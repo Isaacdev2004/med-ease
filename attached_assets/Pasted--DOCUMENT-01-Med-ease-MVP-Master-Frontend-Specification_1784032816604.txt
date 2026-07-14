@@ -1,0 +1,327 @@
+# DOCUMENT 01
+# Med'ease MVP
+# Master Frontend Specification
+Version: 1.0
+Status: Active
+Priority: Critical
+
+================================================================================
+PROJECT OVERVIEW
+================================================================================
+
+Project Name
+
+Med'ease
+
+Category
+
+Enterprise Healthcare SaaS Platform
+
+Type
+
+Healthcare Coordination Platform
+
+Target
+
+Production-grade MVP
+
+Development Duration
+
+10 Weeks
+
+Frontend Stack
+
+Next.js 14
+React
+TypeScript
+Tailwind CSS
+shadcn/ui
+
+Backend
+
+Supabase
+
+Deployment
+
+Vercel
+
+================================================================================
+
+MISSION
+
+================================================================================
+
+The Med'ease platform is designed to become the digital bridge between hospitals,
+healthcare professionals, pharmacies, medical transport providers, caregivers,
+and patients.
+
+Unlike traditional healthcare portals, Med'ease is not merely a patient portal or
+hospital dashboard.
+
+It is an intelligent healthcare coordination ecosystem.
+
+Every interaction should help simplify the patient's healthcare journey while
+providing healthcare professionals with efficient tools for communication,
+resource management, and clinical coordination.
+
+The frontend must reflect trust, professionalism, clarity, empathy, and modern
+healthcare innovation.
+
+Every interface should inspire confidence similar to visiting a premium private
+hospital rather than using a traditional administrative system.
+
+================================================================================
+
+PRODUCT OBJECTIVES
+
+================================================================================
+
+The frontend must achieve the following objectives:
+
+1.
+Reduce cognitive load for healthcare professionals.
+
+2.
+Allow patients to easily understand their healthcare journey.
+
+3.
+Present large volumes of medical information in an intuitive manner.
+
+4.
+Prioritize readability over visual complexity.
+
+5.
+Support rapid navigation during time-sensitive healthcare workflows.
+
+6.
+Present healthcare data with absolute clarity.
+
+7.
+Create investor-level visual quality suitable for product demonstrations.
+
+8.
+Maintain consistency across every module.
+
+9.
+Scale seamlessly as additional modules are introduced.
+
+10.
+Provide a premium digital healthcare experience comparable to world-class
+healthcare platforms.
+
+================================================================================
+
+CORE PRODUCT VALUES
+
+================================================================================
+
+Every screen must communicate the following values:
+
+Trust
+
+Reliability
+
+Security
+
+Professionalism
+
+Accessibility
+
+Human-centered care
+
+Modern innovation
+
+Efficiency
+
+Transparency
+
+Scalability
+
+================================================================================
+
+TARGET USERS
+
+================================================================================
+
+The platform serves multiple categories of users.
+
+Patients
+
+Need reassurance, simplicity, guidance, and clarity.
+
+Healthcare Professionals
+
+Need efficiency, speed, precision, and minimal friction.
+
+Healthcare Facilities
+
+Need operational visibility, resource management, and coordination tools.
+
+Pharmacies
+
+Need medication visibility and patient support tools.
+
+Medical Transport Providers
+
+Need clear scheduling and transfer information.
+
+Administrators
+
+Need analytics, configuration, permissions, and monitoring.
+
+Every interface must adapt naturally to the mental model of its intended user.
+
+================================================================================
+
+PRODUCT PERSONALITY
+
+================================================================================
+
+The application should feel:
+
+Professional
+
+Modern
+
+Calm
+
+Minimal
+
+Premium
+
+Intelligent
+
+Helpful
+
+Clean
+
+Structured
+
+Fast
+
+Reliable
+
+It should never feel:
+
+Cheap
+
+Generic
+
+Overcrowded
+
+Corporate template
+
+Bootstrap dashboard
+
+Colorful for the sake of color
+
+Toy-like
+
+Experimental
+
+Confusing
+
+Outdated
+
+================================================================================
+
+DESIGN PHILOSOPHY
+
+================================================================================
+
+The design language should combine inspiration from:
+
+Stripe Dashboard
+
+Linear
+
+Notion
+
+Vercel Dashboard
+
+Doctolib
+
+Epic MyChart
+
+Apple Health
+
+Google Material 3
+
+IBM Carbon
+
+NHS Digital
+
+without copying any of them.
+
+The resulting interface must establish its own distinctive visual identity.
+
+================================================================================
+
+FRONTEND GOAL
+
+================================================================================
+
+The frontend should be capable of convincing:
+
+Healthcare executives
+
+Hospitals
+
+Government agencies
+
+Healthcare professionals
+
+Medical investors
+
+that Med'ease is a mature, trustworthy, and scalable healthcare platform.
+
+The application should look as though it has been designed by an experienced
+product design team rather than generated by AI.
+
+================================================================================
+
+NON-NEGOTIABLE PRINCIPLES
+
+================================================================================
+
+Every page must:
+
+feel premium
+
+feel responsive
+
+load quickly
+
+be highly readable
+
+be accessible
+
+be mobile-friendly
+
+be production-ready
+
+be reusable
+
+be component-driven
+
+follow TypeScript best practices
+
+use consistent spacing
+
+use consistent typography
+
+use consistent interactions
+
+avoid unnecessary complexity
+
+never sacrifice usability for visual effects
+
+Every screen should answer three questions within five seconds:
+
+Where am I?
+
+What can I do here?
+
+What should I do next?
+
+If those questions are not immediately obvious, the interface has failed.
