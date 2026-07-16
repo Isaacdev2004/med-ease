@@ -1,0 +1,32 @@
+{
+  "name": "@medease/prisma",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json && node scripts/copy-generated.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test src/helpers/request-context.test.ts src/helpers/search.test.ts src/helpers/contract-pagination.test.ts",
+    "test:integration": "node --import tsx --test src/helpers/rls.integration.test.ts"
+  },
+  "dependencies": {
+    "@medease/observability": "workspace:*",
+    "@medease/uuid": "workspace:*",
+    "@nestjs/common": "^11.0.12",
+    "@nestjs/terminus": "^11.0.0",
+    "@prisma/client": "^6.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "prisma": "^6.19.0",
+    "tsx": "catalog:",
+    "typescript": "~5.9.3"
+  }
+}
