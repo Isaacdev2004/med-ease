@@ -69,4 +69,5 @@ CI: mock contract (fast) + HTTP contract + E2E (slow)
 
 ## Certification
 
-Every module must satisfy [module-certification-checklist.md](./module-certification-checklist.md) before merge.
+Every module must satisfy [module-certification-checklist.md](./module-certification-checklist.md) before merge.  
+Detailed engineering criteria: [backend-definition-of-done.md](./backend-definition-of-done.md).

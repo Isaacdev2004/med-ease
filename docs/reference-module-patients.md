@@ -111,4 +111,5 @@ Worker → audit.audit_logs
 
 ## Certification
 
-Every clinical module must satisfy [module-certification-checklist.md](./module-certification-checklist.md) before merge.
+Every clinical module must satisfy [module-certification-checklist.md](./module-certification-checklist.md) before merge.  
+Detailed engineering criteria: [backend-definition-of-done.md](./backend-definition-of-done.md).

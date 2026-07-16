@@ -29,13 +29,13 @@
 | [Canonical Entity Registry](./canonical-entity-registry.md) | 221 entities |
 | [Data Dictionary](./data-dictionary.md) | Column definitions |
 | [Repository Contract Matrix](./repository-contract-matrix.md) | Frontend → backend mapping |
-| [Backend Definition of Done](./backend-definition-of-done.md) | Module completion criteria |
 
 ## Governance (living)
 
 | Document | Purpose |
 |----------|---------|
 | [Module Certification Checklist](./module-certification-checklist.md) | P1–P8 merge gate for every domain module |
+| [Backend Definition of Done](./backend-definition-of-done.md) | Detailed engineering completion criteria |
 | [Reference Module — IAM](./reference-module-iam.md) | Platform/security reference implementation |
 | [Reference Module — Patients](./reference-module-patients.md) | Clinical reference implementation |
 | [ADR Index](./adr/README.md) | Architectural decisions ADR-0001–0012 |
