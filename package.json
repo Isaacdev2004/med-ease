@@ -12,6 +12,7 @@
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "build:web": "pnpm --filter @workspace/medease run build",
     "typecheck:libs": "tsc --build",
+    "pretypecheck": "pnpm prisma:validate && pnpm prisma:generate",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./apps/**\" --filter \"./packages/**\" --filter \"./database\" --filter \"./scripts\" --if-present run typecheck",
     "lint": "eslint .",
     "format": "prettier --write .",

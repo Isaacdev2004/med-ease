@@ -54,6 +54,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Prisma validate
+        run: pnpm prisma:validate
+
+      - name: Prisma generate
+        run: pnpm prisma:generate
+
       - name: Typecheck
         run: pnpm typecheck
 
@@ -62,12 +68,6 @@ jobs:
 
       - name: Format check
         run: pnpm format:check
-
-      - name: Prisma validate
-        run: pnpm prisma:validate
-
-      - name: Prisma generate
-        run: pnpm prisma:generate
 
       - name: Unit tests with coverage gate
         run: node scripts/ci/verify-coverage.mjs
