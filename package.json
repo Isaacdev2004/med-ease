@@ -1,22 +1,47 @@
 {
-  "name": "workspace",
+  "name": "med-ease",
   "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "license": "MIT",
+  "packageManager": "pnpm@10.12.4",
   "scripts": {
-    "preinstall": "sh -c 'rm -f package-lock.json yarn.lock; case \"$npm_config_user_agent\" in pnpm/*) ;; *) echo \"Use pnpm instead\" >&2; exit 1 ;; esac'",
+    "preinstall": "node scripts/preinstall.cjs",
+    "dev": "pnpm --filter @workspace/medease run dev",
+    "dev:api": "pnpm --filter @medease/api run dev",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
+    "build:web": "pnpm --filter @workspace/medease run build",
     "typecheck:libs": "tsc --build",
-    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./apps/**\" --filter \"./packages/**\" --filter \"./database\" --filter \"./scripts\" --if-present run typecheck",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "docker:bootstrap": "node docker/scripts/bootstrap.mjs",
+    "docker:up": "docker compose -f docker/compose.yml -f docker/compose.override.yml --env-file docker/.env up -d --build",
+    "docker:ps": "docker compose -f docker/compose.yml -f docker/compose.override.yml --env-file docker/.env ps",
+    "docker:down": "docker compose -f docker/compose.yml -f docker/compose.override.yml --env-file docker/.env down",
+    "docker:logs": "docker compose -f docker/compose.yml -f docker/compose.override.yml --env-file docker/.env logs -f",
+    "docker:verify": "node docker/scripts/verify-health.mjs",
+    "docker:observability": "docker compose -f docker/compose.yml -f docker/compose.override.yml -f docker/compose.observability.yml --env-file docker/.env up -d",
+    "prisma:validate": "pnpm --filter @medease/database run validate",
+    "prisma:generate": "pnpm --filter @medease/database run generate",
+    "prisma:format": "pnpm --filter @medease/database run format",
+    "prisma:migrate:deploy": "pnpm --filter @medease/database run migrate:deploy",
+    "prisma:migrate:dev": "pnpm --filter @medease/database run migrate:dev",
+    "test": "pnpm --filter @medease/queue run test && pnpm --filter @medease/auth run test",
+    "test:coverage": "node scripts/ci/verify-coverage.mjs",
     "ci:smoke": "node scripts/ci/run-smoke-ci.mjs"
   },
-  "private": true,
-  "dependencies": {
-    "@replit/connectors-sdk": "^0.4.1"
-  },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "ioredis": "^5.11.1",
+    "pg": "^8.22.0",
     "prettier": "^3.9.5",
     "typescript": "~5.9.3",
-    "pg": "^8.22.0",
-    "ioredis": "^5.11.1"
+    "typescript-eslint": "^8.48.0"
   }
 }

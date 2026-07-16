@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: Med-Ease Platform
+    orgId: 1
+    folder: Med-Ease
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

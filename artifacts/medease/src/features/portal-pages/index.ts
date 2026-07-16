@@ -1,0 +1,24 @@
+export * from '@/features/portal-pages/components/PortalUtilityComponents';
+export * from '@/features/portal-pages/data/mock-data';
+export * from '@/features/portal-pages/routes';
+
+export { default as ProfilePage } from '@/features/portal-pages/pages/ProfilePage';
+export { default as SettingsPage } from '@/features/portal-pages/pages/SettingsPage';
+export { default as AdmissionsPage } from '@/features/portal-pages/pages/AdmissionsPage';
+export { default as TransfersPage } from '@/features/portal-pages/pages/TransfersPage';
+export { default as ConsultationsPage } from '@/features/portal-pages/pages/ConsultationsPage';
+export { default as ClinicalTasksPage } from '@/features/portal-pages/pages/ClinicalTasksPage';
+export { default as AnalyticsPage } from '@/features/portal-pages/pages/AnalyticsPage';
+export { default as BedManagementPage } from '@/features/portal-pages/pages/BedManagementPage';
+export { default as CapacityPage } from '@/features/portal-pages/pages/CapacityPage';
+export { default as ResourcesPage } from '@/features/portal-pages/pages/ResourcesPage';
+export { default as PatientsListPage } from '@/features/portal-pages/pages/PatientsListPage';
+export { default as HealthcareProfessionalsPage } from '@/features/portal-pages/pages/HealthcareProfessionalsPage';
+export { default as MedicationRequestsPage } from '@/features/portal-pages/pages/MedicationRequestsPage';
+export { default as EmergencyProfilePage } from '@/features/portal-pages/pages/EmergencyProfilePage';
+export { default as VaccinationsPage } from '@/features/portal-pages/pages/VaccinationsPage';
+export { default as TransportVehiclesPage } from '@/features/portal-pages/pages/TransportVehiclesPage';
+export { default as TransportDriversPage } from '@/features/portal-pages/pages/TransportDriversPage';
+export { default as TransportSchedulesPage } from '@/features/portal-pages/pages/TransportSchedulesPage';
+export { default as TransportHistoryPage } from '@/features/portal-pages/pages/TransportHistoryPage';
+export { default as TransportFacilitiesPage } from '@/features/portal-pages/pages/TransportFacilitiesPage';

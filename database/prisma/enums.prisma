@@ -1,0 +1,260 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Shared enums (Appendix A sample + platform foundation)
+// Maps to PostgreSQL native enums via @@schema directive.
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum TenantStatus {
+  active
+  suspended
+  provisioning
+  decommissioned
+
+  @@map("tenant_status")
+  @@schema("core")
+}
+
+enum SubscriptionTier {
+  starter
+  professional
+  enterprise
+
+  @@map("subscription_tier")
+  @@schema("core")
+}
+
+enum UserStatus {
+  active
+  inactive
+  locked
+  pending
+
+  @@map("user_status")
+  @@schema("identity")
+}
+
+enum IdentityRole {
+  platform_admin
+  facility_admin
+  physician
+  pharmacist
+  transport_dispatcher
+  patient
+
+  @@map("identity_role")
+  @@schema("identity")
+}
+
+enum SessionStatus {
+  active
+  revoked
+  expired
+
+  @@map("session_status")
+  @@schema("identity")
+}
+
+enum FacilityType {
+  hospital
+  clinic
+  pharmacy
+  lab
+  imaging
+  transport
+
+  @@map("facility_type")
+  @@schema("core")
+}
+
+enum FacilityStatus {
+  active
+  inactive
+  maintenance
+
+  @@map("facility_status")
+  @@schema("core")
+}
+
+enum Gender {
+  male
+  female
+  other
+  unknown
+
+  @@map("gender")
+  @@schema("core")
+}
+
+enum AppointmentStatus {
+  scheduled
+  confirmed
+  checked_in
+  in_progress
+  completed
+  cancelled
+  no_show
+
+  @@map("appointment_status")
+  @@schema("clinical")
+}
+
+enum PatientStatus {
+  active
+  inactive
+  observation
+
+  @@map("patient_status")
+  @@schema("clinical")
+}
+
+enum PatientIdentifierType {
+  mrn
+  national_id
+  passport
+  drivers_license
+  ssn
+  other
+
+  @@map("patient_identifier_type")
+  @@schema("clinical")
+}
+
+enum PatientContactType {
+  phone
+  email
+  fax
+  other
+
+  @@map("patient_contact_type")
+  @@schema("clinical")
+}
+
+enum PatientAddressType {
+  home
+  work
+  mailing
+  temporary
+  other
+
+  @@map("patient_address_type")
+  @@schema("clinical")
+}
+
+enum AllergySeverity {
+  mild
+  moderate
+  severe
+  life_threatening
+
+  @@map("allergy_severity")
+  @@schema("clinical")
+}
+
+enum AllergyType {
+  drug
+  food
+  environmental
+  other
+
+  @@map("allergy_type")
+  @@schema("clinical")
+}
+
+enum PrescriptionStatus {
+  active
+  completed
+  cancelled
+  on_hold
+
+  @@map("prescription_status")
+  @@schema("clinical")
+}
+
+enum InvoiceStatus {
+  draft
+  issued
+  paid
+  overdue
+  cancelled
+
+  @@map("invoice_status")
+  @@schema("operations")
+}
+
+enum ClaimStatus {
+  draft
+  submitted
+  accepted
+  rejected
+  paid
+
+  @@map("claim_status")
+  @@schema("operations")
+}
+
+enum WorkflowStatus {
+  draft
+  active
+  paused
+  completed
+  cancelled
+
+  @@map("workflow_status")
+  @@schema("platform")
+}
+
+enum DocumentStatus {
+  draft
+  published
+  archived
+  under_review
+
+  @@map("document_status")
+  @@schema("platform")
+}
+
+enum AuditAction {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  EXPORT
+  BREAK_GLASS
+  LOGIN
+  LOGOUT
+
+  @@map("audit_action")
+  @@schema("audit")
+}
+
+enum SecurityEventType {
+  login_success
+  login_failure
+  logout
+  token_refresh
+  token_reuse_detected
+  session_revoked
+  account_locked
+  account_unlocked
+  password_changed
+
+  @@map("security_event_type")
+  @@schema("audit")
+}
+
+enum EntityType {
+  patient
+  appointment
+  encounter
+  prescription
+  lab_order
+  radiology_study
+  care_plan
+  invoice
+  document
+  workflow_instance
+  employee
+  purchase_order
+
+  @@map("entity_type")
+  @@schema("platform")
+}

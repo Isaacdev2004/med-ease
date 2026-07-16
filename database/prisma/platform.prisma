@@ -1,0 +1,15 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Platform schema — documents, workflows, messaging, reporting, seed registry
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Tracks applied seed batches — foundation table (no IAM FKs).
+model SeedRun {
+  id        String   @id @db.Uuid
+  batchName String   @map("batch_name") @db.VarChar(120)
+  appliedAt DateTime @default(now()) @map("applied_at") @db.Timestamptz(6)
+  checksum  String?  @db.VarChar(64)
+
+  @@index([batchName])
+  @@map("seed_runs")
+  @@schema("platform")
+}

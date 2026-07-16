@@ -1,0 +1,50 @@
+export { facilitiesService } from '@/services/facilities/facilities.service';
+export { facilitiesRepository } from '@/services/facilities/repository';
+export { facilitiesOfflineQueue } from '@/services/facilities/offline-sync';
+export { computeFacilitiesAnalytics, computeEquipmentUtilization } from '@/services/facilities/analytics';
+export { toFhirDevice, toFhirLocation, toFhirHealthcareService } from '@/services/facilities/mapper';
+export {
+  buildFacilitiesDashboard,
+  MOCK_FACILITY_SITES,
+  MOCK_BUILDINGS,
+  MOCK_ROOMS,
+  MOCK_BEDS,
+  MOCK_EQUIPMENT,
+  MOCK_BIOMEDICAL_DEVICES,
+  MOCK_WORK_ORDERS,
+  MOCK_PREVENTIVE,
+  MOCK_CALIBRATION,
+  MOCK_INSPECTIONS,
+  MOCK_UTILITIES,
+  MOCK_ENVIRONMENTAL,
+  MOCK_VENDORS,
+  MOCK_CONTRACTS,
+  MOCK_VEHICLES,
+  MOCK_INCIDENTS,
+} from '@/services/facilities/mock-data';
+export type {
+  FacilitySite,
+  Building,
+  Room,
+  Bed,
+  MedicalEquipment,
+  BiomedicalDevice,
+  WorkOrder,
+  PreventiveMaintenance,
+  CalibrationRecord,
+  Inspection,
+  UtilitySystem,
+  EnvironmentalReading,
+  Vendor,
+  ServiceContract,
+  Vehicle,
+  Incident,
+  FacilitiesDashboard,
+  FacilitiesAnalytics,
+  FacilitiesFilters,
+  FacilitiesPermissions,
+  CreateMaintenanceRequestInput,
+  AssignWorkOrderInput,
+  RecordCalibrationInput,
+  ReportIncidentInput,
+} from '@/services/facilities/types';

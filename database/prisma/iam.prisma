@@ -1,0 +1,260 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// IAM domain models (E2-06) — identity schema extensions
+// ─────────────────────────────────────────────────────────────────────────────
+
+model IamRoleRecord {
+  id          String   @id @db.Uuid
+  name        String
+  description String   @default("")
+  tenantId    String?  @map("tenant_id") @db.Uuid
+  isSystem    Boolean  @default(false) @map("is_system")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  assignments UserRoleAssignment[]
+
+  @@index([tenantId])
+  @@map("iam_roles")
+  @@schema("identity")
+}
+
+model UserRoleAssignment {
+  userId     String        @map("user_id") @db.Uuid
+  roleId     String        @map("role_id") @db.Uuid
+  assignedAt DateTime      @default(now()) @map("assigned_at")
+
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role IamRoleRecord @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+  @@map("user_role_assignments")
+  @@schema("identity")
+}
+
+model IamPolicyRecord {
+  id          String   @id @db.Uuid
+  tenantId    String?  @map("tenant_id") @db.Uuid
+  name        String
+  description String   @default("")
+  effect      String
+  resource    String
+  action      String
+  conditions  Json?
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([tenantId])
+  @@map("iam_policies")
+  @@schema("identity")
+}
+
+model MfaDevice {
+  id           String   @id @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  method       String
+  label        String
+  verified     Boolean  @default(false)
+  registeredAt DateTime @default(now()) @map("registered_at")
+  lastUsedAt   DateTime? @map("last_used_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("mfa_devices")
+  @@schema("identity")
+}
+
+model TrustedDevice {
+  id           String   @id @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  name         String
+  platform     String
+  trustScore   Int      @default(100) @map("trust_score")
+  registeredAt DateTime @default(now()) @map("registered_at")
+  lastSeenAt   DateTime @default(now()) @map("last_seen_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("trusted_devices")
+  @@schema("identity")
+}
+
+model OAuthClient {
+  id           String   @id @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  name         String
+  clientSecret String   @map("client_secret")
+  redirectUris String[] @map("redirect_uris")
+  scopes       String[]
+  status       String   @default("active")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId])
+  @@map("oauth_clients")
+  @@schema("identity")
+}
+
+model ApiKey {
+  id         String    @id @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  name       String
+  prefix     String
+  scopes     String[]
+  status     String    @default("active")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  expiresAt  DateTime? @map("expires_at")
+  lastUsedAt DateTime? @map("last_used_at")
+
+  @@index([tenantId])
+  @@map("api_keys")
+  @@schema("identity")
+}
+
+model ConsentRecord {
+  id        String    @id @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  patientId String    @map("patient_id") @db.Uuid
+  granteeId String    @map("grantee_id") @db.Uuid
+  purpose   String
+  status    String    @default("active")
+  grantedAt DateTime  @default(now()) @map("granted_at")
+  expiresAt DateTime? @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  @@index([granteeId])
+  @@index([patientId])
+  @@map("consent_records")
+  @@schema("identity")
+}
+
+model DelegationRecord {
+  id          String   @id @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  delegatorId String   @map("delegator_id") @db.Uuid
+  delegateId  String   @map("delegate_id") @db.Uuid
+  scope       String
+  startsAt    DateTime @default(now()) @map("starts_at")
+  endsAt      DateTime @map("ends_at")
+  status      String   @default("active")
+
+  @@index([delegatorId])
+  @@index([delegateId])
+  @@map("delegation_records")
+  @@schema("identity")
+}
+
+model ProxyAccess {
+  id          String   @id @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  patientId   String   @map("patient_id") @db.Uuid
+  proxyUserId String   @map("proxy_user_id") @db.Uuid
+  relationship String
+  status      String   @default("active")
+  grantedAt   DateTime @default(now()) @map("granted_at")
+
+  @@index([patientId])
+  @@map("proxy_access")
+  @@schema("identity")
+}
+
+model BreakGlassEvent {
+  id         String    @id @db.Uuid
+  tenantId   String    @map("tenant_id") @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  patientId  String?   @map("patient_id") @db.Uuid
+  reason     String
+  status     String    @default("active")
+  startedAt  DateTime  @default(now()) @map("started_at")
+  endedAt    DateTime? @map("ended_at")
+  reviewedBy String?   @map("reviewed_by") @db.Uuid
+
+  @@index([userId, status])
+  @@map("break_glass_events")
+  @@schema("identity")
+}
+
+model IamAuditLog {
+  id           String   @id @db.Uuid
+  tenantId     String?  @map("tenant_id") @db.Uuid
+  action       String
+  actorId      String   @map("actor_id") @db.Uuid
+  resourceType String   @map("resource_type")
+  resourceId   String   @map("resource_id")
+  outcome      String   @default("success")
+  ipAddress    String?  @map("ip_address")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([tenantId, createdAt(sort: Desc)])
+  @@index([actorId, createdAt(sort: Desc)])
+  @@map("iam_audit_logs")
+  @@schema("audit")
+}
+
+model SecurityIncident {
+  id         String    @id @db.Uuid
+  tenantId   String?   @map("tenant_id") @db.Uuid
+  title      String
+  severity   String
+  category   String
+  status     String    @default("open")
+  detectedAt DateTime  @default(now()) @map("detected_at")
+  resolvedAt DateTime? @map("resolved_at")
+
+  @@index([status, detectedAt(sort: Desc)])
+  @@map("security_incidents")
+  @@schema("audit")
+}
+
+model RiskScore {
+  id         String   @id @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  score      Int
+  factors    String[]
+  level      String
+  assessedAt DateTime @default(now()) @map("assessed_at")
+
+  @@index([userId, assessedAt(sort: Desc)])
+  @@map("risk_scores")
+  @@schema("identity")
+}
+
+model SamlProvider {
+  id       String @id @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+  name     String
+  entityId String @map("entity_id")
+  status   String @default("active")
+
+  @@index([tenantId])
+  @@map("saml_providers")
+  @@schema("identity")
+}
+
+model OidcProvider {
+  id       String @id @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+  name     String
+  issuer   String
+  status   String @default("active")
+
+  @@index([tenantId])
+  @@map("oidc_providers")
+  @@schema("identity")
+}
+
+model IamFavorite {
+  id         String   @id @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, entityType, entityId])
+  @@map("iam_favorites")
+  @@schema("identity")
+}

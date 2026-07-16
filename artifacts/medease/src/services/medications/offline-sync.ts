@@ -1,0 +1,23 @@
+type QueuedAction = { label: string; execute: () => Promise<void> };
+
+class MedicationOfflineQueue {
+  private queue: QueuedAction[] = [];
+
+  enqueue(action: QueuedAction) {
+    this.queue.push(action);
+  }
+
+  async flush() {
+    const pending = [...this.queue];
+    this.queue = [];
+    for (const action of pending) {
+      try {
+        await action.execute();
+      } catch {
+        this.queue.push(action);
+      }
+    }
+  }
+}
+
+export const medicationOfflineQueue = new MedicationOfflineQueue();

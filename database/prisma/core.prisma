@@ -1,0 +1,38 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Core schema — tenancy primitives required for authentication (E2-01)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Tenant {
+  id        String       @id @db.Uuid
+  name      String
+  slug      String       @unique
+  status    TenantStatus @default(active)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  organizations Organization[]
+  users         User[]
+
+  @@map("tenants")
+  @@schema("core")
+}
+
+model Organization {
+  id        String       @id @db.Uuid
+  tenantId  String       @map("tenant_id") @db.Uuid
+  name      String
+  slug      String
+  type      String       @default("health_system")
+  parentId  String?      @map("parent_id") @db.Uuid
+  status    TenantStatus @default(active)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  users  User[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@map("organizations")
+  @@schema("core")
+}

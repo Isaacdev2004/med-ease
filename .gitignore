@@ -44,6 +44,13 @@ Thumbs.db
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 
-# Replit
+# Local tooling caches
 .cache/
 .local/
+.replit-artifact/
+
+# Local environment (never commit secrets)
+.env
+docker/.env
+database/.env
+packages/prisma/src/generated/

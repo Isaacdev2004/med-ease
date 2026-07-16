@@ -1,0 +1,13 @@
+// Med-Ease — root Prisma configuration (E1-03)
+// Multi-file schema: all *.prisma files in this directory are merged.
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../packages/prisma/src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["core", "identity", "clinical", "operations", "intelligence", "platform", "audit", "integration"]
+}

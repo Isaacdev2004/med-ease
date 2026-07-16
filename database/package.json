@@ -1,0 +1,28 @@
+{
+  "name": "@medease/database",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "validate": "prisma validate",
+    "generate": "prisma generate",
+    "format": "prisma format",
+    "format:check": "prisma format --check",
+    "migrate:dev": "prisma migrate dev",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:status": "prisma migrate status",
+    "seed": "tsx seed/index.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@medease/auth": "workspace:*",
+    "@medease/uuid": "workspace:*",
+    "@prisma/client": "6.19.3"
+  },
+  "devDependencies": {
+    "@medease/prisma": "workspace:*",
+    "@types/node": "catalog:",
+    "prisma": "^6.19.0",
+    "tsx": "catalog:",
+    "typescript": "~5.9.3"
+  }
+}

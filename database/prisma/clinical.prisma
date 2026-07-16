@@ -1,0 +1,155 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Clinical schema — patients (Epic 3 / P1)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Patient {
+  id                String        @id @db.Uuid
+  tenantId          String        @map("tenant_id") @db.Uuid
+  facilityId        String?       @map("facility_id") @db.Uuid
+  userId            String?       @map("user_id") @db.Uuid
+  mrn               String
+  fullName          String        @map("full_name")
+  dateOfBirth       DateTime      @map("date_of_birth") @db.Date
+  gender            Gender?
+  status            PatientStatus @default(active)
+  primaryProviderId String?       @map("primary_provider_id") @db.Uuid
+  fhirResourceId    String        @map("fhir_resource_id") @db.Uuid
+  createdBy         String        @map("created_by") @db.Uuid
+  updatedBy         String?       @map("updated_by") @db.Uuid
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  deletedAt         DateTime?     @map("deleted_at")
+  version           Int           @default(1)
+
+  identifiers       PatientIdentifier[]
+  contacts          PatientContact[]
+  addresses         PatientAddress[]
+  emergencyContacts PatientEmergencyContact[]
+  allergies         PatientAllergy[]
+  preferences       PatientPreference?
+
+  @@unique([tenantId, mrn])
+  @@index([tenantId, status])
+  @@index([tenantId, fullName])
+  @@index([tenantId, facilityId])
+  @@index([tenantId, deletedAt])
+  @@map("patients")
+  @@schema("clinical")
+}
+
+model PatientIdentifier {
+  id         String                @id @db.Uuid
+  tenantId   String                @map("tenant_id") @db.Uuid
+  patientId  String                @map("patient_id") @db.Uuid
+  type       PatientIdentifierType
+  value      String
+  system     String?
+  isPrimary  Boolean               @default(false) @map("is_primary")
+  createdAt  DateTime              @default(now()) @map("created_at")
+  updatedAt  DateTime              @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, type, value])
+  @@index([patientId])
+  @@map("patient_identifiers")
+  @@schema("clinical")
+}
+
+model PatientContact {
+  id        String             @id @db.Uuid
+  tenantId  String             @map("tenant_id") @db.Uuid
+  patientId String             @map("patient_id") @db.Uuid
+  type      PatientContactType
+  value     String
+  isPrimary Boolean            @default(false) @map("is_primary")
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([tenantId, value])
+  @@map("patient_contacts")
+  @@schema("clinical")
+}
+
+model PatientAddress {
+  id         String             @id @db.Uuid
+  tenantId   String             @map("tenant_id") @db.Uuid
+  patientId  String             @map("patient_id") @db.Uuid
+  type       PatientAddressType @default(home)
+  street     String
+  city       String
+  state      String?
+  postalCode String             @map("postal_code")
+  country    String
+  isPrimary  Boolean            @default(false) @map("is_primary")
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@map("patient_addresses")
+  @@schema("clinical")
+}
+
+model PatientEmergencyContact {
+  id           String   @id @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  patientId    String   @map("patient_id") @db.Uuid
+  name         String
+  relationship String
+  phone        String
+  email        String?
+  isPrimary    Boolean  @default(true) @map("is_primary")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@map("patient_emergency_contacts")
+  @@schema("clinical")
+}
+
+model PatientAllergy {
+  id         String          @id @db.Uuid
+  tenantId   String          @map("tenant_id") @db.Uuid
+  patientId  String          @map("patient_id") @db.Uuid
+  allergen   String
+  type       AllergyType
+  severity   AllergySeverity
+  reaction   String?
+  notedAt    DateTime        @default(now()) @map("noted_at")
+  createdAt  DateTime        @default(now()) @map("created_at")
+  updatedAt  DateTime        @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([patientId])
+  @@index([tenantId, allergen])
+  @@map("patient_allergies")
+  @@schema("clinical")
+}
+
+model PatientPreference {
+  id            String   @id @db.Uuid
+  tenantId      String   @map("tenant_id") @db.Uuid
+  patientId     String   @unique @map("patient_id") @db.Uuid
+  language      String   @default("en-US")
+  maritalStatus String?  @map("marital_status")
+  occupation    String?
+  nationality   String?
+  smoking       String?
+  communication Json?
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@map("patient_preferences")
+  @@schema("clinical")
+}
