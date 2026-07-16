@@ -1,0 +1,246 @@
+name: Platform CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+concurrency:
+  group: platform-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '10.12.4'
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/medease
+  REDIS_URL: redis://localhost:6379
+  MINIO_ENDPOINT: localhost
+  MINIO_PORT: '9000'
+  MINIO_USE_SSL: 'false'
+  MINIO_ACCESS_KEY: medease
+  MINIO_SECRET_KEY: medease_minio_dev
+  MINIO_BUCKET_DOCUMENTS: medease-documents
+  MINIO_BUCKET_EXPORTS: medease-exports
+  OPENSEARCH_URL: http://localhost:9200
+  MAIL_HOST: localhost
+  MAIL_PORT: '1025'
+  MAIL_FROM: noreply@medease.local
+  WORKER_QUEUE_NAME: medease-health-check
+  JWT_SECRET: dev-only-secret-minimum-thirty-two-characters-long
+  AUTH_COOKIE_SECURE: false
+  API_PORT: '3000'
+  WORKER_PORT: '3001'
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Prisma validate
+        run: pnpm prisma:validate
+
+      - name: Prisma generate
+        run: pnpm prisma:generate
+
+      - name: Unit tests with coverage gate
+        run: node scripts/ci/verify-coverage.mjs
+
+      - name: Build
+        run: pnpm build
+
+      - name: IAM mock repository contract tests
+        run: pnpm --filter @workspace/medease run test:contract:mock
+
+      - name: OpenAPI regeneration check
+        run: node scripts/ci/verify-openapi-regen.mjs
+
+  security:
+    name: Security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Dependency audit
+        run: pnpm audit --audit-level high
+        continue-on-error: true
+
+      - name: License check
+        run: pnpm dlx license-checker --summary --failOn "GPL;AGPL;LGPL;SSPL"
+
+      - name: Generate SBOM (CycloneDX)
+        run: |
+          mkdir -p ci-artifacts
+          pnpm dlx @cyclonedx/cyclonedx-npm --output-file ci-artifacts/sbom.json --output-format JSON
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: ci-artifacts/sbom.json
+
+      - name: Secret scanning (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docker:
+    name: Containers
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Compose file
+        run: docker compose -f docker/compose.yml -f docker/compose.override.yml config
+
+      - name: Build API image
+        run: docker build -f apps/api/Dockerfile .
+
+      - name: Build Worker image
+        run: docker build -f apps/worker/Dockerfile .
+
+  smoke:
+    name: Platform Smoke
+    runs-on: ubuntu-latest
+    needs: verify
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: medease
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prisma generate
+        run: pnpm prisma:generate
+
+      - name: Apply database migrations
+        run: pnpm prisma:migrate:deploy
+
+      - name: Seed database
+        run: pnpm --filter @medease/database run seed
+
+      - name: RLS integration tests
+        run: pnpm --filter @medease/prisma run test:integration
+
+      - name: Build API and Worker
+        run: |
+          pnpm --filter @medease/api run build
+          pnpm --filter @medease/worker run build
+
+      - name: Platform certification (smoke + E2E + contracts)
+        run: node scripts/ci/run-smoke-ci.mjs
+
+  artifacts:
+    name: Artifacts
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Prisma generate
+        run: pnpm prisma:generate
+
+      - name: Archive platform artifacts
+        run: |
+          mkdir -p ci-artifacts
+          cp lib/api-spec/openapi.yaml ci-artifacts/openapi.yaml
+          tar -czf ci-artifacts/prisma-schema.tar.gz database/prisma
+          pnpm --filter @medease/queue run test:coverage 2>&1 | tee ci-artifacts/coverage-report.txt
+
+      - name: Upload platform artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: platform-artifacts
+          path: ci-artifacts/

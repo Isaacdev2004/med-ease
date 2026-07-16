@@ -63,6 +63,6 @@ CI: mock contract (fast) + HTTP contract + E2E (slow)
 - Modify frontend hooks, pages, or services when adding HTTP adapters
 - Accept `tenantId` from untrusted callers in repositories (use request context)
 
-## Next clinical module
+## Clinical reference module
 
-**Patients** — first module to follow this reference after Epic 2 platform certification.
+**Patients** — certified clinical reference module (`docs/reference-module-patients.md`). Appointments, Encounters, Prescriptions, and other clinical domains must follow the same pipeline and certification gates.

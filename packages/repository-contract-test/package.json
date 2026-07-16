@@ -1,0 +1,21 @@
+{
+  "name": "@medease/repository-contract-test",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --import tsx --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@workspace/repository-transport": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "catalog:",
+    "typescript": "~5.9.3"
+  }
+}
