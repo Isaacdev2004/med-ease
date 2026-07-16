@@ -19,6 +19,20 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
+import type {
+  ApiErrorResponseDto,
+  ExportPatientsResultDto,
+  PaginatedPatientsDto,
+  PatientAddressDto,
+  PatientAllergyDto,
+  PatientContactDto,
+  PatientDto,
+  PatientEmergencyContactDto,
+  PatientIdentifierDto,
+  PatientMergeValidationResultDto,
+  PatientPreferenceDto
+} from './api.schemas';
+
 import { customFetch } from '../custom-fetch';
 import type { ErrorType } from '../custom-fetch';
 
@@ -3620,5 +3634,1266 @@ export const useIamControllerShare = <TError = ErrorType<void>,
         TContext
       > => {
       return useMutation(getIamControllerShareMutationOptions(options));
+    }
+
+export const getPatientsControllerListPatientsUrl = () => {
+
+
+
+
+  return `/api/patients`
+}
+
+/**
+ * @summary List patients (paginated)
+ */
+export const patientsControllerListPatients = async ( options?: RequestInit): Promise<PaginatedPatientsDto> => {
+
+  return customFetch<PaginatedPatientsDto>(getPatientsControllerListPatientsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerListPatientsQueryKey = () => {
+    return [
+    `/api/patients`
+    ] as const;
+    }
+
+
+export const getPatientsControllerListPatientsQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerListPatients>>, TError = ErrorType<ApiErrorResponseDto | void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerListPatients>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerListPatientsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerListPatients>>> = ({ signal }) => patientsControllerListPatients({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerListPatients>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerListPatientsQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerListPatients>>>
+export type PatientsControllerListPatientsQueryError = ErrorType<ApiErrorResponseDto | void>
+
+
+/**
+ * @summary List patients (paginated)
+ */
+
+export function usePatientsControllerListPatients<TData = Awaited<ReturnType<typeof patientsControllerListPatients>>, TError = ErrorType<ApiErrorResponseDto | void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerListPatients>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerListPatientsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerRegisterPatientUrl = () => {
+
+
+
+
+  return `/api/patients`
+}
+
+/**
+ * @summary Register a new patient
+ */
+export const patientsControllerRegisterPatient = async ( options?: RequestInit): Promise<PatientDto> => {
+
+  return customFetch<PatientDto>(getPatientsControllerRegisterPatientUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerRegisterPatientMutationOptions = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerRegisterPatient>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof patientsControllerRegisterPatient>>, TError,void, TContext> => {
+
+const mutationKey = ['patientsControllerRegisterPatient'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patientsControllerRegisterPatient>>, void> = () => {
+
+
+          return  patientsControllerRegisterPatient(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatientsControllerRegisterPatientMutationResult = NonNullable<Awaited<ReturnType<typeof patientsControllerRegisterPatient>>>
+
+    export type PatientsControllerRegisterPatientMutationError = ErrorType<ApiErrorResponseDto | void>
+
+    /**
+ * @summary Register a new patient
+ */
+export const usePatientsControllerRegisterPatient = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerRegisterPatient>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patientsControllerRegisterPatient>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getPatientsControllerRegisterPatientMutationOptions(options));
+    }
+
+export const getPatientsControllerSearchPatientsUrl = () => {
+
+
+
+
+  return `/api/patients/search`
+}
+
+/**
+ * @summary Search patients
+ */
+export const patientsControllerSearchPatients = async ( options?: RequestInit): Promise<PaginatedPatientsDto> => {
+
+  return customFetch<PaginatedPatientsDto>(getPatientsControllerSearchPatientsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerSearchPatientsQueryKey = () => {
+    return [
+    `/api/patients/search`
+    ] as const;
+    }
+
+
+export const getPatientsControllerSearchPatientsQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerSearchPatients>>, TError = ErrorType<ApiErrorResponseDto | void>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerSearchPatients>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerSearchPatientsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerSearchPatients>>> = ({ signal }) => patientsControllerSearchPatients({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerSearchPatients>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerSearchPatientsQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerSearchPatients>>>
+export type PatientsControllerSearchPatientsQueryError = ErrorType<ApiErrorResponseDto | void>
+
+
+/**
+ * @summary Search patients
+ */
+
+export function usePatientsControllerSearchPatients<TData = Awaited<ReturnType<typeof patientsControllerSearchPatients>>, TError = ErrorType<ApiErrorResponseDto | void>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerSearchPatients>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerSearchPatientsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerExportPatientsUrl = () => {
+
+
+
+
+  return `/api/patients/export`
+}
+
+/**
+ * @summary Export patients
+ */
+export const patientsControllerExportPatients = async ( options?: RequestInit): Promise<ExportPatientsResultDto> => {
+
+  return customFetch<ExportPatientsResultDto>(getPatientsControllerExportPatientsUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerExportPatientsMutationOptions = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerExportPatients>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof patientsControllerExportPatients>>, TError,void, TContext> => {
+
+const mutationKey = ['patientsControllerExportPatients'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patientsControllerExportPatients>>, void> = () => {
+
+
+          return  patientsControllerExportPatients(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatientsControllerExportPatientsMutationResult = NonNullable<Awaited<ReturnType<typeof patientsControllerExportPatients>>>
+
+    export type PatientsControllerExportPatientsMutationError = ErrorType<ApiErrorResponseDto | void>
+
+    /**
+ * @summary Export patients
+ */
+export const usePatientsControllerExportPatients = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerExportPatients>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patientsControllerExportPatients>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getPatientsControllerExportPatientsMutationOptions(options));
+    }
+
+export const getPatientsControllerValidateMergeUrl = () => {
+
+
+
+
+  return `/api/patients/validate-merge`
+}
+
+/**
+ * @summary Validate patient merge candidates (execution deferred)
+ */
+export const patientsControllerValidateMerge = async ( options?: RequestInit): Promise<PatientMergeValidationResultDto> => {
+
+  return customFetch<PatientMergeValidationResultDto>(getPatientsControllerValidateMergeUrl(),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerValidateMergeMutationOptions = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerValidateMerge>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof patientsControllerValidateMerge>>, TError,void, TContext> => {
+
+const mutationKey = ['patientsControllerValidateMerge'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patientsControllerValidateMerge>>, void> = () => {
+
+
+          return  patientsControllerValidateMerge(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatientsControllerValidateMergeMutationResult = NonNullable<Awaited<ReturnType<typeof patientsControllerValidateMerge>>>
+
+    export type PatientsControllerValidateMergeMutationError = ErrorType<ApiErrorResponseDto | void>
+
+    /**
+ * @summary Validate patient merge candidates (execution deferred)
+ */
+export const usePatientsControllerValidateMerge = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerValidateMerge>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patientsControllerValidateMerge>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getPatientsControllerValidateMergeMutationOptions(options));
+    }
+
+export const getPatientsControllerGetPatientUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}`
+}
+
+/**
+ * @summary Get patient by id
+ */
+export const patientsControllerGetPatient = async (patientId: string, options?: RequestInit): Promise<PatientDto> => {
+
+  return customFetch<PatientDto>(getPatientsControllerGetPatientUrl(patientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerGetPatientQueryKey = (patientId: string,) => {
+    return [
+    `/api/patients/${patientId}`
+    ] as const;
+    }
+
+
+export const getPatientsControllerGetPatientQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerGetPatient>>, TError = ErrorType<void | ApiErrorResponseDto>>(patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetPatient>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerGetPatientQueryKey(patientId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerGetPatient>>> = ({ signal }) => patientsControllerGetPatient(patientId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: patientId !== null && patientId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetPatient>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerGetPatientQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerGetPatient>>>
+export type PatientsControllerGetPatientQueryError = ErrorType<void | ApiErrorResponseDto>
+
+
+/**
+ * @summary Get patient by id
+ */
+
+export function usePatientsControllerGetPatient<TData = Awaited<ReturnType<typeof patientsControllerGetPatient>>, TError = ErrorType<void | ApiErrorResponseDto>>(
+ patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetPatient>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerGetPatientQueryOptions(patientId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerUpdatePatientUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}`
+}
+
+/**
+ * @summary Update patient demographics
+ */
+export const patientsControllerUpdatePatient = async (patientId: string, options?: RequestInit): Promise<PatientDto> => {
+
+  return customFetch<PatientDto>(getPatientsControllerUpdatePatientUrl(patientId),
+  {
+    ...options,
+    method: 'PATCH'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerUpdatePatientMutationOptions = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerUpdatePatient>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof patientsControllerUpdatePatient>>, TError,{patientId: string}, TContext> => {
+
+const mutationKey = ['patientsControllerUpdatePatient'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patientsControllerUpdatePatient>>, {patientId: string}> = (props) => {
+          const {patientId} = props ?? {};
+
+          return  patientsControllerUpdatePatient(patientId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatientsControllerUpdatePatientMutationResult = NonNullable<Awaited<ReturnType<typeof patientsControllerUpdatePatient>>>
+
+    export type PatientsControllerUpdatePatientMutationError = ErrorType<ApiErrorResponseDto | void>
+
+    /**
+ * @summary Update patient demographics
+ */
+export const usePatientsControllerUpdatePatient = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerUpdatePatient>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patientsControllerUpdatePatient>>,
+        TError,
+        {patientId: string},
+        TContext
+      > => {
+      return useMutation(getPatientsControllerUpdatePatientMutationOptions(options));
+    }
+
+export const getPatientsControllerArchivePatientUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}`
+}
+
+/**
+ * @summary Archive (soft-delete) a patient
+ */
+export const patientsControllerArchivePatient = async (patientId: string, options?: RequestInit): Promise<PatientDto> => {
+
+  return customFetch<PatientDto>(getPatientsControllerArchivePatientUrl(patientId),
+  {
+    ...options,
+    method: 'DELETE'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerArchivePatientMutationOptions = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerArchivePatient>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof patientsControllerArchivePatient>>, TError,{patientId: string}, TContext> => {
+
+const mutationKey = ['patientsControllerArchivePatient'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patientsControllerArchivePatient>>, {patientId: string}> = (props) => {
+          const {patientId} = props ?? {};
+
+          return  patientsControllerArchivePatient(patientId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatientsControllerArchivePatientMutationResult = NonNullable<Awaited<ReturnType<typeof patientsControllerArchivePatient>>>
+
+    export type PatientsControllerArchivePatientMutationError = ErrorType<ApiErrorResponseDto | void>
+
+    /**
+ * @summary Archive (soft-delete) a patient
+ */
+export const usePatientsControllerArchivePatient = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerArchivePatient>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patientsControllerArchivePatient>>,
+        TError,
+        {patientId: string},
+        TContext
+      > => {
+      return useMutation(getPatientsControllerArchivePatientMutationOptions(options));
+    }
+
+export const getPatientsControllerRestorePatientUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/restore`
+}
+
+/**
+ * @summary Restore an archived patient
+ */
+export const patientsControllerRestorePatient = async (patientId: string, options?: RequestInit): Promise<PatientDto> => {
+
+  return customFetch<PatientDto>(getPatientsControllerRestorePatientUrl(patientId),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerRestorePatientMutationOptions = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerRestorePatient>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof patientsControllerRestorePatient>>, TError,{patientId: string}, TContext> => {
+
+const mutationKey = ['patientsControllerRestorePatient'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patientsControllerRestorePatient>>, {patientId: string}> = (props) => {
+          const {patientId} = props ?? {};
+
+          return  patientsControllerRestorePatient(patientId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatientsControllerRestorePatientMutationResult = NonNullable<Awaited<ReturnType<typeof patientsControllerRestorePatient>>>
+
+    export type PatientsControllerRestorePatientMutationError = ErrorType<ApiErrorResponseDto | void>
+
+    /**
+ * @summary Restore an archived patient
+ */
+export const usePatientsControllerRestorePatient = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerRestorePatient>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patientsControllerRestorePatient>>,
+        TError,
+        {patientId: string},
+        TContext
+      > => {
+      return useMutation(getPatientsControllerRestorePatientMutationOptions(options));
+    }
+
+export const getPatientsControllerGetIdentifiersUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/identifiers`
+}
+
+/**
+ * @summary List patient identifiers
+ */
+export const patientsControllerGetIdentifiers = async (patientId: string, options?: RequestInit): Promise<PatientIdentifierDto[]> => {
+
+  return customFetch<PatientIdentifierDto[]>(getPatientsControllerGetIdentifiersUrl(patientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerGetIdentifiersQueryKey = (patientId: string,) => {
+    return [
+    `/api/patients/${patientId}/identifiers`
+    ] as const;
+    }
+
+
+export const getPatientsControllerGetIdentifiersQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerGetIdentifiers>>, TError = ErrorType<void | ApiErrorResponseDto>>(patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetIdentifiers>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerGetIdentifiersQueryKey(patientId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerGetIdentifiers>>> = ({ signal }) => patientsControllerGetIdentifiers(patientId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: patientId !== null && patientId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetIdentifiers>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerGetIdentifiersQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerGetIdentifiers>>>
+export type PatientsControllerGetIdentifiersQueryError = ErrorType<void | ApiErrorResponseDto>
+
+
+/**
+ * @summary List patient identifiers
+ */
+
+export function usePatientsControllerGetIdentifiers<TData = Awaited<ReturnType<typeof patientsControllerGetIdentifiers>>, TError = ErrorType<void | ApiErrorResponseDto>>(
+ patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetIdentifiers>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerGetIdentifiersQueryOptions(patientId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerGetContactsUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/contacts`
+}
+
+/**
+ * @summary List patient contacts
+ */
+export const patientsControllerGetContacts = async (patientId: string, options?: RequestInit): Promise<PatientContactDto[]> => {
+
+  return customFetch<PatientContactDto[]>(getPatientsControllerGetContactsUrl(patientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerGetContactsQueryKey = (patientId: string,) => {
+    return [
+    `/api/patients/${patientId}/contacts`
+    ] as const;
+    }
+
+
+export const getPatientsControllerGetContactsQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerGetContacts>>, TError = ErrorType<void | ApiErrorResponseDto>>(patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetContacts>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerGetContactsQueryKey(patientId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerGetContacts>>> = ({ signal }) => patientsControllerGetContacts(patientId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: patientId !== null && patientId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetContacts>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerGetContactsQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerGetContacts>>>
+export type PatientsControllerGetContactsQueryError = ErrorType<void | ApiErrorResponseDto>
+
+
+/**
+ * @summary List patient contacts
+ */
+
+export function usePatientsControllerGetContacts<TData = Awaited<ReturnType<typeof patientsControllerGetContacts>>, TError = ErrorType<void | ApiErrorResponseDto>>(
+ patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetContacts>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerGetContactsQueryOptions(patientId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerGetAddressesUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/addresses`
+}
+
+/**
+ * @summary List patient addresses
+ */
+export const patientsControllerGetAddresses = async (patientId: string, options?: RequestInit): Promise<PatientAddressDto[]> => {
+
+  return customFetch<PatientAddressDto[]>(getPatientsControllerGetAddressesUrl(patientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerGetAddressesQueryKey = (patientId: string,) => {
+    return [
+    `/api/patients/${patientId}/addresses`
+    ] as const;
+    }
+
+
+export const getPatientsControllerGetAddressesQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerGetAddresses>>, TError = ErrorType<void | ApiErrorResponseDto>>(patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetAddresses>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerGetAddressesQueryKey(patientId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerGetAddresses>>> = ({ signal }) => patientsControllerGetAddresses(patientId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: patientId !== null && patientId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetAddresses>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerGetAddressesQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerGetAddresses>>>
+export type PatientsControllerGetAddressesQueryError = ErrorType<void | ApiErrorResponseDto>
+
+
+/**
+ * @summary List patient addresses
+ */
+
+export function usePatientsControllerGetAddresses<TData = Awaited<ReturnType<typeof patientsControllerGetAddresses>>, TError = ErrorType<void | ApiErrorResponseDto>>(
+ patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetAddresses>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerGetAddressesQueryOptions(patientId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerGetEmergencyContactsUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/emergency-contacts`
+}
+
+/**
+ * @summary List patient emergency contacts
+ */
+export const patientsControllerGetEmergencyContacts = async (patientId: string, options?: RequestInit): Promise<PatientEmergencyContactDto[]> => {
+
+  return customFetch<PatientEmergencyContactDto[]>(getPatientsControllerGetEmergencyContactsUrl(patientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerGetEmergencyContactsQueryKey = (patientId: string,) => {
+    return [
+    `/api/patients/${patientId}/emergency-contacts`
+    ] as const;
+    }
+
+
+export const getPatientsControllerGetEmergencyContactsQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerGetEmergencyContacts>>, TError = ErrorType<void | ApiErrorResponseDto>>(patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetEmergencyContacts>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerGetEmergencyContactsQueryKey(patientId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerGetEmergencyContacts>>> = ({ signal }) => patientsControllerGetEmergencyContacts(patientId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: patientId !== null && patientId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetEmergencyContacts>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerGetEmergencyContactsQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerGetEmergencyContacts>>>
+export type PatientsControllerGetEmergencyContactsQueryError = ErrorType<void | ApiErrorResponseDto>
+
+
+/**
+ * @summary List patient emergency contacts
+ */
+
+export function usePatientsControllerGetEmergencyContacts<TData = Awaited<ReturnType<typeof patientsControllerGetEmergencyContacts>>, TError = ErrorType<void | ApiErrorResponseDto>>(
+ patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetEmergencyContacts>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerGetEmergencyContactsQueryOptions(patientId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerGetAllergiesUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/allergies`
+}
+
+/**
+ * @summary List patient allergies
+ */
+export const patientsControllerGetAllergies = async (patientId: string, options?: RequestInit): Promise<PatientAllergyDto[]> => {
+
+  return customFetch<PatientAllergyDto[]>(getPatientsControllerGetAllergiesUrl(patientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerGetAllergiesQueryKey = (patientId: string,) => {
+    return [
+    `/api/patients/${patientId}/allergies`
+    ] as const;
+    }
+
+
+export const getPatientsControllerGetAllergiesQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerGetAllergies>>, TError = ErrorType<void | ApiErrorResponseDto>>(patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetAllergies>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerGetAllergiesQueryKey(patientId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerGetAllergies>>> = ({ signal }) => patientsControllerGetAllergies(patientId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: patientId !== null && patientId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetAllergies>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerGetAllergiesQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerGetAllergies>>>
+export type PatientsControllerGetAllergiesQueryError = ErrorType<void | ApiErrorResponseDto>
+
+
+/**
+ * @summary List patient allergies
+ */
+
+export function usePatientsControllerGetAllergies<TData = Awaited<ReturnType<typeof patientsControllerGetAllergies>>, TError = ErrorType<void | ApiErrorResponseDto>>(
+ patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetAllergies>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerGetAllergiesQueryOptions(patientId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerAddAllergyUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/allergies`
+}
+
+/**
+ * @summary Add a patient allergy
+ */
+export const patientsControllerAddAllergy = async (patientId: string, options?: RequestInit): Promise<PatientAllergyDto> => {
+
+  return customFetch<PatientAllergyDto>(getPatientsControllerAddAllergyUrl(patientId),
+  {
+    ...options,
+    method: 'POST'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerAddAllergyMutationOptions = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerAddAllergy>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof patientsControllerAddAllergy>>, TError,{patientId: string}, TContext> => {
+
+const mutationKey = ['patientsControllerAddAllergy'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patientsControllerAddAllergy>>, {patientId: string}> = (props) => {
+          const {patientId} = props ?? {};
+
+          return  patientsControllerAddAllergy(patientId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatientsControllerAddAllergyMutationResult = NonNullable<Awaited<ReturnType<typeof patientsControllerAddAllergy>>>
+
+    export type PatientsControllerAddAllergyMutationError = ErrorType<ApiErrorResponseDto | void>
+
+    /**
+ * @summary Add a patient allergy
+ */
+export const usePatientsControllerAddAllergy = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerAddAllergy>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patientsControllerAddAllergy>>,
+        TError,
+        {patientId: string},
+        TContext
+      > => {
+      return useMutation(getPatientsControllerAddAllergyMutationOptions(options));
+    }
+
+export const getPatientsControllerGetPreferencesUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/preferences`
+}
+
+/**
+ * @summary Get patient preferences
+ */
+export const patientsControllerGetPreferences = async (patientId: string, options?: RequestInit): Promise<PatientPreferenceDto> => {
+
+  return customFetch<PatientPreferenceDto>(getPatientsControllerGetPreferencesUrl(patientId),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerGetPreferencesQueryKey = (patientId: string,) => {
+    return [
+    `/api/patients/${patientId}/preferences`
+    ] as const;
+    }
+
+
+export const getPatientsControllerGetPreferencesQueryOptions = <TData = Awaited<ReturnType<typeof patientsControllerGetPreferences>>, TError = ErrorType<void | ApiErrorResponseDto>>(patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetPreferences>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPatientsControllerGetPreferencesQueryKey(patientId);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof patientsControllerGetPreferences>>> = ({ signal }) => patientsControllerGetPreferences(patientId, { signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: patientId !== null && patientId !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetPreferences>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type PatientsControllerGetPreferencesQueryResult = NonNullable<Awaited<ReturnType<typeof patientsControllerGetPreferences>>>
+export type PatientsControllerGetPreferencesQueryError = ErrorType<void | ApiErrorResponseDto>
+
+
+/**
+ * @summary Get patient preferences
+ */
+
+export function usePatientsControllerGetPreferences<TData = Awaited<ReturnType<typeof patientsControllerGetPreferences>>, TError = ErrorType<void | ApiErrorResponseDto>>(
+ patientId: string, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof patientsControllerGetPreferences>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getPatientsControllerGetPreferencesQueryOptions(patientId,options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getPatientsControllerUpdatePreferencesUrl = (patientId: string,) => {
+
+
+
+
+  return `/api/patients/${patientId}/preferences`
+}
+
+/**
+ * @summary Create or update patient preferences
+ */
+export const patientsControllerUpdatePreferences = async (patientId: string, options?: RequestInit): Promise<PatientPreferenceDto> => {
+
+  return customFetch<PatientPreferenceDto>(getPatientsControllerUpdatePreferencesUrl(patientId),
+  {
+    ...options,
+    method: 'PUT'
+
+
+  }
+);}
+
+
+
+
+
+export const getPatientsControllerUpdatePreferencesMutationOptions = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerUpdatePreferences>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof patientsControllerUpdatePreferences>>, TError,{patientId: string}, TContext> => {
+
+const mutationKey = ['patientsControllerUpdatePreferences'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patientsControllerUpdatePreferences>>, {patientId: string}> = (props) => {
+          const {patientId} = props ?? {};
+
+          return  patientsControllerUpdatePreferences(patientId,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatientsControllerUpdatePreferencesMutationResult = NonNullable<Awaited<ReturnType<typeof patientsControllerUpdatePreferences>>>
+
+    export type PatientsControllerUpdatePreferencesMutationError = ErrorType<ApiErrorResponseDto | void>
+
+    /**
+ * @summary Create or update patient preferences
+ */
+export const usePatientsControllerUpdatePreferences = <TError = ErrorType<ApiErrorResponseDto | void>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patientsControllerUpdatePreferences>>, TError,{patientId: string}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof patientsControllerUpdatePreferences>>,
+        TError,
+        {patientId: string},
+        TContext
+      > => {
+      return useMutation(getPatientsControllerUpdatePreferencesMutationOptions(options));
     }
 

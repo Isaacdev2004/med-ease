@@ -320,3 +320,427 @@ export const IamControllerGetFavoritesResponse = zod.void()
 export const IamControllerShareResponse = zod.void()
 
 
+/**
+ * @summary List patients (paginated)
+ */
+export const PatientsControllerListPatientsResponse = zod.object({
+  "items": zod.array(zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+})),
+  "total": zod.number(),
+  "page": zod.number(),
+  "pageSize": zod.number()
+})
+
+
+/**
+ * @summary Register a new patient
+ */
+export const PatientsControllerRegisterPatientResponse = zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+})
+
+
+/**
+ * @summary Search patients
+ */
+export const PatientsControllerSearchPatientsResponse = zod.object({
+  "items": zod.array(zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+})),
+  "total": zod.number(),
+  "page": zod.number(),
+  "pageSize": zod.number()
+})
+
+
+/**
+ * @summary Export patients
+ */
+export const PatientsControllerExportPatientsResponse = zod.object({
+  "format": zod.enum(['csv', 'pdf', 'xlsx']),
+  "exportedAt": zod.coerce.date(),
+  "recordCount": zod.number()
+})
+
+
+/**
+ * @summary Validate patient merge candidates (execution deferred)
+ */
+export const PatientsControllerValidateMergeResponse = zod.object({
+  "valid": zod.boolean(),
+  "sourcePatient": zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+}),
+  "targetPatient": zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+})
+})
+
+
+/**
+ * @summary Get patient by id
+ */
+export const PatientsControllerGetPatientParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerGetPatientResponse = zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+})
+
+
+/**
+ * @summary Update patient demographics
+ */
+export const PatientsControllerUpdatePatientParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerUpdatePatientResponse = zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+})
+
+
+/**
+ * @summary Archive (soft-delete) a patient
+ */
+export const PatientsControllerArchivePatientParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerArchivePatientResponse = zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+})
+
+
+/**
+ * @summary Restore an archived patient
+ */
+export const PatientsControllerRestorePatientParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerRestorePatientResponse = zod.object({
+  "patientId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "facilityId": zod.string().uuid().optional(),
+  "userId": zod.string().uuid().optional(),
+  "mrn": zod.string(),
+  "fullName": zod.string(),
+  "dateOfBirth": zod.coerce.date(),
+  "gender": zod.enum(['male', 'female', 'other', 'unknown']).optional(),
+  "status": zod.enum(['active', 'inactive', 'observation']),
+  "primaryProviderId": zod.string().uuid().optional(),
+  "fhirResourceId": zod.string().uuid(),
+  "createdBy": zod.string().uuid(),
+  "updatedBy": zod.string().uuid().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date(),
+  "deletedAt": zod.coerce.date().optional(),
+  "version": zod.number()
+})
+
+
+/**
+ * @summary List patient identifiers
+ */
+export const PatientsControllerGetIdentifiersParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerGetIdentifiersResponseItem = zod.object({
+  "identifierId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "type": zod.enum(['mrn', 'national_id', 'passport', 'drivers_license', 'ssn', 'other']),
+  "value": zod.string(),
+  "system": zod.string().optional(),
+  "isPrimary": zod.boolean(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const PatientsControllerGetIdentifiersResponse = zod.array(PatientsControllerGetIdentifiersResponseItem)
+
+
+/**
+ * @summary List patient contacts
+ */
+export const PatientsControllerGetContactsParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerGetContactsResponseItem = zod.object({
+  "contactId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "type": zod.enum(['phone', 'email', 'fax', 'other']),
+  "value": zod.string(),
+  "isPrimary": zod.boolean(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const PatientsControllerGetContactsResponse = zod.array(PatientsControllerGetContactsResponseItem)
+
+
+/**
+ * @summary List patient addresses
+ */
+export const PatientsControllerGetAddressesParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerGetAddressesResponseItem = zod.object({
+  "addressId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "type": zod.enum(['home', 'work', 'mailing', 'temporary', 'other']),
+  "street": zod.string(),
+  "city": zod.string(),
+  "state": zod.string().optional(),
+  "postalCode": zod.string(),
+  "country": zod.string(),
+  "isPrimary": zod.boolean(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const PatientsControllerGetAddressesResponse = zod.array(PatientsControllerGetAddressesResponseItem)
+
+
+/**
+ * @summary List patient emergency contacts
+ */
+export const PatientsControllerGetEmergencyContactsParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerGetEmergencyContactsResponseItem = zod.object({
+  "emergencyContactId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "name": zod.string(),
+  "relationship": zod.string(),
+  "phone": zod.string(),
+  "email": zod.string().optional(),
+  "isPrimary": zod.boolean(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const PatientsControllerGetEmergencyContactsResponse = zod.array(PatientsControllerGetEmergencyContactsResponseItem)
+
+
+/**
+ * @summary List patient allergies
+ */
+export const PatientsControllerGetAllergiesParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerGetAllergiesResponseItem = zod.object({
+  "allergyId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "allergen": zod.string(),
+  "type": zod.enum(['drug', 'food', 'environmental', 'other']),
+  "severity": zod.enum(['mild', 'moderate', 'severe', 'life_threatening']),
+  "reaction": zod.string().optional(),
+  "notedAt": zod.coerce.date(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const PatientsControllerGetAllergiesResponse = zod.array(PatientsControllerGetAllergiesResponseItem)
+
+
+/**
+ * @summary Add a patient allergy
+ */
+export const PatientsControllerAddAllergyParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerAddAllergyResponse = zod.object({
+  "allergyId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "allergen": zod.string(),
+  "type": zod.enum(['drug', 'food', 'environmental', 'other']),
+  "severity": zod.enum(['mild', 'moderate', 'severe', 'life_threatening']),
+  "reaction": zod.string().optional(),
+  "notedAt": zod.coerce.date(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Get patient preferences
+ */
+export const PatientsControllerGetPreferencesParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerGetPreferencesResponse = zod.object({
+  "preferenceId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "language": zod.string(),
+  "maritalStatus": zod.string().optional(),
+  "occupation": zod.string().optional(),
+  "nationality": zod.string().optional(),
+  "smoking": zod.string().optional(),
+  "communication": zod.record(zod.string(), zod.unknown()).optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Create or update patient preferences
+ */
+export const PatientsControllerUpdatePreferencesParams = zod.object({
+  "patientId": zod.coerce.string().uuid()
+})
+
+export const PatientsControllerUpdatePreferencesResponse = zod.object({
+  "preferenceId": zod.string().uuid(),
+  "tenantId": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "language": zod.string(),
+  "maritalStatus": zod.string().optional(),
+  "occupation": zod.string().optional(),
+  "nationality": zod.string().optional(),
+  "smoking": zod.string().optional(),
+  "communication": zod.record(zod.string(), zod.unknown()).optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+

@@ -593,6 +593,631 @@ paths:
       security: *a2
       summary: Share IAM entity
       tags: *a3
+  /patients:
+    get:
+      operationId: PatientsController_listPatients
+      parameters: []
+      responses:
+        "200":
+          description: Paginated patient list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedPatientsDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+      security: &a4
+        - bearer: []
+      summary: List patients (paginated)
+      tags: &a5
+        - patients
+    post:
+      operationId: PatientsController_registerPatient
+      parameters: []
+      responses:
+        "201":
+          description: Registered patient
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+      security: *a4
+      summary: Register a new patient
+      tags: *a5
+  /patients/search:
+    get:
+      operationId: PatientsController_searchPatients
+      parameters: []
+      responses:
+        "200":
+          description: Paginated search results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedPatientsDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+      security: *a4
+      summary: Search patients
+      tags: *a5
+  /patients/export:
+    post:
+      operationId: PatientsController_exportPatients
+      parameters: []
+      responses:
+        "200":
+          description: Export metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExportPatientsResultDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+      security: *a4
+      summary: Export patients
+      tags: *a5
+  /patients/validate-merge:
+    post:
+      operationId: PatientsController_validateMerge
+      parameters: []
+      responses:
+        "200":
+          description: Merge validation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientMergeValidationResultDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: Validate patient merge candidates (execution deferred)
+      tags: *a5
+  /patients/{patientId}:
+    get:
+      operationId: PatientsController_getPatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Patient record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: Get patient by id
+      tags: *a5
+    patch:
+      operationId: PatientsController_updatePatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Updated patient
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: Update patient demographics
+      tags: *a5
+    delete:
+      operationId: PatientsController_archivePatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Archived patient
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: Archive (soft-delete) a patient
+      tags: *a5
+  /patients/{patientId}/restore:
+    post:
+      operationId: PatientsController_restorePatient
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Restored patient
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: Restore an archived patient
+      tags: *a5
+  /patients/{patientId}/identifiers:
+    get:
+      operationId: PatientsController_getIdentifiers
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Patient identifiers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PatientIdentifierDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: List patient identifiers
+      tags: *a5
+  /patients/{patientId}/contacts:
+    get:
+      operationId: PatientsController_getContacts
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Patient contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PatientContactDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: List patient contacts
+      tags: *a5
+  /patients/{patientId}/addresses:
+    get:
+      operationId: PatientsController_getAddresses
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Patient addresses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PatientAddressDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: List patient addresses
+      tags: *a5
+  /patients/{patientId}/emergency-contacts:
+    get:
+      operationId: PatientsController_getEmergencyContacts
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Emergency contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PatientEmergencyContactDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: List patient emergency contacts
+      tags: *a5
+  /patients/{patientId}/allergies:
+    get:
+      operationId: PatientsController_getAllergies
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Patient allergies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PatientAllergyDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: List patient allergies
+      tags: *a5
+    post:
+      operationId: PatientsController_addAllergy
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "201":
+          description: Created allergy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientAllergyDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: Add a patient allergy
+      tags: *a5
+  /patients/{patientId}/preferences:
+    get:
+      operationId: PatientsController_getPreferences
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Patient preferences
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientPreferenceDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: Get patient preferences
+      tags: *a5
+    put:
+      operationId: PatientsController_updatePreferences
+      parameters:
+        - name: patientId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        "200":
+          description: Patient preferences
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PatientPreferenceDto"
+        "400":
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+        "401":
+          description: |-
+            Authentication required
+
+            Authentication required
+        "403":
+          description: |-
+            Insufficient permissions or ABAC policy denial
+
+            Insufficient permissions
+        "404":
+          description: Patient not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponseDto"
+      security: *a4
+      summary: Create or update patient preferences
+      tags: *a5
 info:
   title: Api
   description: Med-Ease enterprise healthcare platform API
@@ -607,6 +1232,402 @@ components:
       bearerFormat: JWT
       type: http
   schemas:
+    PatientDto:
+      type: object
+      properties:
+        patientId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        facilityId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        mrn:
+          type: string
+        fullName:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+            - other
+            - unknown
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - observation
+        primaryProviderId:
+          type: string
+          format: uuid
+        fhirResourceId:
+          type: string
+          format: uuid
+        createdBy:
+          type: string
+          format: uuid
+        updatedBy:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        deletedAt:
+          type: string
+          format: date-time
+        version:
+          type: number
+      required:
+        - patientId
+        - tenantId
+        - mrn
+        - fullName
+        - dateOfBirth
+        - status
+        - fhirResourceId
+        - createdBy
+        - createdAt
+        - updatedAt
+        - version
+    PaginatedPatientsDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PatientDto"
+        total:
+          type: number
+        page:
+          type: number
+        pageSize:
+          type: number
+      required:
+        - items
+        - total
+        - page
+        - pageSize
+    ApiErrorResponseDto:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        statusCode:
+          type: number
+        message:
+          type: string
+          description: Error message or validation errors
+        path:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+      required:
+        - status
+        - statusCode
+        - message
+        - path
+        - timestamp
+    ExportPatientsResultDto:
+      type: object
+      properties:
+        format:
+          type: string
+          enum:
+            - csv
+            - pdf
+            - xlsx
+        exportedAt:
+          type: string
+          format: date-time
+        recordCount:
+          type: number
+      required:
+        - format
+        - exportedAt
+        - recordCount
+    PatientMergeValidationResultDto:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        sourcePatient:
+          $ref: "#/components/schemas/PatientDto"
+        targetPatient:
+          $ref: "#/components/schemas/PatientDto"
+      required:
+        - valid
+        - sourcePatient
+        - targetPatient
+    PatientIdentifierDto:
+      type: object
+      properties:
+        identifierId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        patientId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - mrn
+            - national_id
+            - passport
+            - drivers_license
+            - ssn
+            - other
+        value:
+          type: string
+        system:
+          type: string
+        isPrimary:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - identifierId
+        - tenantId
+        - patientId
+        - type
+        - value
+        - isPrimary
+        - createdAt
+        - updatedAt
+    PatientContactDto:
+      type: object
+      properties:
+        contactId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        patientId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - phone
+            - email
+            - fax
+            - other
+        value:
+          type: string
+        isPrimary:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - contactId
+        - tenantId
+        - patientId
+        - type
+        - value
+        - isPrimary
+        - createdAt
+        - updatedAt
+    PatientAddressDto:
+      type: object
+      properties:
+        addressId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        patientId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+            - home
+            - work
+            - mailing
+            - temporary
+            - other
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+        isPrimary:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - addressId
+        - tenantId
+        - patientId
+        - type
+        - street
+        - city
+        - postalCode
+        - country
+        - isPrimary
+        - createdAt
+        - updatedAt
+    PatientEmergencyContactDto:
+      type: object
+      properties:
+        emergencyContactId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        patientId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        relationship:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        isPrimary:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - emergencyContactId
+        - tenantId
+        - patientId
+        - name
+        - relationship
+        - phone
+        - isPrimary
+        - createdAt
+        - updatedAt
+    PatientAllergyDto:
+      type: object
+      properties:
+        allergyId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        patientId:
+          type: string
+          format: uuid
+        allergen:
+          type: string
+        type:
+          type: string
+          enum:
+            - drug
+            - food
+            - environmental
+            - other
+        severity:
+          type: string
+          enum:
+            - mild
+            - moderate
+            - severe
+            - life_threatening
+        reaction:
+          type: string
+        notedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - allergyId
+        - tenantId
+        - patientId
+        - allergen
+        - type
+        - severity
+        - notedAt
+        - createdAt
+        - updatedAt
+    PatientPreferenceDto:
+      type: object
+      properties:
+        preferenceId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        patientId:
+          type: string
+          format: uuid
+        language:
+          type: string
+        maritalStatus:
+          type: string
+        occupation:
+          type: string
+        nationality:
+          type: string
+        smoking:
+          type: string
+        communication:
+          type: object
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - preferenceId
+        - tenantId
+        - patientId
+        - language
+        - createdAt
+        - updatedAt
     HealthStatus:
       type: object
       properties:

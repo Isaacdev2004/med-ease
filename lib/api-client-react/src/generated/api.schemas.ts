@@ -5,6 +5,215 @@
  * Med-Ease enterprise healthcare platform API
  * OpenAPI spec version: 0.1.0
  */
+export type PatientDtoGender = typeof PatientDtoGender[keyof typeof PatientDtoGender];
+
+
+export const PatientDtoGender = {
+  male: 'male',
+  female: 'female',
+  other: 'other',
+  unknown: 'unknown',
+} as const;
+
+export type PatientDtoStatus = typeof PatientDtoStatus[keyof typeof PatientDtoStatus];
+
+
+export const PatientDtoStatus = {
+  active: 'active',
+  inactive: 'inactive',
+  observation: 'observation',
+} as const;
+
+export interface PatientDto {
+  patientId: string;
+  tenantId: string;
+  facilityId?: string;
+  userId?: string;
+  mrn: string;
+  fullName: string;
+  dateOfBirth: string;
+  gender?: PatientDtoGender;
+  status: PatientDtoStatus;
+  primaryProviderId?: string;
+  fhirResourceId: string;
+  createdBy: string;
+  updatedBy?: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
+  version: number;
+}
+
+export interface PaginatedPatientsDto {
+  items: PatientDto[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export interface ApiErrorResponseDto {
+  status: string;
+  statusCode: number;
+  /** Error message or validation errors */
+  message: string;
+  path: string;
+  timestamp: string;
+}
+
+export type ExportPatientsResultDtoFormat = typeof ExportPatientsResultDtoFormat[keyof typeof ExportPatientsResultDtoFormat];
+
+
+export const ExportPatientsResultDtoFormat = {
+  csv: 'csv',
+  pdf: 'pdf',
+  xlsx: 'xlsx',
+} as const;
+
+export interface ExportPatientsResultDto {
+  format: ExportPatientsResultDtoFormat;
+  exportedAt: string;
+  recordCount: number;
+}
+
+export interface PatientMergeValidationResultDto {
+  valid: boolean;
+  sourcePatient: PatientDto;
+  targetPatient: PatientDto;
+}
+
+export type PatientIdentifierDtoType = typeof PatientIdentifierDtoType[keyof typeof PatientIdentifierDtoType];
+
+
+export const PatientIdentifierDtoType = {
+  mrn: 'mrn',
+  national_id: 'national_id',
+  passport: 'passport',
+  drivers_license: 'drivers_license',
+  ssn: 'ssn',
+  other: 'other',
+} as const;
+
+export interface PatientIdentifierDto {
+  identifierId: string;
+  tenantId: string;
+  patientId: string;
+  type: PatientIdentifierDtoType;
+  value: string;
+  system?: string;
+  isPrimary: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PatientContactDtoType = typeof PatientContactDtoType[keyof typeof PatientContactDtoType];
+
+
+export const PatientContactDtoType = {
+  phone: 'phone',
+  email: 'email',
+  fax: 'fax',
+  other: 'other',
+} as const;
+
+export interface PatientContactDto {
+  contactId: string;
+  tenantId: string;
+  patientId: string;
+  type: PatientContactDtoType;
+  value: string;
+  isPrimary: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PatientAddressDtoType = typeof PatientAddressDtoType[keyof typeof PatientAddressDtoType];
+
+
+export const PatientAddressDtoType = {
+  home: 'home',
+  work: 'work',
+  mailing: 'mailing',
+  temporary: 'temporary',
+  other: 'other',
+} as const;
+
+export interface PatientAddressDto {
+  addressId: string;
+  tenantId: string;
+  patientId: string;
+  type: PatientAddressDtoType;
+  street: string;
+  city: string;
+  state?: string;
+  postalCode: string;
+  country: string;
+  isPrimary: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PatientEmergencyContactDto {
+  emergencyContactId: string;
+  tenantId: string;
+  patientId: string;
+  name: string;
+  relationship: string;
+  phone: string;
+  email?: string;
+  isPrimary: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PatientAllergyDtoType = typeof PatientAllergyDtoType[keyof typeof PatientAllergyDtoType];
+
+
+export const PatientAllergyDtoType = {
+  drug: 'drug',
+  food: 'food',
+  environmental: 'environmental',
+  other: 'other',
+} as const;
+
+export type PatientAllergyDtoSeverity = typeof PatientAllergyDtoSeverity[keyof typeof PatientAllergyDtoSeverity];
+
+
+export const PatientAllergyDtoSeverity = {
+  mild: 'mild',
+  moderate: 'moderate',
+  severe: 'severe',
+  life_threatening: 'life_threatening',
+} as const;
+
+export interface PatientAllergyDto {
+  allergyId: string;
+  tenantId: string;
+  patientId: string;
+  allergen: string;
+  type: PatientAllergyDtoType;
+  severity: PatientAllergyDtoSeverity;
+  reaction?: string;
+  notedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PatientPreferenceDtoCommunication = { [key: string]: unknown };
+
+export interface PatientPreferenceDto {
+  preferenceId: string;
+  tenantId: string;
+  patientId: string;
+  language: string;
+  maritalStatus?: string;
+  occupation?: string;
+  nationality?: string;
+  smoking?: string;
+  communication?: PatientPreferenceDtoCommunication;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface HealthStatus {
   status: string;
 }

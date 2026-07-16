@@ -6,6 +6,26 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './apiErrorResponseDto';
+export * from './exportPatientsResultDto';
+export * from './exportPatientsResultDtoFormat';
 export * from './healthCheckResponse';
 export * from './healthStatus';
 export * from './jsonObject';
+export * from './paginatedPatientsDto';
+export * from './patientAddressDto';
+export * from './patientAddressDtoType';
+export * from './patientAllergyDto';
+export * from './patientAllergyDtoSeverity';
+export * from './patientAllergyDtoType';
+export * from './patientContactDto';
+export * from './patientContactDtoType';
+export * from './patientDto';
+export * from './patientDtoGender';
+export * from './patientDtoStatus';
+export * from './patientEmergencyContactDto';
+export * from './patientIdentifierDto';
+export * from './patientIdentifierDtoType';
+export * from './patientMergeValidationResultDto';
+export * from './patientPreferenceDto';
+export * from './patientPreferenceDtoCommunication';
