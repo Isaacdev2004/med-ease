@@ -1,30 +1,611 @@
-openapi: 3.1.0
-info:
-  # Do not change the title, if the title changes, the import paths will be broken
-  title: Api
-  version: 0.1.0
-  description: API specification
-servers:
-  - url: /api
-    description: Base API path
-tags:
-  - name: health
-    description: Health operations
+openapi: 3.0.0
 paths:
   /healthz:
     get:
-      operationId: healthCheck
-      tags: [health]
-      summary: Health check
-      description: Returns server health status
+      operationId: HealthController_liveness
+      parameters: []
       responses:
         "200":
-          description: Healthy
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/HealthStatus"
+          description: API process is alive
+      summary: Liveness probe
+      tags: &a1
+        - health
+  /healthz/ready:
+    get:
+      operationId: HealthController_readiness
+      parameters: []
+      responses:
+        "200":
+          description: All dependencies healthy
+        "503":
+          description: One or more dependencies unhealthy
+      summary: Readiness probe — verifies infrastructure dependencies
+      tags: *a1
+  /iam/dashboard:
+    get:
+      operationId: IamController_dashboard
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: &a2
+        - bearer: []
+      summary: IAM dashboard metrics
+      tags: &a3
+        - iam
+  /iam/analytics:
+    get:
+      operationId: IamController_analytics
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: IAM analytics metrics
+      tags: *a3
+  /iam/users:
+    get:
+      operationId: IamController_getUsers
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List IAM users
+      tags: *a3
+    post:
+      operationId: IamController_createUser
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Create IAM user
+      tags: *a3
+  /iam/users/{id}:
+    get:
+      operationId: IamController_getUser
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema: {}
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Get IAM user by id
+      tags: *a3
+  /iam/tenants:
+    get:
+      operationId: IamController_getTenants
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List tenants
+      tags: *a3
+  /iam/organizations:
+    get:
+      operationId: IamController_getOrganizations
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List organizations
+      tags: *a3
+  /iam/roles:
+    get:
+      operationId: IamController_getRoles
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List IAM roles
+      tags: *a3
+  /iam/permissions:
+    get:
+      operationId: IamController_getPermissions
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List IAM permissions catalog
+      tags: *a3
+  /iam/policies:
+    get:
+      operationId: IamController_getPolicies
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List IAM policies
+      tags: *a3
+    post:
+      operationId: IamController_createPolicy
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Create IAM policy
+      tags: *a3
+  /iam/sessions:
+    get:
+      operationId: IamController_getSessions
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List user sessions
+      tags: *a3
+  /iam/login-history:
+    get:
+      operationId: IamController_getLoginHistory
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List login history
+      tags: *a3
+  /iam/mfa-devices:
+    get:
+      operationId: IamController_getMfaDevices
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List MFA devices
+      tags: *a3
+  /iam/trusted-devices:
+    get:
+      operationId: IamController_getTrustedDevices
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List trusted devices
+      tags: *a3
+  /iam/oauth-clients:
+    get:
+      operationId: IamController_getOauthClients
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List OAuth clients
+      tags: *a3
+    post:
+      operationId: IamController_createOAuthClient
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Create OAuth client
+      tags: *a3
+  /iam/api-keys:
+    get:
+      operationId: IamController_getApiKeys
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List API keys
+      tags: *a3
+  /iam/consents:
+    get:
+      operationId: IamController_getConsents
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List consent records
+      tags: *a3
+    post:
+      operationId: IamController_grantConsent
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Grant consent
+      tags: *a3
+  /iam/delegations:
+    get:
+      operationId: IamController_getDelegations
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List delegations
+      tags: *a3
+    post:
+      operationId: IamController_delegateAccess
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Delegate access
+      tags: *a3
+  /iam/proxy-access:
+    get:
+      operationId: IamController_getProxyAccess
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List proxy access records
+      tags: *a3
+  /iam/break-glass:
+    get:
+      operationId: IamController_getBreakGlass
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List break-glass events
+      tags: *a3
+  /iam/audit-events:
+    get:
+      operationId: IamController_getAuditEvents
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List IAM audit events
+      tags: *a3
+  /iam/security-incidents:
+    get:
+      operationId: IamController_getSecurityIncidents
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List security incidents
+      tags: *a3
+  /iam/risk-scores:
+    get:
+      operationId: IamController_getRiskScores
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List risk scores
+      tags: *a3
+  /iam/saml-providers:
+    get:
+      operationId: IamController_getSamlProviders
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List SAML providers
+      tags: *a3
+  /iam/oidc-providers:
+    get:
+      operationId: IamController_getOidcProviders
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List OIDC providers
+      tags: *a3
+  /iam/users/invite:
+    post:
+      operationId: IamController_inviteUser
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Invite IAM user
+      tags: *a3
+  /iam/users/{id}/lock:
+    post:
+      operationId: IamController_lockAccount
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema: {}
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Lock user account
+      tags: *a3
+  /iam/users/{id}/unlock:
+    post:
+      operationId: IamController_unlockAccount
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema: {}
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Unlock user account
+      tags: *a3
+  /iam/users/assign-role:
+    post:
+      operationId: IamController_assignRole
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Assign role to user
+      tags: *a3
+  /iam/users/remove-role:
+    post:
+      operationId: IamController_removeRole
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Remove role from user
+      tags: *a3
+  /iam/mfa/enable:
+    post:
+      operationId: IamController_enableMfa
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Enable MFA for user
+      tags: *a3
+  /iam/mfa/disable:
+    post:
+      operationId: IamController_disableMfa
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Disable MFA for user
+      tags: *a3
+  /iam/sessions/{id}/revoke:
+    post:
+      operationId: IamController_revokeSession
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema: {}
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Revoke user session
+      tags: *a3
+  /iam/api-keys/rotate:
+    post:
+      operationId: IamController_rotateApiKey
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Rotate API key
+      tags: *a3
+  /iam/consents/{id}/revoke:
+    post:
+      operationId: IamController_revokeConsent
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema: {}
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Revoke consent
+      tags: *a3
+  /iam/break-glass/start:
+    post:
+      operationId: IamController_startBreakGlass
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Start break-glass event
+      tags: *a3
+  /iam/break-glass/{id}/end:
+    post:
+      operationId: IamController_endBreakGlass
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema: {}
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: End break-glass event
+      tags: *a3
+  /iam/search:
+    get:
+      operationId: IamController_search
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Search IAM users and policies
+      tags: *a3
+  /iam/export:
+    post:
+      operationId: IamController_exportData
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Export IAM data
+      tags: *a3
+  /iam/favorites:
+    post:
+      operationId: IamController_favorite
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Favorite IAM entity
+      tags: *a3
+    get:
+      operationId: IamController_getFavorites
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: List IAM favorites
+      tags: *a3
+  /iam/share:
+    post:
+      operationId: IamController_share
+      parameters: []
+      responses:
+        "401":
+          description: Authentication required
+        "403":
+          description: Insufficient permissions
+      security: *a2
+      summary: Share IAM entity
+      tags: *a3
+info:
+  title: Api
+  description: Med-Ease enterprise healthcare platform API
+  version: 0.1.0
+  contact: {}
+tags: []
+servers: []
 components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
   schemas:
     HealthStatus:
       type: object
@@ -33,4 +614,13 @@ components:
           type: string
       required:
         - status
-
+    HealthCheckResponse:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    JsonObject:
+      type: object
+      additionalProperties: true
