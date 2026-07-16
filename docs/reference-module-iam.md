@@ -66,3 +66,7 @@ CI: mock contract (fast) + HTTP contract + E2E (slow)
 ## Clinical reference module
 
 **Patients** — certified clinical reference module (`docs/reference-module-patients.md`). Appointments, Encounters, Prescriptions, and other clinical domains must follow the same pipeline and certification gates.
+
+## Certification
+
+Every module must satisfy [module-certification-checklist.md](./module-certification-checklist.md) before merge.

@@ -108,3 +108,7 @@ Worker → audit.audit_logs
 - Call `AuditPublisher` directly from services (use `DomainEventBus`)
 - Modify frontend hooks, pages, or routing when adding HTTP adapters
 - Accept `tenantId` from untrusted callers in repositories (use request context)
+
+## Certification
+
+Every clinical module must satisfy [module-certification-checklist.md](./module-certification-checklist.md) before merge.
