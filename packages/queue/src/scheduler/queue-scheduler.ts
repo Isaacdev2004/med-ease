@@ -1,4 +1,4 @@
-import type { JobsOptions, RepeatOptions } from 'bullmq';
+import type { RepeatOptions } from 'bullmq';
 
 import type { QueueName } from '../constants/queue-names';
 import { QUEUE_NAMES } from '../constants/queue-names';

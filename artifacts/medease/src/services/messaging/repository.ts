@@ -2,7 +2,6 @@ import { computeMessagingAnalytics } from '@/services/messaging/analytics';
 import { nextBroadcastStatus } from '@/services/messaging/broadcast-engine';
 import { nextCampaignStatus } from '@/services/messaging/campaign-engine';
 import { nextMessageStatus } from '@/services/messaging/channel-engine';
-import { nextDeliveryStatus } from '@/services/messaging/delivery-engine';
 import { extractVariables } from '@/services/messaging/template-engine';
 import {
   MOCK_ANNOUNCEMENTS,

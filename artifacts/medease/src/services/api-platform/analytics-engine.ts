@@ -35,7 +35,7 @@ export function computeApiAnalytics(
   keys: ApiKey[],
   endpoints: ApiEndpoint[],
   deliveries: WebhookDelivery[],
-  sdkDownloads: number,
+  _sdkDownloads: number,
 ): ApiAnalytics {
   const latencySamples = [45, 62, 38, 120, 55, 89, 42, 200, 67, 51];
   return {

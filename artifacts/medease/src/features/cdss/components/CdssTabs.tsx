@@ -46,7 +46,7 @@ function getTabs(variant: CdssTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function CdssTabs({ basePath, variant = 'professional' }: CdssTabsProps) {
+export function CdssTabs({ basePath: _basePath, variant = 'professional' }: CdssTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

@@ -40,7 +40,7 @@ function getTabs(variant: PhmTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function PhmTabs({ basePath, variant = 'professional' }: PhmTabsProps) {
+export function PhmTabs({ basePath: _basePath, variant = 'professional' }: PhmTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

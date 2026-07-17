@@ -45,7 +45,7 @@ function getTabs(variant: ResearchTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function ResearchTabs({ basePath, variant = 'professional' }: ResearchTabsProps) {
+export function ResearchTabs({ basePath: _basePath, variant = 'professional' }: ResearchTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

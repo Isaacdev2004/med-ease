@@ -45,7 +45,7 @@ function getTabs(variant: InteropTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function InteropTabs({ basePath, variant = 'professional' }: InteropTabsProps) {
+export function InteropTabs({ basePath: _basePath, variant = 'professional' }: InteropTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

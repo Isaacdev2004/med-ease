@@ -37,7 +37,7 @@ function getTabs(variant: ReportingTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function ReportingTabs({ basePath, variant = 'professional' }: ReportingTabsProps) {
+export function ReportingTabs({ basePath: _basePath, variant = 'professional' }: ReportingTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

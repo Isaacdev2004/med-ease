@@ -771,7 +771,7 @@ export class IamRepository extends TenantAwareRepository {
 
   async assignRole(input: AssignRoleInput) {
     return this.prisma.runInTransaction(async (tx) => {
-      const user = await tx.user.findFirstOrThrow({
+      await tx.user.findFirstOrThrow({
         where: { id: input.userId, tenantId: this.tenantId },
         include: USER_INCLUDE,
       });
@@ -793,7 +793,7 @@ export class IamRepository extends TenantAwareRepository {
 
   async removeRole(input: AssignRoleInput) {
     return this.prisma.runInTransaction(async (tx) => {
-      const user = await tx.user.findFirstOrThrow({
+      await tx.user.findFirstOrThrow({
         where: { id: input.userId, tenantId: this.tenantId },
         include: USER_INCLUDE,
       });
@@ -1058,7 +1058,7 @@ export class IamRepository extends TenantAwareRepository {
   }
 
   async share(input: ShareIamInput) {
-    return this.prisma.runInTransaction(async (tx) => {
+    return this.prisma.runInTransaction(async (_tx) => {
       return { shared: true, recipients: input.recipientIds.length };
     });
   }

@@ -44,7 +44,7 @@ function getTabs(variant: PublicHealthTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function PublicHealthTabs({ basePath, variant = 'professional' }: PublicHealthTabsProps) {
+export function PublicHealthTabs({ basePath: _basePath, variant = 'professional' }: PublicHealthTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

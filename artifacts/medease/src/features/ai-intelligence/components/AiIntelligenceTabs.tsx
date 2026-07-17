@@ -42,7 +42,7 @@ function getTabs(variant: AiIntelligenceTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function AiIntelligenceTabs({ basePath, variant = 'professional' }: AiIntelligenceTabsProps) {
+export function AiIntelligenceTabs({ basePath: _basePath, variant = 'professional' }: AiIntelligenceTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

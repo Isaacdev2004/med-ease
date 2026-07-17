@@ -40,7 +40,7 @@ function getTabs(variant: MessagingTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function MessagingTabs({ basePath, variant = 'professional' }: MessagingTabsProps) {
+export function MessagingTabs({ basePath: _basePath, variant = 'professional' }: MessagingTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

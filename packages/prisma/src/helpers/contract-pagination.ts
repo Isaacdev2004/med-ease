@@ -4,6 +4,6 @@ import type { PaginatedResult } from './pagination';
 export function toContractPaginated<T>(
   result: PaginatedResult<T>,
 ): Pick<PaginatedResult<T>, 'items' | 'page' | 'pageSize' | 'total'> {
-  const { totalPages: _totalPages, ...contract } = result;
-  return contract;
+  const { items, page, pageSize, total } = result;
+  return { items, page, pageSize, total };
 }

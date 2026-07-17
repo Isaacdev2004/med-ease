@@ -41,7 +41,7 @@ function getTabs(variant: CommandCenterTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function CommandCenterTabs({ basePath, variant = 'professional' }: CommandCenterTabsProps) {
+export function CommandCenterTabs({ basePath: _basePath, variant = 'professional' }: CommandCenterTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

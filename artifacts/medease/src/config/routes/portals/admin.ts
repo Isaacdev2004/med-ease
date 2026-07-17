@@ -1,7 +1,6 @@
 import {
   ActivitySquare,
   Bell,
-  Building2,
   Database,
   Flag,
   Home,

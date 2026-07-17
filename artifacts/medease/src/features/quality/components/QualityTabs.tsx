@@ -42,7 +42,7 @@ function getTabs(variant: QualityTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function QualityTabs({ basePath, variant = 'professional' }: QualityTabsProps) {
+export function QualityTabs({ basePath: _basePath, variant = 'professional' }: QualityTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

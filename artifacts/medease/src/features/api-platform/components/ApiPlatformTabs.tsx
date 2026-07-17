@@ -40,7 +40,7 @@ function getTabs(variant: ApiPlatformTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function ApiPlatformTabs({ basePath, variant = 'professional' }: ApiPlatformTabsProps) {
+export function ApiPlatformTabs({ basePath: _basePath, variant = 'professional' }: ApiPlatformTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

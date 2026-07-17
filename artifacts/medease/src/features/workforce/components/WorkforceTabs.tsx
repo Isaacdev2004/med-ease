@@ -46,7 +46,7 @@ function getTabs(variant: WorkforceTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function WorkforceTabs({ basePath, variant = 'professional' }: WorkforceTabsProps) {
+export function WorkforceTabs({ basePath: _basePath, variant = 'professional' }: WorkforceTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

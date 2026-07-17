@@ -198,7 +198,7 @@ export const MOCK_INTEGRATIONS: Integration[] = [
 
 export function buildMessagingDashboard(facilityId?: string): MessagingDashboard {
   let messages = MOCK_MESSAGES;
-  let inbox = MOCK_INBOX;
+  const inbox = MOCK_INBOX;
   let broadcasts = MOCK_BROADCASTS;
   if (facilityId) {
     messages = messages.filter((m) => m.facilityId === facilityId);

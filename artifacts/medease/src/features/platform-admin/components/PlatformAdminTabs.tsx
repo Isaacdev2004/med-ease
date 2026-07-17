@@ -34,7 +34,7 @@ interface PlatformAdminTabsProps {
   variant?: 'admin' | 'readonly';
 }
 
-export function PlatformAdminTabs({ basePath, variant = 'admin' }: PlatformAdminTabsProps) {
+export function PlatformAdminTabs({ basePath: _basePath, variant = 'admin' }: PlatformAdminTabsProps) {
   const [location] = useLocation();
   const tabs = variant === 'readonly' ? READONLY_TABS : ADMIN_TABS;
 

@@ -10,6 +10,11 @@ export default tseslint.config(
       '**/dist/**',
       '**/node_modules/**',
       '**/*.tsbuildinfo',
+      '**/generated/**',
+      'lib/api-client-react/src/generated/**',
+      'lib/api-zod/src/generated/**',
+      'coverage/**',
+      'ci-artifacts/**',
       '.local/**',
       '.agents/**',
       'attached_assets/**',
@@ -31,6 +36,14 @@ export default tseslint.config(
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/purity': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

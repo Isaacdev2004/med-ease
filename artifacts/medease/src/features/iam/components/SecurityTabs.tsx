@@ -55,7 +55,7 @@ function getTabs(variant: SecurityTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function SecurityTabs({ basePath, variant = 'professional' }: SecurityTabsProps) {
+export function SecurityTabs({ basePath: _basePath, variant = 'professional' }: SecurityTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

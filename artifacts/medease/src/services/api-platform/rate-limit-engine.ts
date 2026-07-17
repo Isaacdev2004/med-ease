@@ -1,4 +1,4 @@
-import type { ApiKeyStatus, RateLimitPolicy } from '@/services/api-platform/types';
+import type { RateLimitPolicy } from '@/services/api-platform/types';
 
 export function isRateLimitExceeded(currentCount: number, policy: RateLimitPolicy): boolean {
   if (!policy.enabled) return false;

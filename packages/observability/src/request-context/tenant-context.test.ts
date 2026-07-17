@@ -4,7 +4,6 @@ import { describe, it } from 'node:test';
 import {
   createBaseRequestContext,
   getRequestContext,
-  mergeRequestContext,
   requireTenantId,
   runWithRequestContext,
 } from '../context';

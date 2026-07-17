@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 
 import {
   PermissionEngine,
-  resolveEffectivePermissions,
   type AuthorizationResource,
   type AuthorizationSubject,
   type EffectivePermissionSet,

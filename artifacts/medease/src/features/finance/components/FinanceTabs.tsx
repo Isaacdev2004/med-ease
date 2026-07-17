@@ -45,7 +45,7 @@ function getTabs(variant: FinanceTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function FinanceTabs({ basePath, variant = 'professional' }: FinanceTabsProps) {
+export function FinanceTabs({ basePath: _basePath, variant = 'professional' }: FinanceTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

@@ -46,7 +46,7 @@ function getTabs(variant: ProcurementTabsProps['variant']) {
   return PHARMACY_TABS;
 }
 
-export function ProcurementTabs({ basePath, variant = 'pharmacy' }: ProcurementTabsProps) {
+export function ProcurementTabs({ basePath: _basePath, variant = 'pharmacy' }: ProcurementTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

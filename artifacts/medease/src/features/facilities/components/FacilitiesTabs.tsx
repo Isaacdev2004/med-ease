@@ -46,7 +46,7 @@ function getTabs(variant: FacilitiesTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function FacilitiesTabs({ basePath, variant = 'professional' }: FacilitiesTabsProps) {
+export function FacilitiesTabs({ basePath: _basePath, variant = 'professional' }: FacilitiesTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 

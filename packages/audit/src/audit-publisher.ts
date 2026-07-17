@@ -1,4 +1,4 @@
-import { createEnvelope, type CreateEnvelopeInput, type QueueJobEnvelope } from '@medease/queue';
+import { createEnvelope, type QueueJobEnvelope } from '@medease/queue';
 
 import { envelopeInputFromAuditEvent } from './audit-context';
 import type { AuditDomainEvent, AuditRecordPayload } from './audit-types';

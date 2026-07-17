@@ -31,7 +31,7 @@ function createContext(input: {
   const handler = () => undefined;
   const classRef = class TestController {};
 
-  const reflector = new Reflector();
+  const _reflector = new Reflector();
   if (input.requirement) {
     Reflect.defineMetadata(PERMISSIONS_KEY, input.requirement, handler);
   }

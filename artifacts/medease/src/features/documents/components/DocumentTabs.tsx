@@ -44,7 +44,7 @@ function getTabs(variant: DocumentTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function DocumentTabs({ basePath, variant = 'professional' }: DocumentTabsProps) {
+export function DocumentTabs({ basePath: _basePath, variant = 'professional' }: DocumentTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
