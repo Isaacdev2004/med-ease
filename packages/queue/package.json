@@ -14,7 +14,7 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --import tsx --test src/envelope/queue-job.envelope.test.ts",
-    "test:coverage": "node --import tsx --test --experimental-test-coverage src/envelope/queue-job.envelope.test.ts"
+    "test:coverage": "node --import tsx --test --experimental-test-coverage --test-coverage-exclude=**/dist/** --test-coverage-include=**/src/** src/envelope/queue-job.envelope.test.ts"
   },
   "dependencies": {
     "@medease/uuid": "workspace:*",
