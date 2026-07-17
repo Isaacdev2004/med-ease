@@ -1,3 +1,4 @@
+import { loadDatabaseEnv } from '../load-env.js';
 import { coreSeed } from './core';
 import { clinicalSeed } from './clinical';
 import { iamSeed } from './iam';
@@ -6,6 +7,7 @@ import { operationsSeed } from './operations';
 import { runSeedModules } from './types';
 
 async function main() {
+  loadDatabaseEnv();
   const dryRun = process.env.SEED_DRY_RUN === 'true';
 
   await runSeedModules(

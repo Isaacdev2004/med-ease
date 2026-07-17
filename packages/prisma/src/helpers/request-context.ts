@@ -61,15 +61,18 @@ async function runInContextTransaction<T>(
   applyContext: (client: TransactionClient) => Promise<void>,
   fn: (tx: TransactionClient) => Promise<T>,
 ): Promise<T> {
-  return prisma.$transaction(async (tx) => {
-    await applyContext(tx);
+  return prisma.$transaction(
+    async (tx) => {
+      await applyContext(tx);
 
-    try {
-      return await fn(tx);
-    } finally {
-      await clearPrismaRequestContext(tx);
-    }
-  });
+      try {
+        return await fn(tx);
+      } finally {
+        await clearPrismaRequestContext(tx);
+      }
+    },
+    { timeout: 60_000 },
+  );
 }
 
 export async function runInTransactionWithRequestContext<T>(
