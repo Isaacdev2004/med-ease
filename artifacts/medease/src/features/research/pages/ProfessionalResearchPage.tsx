@@ -3,7 +3,13 @@ import { useLocation } from 'wouter';
 import { ResearchShell } from '@/features/research/components/ResearchShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'research' | 'clinical-trials' | 'participants' | 'study-visits' | 'adverse-events' | 'biospecimens';
+type Segment =
+  | 'research'
+  | 'clinical-trials'
+  | 'participants'
+  | 'study-visits'
+  | 'adverse-events'
+  | 'biospecimens';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/clinical-trials')) return 'clinical-trials';
@@ -26,5 +32,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalResearchPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <ResearchShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <ResearchShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

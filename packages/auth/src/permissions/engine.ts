@@ -28,7 +28,11 @@ export function isDenied(required: string, denies: readonly string[]): boolean {
   return denies.some((deny) => permissionMatches(deny, required));
 }
 
-export function hasPermission(grants: readonly string[], required: string, denies: readonly string[] = []): boolean {
+export function hasPermission(
+  grants: readonly string[],
+  required: string,
+  denies: readonly string[] = [],
+): boolean {
   if (isDenied(required, denies)) {
     return false;
   }
@@ -41,7 +45,9 @@ export function hasAllPermissions(
   required: readonly string[],
   denies: readonly string[] = [],
 ): boolean {
-  return required.every((permission) => hasPermission(grants, permission, denies));
+  return required.every((permission) =>
+    hasPermission(grants, permission, denies),
+  );
 }
 
 export function hasAnyPermission(
@@ -49,7 +55,9 @@ export function hasAnyPermission(
   required: readonly string[],
   denies: readonly string[] = [],
 ): boolean {
-  return required.some((permission) => hasPermission(grants, permission, denies));
+  return required.some((permission) =>
+    hasPermission(grants, permission, denies),
+  );
 }
 
 export function evaluatePermissionRequirement(
@@ -74,7 +82,9 @@ function dedupe(values: string[]): string[] {
 }
 
 function applyDenyRules(grants: string[], denies: string[]): string[] {
-  return grants.filter((grant) => !denies.some((deny) => permissionMatches(deny, grant)));
+  return grants.filter(
+    (grant) => !denies.some((deny) => permissionMatches(deny, grant)),
+  );
 }
 
 export function resolveEffectivePermissions(input: {
@@ -112,7 +122,8 @@ export class PermissionEngine {
     mode: PermissionMode = 'all',
     denies: readonly string[] = [],
   ): boolean {
-    const requiredList = typeof required === 'string' ? [required] : [...required];
+    const requiredList =
+      typeof required === 'string' ? [required] : [...required];
     return evaluatePermissionRequirement(effective, requiredList, mode, denies);
   }
 }

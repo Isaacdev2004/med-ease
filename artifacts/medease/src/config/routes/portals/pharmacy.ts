@@ -40,10 +40,21 @@ export const pharmacyRouteGroup: PortalRouteGroup = {
       lazy: () => import('@/features/pharmacy/pages/Dashboard'),
       nav: { icon: FileText, label: 'Queue', order: 0 },
     },
-    ...createPharmacyMedicationRoutes('pharmacy', { icon: ClipboardList, order: 2 }),
+    ...createPharmacyMedicationRoutes('pharmacy', {
+      icon: ClipboardList,
+      order: 2,
+    }),
     ...createPharmacyBillingRoutes('pharmacy'),
-    ...createPharmacyInventoryRoutes('pharmacy', { icon: Package, label: 'Inventory', order: 3 }),
-    ...createPharmacyProcurementRoutes('pharmacy', { icon: ShoppingCart, label: 'Procurement', order: 4 }),
+    ...createPharmacyInventoryRoutes('pharmacy', {
+      icon: Package,
+      label: 'Inventory',
+      order: 3,
+    }),
+    ...createPharmacyProcurementRoutes('pharmacy', {
+      icon: ShoppingCart,
+      label: 'Procurement',
+      order: 4,
+    }),
     createMedicationRequestsRoute('pharmacy', {
       nav: { icon: Pill, order: 5 },
     }),

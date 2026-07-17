@@ -1,4 +1,9 @@
-import type { AlertSeverity, AlertType, ClinicalAlert, ClinicalRule } from '@/services/cdss/types';
+import type {
+  AlertSeverity,
+  AlertType,
+  ClinicalAlert,
+  ClinicalRule,
+} from '@/services/cdss/types';
 
 const SEVERITY_WEIGHT: Record<AlertSeverity, number> = {
   critical: 5,
@@ -25,17 +30,28 @@ export function evaluateRules(
 ): ClinicalRule[] {
   return rules.filter((r) => {
     if (!r.enabled) return false;
-    if (context.facilityId && r.facilityId && r.facilityId !== context.facilityId) return false;
+    if (
+      context.facilityId &&
+      r.facilityId &&
+      r.facilityId !== context.facilityId
+    )
+      return false;
     if (context.alertType && r.category !== context.alertType) return false;
     return true;
   });
 }
 
-export function matchAbnormalLab(value: number, low: number, high: number): boolean {
+export function matchAbnormalLab(
+  value: number,
+  low: number,
+  high: number,
+): boolean {
   return value < low || value > high;
 }
 
-export function requiresRenalDoseAdjustment(creatinineClearance: number): boolean {
+export function requiresRenalDoseAdjustment(
+  creatinineClearance: number,
+): boolean {
   return creatinineClearance < 60;
 }
 

@@ -6,7 +6,10 @@ import { ALL_QUEUE_NAMES } from '@medease/queue';
 
 import type { QueueRegistry } from '../framework/queue-registry.js';
 import type { MetricsCollector } from '../metrics/metrics-collector.js';
-import { collectAllQueueDashboards, summarizeQueueHealth } from '../monitoring/queue-monitor.js';
+import {
+  collectAllQueueDashboards,
+  summarizeQueueHealth,
+} from '../monitoring/queue-monitor.js';
 import { getWorkerVersion } from '../version.js';
 import type { WorkerConfig } from '../config.js';
 
@@ -46,7 +49,8 @@ export function createHealthServer(
           JSON.stringify({
             status: 'error',
             service: config.serviceName,
-            message: error instanceof Error ? error.message : 'Redis unreachable',
+            message:
+              error instanceof Error ? error.message : 'Redis unreachable',
           }),
         );
       } finally {
@@ -84,7 +88,10 @@ export function createHealthServer(
           JSON.stringify({
             status: 'error',
             service: config.serviceName,
-            message: error instanceof Error ? error.message : 'Queue monitoring failed',
+            message:
+              error instanceof Error
+                ? error.message
+                : 'Queue monitoring failed',
           }),
         );
       }
@@ -92,7 +99,9 @@ export function createHealthServer(
     }
 
     if (url === '/metrics') {
-      res.writeHead(200, { 'Content-Type': 'text/plain; version=0.0.4; charset=utf-8' });
+      res.writeHead(200, {
+        'Content-Type': 'text/plain; version=0.0.4; charset=utf-8',
+      });
       res.end(await metrics.renderPrometheus());
       return;
     }
@@ -117,7 +126,10 @@ export function createHealthServer(
         res.end(
           JSON.stringify({
             status: 'error',
-            message: error instanceof Error ? error.message : 'Queue stats unavailable',
+            message:
+              error instanceof Error
+                ? error.message
+                : 'Queue stats unavailable',
           }),
         );
       }

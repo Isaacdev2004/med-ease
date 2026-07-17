@@ -26,9 +26,16 @@ export function NotificationEmpty({ onRefresh }: NotificationEmptyProps) {
 
 export function NotificationSkeleton() {
   return (
-    <div className="space-y-3 p-4" aria-busy="true" aria-label="Loading notifications">
+    <div
+      className="space-y-3 p-4"
+      aria-busy="true"
+      aria-label="Loading notifications"
+    >
       {Array.from({ length: 4 }).map((_, index) => (
-        <div key={index} className="space-y-2 rounded-lg border p-3 animate-pulse">
+        <div
+          key={index}
+          className="space-y-2 rounded-lg border p-3 animate-pulse"
+        >
           <div className="h-4 w-2/3 rounded bg-muted" />
           <div className="h-3 w-full rounded bg-muted" />
         </div>

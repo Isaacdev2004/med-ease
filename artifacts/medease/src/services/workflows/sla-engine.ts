@@ -1,6 +1,14 @@
-import type { SLA, SlaStatus, WorkflowInstance } from '@/services/workflows/types';
+import type {
+  SLA,
+  SlaStatus,
+  WorkflowInstance,
+} from '@/services/workflows/types';
 
-export function computeSlaStatus(startedAt: string, targetMinutes: number, warningMinutes: number): SlaStatus {
+export function computeSlaStatus(
+  startedAt: string,
+  targetMinutes: number,
+  warningMinutes: number,
+): SlaStatus {
   const elapsed = (Date.now() - new Date(startedAt).getTime()) / 60000;
   if (elapsed >= targetMinutes) return 'breached';
   if (elapsed >= warningMinutes) return 'at_risk';

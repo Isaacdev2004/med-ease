@@ -5,10 +5,11 @@ import { env } from '@/config/env';
 let configured = false;
 
 /** Wire generated API client to auth session and base URL. Call once at bootstrap. */
-export function configureApiClient(getAccessToken: () => string | null | undefined) {
+export function configureApiClient(
+  getAccessToken: () => string | null | undefined,
+) {
   if (!configured) {
-    const apiBase =
-      import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') ?? '';
+    const apiBase = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') ?? '';
     if (apiBase) {
       setBaseUrl(apiBase);
     }

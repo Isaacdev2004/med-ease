@@ -10,7 +10,9 @@ import type {
 } from '@/services/telemedicine/types';
 
 const DELAY = 250;
-async function delay(ms = DELAY) { await new Promise((r) => setTimeout(r, ms)); }
+async function delay(ms = DELAY) {
+  await new Promise((r) => setTimeout(r, ms));
+}
 
 export const telemedicineService = {
   async resolvePatientId(userId: string, explicitId?: string) {
@@ -43,7 +45,11 @@ export const telemedicineService = {
     return telemedicineRepository.getParticipants(sessionId);
   },
 
-  async inviteParticipant(sessionId: string, name: string, role: 'patient' | 'clinician' | 'interpreter') {
+  async inviteParticipant(
+    sessionId: string,
+    name: string,
+    role: 'patient' | 'clinician' | 'interpreter',
+  ) {
     await delay();
     return telemedicineRepository.inviteParticipant(sessionId, name, role);
   },
@@ -145,12 +151,20 @@ export const telemedicineService = {
 
   async muteParticipant(participantId: string, muted: boolean) {
     await delay();
-    return telemedicineRepository.toggleParticipantMedia(participantId, 'microphoneOn', !muted);
+    return telemedicineRepository.toggleParticipantMedia(
+      participantId,
+      'microphoneOn',
+      !muted,
+    );
   },
 
   async toggleVideo(participantId: string, enabled: boolean) {
     await delay();
-    return telemedicineRepository.toggleParticipantMedia(participantId, 'cameraOn', enabled);
+    return telemedicineRepository.toggleParticipantMedia(
+      participantId,
+      'cameraOn',
+      enabled,
+    );
   },
 
   async startScreenShare(participantId: string) {

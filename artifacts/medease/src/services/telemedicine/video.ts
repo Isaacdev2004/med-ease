@@ -13,12 +13,24 @@ export interface VideoAdapter {
 function mockAdapter(platform: VideoPlatform): VideoAdapter {
   return {
     platform,
-    async joinRoom() { return { connected: true }; },
-    async leaveRoom() { /* mock */ },
-    async toggleVideo() { /* mock */ },
-    async toggleAudio() { /* mock */ },
-    async startScreenShare() { /* mock */ },
-    async stopScreenShare() { /* mock */ },
+    async joinRoom() {
+      return { connected: true };
+    },
+    async leaveRoom() {
+      /* mock */
+    },
+    async toggleVideo() {
+      /* mock */
+    },
+    async toggleAudio() {
+      /* mock */
+    },
+    async startScreenShare() {
+      /* mock */
+    },
+    async stopScreenShare() {
+      /* mock */
+    },
   };
 }
 
@@ -35,7 +47,11 @@ export function getVideoAdapter(platform: VideoPlatform): VideoAdapter {
   return adapters[platform];
 }
 
-export async function startVideo(sessionId: string, platform: VideoPlatform, roomId: string) {
+export async function startVideo(
+  sessionId: string,
+  platform: VideoPlatform,
+  roomId: string,
+) {
   const adapter = getVideoAdapter(platform);
   return adapter.joinRoom(roomId, `mock-token-${sessionId}`);
 }

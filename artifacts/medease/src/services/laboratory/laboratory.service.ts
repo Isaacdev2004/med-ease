@@ -1,9 +1,22 @@
 import { buildAnalytics } from '@/services/laboratory/analytics';
-import { getUnacknowledgedAlerts, sortAlertsByDate } from '@/services/laboratory/alerts';
-import { getPatientIdForUser, buildDashboard, buildTrends } from '@/services/laboratory/mock-data';
-import { sortOrdersByDate, categorizeOrders } from '@/services/laboratory/orders';
+import {
+  getUnacknowledgedAlerts,
+  sortAlertsByDate,
+} from '@/services/laboratory/alerts';
+import {
+  getPatientIdForUser,
+  buildDashboard,
+  buildTrends,
+} from '@/services/laboratory/mock-data';
+import {
+  sortOrdersByDate,
+  categorizeOrders,
+} from '@/services/laboratory/orders';
 import { laboratoryRepository } from '@/services/laboratory/repository';
-import { getCriticalObservations, sortResultsByDate } from '@/services/laboratory/results';
+import {
+  getCriticalObservations,
+  sortResultsByDate,
+} from '@/services/laboratory/results';
 import { sortSpecimensByDate } from '@/services/laboratory/specimens';
 import type {
   CancelLabOrderInput,
@@ -83,8 +96,12 @@ export const laboratoryService = {
 
   async getPatientLaboratory(patientId: string) {
     await delay();
-    const orders = sortOrdersByDate(laboratoryRepository.getAllOrders({ patientId }));
-    const results = sortResultsByDate(laboratoryRepository.getAllResults({ patientId }));
+    const orders = sortOrdersByDate(
+      laboratoryRepository.getAllOrders({ patientId }),
+    );
+    const results = sortResultsByDate(
+      laboratoryRepository.getAllResults({ patientId }),
+    );
     const observations = laboratoryRepository.getObservations(patientId);
     return {
       orders,
@@ -122,7 +139,9 @@ export const laboratoryService = {
 
   async getSpecimens(orderId?: string, patientId?: string) {
     await delay();
-    return sortSpecimensByDate(laboratoryRepository.getSpecimens(orderId, patientId));
+    return sortSpecimensByDate(
+      laboratoryRepository.getSpecimens(orderId, patientId),
+    );
   },
 
   async collectSpecimen(input: CollectSpecimenInput) {

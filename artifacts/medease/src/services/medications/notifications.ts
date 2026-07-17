@@ -15,7 +15,9 @@ type MedicationNotification = {
   priority: 'low' | 'normal' | 'high' | 'urgent';
 };
 
-export function buildNewPrescriptionNotification(prescription: Prescription): MedicationNotification {
+export function buildNewPrescriptionNotification(
+  prescription: Prescription,
+): MedicationNotification {
   return {
     id: `alert-rx-new-${prescription.id}`,
     title: 'New prescription issued',
@@ -25,7 +27,9 @@ export function buildNewPrescriptionNotification(prescription: Prescription): Me
   };
 }
 
-export function buildRefillDueNotification(refill: RefillRequest): MedicationNotification {
+export function buildRefillDueNotification(
+  refill: RefillRequest,
+): MedicationNotification {
   return {
     id: `alert-refill-due-${refill.id}`,
     title: 'Refill due soon',
@@ -45,17 +49,24 @@ export function buildMissedDoseAlert(log: DoseLog): MedicationNotification {
   };
 }
 
-export function buildInteractionAlert(interaction: DrugInteraction): MedicationNotification {
+export function buildInteractionAlert(
+  interaction: DrugInteraction,
+): MedicationNotification {
   return {
     id: `alert-interaction-${interaction.id}`,
     title: 'Drug interaction detected',
     message: `${interaction.source} and ${interaction.target}: ${interaction.recommendation}`,
     type: 'medication',
-    priority: interaction.severity === 'critical' || interaction.severity === 'high' ? 'urgent' : 'high',
+    priority:
+      interaction.severity === 'critical' || interaction.severity === 'high'
+        ? 'urgent'
+        : 'high',
   };
 }
 
-export function buildMedicationRecalledNotification(medicationName: string): MedicationNotification {
+export function buildMedicationRecalledNotification(
+  medicationName: string,
+): MedicationNotification {
   return {
     id: `alert-recall-${medicationName.replace(/\s+/g, '-').toLowerCase()}`,
     title: 'Medication recall alert',
@@ -65,7 +76,9 @@ export function buildMedicationRecalledNotification(medicationName: string): Med
   };
 }
 
-export function buildDispenseCompletedNotification(dispense: MedicationDispense): MedicationNotification {
+export function buildDispenseCompletedNotification(
+  dispense: MedicationDispense,
+): MedicationNotification {
   return {
     id: `alert-dispense-${dispense.id}`,
     title: 'Dispense completed',
@@ -75,7 +88,10 @@ export function buildDispenseCompletedNotification(dispense: MedicationDispense)
   };
 }
 
-export function buildCourseCompletedNotification(medicationName: string, patientId: string): MedicationNotification {
+export function buildCourseCompletedNotification(
+  medicationName: string,
+  patientId: string,
+): MedicationNotification {
   return {
     id: `alert-course-${patientId}-${medicationName.replace(/\s+/g, '-').toLowerCase()}`,
     title: 'Medication course completed',
@@ -85,7 +101,10 @@ export function buildCourseCompletedNotification(medicationName: string, patient
   };
 }
 
-export function buildMedicationReminderNotification(medicationName: string, scheduledAt: string): MedicationNotification {
+export function buildMedicationReminderNotification(
+  medicationName: string,
+  scheduledAt: string,
+): MedicationNotification {
   return {
     id: `alert-reminder-${medicationName.replace(/\s+/g, '-').toLowerCase()}-${scheduledAt}`,
     title: 'Medication reminder',
@@ -95,7 +114,9 @@ export function buildMedicationReminderNotification(medicationName: string, sche
   };
 }
 
-export function buildPrescriptionExpiredNotification(prescription: Prescription): MedicationNotification {
+export function buildPrescriptionExpiredNotification(
+  prescription: Prescription,
+): MedicationNotification {
   return {
     id: `alert-rx-expired-${prescription.id}`,
     title: 'Prescription expired',
@@ -105,7 +126,9 @@ export function buildPrescriptionExpiredNotification(prescription: Prescription)
   };
 }
 
-export function buildRefillApprovedNotification(refill: RefillRequest): MedicationNotification {
+export function buildRefillApprovedNotification(
+  refill: RefillRequest,
+): MedicationNotification {
   return {
     id: `alert-refill-${refill.id}`,
     title: 'Refill approved',
@@ -115,7 +138,9 @@ export function buildRefillApprovedNotification(refill: RefillRequest): Medicati
   };
 }
 
-export function buildAdministrationRecordedNotification(record: MedicationAdministration): MedicationNotification {
+export function buildAdministrationRecordedNotification(
+  record: MedicationAdministration,
+): MedicationNotification {
   return {
     id: `alert-admin-${record.id}`,
     title: 'Dose administered',

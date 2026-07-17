@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { MessagingSectionContent } from '@/features/messaging/components/MessagingSections';
-import { MessagingTabs, getMessagingSectionFromPath } from '@/features/messaging/components/MessagingTabs';
+import {
+  MessagingTabs,
+  getMessagingSectionFromPath,
+} from '@/features/messaging/components/MessagingTabs';
 import { useMessagingPermissions } from '@/features/messaging/hooks/use-messaging-permissions';
 import type { MessagingFilters } from '@/services/messaging/types';
 import { PageShell } from '@/shared/components';
@@ -26,12 +29,18 @@ export function MessagingShell({
   const [location] = useLocation();
   const perms = useMessagingPermissions();
   const section = getMessagingSectionFromPath(location);
-  const scopedFilters = useMemo((): MessagingFilters => ({ facilityId, userId }), [facilityId, userId]);
+  const scopedFilters = useMemo(
+    (): MessagingFilters => ({ facilityId, userId }),
+    [facilityId, userId],
+  );
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view messaging." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view messaging."
+        />
       </PageShell>
     );
   }
@@ -43,7 +52,11 @@ export function MessagingShell({
     >
       <div className="space-y-6">
         <MessagingTabs basePath={basePath} variant={variant} />
-        <MessagingSectionContent section={section} filters={scopedFilters} variant={variant} />
+        <MessagingSectionContent
+          section={section}
+          filters={scopedFilters}
+          variant={variant}
+        />
       </div>
     </PageShell>
   );

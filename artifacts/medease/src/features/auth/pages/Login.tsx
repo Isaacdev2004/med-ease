@@ -47,7 +47,9 @@ export default function Login() {
             <LoadingButton
               className="w-full h-11 text-base shadow-md"
               type="submit"
-              loading={form.formState.isSubmitting || authState === 'authenticating'}
+              loading={
+                form.formState.isSubmitting || authState === 'authenticating'
+              }
             >
               Sign In Securely
             </LoadingButton>
@@ -95,10 +97,15 @@ export default function Login() {
           <Shield className="w-3.5 h-3.5 mr-1.5 text-primary" />
           HIPAA Compliant Secure Portal
         </div>
-        <p className="text-xs text-center text-muted-foreground">{DEMO_CREDENTIALS_HINT}</p>
+        <p className="text-xs text-center text-muted-foreground">
+          {DEMO_CREDENTIALS_HINT}
+        </p>
         <p className="text-sm text-center text-muted-foreground">
           New to Med&apos;ease?{' '}
-          <Link href={ROUTES.register} className="text-primary font-medium hover:underline">
+          <Link
+            href={ROUTES.register}
+            className="text-primary font-medium hover:underline"
+          >
             Create an account
           </Link>
         </p>

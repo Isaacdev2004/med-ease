@@ -4,9 +4,12 @@ import { BillingShell } from '@/features/billing/components/BillingShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
 function resolveProfessionalBasePath(location: string) {
-  if (location.includes('/claims')) return resolveModuleBasePath(location, 'claims');
-  if (location.includes('/payments')) return resolveModuleBasePath(location, 'payments');
-  if (location.includes('/revenue')) return resolveModuleBasePath(location, 'revenue');
+  if (location.includes('/claims'))
+    return resolveModuleBasePath(location, 'claims');
+  if (location.includes('/payments'))
+    return resolveModuleBasePath(location, 'payments');
+  if (location.includes('/revenue'))
+    return resolveModuleBasePath(location, 'revenue');
   return resolveModuleBasePath(location, 'billing');
 }
 

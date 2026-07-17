@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { runWithRequestContext, createBaseRequestContext } from '@medease/observability';
+import {
+  runWithRequestContext,
+  createBaseRequestContext,
+} from '@medease/observability';
 import type { AuditPublisher } from '@medease/audit';
 
 import { DomainEventBus } from './domain-event-bus';
@@ -22,7 +25,10 @@ describe('DomainEventBus', () => {
 
     await runWithRequestContext(
       {
-        ...createBaseRequestContext({ requestId: 'req-1', correlationId: 'corr-1' }),
+        ...createBaseRequestContext({
+          requestId: 'req-1',
+          correlationId: 'corr-1',
+        }),
         tenantId: 'tenant-a',
         userId: 'admin-1',
         roles: [],
@@ -71,7 +77,11 @@ describe('DomainEventBus', () => {
 
   it('ignores unregistered event types without failing', async () => {
     const bus = new DomainEventBus();
-    bus.register(createAuditHandler({ publishAsync: () => undefined } as unknown as AuditPublisher));
+    bus.register(
+      createAuditHandler({
+        publishAsync: () => undefined,
+      } as unknown as AuditPublisher),
+    );
 
     await bus.publish({
       id: 'evt-1',

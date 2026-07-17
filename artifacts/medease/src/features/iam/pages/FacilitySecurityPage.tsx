@@ -24,5 +24,11 @@ const TITLES: Record<Segment, string> = {
 export default function FacilitySecurityPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <SecurityShell basePath={resolveModuleBasePath(location, segment)} variant="facility" title={TITLES[segment]} />;
+  return (
+    <SecurityShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="facility"
+      title={TITLES[segment]}
+    />
+  );
 }

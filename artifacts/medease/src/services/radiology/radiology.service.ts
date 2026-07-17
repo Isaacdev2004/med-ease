@@ -1,5 +1,8 @@
 import { buildAnalytics } from '@/services/radiology/analytics';
-import { buildDashboard, getPatientIdForUser } from '@/services/radiology/mock-data';
+import {
+  buildDashboard,
+  getPatientIdForUser,
+} from '@/services/radiology/mock-data';
 import { radiologyRepository } from '@/services/radiology/repository';
 import { sortStudiesByDate } from '@/services/radiology/studies';
 import { createDefaultViewerState } from '@/services/radiology/viewer';
@@ -57,7 +60,9 @@ export const radiologyService = {
 
   async getPatientImaging(patientId: string) {
     await delay();
-    const studies = sortStudiesByDate(radiologyRepository.getAllStudies({ patientId }));
+    const studies = sortStudiesByDate(
+      radiologyRepository.getAllStudies({ patientId }),
+    );
     const reports = radiologyRepository.getAllReports(patientId);
     return { studies, reports, critical: reports.filter((r) => r.isCritical) };
   },
@@ -88,7 +93,9 @@ export const radiologyService = {
       radiologistId ? { radiologistId } : undefined,
     );
     return {
-      activeStudies: studies.filter((s) => s.status === 'pending_interpretation').length,
+      activeStudies: studies.filter(
+        (s) => s.status === 'pending_interpretation',
+      ).length,
       pendingReports: radiologyRepository.getPendingReports().length,
       critical: radiologyRepository.getCriticalReports().length,
       studies: studies.slice(0, 10),
@@ -97,7 +104,9 @@ export const radiologyService = {
 
   async getFacilityImaging(facilityId?: string) {
     await delay();
-    const studies = radiologyRepository.getAllStudies(facilityId ? { facilityId } : undefined);
+    const studies = radiologyRepository.getAllStudies(
+      facilityId ? { facilityId } : undefined,
+    );
     return {
       studiesToday: studies.filter((_, i) => i % 40 === 0).length || 6,
       devices: radiologyRepository.getDevices(),

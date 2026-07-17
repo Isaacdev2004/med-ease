@@ -51,21 +51,36 @@ export function DashboardSection({ filters }: { filters?: PhmFilters }) {
   const gaps = useCareGaps(filters);
   const registries = useRegistries(filters);
   const { closeCareGap } = usePhmMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading population dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={HeartPulse} title="No population data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading population dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={HeartPulse} title="No population data" />;
   return (
     <div className="space-y-6">
       <PopulationDashboard dashboard={dashboard.data} />
       <RiskDistributionPanel distribution={dashboard.data.riskDistribution} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(gaps.data?.items ?? dashboard.data.recentGaps).slice(0, 6).map((g) => (
-          <CareGapCard key={g.gapId} gap={g} onClose={() => closeCareGap.mutate({ gapId: g.gapId, closedBy: 'current-user' })} />
-        ))}
+        {(gaps.data?.items ?? dashboard.data.recentGaps)
+          .slice(0, 6)
+          .map((g) => (
+            <CareGapCard
+              key={g.gapId}
+              gap={g}
+              onClose={() =>
+                closeCareGap.mutate({
+                  gapId: g.gapId,
+                  closedBy: 'current-user',
+                })
+              }
+            />
+          ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(registries.data?.items ?? dashboard.data.topRegistries).slice(0, 6).map((r) => (
-          <RegistryCard key={r.registryId} registry={r} />
-        ))}
+        {(registries.data?.items ?? dashboard.data.topRegistries)
+          .slice(0, 6)
+          .map((r) => (
+            <RegistryCard key={r.registryId} registry={r} />
+          ))}
       </div>
     </div>
   );
@@ -78,7 +93,13 @@ export function CareGapsSection({ filters }: { filters?: PhmFilters }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {(gaps.data?.items ?? []).slice(0, 12).map((g) => (
-        <CareGapCard key={g.gapId} gap={g} onClose={() => closeCareGap.mutate({ gapId: g.gapId, closedBy: 'current-user' })} />
+        <CareGapCard
+          key={g.gapId}
+          gap={g}
+          onClose={() =>
+            closeCareGap.mutate({ gapId: g.gapId, closedBy: 'current-user' })
+          }
+        />
       ))}
     </div>
   );
@@ -89,7 +110,9 @@ export function RegistriesSection({ filters }: { filters?: PhmFilters }) {
   if (registries.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(registries.data?.items ?? []).slice(0, 12).map((r) => <RegistryCard key={r.registryId} registry={r} />)}
+      {(registries.data?.items ?? []).slice(0, 12).map((r) => (
+        <RegistryCard key={r.registryId} registry={r} />
+      ))}
     </div>
   );
 }
@@ -101,10 +124,14 @@ export function HighRiskSection({ filters }: { filters?: PhmFilters }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(patients.data?.items ?? []).slice(0, 9).map((p) => <HighRiskPatientCard key={p.memberId} member={p} />)}
+        {(patients.data?.items ?? []).slice(0, 9).map((p) => (
+          <HighRiskPatientCard key={p.memberId} member={p} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(scores.data?.items ?? []).slice(0, 6).map((s) => <PhmRiskCard key={s.scoreId} score={s} />)}
+        {(scores.data?.items ?? []).slice(0, 6).map((s) => (
+          <PhmRiskCard key={s.scoreId} score={s} />
+        ))}
       </div>
     </div>
   );
@@ -118,21 +145,25 @@ export function OutreachSection({ filters }: { filters?: PhmFilters }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(outreach.data?.items ?? []).slice(0, 9).map((c) => <OutreachCampaignCard key={c.campaignId} campaign={c} />)}
+        {(outreach.data?.items ?? []).slice(0, 9).map((c) => (
+          <OutreachCampaignCard key={c.campaignId} campaign={c} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         {(cohorts.data?.items ?? []).slice(0, 4).map((c) => (
           <CohortBuilder
             key={c.cohortId}
             cohort={c}
-            onLaunch={() => launchCampaign.mutate({
-              name: `Outreach — ${c.name}`,
-              channel: 'sms',
-              facilityId: filters?.facilityId,
-              targetCount: c.memberCount,
-              scheduledDate: new Date().toISOString(),
-              cohortId: c.cohortId,
-            })}
+            onLaunch={() =>
+              launchCampaign.mutate({
+                name: `Outreach — ${c.name}`,
+                channel: 'sms',
+                facilityId: filters?.facilityId,
+                targetCount: c.memberCount,
+                scheduledDate: new Date().toISOString(),
+                cohortId: c.cohortId,
+              })
+            }
           />
         ))}
       </div>
@@ -147,10 +178,14 @@ export function ProgramsSection({ filters }: { filters?: PhmFilters }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(programs.data?.items ?? []).slice(0, 9).map((p) => <ChronicProgramCard key={p.programId} program={p} />)}
+        {(programs.data?.items ?? []).slice(0, 9).map((p) => (
+          <ChronicProgramCard key={p.programId} program={p} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(preventive.data?.items ?? []).slice(0, 6).map((p) => <PreventiveCareCard key={p.preventiveId} item={p} />)}
+        {(preventive.data?.items ?? []).slice(0, 6).map((p) => (
+          <PreventiveCareCard key={p.preventiveId} item={p} />
+        ))}
       </div>
     </div>
   );
@@ -161,7 +196,9 @@ export function CommunityHealthSection({ filters }: { filters?: PhmFilters }) {
   if (community.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(community.data?.items ?? []).slice(0, 12).map((p) => <CommunityHealthCard key={p.programId} program={p} />)}
+      {(community.data?.items ?? []).slice(0, 12).map((p) => (
+        <CommunityHealthCard key={p.programId} program={p} />
+      ))}
     </div>
   );
 }
@@ -186,10 +223,14 @@ export function QualityMeasuresSection({ filters }: { filters?: PhmFilters }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(preventive.data?.items ?? []).slice(0, 9).map((p) => <PreventiveCareCard key={p.preventiveId} item={p} />)}
+        {(preventive.data?.items ?? []).slice(0, 9).map((p) => (
+          <PreventiveCareCard key={p.preventiveId} item={p} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(registries.data?.items ?? []).slice(0, 6).map((r) => <RegistryCard key={r.registryId} registry={r} />)}
+        {(registries.data?.items ?? []).slice(0, 6).map((r) => (
+          <RegistryCard key={r.registryId} registry={r} />
+        ))}
       </div>
     </div>
   );
@@ -202,10 +243,14 @@ export function PopulationRiskSection({ filters }: { filters?: PhmFilters }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(scores.data?.items ?? []).slice(0, 12).map((s) => <PhmRiskCard key={s.scoreId} score={s} />)}
+        {(scores.data?.items ?? []).slice(0, 12).map((s) => (
+          <PhmRiskCard key={s.scoreId} score={s} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(patients.data?.items ?? []).slice(0, 6).map((p) => <HighRiskPatientCard key={p.memberId} member={p} />)}
+        {(patients.data?.items ?? []).slice(0, 6).map((p) => (
+          <HighRiskPatientCard key={p.memberId} member={p} />
+        ))}
       </div>
     </div>
   );
@@ -215,7 +260,8 @@ export function ExecutiveSection({ filters }: { filters?: PhmFilters }) {
   const dashboard = usePhmDashboard(filters?.facilityId);
   const analytics = usePopulationAnalytics(filters?.facilityId);
   if (dashboard.isLoading || analytics.isLoading) return <LoadingView />;
-  if (!dashboard.data || !analytics.data) return <EmptyState title="No executive data" />;
+  if (!dashboard.data || !analytics.data)
+    return <EmptyState title="No executive data" />;
   return (
     <div className="space-y-6">
       <PopulationDashboard dashboard={dashboard.data} />
@@ -232,34 +278,42 @@ export function CampaignsSection({ filters }: { filters?: PhmFilters }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(outreach.data?.items ?? []).slice(0, 12).map((c) => <OutreachCampaignCard key={c.campaignId} campaign={c} />)}
+        {(outreach.data?.items ?? []).slice(0, 12).map((c) => (
+          <OutreachCampaignCard key={c.campaignId} campaign={c} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         {(cohorts.data?.items ?? []).slice(0, 4).map((c) => (
           <CohortBuilder
             key={c.cohortId}
             cohort={c}
-            onLaunch={() => launchCampaign.mutate({
-              name: `Campaign — ${c.name}`,
-              channel: 'email',
-              facilityId: filters?.facilityId,
-              targetCount: c.memberCount,
-              scheduledDate: new Date().toISOString(),
-              cohortId: c.cohortId,
-            })}
+            onLaunch={() =>
+              launchCampaign.mutate({
+                name: `Campaign — ${c.name}`,
+                channel: 'email',
+                facilityId: filters?.facilityId,
+                targetCount: c.memberCount,
+                scheduledDate: new Date().toISOString(),
+                cohortId: c.cohortId,
+              })
+            }
           />
         ))}
       </div>
       <button
         type="button"
         className="text-sm text-primary underline"
-        onClick={() => createCohort.mutate({
-          name: 'High-risk diabetes cohort',
-          description: 'Patients with uncontrolled diabetes and missed follow-ups',
-          criteria: 'Age > 60\nAND\nDiabetes\nAND\nHbA1c > 8\nAND\nNo appointment in 6 months',
-          facilityId: filters?.facilityId,
-          dynamic: true,
-        })}
+        onClick={() =>
+          createCohort.mutate({
+            name: 'High-risk diabetes cohort',
+            description:
+              'Patients with uncontrolled diabetes and missed follow-ups',
+            criteria:
+              'Age > 60\nAND\nDiabetes\nAND\nHbA1c > 8\nAND\nNo appointment in 6 months',
+            facilityId: filters?.facilityId,
+            dynamic: true,
+          })
+        }
       >
         Create sample cohort
       </button>
@@ -267,19 +321,37 @@ export function CampaignsSection({ filters }: { filters?: PhmFilters }) {
   );
 }
 
-export function PhmSectionContent({ section, filters }: { section: PhmSection; filters?: PhmFilters }) {
+export function PhmSectionContent({
+  section,
+  filters,
+}: {
+  section: PhmSection;
+  filters?: PhmFilters;
+}) {
   switch (section) {
-    case 'care-gaps': return <CareGapsSection filters={filters} />;
-    case 'registries': return <RegistriesSection filters={filters} />;
-    case 'high-risk': return <HighRiskSection filters={filters} />;
-    case 'outreach': return <OutreachSection filters={filters} />;
-    case 'programs': return <ProgramsSection filters={filters} />;
-    case 'community-health': return <CommunityHealthSection filters={filters} />;
-    case 'analytics': return <AnalyticsSection filters={filters} />;
-    case 'quality-measures': return <QualityMeasuresSection filters={filters} />;
-    case 'population-risk': return <PopulationRiskSection filters={filters} />;
-    case 'executive': return <ExecutiveSection filters={filters} />;
-    case 'campaigns': return <CampaignsSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'care-gaps':
+      return <CareGapsSection filters={filters} />;
+    case 'registries':
+      return <RegistriesSection filters={filters} />;
+    case 'high-risk':
+      return <HighRiskSection filters={filters} />;
+    case 'outreach':
+      return <OutreachSection filters={filters} />;
+    case 'programs':
+      return <ProgramsSection filters={filters} />;
+    case 'community-health':
+      return <CommunityHealthSection filters={filters} />;
+    case 'analytics':
+      return <AnalyticsSection filters={filters} />;
+    case 'quality-measures':
+      return <QualityMeasuresSection filters={filters} />;
+    case 'population-risk':
+      return <PopulationRiskSection filters={filters} />;
+    case 'executive':
+      return <ExecutiveSection filters={filters} />;
+    case 'campaigns':
+      return <CampaignsSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

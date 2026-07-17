@@ -16,7 +16,9 @@ export type DependencyMetrics = ReturnType<typeof createDependencyMetrics>;
 
 @Injectable()
 export class MetricsService {
-  constructor(@Inject(METRICS_REGISTRY) private readonly registry: MetricsRegistry) {}
+  constructor(
+    @Inject(METRICS_REGISTRY) private readonly registry: MetricsRegistry,
+  ) {}
 
   async render(): Promise<string> {
     return this.registry.renderMetrics();
@@ -38,7 +40,8 @@ export class MetricsService {
     {
       provide: DEPENDENCY_METRICS,
       inject: [METRICS_REGISTRY],
-      useFactory: (registry: MetricsRegistry) => createDependencyMetrics(registry),
+      useFactory: (registry: MetricsRegistry) =>
+        createDependencyMetrics(registry),
     },
     MetricsService,
   ],

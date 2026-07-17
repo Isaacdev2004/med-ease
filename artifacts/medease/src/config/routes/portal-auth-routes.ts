@@ -1,8 +1,5 @@
 import { registerGlobalRoute } from '@/config/routes/metadata';
-import {
-  getPortalLoginPath,
-  PORTAL_IDS,
-} from '@/config/routes/portal-login';
+import { getPortalLoginPath, PORTAL_IDS } from '@/config/routes/portal-login';
 import type { GlobalRouteDefinition } from '@/config/routes/types';
 
 const PORTAL_LOGIN_TITLES: Record<(typeof PORTAL_IDS)[number], string> = {

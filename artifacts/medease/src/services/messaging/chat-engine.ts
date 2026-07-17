@@ -9,11 +9,19 @@ export function secureThreadCount(threads: ChatThread[]): number {
 }
 
 export function sortThreadsByActivity(threads: ChatThread[]): ChatThread[] {
-  return [...threads].sort((a, b) => new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime());
+  return [...threads].sort(
+    (a, b) =>
+      new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime(),
+  );
 }
 
-export function threadMessages(messages: ChatMessage[], threadId: string): ChatMessage[] {
+export function threadMessages(
+  messages: ChatMessage[],
+  threadId: string,
+): ChatMessage[] {
   return messages
     .filter((m) => m.threadId === threadId)
-    .sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
+    .sort(
+      (a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime(),
+    );
 }

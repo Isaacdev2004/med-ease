@@ -11,32 +11,75 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Progress } from '@/shared/ui/progress';
 
 const initialWards = [
-  { id: 'w1', primary: 'ICU-3', secondary: '12 / 14 beds', badge: '86%', capacity: 86 },
-  { id: 'w2', primary: 'Emergency', secondary: '28 / 32 beds', badge: '88%', capacity: 88 },
-  { id: 'w3', primary: 'Med-Surg 2B', secondary: '18 / 24 beds', badge: '75%', capacity: 75 },
-  { id: 'w4', primary: 'Pediatrics', secondary: '9 / 16 beds', badge: '56%', capacity: 56 },
+  {
+    id: 'w1',
+    primary: 'ICU-3',
+    secondary: '12 / 14 beds',
+    badge: '86%',
+    capacity: 86,
+  },
+  {
+    id: 'w2',
+    primary: 'Emergency',
+    secondary: '28 / 32 beds',
+    badge: '88%',
+    capacity: 88,
+  },
+  {
+    id: 'w3',
+    primary: 'Med-Surg 2B',
+    secondary: '18 / 24 beds',
+    badge: '75%',
+    capacity: 75,
+  },
+  {
+    id: 'w4',
+    primary: 'Pediatrics',
+    secondary: '9 / 16 beds',
+    badge: '56%',
+    capacity: 56,
+  },
 ];
 
 export default function CapacityPage() {
   const [wards, setWards] = useState(initialWards);
-  const overall = Math.round(wards.reduce((sum, w) => sum + w.capacity, 0) / wards.length);
+  const overall = Math.round(
+    wards.reduce((sum, w) => sum + w.capacity, 0) / wards.length,
+  );
 
   return (
     <PageShell
       title="Capacity"
       subtitle="Ward-level capacity planning and surge readiness."
-      primaryAction={<PortalActionButton label="Open surge plan" successTitle="Surge plan activated" />}
+      primaryAction={
+        <PortalActionButton
+          label="Open surge plan"
+          successTitle="Surge plan activated"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
         metrics={[
-          { title: 'Overall occupancy', value: `${overall}%`, status: overall > 85 ? 'observation' : 'stable' },
+          {
+            title: 'Overall occupancy',
+            value: `${overall}%`,
+            status: overall > 85 ? 'observation' : 'stable',
+          },
           { title: 'Available beds', value: 42, status: 'stable' },
-          { title: 'Projected peak', value: '94%', description: 'Next 48 hours', status: 'observation' },
+          {
+            title: 'Projected peak',
+            value: '94%',
+            description: 'Next 48 hours',
+            status: 'observation',
+          },
         ]}
       />
 
-      <SectionHeader title="Ward capacity" description="Current utilization by unit." />
+      <SectionHeader
+        title="Ward capacity"
+        description="Current utilization by unit."
+      />
       <div className="grid gap-4 lg:grid-cols-2">
         {wards.map((ward) => (
           <Card key={ward.id}>
@@ -57,7 +100,12 @@ export default function CapacityPage() {
                 onClick={() => {
                   setWards((prev) =>
                     prev.map((item) =>
-                      item.id === ward.id ? { ...item, capacity: Math.min(item.capacity + 2, 100) } : item,
+                      item.id === ward.id
+                        ? {
+                            ...item,
+                            capacity: Math.min(item.capacity + 2, 100),
+                          }
+                        : item,
                     ),
                   );
                 }}
@@ -70,8 +118,18 @@ export default function CapacityPage() {
       <PortalListCard
         title="Transfer recommendations"
         items={[
-          { id: 'r1', primary: 'Med-Surg 4A → Rehab', secondary: '3 patients eligible for step-down', badge: 'suggested' },
-          { id: 'r2', primary: 'ICU-3 overflow', secondary: 'Consider step-down to CCU', badge: 'urgent' },
+          {
+            id: 'r1',
+            primary: 'Med-Surg 4A → Rehab',
+            secondary: '3 patients eligible for step-down',
+            badge: 'suggested',
+          },
+          {
+            id: 'r2',
+            primary: 'ICU-3 overflow',
+            secondary: 'Consider step-down to CCU',
+            badge: 'urgent',
+          },
         ]}
         actionLabel="Apply recommendations"
       />

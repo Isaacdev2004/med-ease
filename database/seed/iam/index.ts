@@ -19,13 +19,19 @@ export const iamSeed: SeedModule = {
       return;
     }
 
-    const { PrismaClient, runInSystemTransaction } = await import('@medease/prisma');
-    type TransactionClient = Parameters<Parameters<typeof runInSystemTransaction>[1]>[0];
+    const { PrismaClient, runInSystemTransaction } =
+      await import('@medease/prisma');
+    type TransactionClient = Parameters<
+      Parameters<typeof runInSystemTransaction>[1]
+    >[0];
     const prisma = new PrismaClient();
 
     try {
       await runInSystemTransaction(prisma, async (tx: TransactionClient) => {
-        for (const [name, id] of Object.entries(SYSTEM_ROLE_IDS) as [IdentityRole, string][]) {
+        for (const [name, id] of Object.entries(SYSTEM_ROLE_IDS) as [
+          IdentityRole,
+          string,
+        ][]) {
           await tx.iamRoleRecord.upsert({
             where: { id },
             create: {

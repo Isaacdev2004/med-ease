@@ -15,8 +15,16 @@ type PortalTab = { segment: MedicationSection; label: string; path: string };
 const CLINICIAN_TABS: PortalTab[] = [
   { segment: 'dashboard', label: 'Overview', path: 'medications' },
   { segment: 'prescriptions', label: 'Prescriptions', path: 'prescriptions' },
-  { segment: 'reconciliation', label: 'Reconciliation', path: 'reconciliation' },
-  { segment: 'administration', label: 'Administration', path: 'administration' },
+  {
+    segment: 'reconciliation',
+    label: 'Reconciliation',
+    path: 'reconciliation',
+  },
+  {
+    segment: 'administration',
+    label: 'Administration',
+    path: 'administration',
+  },
   { segment: 'analytics', label: 'Analytics', path: 'analytics' },
 ];
 
@@ -32,7 +40,11 @@ const PHARMACY_TABS: PortalTab[] = [
 const FACILITY_TABS: PortalTab[] = [
   { segment: 'dashboard', label: 'Medications', path: 'medications' },
   { segment: 'emar', label: 'eMAR', path: 'emar' },
-  { segment: 'administration', label: 'Administration', path: 'administration' },
+  {
+    segment: 'administration',
+    label: 'Administration',
+    path: 'administration',
+  },
 ];
 
 const ADMIN_TABS: PortalTab[] = [
@@ -48,16 +60,28 @@ interface MedicationTabsProps {
 
 function portalRoot(basePath: string, variant: MedicationTabsProps['variant']) {
   if (variant === 'clinician') {
-    return basePath.replace(/\/(medications|prescriptions|reconciliation|administration|analytics)$/, '');
+    return basePath.replace(
+      /\/(medications|prescriptions|reconciliation|administration|analytics)$/,
+      '',
+    );
   }
   if (variant === 'pharmacy') {
-    return basePath.replace(/\/(medications|prescriptions|refills|dispensing|interactions|inventory)$/, '');
+    return basePath.replace(
+      /\/(medications|prescriptions|refills|dispensing|interactions|inventory)$/,
+      '',
+    );
   }
   if (variant === 'facility') {
-    return basePath.replace(/\/(medications|emar|administration|medication-board|medication-administration)$/, '');
+    return basePath.replace(
+      /\/(medications|emar|administration|medication-board|medication-administration)$/,
+      '',
+    );
   }
   if (variant === 'admin') {
-    return basePath.replace(/\/(medications|prescriptions|medication-analytics|formulary)$/, '');
+    return basePath.replace(
+      /\/(medications|prescriptions|medication-analytics|formulary)$/,
+      '',
+    );
   }
   return basePath;
 }
@@ -75,7 +99,10 @@ function PortalMedicationTabs({
   const root = portalRoot(basePath, variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Medication sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Medication sections"
+    >
       {tabs.map((tab) => {
         const href = `${root}/${tab.path}`;
         const active = location.endsWith(`/${tab.path}`);
@@ -85,7 +112,9 @@ function PortalMedicationTabs({
             href={href}
             className={cn(
               'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-              active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
             )}
             aria-current={active ? 'page' : undefined}
           >
@@ -97,20 +126,47 @@ function PortalMedicationTabs({
   );
 }
 
-export function MedicationTabs({ basePath, variant = 'patient' }: MedicationTabsProps) {
+export function MedicationTabs({
+  basePath,
+  variant = 'patient',
+}: MedicationTabsProps) {
   const [location] = useLocation();
 
   if (variant === 'clinician') {
-    return <PortalMedicationTabs basePath={basePath} variant="clinician" tabs={CLINICIAN_TABS} />;
+    return (
+      <PortalMedicationTabs
+        basePath={basePath}
+        variant="clinician"
+        tabs={CLINICIAN_TABS}
+      />
+    );
   }
   if (variant === 'pharmacy') {
-    return <PortalMedicationTabs basePath={basePath} variant="pharmacy" tabs={PHARMACY_TABS} />;
+    return (
+      <PortalMedicationTabs
+        basePath={basePath}
+        variant="pharmacy"
+        tabs={PHARMACY_TABS}
+      />
+    );
   }
   if (variant === 'facility') {
-    return <PortalMedicationTabs basePath={basePath} variant="facility" tabs={FACILITY_TABS} />;
+    return (
+      <PortalMedicationTabs
+        basePath={basePath}
+        variant="facility"
+        tabs={FACILITY_TABS}
+      />
+    );
   }
   if (variant === 'admin') {
-    return <PortalMedicationTabs basePath={basePath} variant="admin" tabs={ADMIN_TABS} />;
+    return (
+      <PortalMedicationTabs
+        basePath={basePath}
+        variant="admin"
+        tabs={ADMIN_TABS}
+      />
+    );
   }
 
   function isActive(segment: MedicationSection | '') {
@@ -121,7 +177,10 @@ export function MedicationTabs({ basePath, variant = 'patient' }: MedicationTabs
   }
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Medication sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Medication sections"
+    >
       {PATIENT_TABS.map((tab) => {
         const href = tab.segment ? `${basePath}/${tab.segment}` : basePath;
         return (
@@ -144,16 +203,34 @@ export function MedicationTabs({ basePath, variant = 'patient' }: MedicationTabs
   );
 }
 
-export function getMedicationSectionFromPath(pathname: string): MedicationSection {
+export function getMedicationSectionFromPath(
+  pathname: string,
+): MedicationSection {
   const segment = pathname.split('/').filter(Boolean).pop() ?? '';
-  if (segment === 'medications' || segment === 'medication-board') return 'dashboard';
+  if (segment === 'medications' || segment === 'medication-board')
+    return 'dashboard';
   if (segment === 'medication-administration') return 'administration';
   if (segment === 'medication-analytics') return 'analytics';
   if (segment === 'prescribe') return 'prescriptions';
   const valid: MedicationSection[] = [
-    'today', 'calendar', 'history', 'refills', 'reminders', 'logs',
-    'interactions', 'adherence', 'prescriptions', 'dispensing', 'analytics', 'administration',
-    'reconciliation', 'formulary', 'inventory', 'emar',
+    'today',
+    'calendar',
+    'history',
+    'refills',
+    'reminders',
+    'logs',
+    'interactions',
+    'adherence',
+    'prescriptions',
+    'dispensing',
+    'analytics',
+    'administration',
+    'reconciliation',
+    'formulary',
+    'inventory',
+    'emar',
   ];
-  return valid.includes(segment as MedicationSection) ? (segment as MedicationSection) : 'dashboard';
+  return valid.includes(segment as MedicationSection)
+    ? (segment as MedicationSection)
+    : 'dashboard';
 }

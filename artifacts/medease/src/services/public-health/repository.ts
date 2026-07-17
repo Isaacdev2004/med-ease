@@ -33,7 +33,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -42,7 +47,12 @@ function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
   return fields.some((f) => f?.toLowerCase().includes(lower));
 }
 
-function audit(action: string, resourceType: string, resourceId: string, facilityId?: string) {
+function audit(
+  action: string,
+  resourceType: string,
+  resourceId: string,
+  facilityId?: string,
+) {
   MOCK_PH_AUDIT.unshift({
     auditId: `phaudit-${Date.now()}`,
     action,
@@ -64,17 +74,29 @@ class PublicHealthRepository {
   private favorites: PublicHealthFavorite[] = [];
   private nextId = 800000;
 
-  dashboard(facilityId?: string) { return buildPublicHealthDashboard(facilityId); }
-  analytics(facilityId?: string) { return computePublicHealthAnalytics(facilityId); }
+  dashboard(facilityId?: string) {
+    return buildPublicHealthDashboard(facilityId);
+  }
+  analytics(facilityId?: string) {
+    return computePublicHealthAnalytics(facilityId);
+  }
 
   getCases(filters?: PublicHealthFilters) {
     let items = this.cases;
-    if (filters?.facilityId) items = items.filter((c) => c.facilityId === filters.facilityId);
-    if (filters?.disease) items = items.filter((c) => c.disease === filters.disease);
-    if (filters?.status) items = items.filter((c) => c.status === filters.status);
-    if (filters?.outbreakId) items = items.filter((c) => c.outbreakId === filters.outbreakId);
-    if (filters?.patientId) items = items.filter((c) => c.patientId === filters.patientId);
-    if (filters?.q) items = items.filter((c) => matchQ(filters.q, c.disease, c.caseId, c.patientId));
+    if (filters?.facilityId)
+      items = items.filter((c) => c.facilityId === filters.facilityId);
+    if (filters?.disease)
+      items = items.filter((c) => c.disease === filters.disease);
+    if (filters?.status)
+      items = items.filter((c) => c.status === filters.status);
+    if (filters?.outbreakId)
+      items = items.filter((c) => c.outbreakId === filters.outbreakId);
+    if (filters?.patientId)
+      items = items.filter((c) => c.patientId === filters.patientId);
+    if (filters?.q)
+      items = items.filter((c) =>
+        matchQ(filters.q, c.disease, c.caseId, c.patientId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -84,95 +106,130 @@ class PublicHealthRepository {
 
   getOutbreaks(filters?: PublicHealthFilters) {
     let items = this.outbreaks;
-    if (filters?.facilityId) items = items.filter((o) => o.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((o) => o.status === filters.status);
-    if (filters?.q) items = items.filter((o) => matchQ(filters.q, o.name, o.disease));
+    if (filters?.facilityId)
+      items = items.filter((o) => o.facilityId === filters.facilityId);
+    if (filters?.status)
+      items = items.filter((o) => o.status === filters.status);
+    if (filters?.q)
+      items = items.filter((o) => matchQ(filters.q, o.name, o.disease));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getContactTracing(filters?: PublicHealthFilters) {
     let items = this.contacts;
-    if (filters?.facilityId) items = items.filter((c) => c.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((c) => c.patientId === filters.patientId);
-    if (filters?.q) items = items.filter((c) => matchQ(filters.q, c.contactName, c.contactId));
+    if (filters?.facilityId)
+      items = items.filter((c) => c.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((c) => c.patientId === filters.patientId);
+    if (filters?.q)
+      items = items.filter((c) =>
+        matchQ(filters.q, c.contactName, c.contactId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getImmunizations(filters?: PublicHealthFilters) {
     let items = this.immunizations;
-    if (filters?.facilityId) items = items.filter((i) => i.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((i) => i.patientId === filters.patientId);
-    if (filters?.status) items = items.filter((i) => i.status === filters.status);
-    if (filters?.q) items = items.filter((i) => matchQ(filters.q, i.vaccine, i.immunizationId));
+    if (filters?.facilityId)
+      items = items.filter((i) => i.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((i) => i.patientId === filters.patientId);
+    if (filters?.status)
+      items = items.filter((i) => i.status === filters.status);
+    if (filters?.q)
+      items = items.filter((i) =>
+        matchQ(filters.q, i.vaccine, i.immunizationId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getRegistries(filters?: PublicHealthFilters) {
     let items = MOCK_REGISTRIES;
-    if (filters?.facilityId) items = items.filter((r) => r.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((r) => r.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getCommunityPrograms(filters?: PublicHealthFilters) {
     let items = this.programs;
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
-    if (filters?.programId) items = items.filter((p) => p.programId === filters.programId);
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.name, p.category));
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
+    if (filters?.programId)
+      items = items.filter((p) => p.programId === filters.programId);
+    if (filters?.q)
+      items = items.filter((p) => matchQ(filters.q, p.name, p.category));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getMaternalHealth(filters?: PublicHealthFilters) {
     let items = MOCK_MATERNAL;
-    if (filters?.facilityId) items = items.filter((m) => m.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((m) => m.patientId === filters.patientId);
+    if (filters?.facilityId)
+      items = items.filter((m) => m.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((m) => m.patientId === filters.patientId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getChildHealth(filters?: PublicHealthFilters) {
     let items = MOCK_CHILD_HEALTH;
-    if (filters?.facilityId) items = items.filter((c) => c.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((c) => c.patientId === filters.patientId);
+    if (filters?.facilityId)
+      items = items.filter((c) => c.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((c) => c.patientId === filters.patientId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getSchoolHealth(filters?: PublicHealthFilters) {
     let items = MOCK_SCHOOL_SCREENINGS;
-    if (filters?.facilityId) items = items.filter((s) => s.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((s) => s.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getOccupationalHealth(filters?: PublicHealthFilters) {
     let items = MOCK_OCCUPATIONAL;
-    if (filters?.facilityId) items = items.filter((o) => o.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((o) => o.patientId === filters.patientId);
+    if (filters?.facilityId)
+      items = items.filter((o) => o.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((o) => o.patientId === filters.patientId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getEnvironmentalHealth(filters?: PublicHealthFilters) {
     let items = MOCK_ENVIRONMENTAL;
-    if (filters?.facilityId) items = items.filter((e) => e.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((e) => matchQ(filters.q, e.siteName, e.inspectionType));
+    if (filters?.facilityId)
+      items = items.filter((e) => e.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((e) =>
+        matchQ(filters.q, e.siteName, e.inspectionType),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getSdohAssessments(filters?: PublicHealthFilters) {
     let items = MOCK_SDOH;
-    if (filters?.facilityId) items = items.filter((s) => s.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((s) => s.patientId === filters.patientId);
-    if (filters?.q) items = items.filter((s) => matchQ(filters.q, s.domain, s.assessmentId));
+    if (filters?.facilityId)
+      items = items.filter((s) => s.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((s) => s.patientId === filters.patientId);
+    if (filters?.q)
+      items = items.filter((s) => matchQ(filters.q, s.domain, s.assessmentId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getCommunityMembers(filters?: PublicHealthFilters) {
     let items = MOCK_COMMUNITY_MEMBERS;
-    if (filters?.facilityId) items = items.filter((m) => m.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((m) => matchQ(filters.q, m.name, m.patientId));
+    if (filters?.facilityId)
+      items = items.filter((m) => m.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((m) => matchQ(filters.q, m.name, m.patientId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getAudit(filters?: PublicHealthFilters) {
     let items = MOCK_PH_AUDIT;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -221,7 +278,12 @@ class PublicHealthRepository {
       appointmentId: input.appointmentId,
     };
     this.immunizations.unshift(record);
-    audit('record_immunization', 'immunization', record.immunizationId, input.facilityId);
+    audit(
+      'record_immunization',
+      'immunization',
+      record.immunizationId,
+      input.facilityId,
+    );
     return record;
   }
 
@@ -248,11 +310,19 @@ class PublicHealthRepository {
   }
 
   completeInvestigation(input: CompleteInvestigationInput) {
-    const outbreak = this.outbreaks.find((o) => o.outbreakId === input.outbreakId);
-    if (!outbreak || !canResolveOutbreak(outbreak)) throw new Error('Cannot complete investigation');
+    const outbreak = this.outbreaks.find(
+      (o) => o.outbreakId === input.outbreakId,
+    );
+    if (!outbreak || !canResolveOutbreak(outbreak))
+      throw new Error('Cannot complete investigation');
     outbreak.status = 'resolved';
     outbreak.resolvedAt = new Date().toISOString();
-    audit('complete_investigation', 'outbreak', outbreak.outbreakId, outbreak.facilityId);
+    audit(
+      'complete_investigation',
+      'outbreak',
+      outbreak.outbreakId,
+      outbreak.facilityId,
+    );
     return outbreak;
   }
 
@@ -263,7 +333,12 @@ class PublicHealthRepository {
       facilityId: input.facilityId,
       domain: input.domain,
       score: input.score,
-      riskLevel: input.score >= 70 ? 'high' as const : input.score >= 40 ? 'moderate' as const : 'low' as const,
+      riskLevel:
+        input.score >= 70
+          ? ('high' as const)
+          : input.score >= 40
+            ? ('moderate' as const)
+            : ('low' as const),
       assessedAt: new Date().toISOString(),
       interventionNeeded: input.score >= 50,
     };
@@ -273,22 +348,45 @@ class PublicHealthRepository {
 
   scheduleOutreach(input: ScheduleOutreachInput) {
     audit('schedule_outreach', 'program', input.programId, input.facilityId);
-    return { scheduled: true, programId: input.programId, scheduledAt: input.scheduledAt };
+    return {
+      scheduled: true,
+      programId: input.programId,
+      scheduledAt: input.scheduledAt,
+    };
   }
 
   search(query: string, facilityId?: string) {
     const q = query.toLowerCase();
-    const cases = this.cases.filter((c) => (!facilityId || c.facilityId === facilityId) && matchQ(q, c.disease, c.caseId));
-    const outbreaks = this.outbreaks.filter((o) => (!facilityId || o.facilityId === facilityId) && matchQ(q, o.name));
+    const cases = this.cases.filter(
+      (c) =>
+        (!facilityId || c.facilityId === facilityId) &&
+        matchQ(q, c.disease, c.caseId),
+    );
+    const outbreaks = this.outbreaks.filter(
+      (o) => (!facilityId || o.facilityId === facilityId) && matchQ(q, o.name),
+    );
     return { cases: cases.slice(0, 10), outbreaks: outbreaks.slice(0, 10) };
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.cases.length + this.immunizations.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.cases.length + this.immunizations.length,
+    };
   }
 
-  favorite(userId: string, entityType: PublicHealthFavorite['entityType'], entityId: string) {
-    const fav = { userId, entityType, entityId, createdAt: new Date().toISOString() };
+  favorite(
+    userId: string,
+    entityType: PublicHealthFavorite['entityType'],
+    entityId: string,
+  ) {
+    const fav = {
+      userId,
+      entityType,
+      entityId,
+      createdAt: new Date().toISOString(),
+    };
     this.favorites.push(fav);
     return fav;
   }

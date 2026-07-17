@@ -22,14 +22,14 @@ export function AppProviders() {
           <ApiProvider>
             <RealtimeProvider>
               <AuthStateBoundary>
-              <TooltipProvider>
-                <RootLayout>
-                  <WouterRouter base={env.baseUrl}>
-                    <AppRouter />
-                  </WouterRouter>
-                </RootLayout>
-                <Toaster />
-              </TooltipProvider>
+                <TooltipProvider>
+                  <RootLayout>
+                    <WouterRouter base={env.baseUrl}>
+                      <AppRouter />
+                    </WouterRouter>
+                  </RootLayout>
+                  <Toaster />
+                </TooltipProvider>
               </AuthStateBoundary>
             </RealtimeProvider>
           </ApiProvider>

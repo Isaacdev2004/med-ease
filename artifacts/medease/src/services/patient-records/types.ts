@@ -1,11 +1,14 @@
 /** Patient Health Record domain types — FHIR-ready structure. */
 
 export type Gender = 'male' | 'female' | 'other' | 'unknown';
-export type BloodGroup = 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-' | 'unknown';
-export type AllergySeverity = 'mild' | 'moderate' | 'severe' | 'life_threatening';
+export type BloodGroup =
+  'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-' | 'unknown';
+export type AllergySeverity =
+  'mild' | 'moderate' | 'severe' | 'life_threatening';
 export type AllergyType = 'drug' | 'food' | 'environmental';
 export type MedicationStatus = 'active' | 'stopped' | 'paused' | 'completed';
-export type EncounterType = 'emergency' | 'admission' | 'consultation' | 'teleconsultation' | 'procedure';
+export type EncounterType =
+  'emergency' | 'admission' | 'consultation' | 'teleconsultation' | 'procedure';
 export type AlertSeverity = 'info' | 'warning' | 'critical';
 export type AlertCategory =
   | 'drug_allergy'

@@ -59,7 +59,9 @@ export class CreatePatientContactBodyDto {
 }
 
 export class CreatePatientAddressBodyDto {
-  @ApiPropertyOptional({ enum: ['home', 'work', 'mailing', 'temporary', 'other'] })
+  @ApiPropertyOptional({
+    enum: ['home', 'work', 'mailing', 'temporary', 'other'],
+  })
   @IsOptional()
   @IsIn(['home', 'work', 'mailing', 'temporary', 'other'])
   type?: 'home' | 'work' | 'mailing' | 'temporary' | 'other';
@@ -165,7 +167,10 @@ export class CreatePatientPreferenceBodyDto implements CreatePatientPreferenceIn
   communication?: Record<string, unknown>;
 }
 
-export class RegisterPatientBodyDto implements Omit<CreatePatientInput, 'createdBy'> {
+export class RegisterPatientBodyDto implements Omit<
+  CreatePatientInput,
+  'createdBy'
+> {
   @ApiProperty()
   @IsString()
   mrn!: string;
@@ -250,7 +255,10 @@ export class RegisterPatientBodyDto implements Omit<CreatePatientInput, 'created
   preferences?: CreatePatientPreferenceBodyDto;
 }
 
-export class UpdatePatientBodyDto implements Omit<UpdatePatientInput, 'updatedBy'> {
+export class UpdatePatientBodyDto implements Omit<
+  UpdatePatientInput,
+  'updatedBy'
+> {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()

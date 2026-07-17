@@ -11,7 +11,11 @@ const PROFESSIONAL_TABS: Tab[] = [
   { segment: 'trials', label: 'Clinical Trials', path: 'clinical-trials' },
   { segment: 'participants', label: 'Participants', path: 'participants' },
   { segment: 'visits', label: 'Study Visits', path: 'study-visits' },
-  { segment: 'adverse-events', label: 'Adverse Events', path: 'adverse-events' },
+  {
+    segment: 'adverse-events',
+    label: 'Adverse Events',
+    path: 'adverse-events',
+  },
   { segment: 'biospecimens', label: 'Biospecimens', path: 'biospecimens' },
 ];
 
@@ -19,7 +23,11 @@ const FACILITY_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Research', path: 'research' },
   { segment: 'sites', label: 'Study Sites', path: 'study-sites' },
   { segment: 'recruitment', label: 'Recruitment', path: 'recruitment' },
-  { segment: 'facility-dashboard', label: 'Research Dashboard', path: 'research-dashboard' },
+  {
+    segment: 'facility-dashboard',
+    label: 'Research Dashboard',
+    path: 'research-dashboard',
+  },
   { segment: 'innovation', label: 'Innovation', path: 'innovation' },
 ];
 
@@ -45,17 +53,33 @@ function getTabs(variant: ResearchTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function ResearchTabs({ basePath: _basePath, variant = 'professional' }: ResearchTabsProps) {
+export function ResearchTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: ResearchTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Research sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Research sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -64,8 +88,15 @@ export function ResearchTabs({ basePath: _basePath, variant = 'professional' }: 
   );
 }
 
-export function getResearchSectionFromPath(pathname: string, variant: 'professional' | 'facility' | 'admin' = 'professional'): ResearchSection {
-  if (pathname.includes('/clinical-trials') || (variant === 'admin' && pathname.includes('/trials'))) return variant === 'admin' ? 'trials-admin' : 'trials';
+export function getResearchSectionFromPath(
+  pathname: string,
+  variant: 'professional' | 'facility' | 'admin' = 'professional',
+): ResearchSection {
+  if (
+    pathname.includes('/clinical-trials') ||
+    (variant === 'admin' && pathname.includes('/trials'))
+  )
+    return variant === 'admin' ? 'trials-admin' : 'trials';
   if (pathname.includes('/participants')) return 'participants';
   if (pathname.includes('/study-visits')) return 'visits';
   if (pathname.includes('/adverse-events')) return 'adverse-events';
@@ -80,6 +111,13 @@ export function getResearchSectionFromPath(pathname: string, variant: 'professio
   if (pathname.includes('/research-analytics')) return 'analytics';
   if (pathname.includes('/protocols')) return 'protocols';
   if (pathname.includes('/research-audit')) return 'audit';
-  if (variant === 'admin' && pathname.includes('/research') && !pathname.includes('/research-analytics') && !pathname.includes('/research-dashboard') && !pathname.includes('/research-audit')) return 'hub';
+  if (
+    variant === 'admin' &&
+    pathname.includes('/research') &&
+    !pathname.includes('/research-analytics') &&
+    !pathname.includes('/research-dashboard') &&
+    !pathname.includes('/research-audit')
+  )
+    return 'hub';
   return 'dashboard';
 }

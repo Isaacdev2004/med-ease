@@ -19,11 +19,21 @@ export function mapToFhirBundle(resources: {
   copilotSessions?: CopilotSession[];
 }) {
   const entries: { resource: unknown }[] = [];
-  resources.riskAssessments?.forEach((r) => entries.push({ resource: toFhirRiskAssessment(r) }));
-  resources.recommendations?.forEach((r) => entries.push({ resource: toFhirDetectedIssue(r) }));
-  resources.summaries?.forEach((s) => entries.push({ resource: toFhirDiagnosticReport(s) }));
-  resources.forecasts?.forEach((f) => entries.push({ resource: toFhirMeasureReport(f) }));
-  resources.copilotSessions?.forEach((s) => entries.push({ resource: toFhirGuidanceResponse(s) }));
+  resources.riskAssessments?.forEach((r) =>
+    entries.push({ resource: toFhirRiskAssessment(r) }),
+  );
+  resources.recommendations?.forEach((r) =>
+    entries.push({ resource: toFhirDetectedIssue(r) }),
+  );
+  resources.summaries?.forEach((s) =>
+    entries.push({ resource: toFhirDiagnosticReport(s) }),
+  );
+  resources.forecasts?.forEach((f) =>
+    entries.push({ resource: toFhirMeasureReport(f) }),
+  );
+  resources.copilotSessions?.forEach((s) =>
+    entries.push({ resource: toFhirGuidanceResponse(s) }),
+  );
   return { resourceType: 'Bundle', type: 'collection', entry: entries };
 }
 
@@ -32,7 +42,12 @@ export function toFhirProvenance(resourceId: string, actorId: string) {
     resourceType: 'Provenance',
     target: [{ reference: resourceId }],
     recorded: new Date().toISOString(),
-    agent: [{ who: { reference: `Practitioner/${actorId}` }, type: { text: 'AI System' } }],
+    agent: [
+      {
+        who: { reference: `Practitioner/${actorId}` },
+        type: { text: 'AI System' },
+      },
+    ],
   };
 }
 

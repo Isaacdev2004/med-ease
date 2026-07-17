@@ -15,17 +15,23 @@ export const executiveQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   enterpriseKpis: (filters?: ExecutiveFilters) => ({
-    queryKey: queryKeys.executive.enterpriseKpis(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.executive.enterpriseKpis(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => executiveService.getEnterpriseKpis(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   operationalMetrics: (filters?: ExecutiveFilters) => ({
-    queryKey: queryKeys.executive.operationalMetrics(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.executive.operationalMetrics(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => executiveService.getOperationalMetrics(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   departmentScorecards: (filters?: ExecutiveFilters) => ({
-    queryKey: queryKeys.executive.departmentScorecards(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.executive.departmentScorecards(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => executiveService.getDepartmentScorecards(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -35,7 +41,9 @@ export const executiveQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   capacityAnalytics: (filters?: ExecutiveFilters) => ({
-    queryKey: queryKeys.executive.capacityAnalytics(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.executive.capacityAnalytics(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => executiveService.getCapacityAnalytics(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -65,22 +73,30 @@ export const executiveQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   executiveForecasts: (filters?: ExecutiveFilters) => ({
-    queryKey: queryKeys.executive.forecasts(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.executive.forecasts(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => executiveService.getExecutiveForecasts(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   strategicInitiatives: (filters?: ExecutiveFilters) => ({
-    queryKey: queryKeys.executive.strategicInitiatives(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.executive.strategicInitiatives(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => executiveService.getStrategicInitiatives(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   executiveAlerts: (filters?: ExecutiveFilters) => ({
-    queryKey: queryKeys.executive.alerts(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.executive.alerts(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => executiveService.getExecutiveAlerts(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   benchmarkReports: (filters?: ExecutiveFilters) => ({
-    queryKey: queryKeys.executive.benchmarks(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.executive.benchmarks(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => executiveService.getBenchmarkReports(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

@@ -23,9 +23,11 @@ export type VitalType =
 
 export type AlertSeverity = 'info' | 'warning' | 'critical' | 'urgent';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved' | 'dismissed';
-export type DeviceStatus = 'online' | 'offline' | 'syncing' | 'error' | 'maintenance';
+export type DeviceStatus =
+  'online' | 'offline' | 'syncing' | 'error' | 'maintenance';
 export type BatteryStatus = 'full' | 'good' | 'low' | 'critical' | 'unknown';
-export type MonitoringContext = 'home' | 'ward' | 'telemonitoring' | 'outpatient' | 'rpm';
+export type MonitoringContext =
+  'home' | 'ward' | 'telemonitoring' | 'outpatient' | 'rpm';
 export type RPMProgramStatus = 'active' | 'paused' | 'completed' | 'pending';
 
 export interface VitalSign {
@@ -134,7 +136,13 @@ export interface MonitoringAlert {
   id: string;
   patientId: string;
   patientName: string;
-  type: 'threshold' | 'missed_reading' | 'device_offline' | 'battery_low' | 'escalation' | 'clinical';
+  type:
+    | 'threshold'
+    | 'missed_reading'
+    | 'device_offline'
+    | 'battery_low'
+    | 'escalation'
+    | 'clinical';
   severity: AlertSeverity;
   status: AlertStatus;
   title: string;
@@ -347,6 +355,7 @@ export const AUTH_USER_PATIENT_MAP: Record<string, string> = {
   'user-patient': 'phr-001',
 };
 
-export const MONITORED_PATIENT_IDS = Array.from({ length: 40 }, (_, i) =>
-  `phr-${String(i + 1).padStart(3, '0')}`,
+export const MONITORED_PATIENT_IDS = Array.from(
+  { length: 40 },
+  (_, i) => `phr-${String(i + 1).padStart(3, '0')}`,
 );

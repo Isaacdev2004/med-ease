@@ -1,14 +1,11 @@
-import {
-  addDays,
-  addMonths,
-  format,
-  subDays,
-  subMonths,
-} from 'date-fns';
+import { addDays, addMonths, format, subDays, subMonths } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
-import type { CalendarEvent, CalendarViewMode } from '@/services/appointments/types';
+import type {
+  CalendarEvent,
+  CalendarViewMode,
+} from '@/services/appointments/types';
 import type { CalendarDayCell } from '@/services/appointments/calendar';
 import { AppointmentStatusBadge } from '@/features/appointments/components/AppointmentComponents';
 import { Button } from '@/shared/ui/button';
@@ -27,7 +24,11 @@ export function CalendarLegend() {
     <div className="flex flex-wrap gap-3 text-xs" aria-label="Calendar legend">
       {STATUS_LEGEND.map((item) => (
         <span key={item.label} className="flex items-center gap-1.5">
-          <span className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} aria-hidden="true" />
+          <span
+            className="h-3 w-3 rounded-full"
+            style={{ backgroundColor: item.color }}
+            aria-hidden="true"
+          />
           {item.label}
         </span>
       ))}
@@ -50,20 +51,44 @@ export function CalendarToolbar({
   onNext: () => void;
   onToday: () => void;
 }) {
-  const modes: CalendarViewMode[] = ['month', 'week', 'day', 'agenda', 'timeline'];
+  const modes: CalendarViewMode[] = [
+    'month',
+    'week',
+    'day',
+    'agenda',
+    'timeline',
+  ];
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-2">
-        <Button type="button" variant="outline" size="icon" onClick={onPrev} aria-label="Previous">
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          onClick={onPrev}
+          aria-label="Previous"
+        >
           <ChevronLeft className="h-4 w-4" />
         </Button>
-        <Button type="button" variant="outline" size="sm" onClick={onToday}>Today</Button>
-        <Button type="button" variant="outline" size="icon" onClick={onNext} aria-label="Next">
+        <Button type="button" variant="outline" size="sm" onClick={onToday}>
+          Today
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          onClick={onNext}
+          aria-label="Next"
+        >
           <ChevronRight className="h-4 w-4" />
         </Button>
         <h2 className="text-lg font-semibold ml-2">{label}</h2>
       </div>
-      <div className="flex flex-wrap gap-1" role="tablist" aria-label="Calendar view">
+      <div
+        className="flex flex-wrap gap-1"
+        role="tablist"
+        aria-label="Calendar view"
+      >
         {modes.map((m) => (
           <Button
             key={m}
@@ -90,8 +115,16 @@ export function MiniCalendar({
   onSelectDate: (date: Date) => void;
 }) {
   const days = useMemo(() => {
-    const start = new Date(referenceDate.getFullYear(), referenceDate.getMonth(), 1);
-    const end = new Date(referenceDate.getFullYear(), referenceDate.getMonth() + 1, 0);
+    const start = new Date(
+      referenceDate.getFullYear(),
+      referenceDate.getMonth(),
+      1,
+    );
+    const end = new Date(
+      referenceDate.getFullYear(),
+      referenceDate.getMonth() + 1,
+      0,
+    );
     const cells: Date[] = [];
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
       cells.push(new Date(d));
@@ -101,7 +134,11 @@ export function MiniCalendar({
 
   return (
     <Card>
-      <CardHeader className="pb-2"><CardTitle className="text-sm">{format(referenceDate, 'MMMM yyyy')}</CardTitle></CardHeader>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm">
+          {format(referenceDate, 'MMMM yyyy')}
+        </CardTitle>
+      </CardHeader>
       <CardContent className="grid grid-cols-7 gap-1 text-center text-xs">
         {days.map((day) => (
           <button
@@ -136,7 +173,11 @@ export function MonthView({ grid }: { grid: CalendarDayCell[] }) {
   return (
     <div className="rounded-lg border" role="grid" aria-label="Month calendar">
       <div className="grid grid-cols-7 border-b bg-muted/40 text-center text-xs font-medium">
-        {weekdays.map((d) => <div key={d} className="p-2">{d}</div>)}
+        {weekdays.map((d) => (
+          <div key={d} className="p-2">
+            {d}
+          </div>
+        ))}
       </div>
       <div className="grid grid-cols-7">
         {grid.map((cell) => (
@@ -149,10 +190,18 @@ export function MonthView({ grid }: { grid: CalendarDayCell[] }) {
             )}
             role="gridcell"
           >
-            <span className={cn('font-medium', cell.isToday && 'text-primary')}>{format(cell.date, 'd')}</span>
+            <span className={cn('font-medium', cell.isToday && 'text-primary')}>
+              {format(cell.date, 'd')}
+            </span>
             <div className="mt-1 space-y-0.5">
-              {cell.events.slice(0, 3).map((e) => <EventPill key={e.id} event={e} />)}
-              {cell.events.length > 3 ? <p className="text-muted-foreground">+{cell.events.length - 3} more</p> : null}
+              {cell.events.slice(0, 3).map((e) => (
+                <EventPill key={e.id} event={e} />
+              ))}
+              {cell.events.length > 3 ? (
+                <p className="text-muted-foreground">
+                  +{cell.events.length - 3} more
+                </p>
+              ) : null}
             </div>
           </div>
         ))}
@@ -163,14 +212,22 @@ export function MonthView({ grid }: { grid: CalendarDayCell[] }) {
 
 export function WeekView({ grid }: { grid: CalendarDayCell[] }) {
   return (
-    <div className="grid gap-2 lg:grid-cols-7" role="list" aria-label="Week calendar">
+    <div
+      className="grid gap-2 lg:grid-cols-7"
+      role="list"
+      aria-label="Week calendar"
+    >
       {grid.map((cell) => (
         <Card key={cell.date.toISOString()} role="listitem">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm">{format(cell.date, 'EEE d')}</CardTitle>
+            <CardTitle className="text-sm">
+              {format(cell.date, 'EEE d')}
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1">
-            {cell.events.length ? cell.events.map((e) => <EventPill key={e.id} event={e} />) : (
+            {cell.events.length ? (
+              cell.events.map((e) => <EventPill key={e.id} event={e} />)
+            ) : (
               <p className="text-xs text-muted-foreground">No appointments</p>
             )}
           </CardContent>
@@ -183,17 +240,31 @@ export function WeekView({ grid }: { grid: CalendarDayCell[] }) {
 export function DayView({ events }: { events: CalendarEvent[] }) {
   return (
     <div className="space-y-2" role="list" aria-label="Day schedule">
-      {events.length ? events.map((event) => (
-        <Card key={event.id} role="listitem" draggable className="cursor-grab">
-          <CardContent className="flex items-center justify-between gap-4 py-3">
-            <div>
-              <p className="font-medium">{event.title}</p>
-              <p className="text-sm text-muted-foreground">{format(new Date(event.start), 'HH:mm')} – {format(new Date(event.end), 'HH:mm')}</p>
-            </div>
-            <AppointmentStatusBadge status={event.status} />
-          </CardContent>
-        </Card>
-      )) : <p className="text-muted-foreground text-sm">No appointments scheduled.</p>}
+      {events.length ? (
+        events.map((event) => (
+          <Card
+            key={event.id}
+            role="listitem"
+            draggable
+            className="cursor-grab"
+          >
+            <CardContent className="flex items-center justify-between gap-4 py-3">
+              <div>
+                <p className="font-medium">{event.title}</p>
+                <p className="text-sm text-muted-foreground">
+                  {format(new Date(event.start), 'HH:mm')} –{' '}
+                  {format(new Date(event.end), 'HH:mm')}
+                </p>
+              </div>
+              <AppointmentStatusBadge status={event.status} />
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <p className="text-muted-foreground text-sm">
+          No appointments scheduled.
+        </p>
+      )}
     </div>
   );
 }
@@ -206,7 +277,9 @@ export function AgendaView({ events }: { events: CalendarEvent[] }) {
           <CardContent className="py-3 flex justify-between gap-4">
             <div>
               <p className="font-medium">{event.title}</p>
-              <p className="text-sm text-muted-foreground">{format(new Date(event.start), 'PPp')}</p>
+              <p className="text-sm text-muted-foreground">
+                {format(new Date(event.start), 'PPp')}
+              </p>
             </div>
             <AppointmentStatusBadge status={event.status} />
           </CardContent>
@@ -218,14 +291,24 @@ export function AgendaView({ events }: { events: CalendarEvent[] }) {
 
 export function TimelineCalendar({ events }: { events: CalendarEvent[] }) {
   return (
-    <div className="relative space-y-4 pl-6 before:absolute before:left-2 before:top-0 before:h-full before:w-0.5 before:bg-border" role="list" aria-label="Timeline calendar">
+    <div
+      className="relative space-y-4 pl-6 before:absolute before:left-2 before:top-0 before:h-full before:w-0.5 before:bg-border"
+      role="list"
+      aria-label="Timeline calendar"
+    >
       {events.map((event) => (
         <div key={event.id} className="relative" role="listitem">
-          <span className="absolute -left-[1.35rem] top-1 h-3 w-3 rounded-full border-2 bg-background" style={{ borderColor: event.color }} aria-hidden="true" />
+          <span
+            className="absolute -left-[1.35rem] top-1 h-3 w-3 rounded-full border-2 bg-background"
+            style={{ borderColor: event.color }}
+            aria-hidden="true"
+          />
           <Card>
             <CardContent className="py-3">
               <p className="font-medium">{event.title}</p>
-              <p className="text-sm text-muted-foreground">{format(new Date(event.start), 'PPp')}</p>
+              <p className="text-sm text-muted-foreground">
+                {format(new Date(event.start), 'PPp')}
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -253,13 +336,20 @@ export function CalendarView({
   onReferenceDateChange: (date: Date) => void;
   onModeChange?: (mode: CalendarViewMode) => void;
 }) {
-  const label = mode === 'month'
-    ? format(referenceDate, 'MMMM yyyy')
-    : format(referenceDate, 'PPP');
+  const label =
+    mode === 'month'
+      ? format(referenceDate, 'MMMM yyyy')
+      : format(referenceDate, 'PPP');
 
   function navigate(delta: number) {
-    if (mode === 'month') onReferenceDateChange(delta > 0 ? addMonths(referenceDate, 1) : subMonths(referenceDate, 1));
-    else onReferenceDateChange(delta > 0 ? addDays(referenceDate, 1) : subDays(referenceDate, 1));
+    if (mode === 'month')
+      onReferenceDateChange(
+        delta > 0 ? addMonths(referenceDate, 1) : subMonths(referenceDate, 1),
+      );
+    else
+      onReferenceDateChange(
+        delta > 0 ? addDays(referenceDate, 1) : subDays(referenceDate, 1),
+      );
   }
 
   return (
@@ -277,7 +367,9 @@ export function CalendarView({
       {mode === 'week' && grid ? <WeekView grid={grid} /> : null}
       {mode === 'day' ? <DayView events={dayEvents ?? []} /> : null}
       {mode === 'agenda' ? <AgendaView events={agendaEvents ?? []} /> : null}
-      {mode === 'timeline' ? <TimelineCalendar events={allEvents.slice(0, 20)} /> : null}
+      {mode === 'timeline' ? (
+        <TimelineCalendar events={allEvents.slice(0, 20)} />
+      ) : null}
     </div>
   );
 }

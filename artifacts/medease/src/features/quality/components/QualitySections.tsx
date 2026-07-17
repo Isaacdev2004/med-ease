@@ -56,19 +56,29 @@ export function DashboardSection({ filters }: { filters?: QualityFilters }) {
   const dashboard = useQualityDashboard(filters?.facilityId);
   const incidents = useIncidents(filters);
   const { escalateIncident } = useQualityMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading quality dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={Shield} title="No quality data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading quality dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Shield} title="No quality data" />;
   return (
     <div className="space-y-6">
       <ExecutiveDashboard dashboard={dashboard.data} />
       <HeatMap data={dashboard.data.riskHeatMap} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(incidents.data?.items ?? dashboard.data.recentIncidents).slice(0, 6).map((i) => (
-          <IncidentCard key={i.incidentId} incident={i} onEscalate={() => escalateIncident.mutate(i.incidentId)} />
-        ))}
+        {(incidents.data?.items ?? dashboard.data.recentIncidents)
+          .slice(0, 6)
+          .map((i) => (
+            <IncidentCard
+              key={i.incidentId}
+              incident={i}
+              onEscalate={() => escalateIncident.mutate(i.incidentId)}
+            />
+          ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {dashboard.data.recentCapa.map((c) => <CAPACard key={c.capaId} capa={c} />)}
+        {dashboard.data.recentCapa.map((c) => (
+          <CAPACard key={c.capaId} capa={c} />
+        ))}
       </div>
     </div>
   );
@@ -81,7 +91,11 @@ export function IncidentsSection({ filters }: { filters?: QualityFilters }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {(incidents.data?.items ?? []).slice(0, 12).map((i) => (
-        <IncidentCard key={i.incidentId} incident={i} onEscalate={() => escalateIncident.mutate(i.incidentId)} />
+        <IncidentCard
+          key={i.incidentId}
+          incident={i}
+          onEscalate={() => escalateIncident.mutate(i.incidentId)}
+        />
       ))}
     </div>
   );
@@ -95,10 +109,16 @@ export function PoliciesSection({ filters }: { filters?: QualityFilters }) {
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(policies.data?.items ?? []).slice(0, 9).map((p) => (
-          <PolicyCard key={p.policyId} policy={p} onArchive={() => archivePolicy.mutate(p.policyId)} />
+          <PolicyCard
+            key={p.policyId}
+            policy={p}
+            onArchive={() => archivePolicy.mutate(p.policyId)}
+          />
         ))}
       </div>
-      {(policies.data?.items ?? []).slice(0, 2).map((p) => <DocumentViewer key={`doc-${p.policyId}`} policy={p} />)}
+      {(policies.data?.items ?? []).slice(0, 2).map((p) => (
+        <DocumentViewer key={`doc-${p.policyId}`} policy={p} />
+      ))}
     </div>
   );
 }
@@ -107,37 +127,69 @@ export function InfectionSection({ filters }: { filters?: QualityFilters }) {
   const infection = useInfectionControl(filters);
   if (infection.isLoading) return <LoadingView />;
   if (!infection.data) return <EmptyState title="No infection data" />;
-  return <InfectionDashboard records={infection.data.records.items} outbreaks={infection.data.outbreaks} />;
+  return (
+    <InfectionDashboard
+      records={infection.data.records.items}
+      outbreaks={infection.data.outbreaks}
+    />
+  );
 }
 
 export function AuditsSection({ filters }: { filters?: QualityFilters }) {
   const audits = useAudits(filters);
   if (audits.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(audits.data?.items ?? []).slice(0, 12).map((a) => <AuditCard key={a.auditId} audit={a} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(audits.data?.items ?? []).slice(0, 12).map((a) => (
+        <AuditCard key={a.auditId} audit={a} />
+      ))}
+    </div>
+  );
 }
 
 export function ComplianceSection({ filters }: { filters?: QualityFilters }) {
   const compliance = useCompliance(filters);
   if (compliance.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(compliance.data?.items ?? []).slice(0, 9).map((c) => <ComplianceScoreCard key={c.complianceId} record={c} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(compliance.data?.items ?? []).slice(0, 9).map((c) => (
+        <ComplianceScoreCard key={c.complianceId} record={c} />
+      ))}
+    </div>
+  );
 }
 
 export function RisksSection({ filters }: { filters?: QualityFilters }) {
   const risks = useRisks(filters);
   if (risks.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(risks.data?.items ?? []).slice(0, 12).map((r) => <RiskCard key={r.riskId} risk={r} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(risks.data?.items ?? []).slice(0, 12).map((r) => (
+        <RiskCard key={r.riskId} risk={r} />
+      ))}
+    </div>
+  );
 }
 
 export function CapaSection({ filters }: { filters?: QualityFilters }) {
   const capa = useCapa(filters);
-  const rca = useQuery({ queryKey: ['quality', 'rca'], queryFn: () => qualityService.getRootCauseAnalyses() });
+  const rca = useQuery({
+    queryKey: ['quality', 'rca'],
+    queryFn: () => qualityService.getRootCauseAnalyses(),
+  });
   const { closeCapa } = useQualityMutations();
   if (capa.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(capa.data?.items ?? []).slice(0, 9).map((c) => (
-          <CAPACard key={c.capaId} capa={c} onClose={() => closeCapa.mutate({ capaId: c.capaId, effectivenessScore: 92 })} />
+          <CAPACard
+            key={c.capaId}
+            capa={c}
+            onClose={() =>
+              closeCapa.mutate({ capaId: c.capaId, effectivenessScore: 92 })
+            }
+          />
         ))}
       </div>
       <FishbonePanel rca={rca.data?.[0]} />
@@ -149,12 +201,23 @@ export function CapaSection({ filters }: { filters?: QualityFilters }) {
 
 export function AccreditationSection() {
   const accreditation = useAccreditation();
-  const gaps = useQuery({ queryKey: ['quality', 'accreditation-gaps'], queryFn: () => qualityService.accreditationGaps() });
+  const gaps = useQuery({
+    queryKey: ['quality', 'accreditation-gaps'],
+    queryFn: () => qualityService.accreditationGaps(),
+  });
   if (accreditation.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(accreditation.data ?? []).slice(0, 12).map((s) => <AccreditationCard key={s.standardId} standard={s} />)}</div>
-      {gaps.data?.length ? <p className="text-sm text-muted-foreground">{gaps.data.length} standards with identified gaps</p> : null}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {(accreditation.data ?? []).slice(0, 12).map((s) => (
+          <AccreditationCard key={s.standardId} standard={s} />
+        ))}
+      </div>
+      {gaps.data?.length ? (
+        <p className="text-sm text-muted-foreground">
+          {gaps.data.length} standards with identified gaps
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -182,19 +245,37 @@ export function AnalyticsSection({ filters }: { filters?: QualityFilters }) {
   );
 }
 
-export function QualitySectionContent({ section, filters }: { section: QualitySection; filters?: QualityFilters }) {
+export function QualitySectionContent({
+  section,
+  filters,
+}: {
+  section: QualitySection;
+  filters?: QualityFilters;
+}) {
   switch (section) {
-    case 'incidents': return <IncidentsSection filters={filters} />;
-    case 'policies': return <PoliciesSection filters={filters} />;
-    case 'infection': return <InfectionSection filters={filters} />;
-    case 'audits': return <AuditsSection filters={filters} />;
-    case 'compliance': return <ComplianceSection filters={filters} />;
-    case 'risks': return <RisksSection filters={filters} />;
-    case 'capa': return <CapaSection filters={filters} />;
-    case 'accreditation': return <AccreditationSection />;
-    case 'documents': return <DocumentsSection filters={filters} />;
-    case 'regulatory': return <RegulatorySection filters={filters} />;
-    case 'analytics': return <AnalyticsSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'incidents':
+      return <IncidentsSection filters={filters} />;
+    case 'policies':
+      return <PoliciesSection filters={filters} />;
+    case 'infection':
+      return <InfectionSection filters={filters} />;
+    case 'audits':
+      return <AuditsSection filters={filters} />;
+    case 'compliance':
+      return <ComplianceSection filters={filters} />;
+    case 'risks':
+      return <RisksSection filters={filters} />;
+    case 'capa':
+      return <CapaSection filters={filters} />;
+    case 'accreditation':
+      return <AccreditationSection />;
+    case 'documents':
+      return <DocumentsSection filters={filters} />;
+    case 'regulatory':
+      return <RegulatorySection filters={filters} />;
+    case 'analytics':
+      return <AnalyticsSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

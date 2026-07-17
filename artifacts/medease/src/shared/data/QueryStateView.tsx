@@ -68,11 +68,13 @@ export function QueryStateView<T>({
   }
 
   if (isSuccess && data !== undefined && isEmpty?.(data)) {
-    return empty ?? (
-      <ListEmptyState
-        title="No records yet"
-        description="There is nothing to show in this view."
-      />
+    return (
+      empty ?? (
+        <ListEmptyState
+          title="No records yet"
+          description="There is nothing to show in this view."
+        />
+      )
     );
   }
 

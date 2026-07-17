@@ -19,7 +19,10 @@ import type {
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    documentOfflineQueue.enqueue({ label, execute: () => execute().then(() => undefined) });
+    documentOfflineQueue.enqueue({
+      label,
+      execute: () => execute().then(() => undefined),
+    });
     appToast.offline('Document update queued until you are back online.');
     return Promise.resolve(null);
   }
@@ -34,78 +37,154 @@ export function useDocumentMutations() {
   const client = useQueryClient();
 
   const uploadDocument = useMutation({
-    mutationFn: (input: UploadDocumentInput) => runOrQueue('Upload document', () => documentService.uploadDocument(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Document uploaded.' }); },
+    mutationFn: (input: UploadDocumentInput) =>
+      runOrQueue('Upload document', () =>
+        documentService.uploadDocument(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Document uploaded.' });
+    },
   });
 
   const createFolder = useMutation({
-    mutationFn: (input: CreateFolderInput) => runOrQueue('Create folder', () => documentService.createFolder(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Folder created.' }); },
+    mutationFn: (input: CreateFolderInput) =>
+      runOrQueue('Create folder', () => documentService.createFolder(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Folder created.' });
+    },
   });
 
   const moveDocument = useMutation({
-    mutationFn: (input: MoveDocumentInput) => runOrQueue('Move document', () => documentService.moveDocument(input)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Document moved.' }); },
+    mutationFn: (input: MoveDocumentInput) =>
+      runOrQueue('Move document', () => documentService.moveDocument(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Document moved.' });
+    },
   });
 
   const archiveDocument = useMutation({
-    mutationFn: (documentId: string) => runOrQueue('Archive document', () => documentService.archiveDocument(documentId)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Document archived.' }); },
+    mutationFn: (documentId: string) =>
+      runOrQueue('Archive document', () =>
+        documentService.archiveDocument(documentId),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Document archived.' });
+    },
   });
 
   const restoreDocument = useMutation({
-    mutationFn: (documentId: string) => runOrQueue('Restore document', () => documentService.restoreDocument(documentId)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Document restored.' }); },
+    mutationFn: (documentId: string) =>
+      runOrQueue('Restore document', () =>
+        documentService.restoreDocument(documentId),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Document restored.' });
+    },
   });
 
   const createVersion = useMutation({
-    mutationFn: (input: CreateVersionInput) => runOrQueue('Create version', () => documentService.createVersion(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'New version created.' }); },
+    mutationFn: (input: CreateVersionInput) =>
+      runOrQueue('Create version', () => documentService.createVersion(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'New version created.' });
+    },
   });
 
   const ocrDocument = useMutation({
-    mutationFn: (documentId: string) => runOrQueue('OCR document', () => documentService.ocrDocument(documentId)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'OCR complete.' }); },
+    mutationFn: (documentId: string) =>
+      runOrQueue('OCR document', () => documentService.ocrDocument(documentId)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'OCR complete.' });
+    },
   });
 
   const requestSignature = useMutation({
-    mutationFn: (input: RequestSignatureInput) => runOrQueue('Request signature', () => documentService.requestSignature(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Signature requested.' }); },
+    mutationFn: (input: RequestSignatureInput) =>
+      runOrQueue('Request signature', () =>
+        documentService.requestSignature(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Signature requested.' });
+    },
   });
 
   const signDocument = useMutation({
-    mutationFn: (input: SignDocumentInput) => runOrQueue('Sign document', () => documentService.signDocument(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Document signed.' }); },
+    mutationFn: (input: SignDocumentInput) =>
+      runOrQueue('Sign document', () => documentService.signDocument(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Document signed.' });
+    },
   });
 
   const shareDocument = useMutation({
-    mutationFn: (input: ShareDocumentInput) => runOrQueue('Share document', () => documentService.shareDocument(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Share link created.' }); },
+    mutationFn: (input: ShareDocumentInput) =>
+      runOrQueue('Share document', () => documentService.shareDocument(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Share link created.' });
+    },
   });
 
   const revokeSharing = useMutation({
-    mutationFn: (input: ShareDocumentLinkInput) => runOrQueue('Revoke sharing', () => documentService.revokeSharing(input)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Share link revoked.' }); },
+    mutationFn: (input: ShareDocumentLinkInput) =>
+      runOrQueue('Revoke sharing', () => documentService.revokeSharing(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Share link revoked.' });
+    },
   });
 
   const applyRetention = useMutation({
-    mutationFn: (input: ApplyRetentionInput) => runOrQueue('Apply retention', () => documentService.applyRetention(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Retention policy applied.' }); },
+    mutationFn: (input: ApplyRetentionInput) =>
+      runOrQueue('Apply retention', () =>
+        documentService.applyRetention(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Retention policy applied.' });
+    },
   });
 
   const applyLegalHold = useMutation({
-    mutationFn: (input: ApplyLegalHoldInput) => runOrQueue('Apply legal hold', () => documentService.applyLegalHold(input)),
-    onSuccess: () => { invalidateAll(client); appToast.warning({ title: 'Legal hold applied.' }); },
+    mutationFn: (input: ApplyLegalHoldInput) =>
+      runOrQueue('Apply legal hold', () =>
+        documentService.applyLegalHold(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.warning({ title: 'Legal hold applied.' });
+    },
   });
 
   const exportData = useMutation({
-    mutationFn: (format: 'csv' | 'pdf' | 'xlsx') => runOrQueue('Export documents', () => documentService.exportData(format)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Export complete.' }); },
+    mutationFn: (format: 'csv' | 'pdf' | 'xlsx') =>
+      runOrQueue('Export documents', () => documentService.exportData(format)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Export complete.' });
+    },
   });
 
   const favorite = useMutation({
-    mutationFn: ({ userId, documentId }: { userId: string; documentId: string }) =>
-      runOrQueue('Favorite', () => documentService.favorite(userId, documentId)),
+    mutationFn: ({
+      userId,
+      documentId,
+    }: {
+      userId: string;
+      documentId: string;
+    }) =>
+      runOrQueue('Favorite', () =>
+        documentService.favorite(userId, documentId),
+      ),
     onSuccess: () => invalidateAll(client),
   });
 

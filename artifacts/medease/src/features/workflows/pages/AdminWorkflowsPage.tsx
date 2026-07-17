@@ -49,5 +49,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminWorkflowsPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <WorkflowShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <WorkflowShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

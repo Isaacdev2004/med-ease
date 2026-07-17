@@ -43,7 +43,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -52,7 +57,13 @@ function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
   return fields.some((f) => f?.toLowerCase().includes(lower));
 }
 
-function audit(action: string, resourceType: string, resourceId: string, actorId = 'system', tenantId?: string) {
+function audit(
+  action: string,
+  resourceType: string,
+  resourceId: string,
+  actorId = 'system',
+  tenantId?: string,
+) {
   MOCK_IAM_AUDIT.unshift({
     auditId: `iamaudit-${Date.now()}`,
     action,
@@ -75,15 +86,25 @@ class IamMockRepository implements IamRepositoryContract {
   private favorites: IamFavorite[] = [];
   private nextId = 970000;
 
-  async dashboard(tenantId?: string) { return buildIamDashboard(tenantId); }
-  async analytics(tenantId?: string) { return computeIamAnalytics(tenantId); }
+  async dashboard(tenantId?: string) {
+    return buildIamDashboard(tenantId);
+  }
+  async analytics(tenantId?: string) {
+    return computeIamAnalytics(tenantId);
+  }
 
   async getUsers(filters?: IamFilters) {
     let items = this.users;
-    if (filters?.tenantId) items = items.filter((u) => u.tenantId === filters.tenantId);
-    if (filters?.organizationId) items = items.filter((u) => u.organizationId === filters.organizationId);
-    if (filters?.status) items = items.filter((u) => u.status === filters.status);
-    if (filters?.q) items = items.filter((u) => matchQ(filters.q, u.email, u.displayName, u.userId));
+    if (filters?.tenantId)
+      items = items.filter((u) => u.tenantId === filters.tenantId);
+    if (filters?.organizationId)
+      items = items.filter((u) => u.organizationId === filters.organizationId);
+    if (filters?.status)
+      items = items.filter((u) => u.status === filters.status);
+    if (filters?.q)
+      items = items.filter((u) =>
+        matchQ(filters.q, u.email, u.displayName, u.userId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -95,131 +116,164 @@ class IamMockRepository implements IamRepositoryContract {
 
   async getTenants(filters?: IamFilters) {
     let items = MOCK_TENANTS;
-    if (filters?.q) items = items.filter((t) => matchQ(filters.q, t.name, t.slug));
+    if (filters?.q)
+      items = items.filter((t) => matchQ(filters.q, t.name, t.slug));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getOrganizations(filters?: IamFilters) {
     let items = MOCK_ORGANIZATIONS;
-    if (filters?.tenantId) items = items.filter((o) => o.tenantId === filters.tenantId);
+    if (filters?.tenantId)
+      items = items.filter((o) => o.tenantId === filters.tenantId);
     if (filters?.q) items = items.filter((o) => matchQ(filters.q, o.name));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getRoles(filters?: IamFilters) {
     let items = MOCK_IAM_ROLES;
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.name, r.description));
+    if (filters?.q)
+      items = items.filter((r) => matchQ(filters.q, r.name, r.description));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getPermissions(filters?: IamFilters) {
     let items = MOCK_IAM_PERMISSIONS;
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.name, p.module));
+    if (filters?.q)
+      items = items.filter((p) => matchQ(filters.q, p.name, p.module));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getPolicies(filters?: IamFilters) {
     let items = this.policies;
-    if (filters?.tenantId) items = items.filter((p) => !p.tenantId || p.tenantId === filters.tenantId);
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.name, p.resource));
+    if (filters?.tenantId)
+      items = items.filter(
+        (p) => !p.tenantId || p.tenantId === filters.tenantId,
+      );
+    if (filters?.q)
+      items = items.filter((p) => matchQ(filters.q, p.name, p.resource));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getSessions(filters?: IamFilters) {
     let items = this.sessions;
-    if (filters?.userId) items = items.filter((s) => s.userId === filters.userId);
-    if (filters?.status) items = items.filter((s) => s.status === filters.status);
+    if (filters?.userId)
+      items = items.filter((s) => s.userId === filters.userId);
+    if (filters?.status)
+      items = items.filter((s) => s.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getLoginHistory(filters?: IamFilters) {
     let items = MOCK_LOGIN_HISTORY;
-    if (filters?.userId) items = items.filter((l) => l.userId === filters.userId);
+    if (filters?.userId)
+      items = items.filter((l) => l.userId === filters.userId);
     if (filters?.q) items = items.filter((l) => matchQ(filters.q, l.email));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getMfaDevices(filters?: IamFilters) {
     let items = MOCK_MFA_DEVICES;
-    if (filters?.userId) items = items.filter((d) => d.userId === filters.userId);
+    if (filters?.userId)
+      items = items.filter((d) => d.userId === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getTrustedDevices(filters?: IamFilters) {
     let items = MOCK_TRUSTED_DEVICES;
-    if (filters?.userId) items = items.filter((d) => d.userId === filters.userId);
+    if (filters?.userId)
+      items = items.filter((d) => d.userId === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getOauthClients(filters?: IamFilters) {
     let items = MOCK_OAUTH_CLIENTS;
-    if (filters?.tenantId) items = items.filter((c) => c.tenantId === filters.tenantId);
-    if (filters?.q) items = items.filter((c) => matchQ(filters.q, c.name, c.clientId));
+    if (filters?.tenantId)
+      items = items.filter((c) => c.tenantId === filters.tenantId);
+    if (filters?.q)
+      items = items.filter((c) => matchQ(filters.q, c.name, c.clientId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getApiKeys(filters?: IamFilters) {
     let items = MOCK_API_KEYS;
-    if (filters?.tenantId) items = items.filter((k) => k.tenantId === filters.tenantId);
-    if (filters?.q) items = items.filter((k) => matchQ(filters.q, k.name, k.keyId));
+    if (filters?.tenantId)
+      items = items.filter((k) => k.tenantId === filters.tenantId);
+    if (filters?.q)
+      items = items.filter((k) => matchQ(filters.q, k.name, k.keyId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getConsents(filters?: IamFilters) {
     let items = this.consents;
-    if (filters?.userId) items = items.filter((c) => c.granteeId === filters.userId);
-    if (filters?.patientId) items = items.filter((c) => c.patientId === filters.patientId);
+    if (filters?.userId)
+      items = items.filter((c) => c.granteeId === filters.userId);
+    if (filters?.patientId)
+      items = items.filter((c) => c.patientId === filters.patientId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getDelegations(filters?: IamFilters) {
     let items = this.delegations;
-    if (filters?.userId) items = items.filter((d) => d.delegatorId === filters.userId || d.delegateId === filters.userId);
+    if (filters?.userId)
+      items = items.filter(
+        (d) =>
+          d.delegatorId === filters.userId || d.delegateId === filters.userId,
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getProxyAccess(filters?: IamFilters) {
     let items = MOCK_PROXY_ACCESS;
-    if (filters?.patientId) items = items.filter((p) => p.patientId === filters.patientId);
+    if (filters?.patientId)
+      items = items.filter((p) => p.patientId === filters.patientId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getBreakGlass(filters?: IamFilters) {
     let items = this.breakGlass;
-    if (filters?.userId) items = items.filter((e) => e.userId === filters.userId);
-    if (filters?.status) items = items.filter((e) => e.status === filters.status);
+    if (filters?.userId)
+      items = items.filter((e) => e.userId === filters.userId);
+    if (filters?.status)
+      items = items.filter((e) => e.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getAuditEvents(filters?: IamFilters) {
     let items = MOCK_IAM_AUDIT;
-    if (filters?.tenantId) items = items.filter((a) => a.tenantId === filters.tenantId);
-    if (filters?.userId) items = items.filter((a) => a.actorId === filters.userId);
-    if (filters?.q) items = items.filter((a) => matchQ(filters.q, a.action, a.resourceType));
+    if (filters?.tenantId)
+      items = items.filter((a) => a.tenantId === filters.tenantId);
+    if (filters?.userId)
+      items = items.filter((a) => a.actorId === filters.userId);
+    if (filters?.q)
+      items = items.filter((a) => matchQ(filters.q, a.action, a.resourceType));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getSecurityIncidents(filters?: IamFilters) {
     let items = MOCK_SECURITY_INCIDENTS;
-    if (filters?.status) items = items.filter((i) => i.status === filters.status);
+    if (filters?.status)
+      items = items.filter((i) => i.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getRiskScores(filters?: IamFilters) {
     let items = MOCK_RISK_SCORES;
-    if (filters?.userId) items = items.filter((r) => r.userId === filters.userId);
+    if (filters?.userId)
+      items = items.filter((r) => r.userId === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getSamlProviders(filters?: IamFilters) {
     let items = MOCK_SAML_PROVIDERS;
-    if (filters?.tenantId) items = items.filter((p) => p.tenantId === filters.tenantId);
+    if (filters?.tenantId)
+      items = items.filter((p) => p.tenantId === filters.tenantId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   async getOidcProviders(filters?: IamFilters) {
     let items = MOCK_OIDC_PROVIDERS;
-    if (filters?.tenantId) items = items.filter((p) => p.tenantId === filters.tenantId);
+    if (filters?.tenantId)
+      items = items.filter((p) => p.tenantId === filters.tenantId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -241,7 +295,10 @@ class IamMockRepository implements IamRepositoryContract {
   }
 
   async inviteUser(input: InviteUserInput) {
-    return this.createUser({ ...input, displayName: input.email.split('@')[0] ?? 'Invited User' });
+    return this.createUser({
+      ...input,
+      displayName: input.email.split('@')[0] ?? 'Invited User',
+    });
   }
 
   async lockAccount(userId: string) {
@@ -335,7 +392,11 @@ class IamMockRepository implements IamRepositoryContract {
     const key = MOCK_API_KEYS.find((k) => k.keyId === keyId);
     if (!key) throw new NotFoundError('API key not found');
     audit('rotate_api_key', 'api_key', keyId, 'system', key.tenantId);
-    return { ...key, prefix: `mk_${Date.now().toString(36).slice(0, 4)}`, createdAt: new Date().toISOString() };
+    return {
+      ...key,
+      prefix: `mk_${Date.now().toString(36).slice(0, 4)}`,
+      createdAt: new Date().toISOString(),
+    };
   }
 
   async grantConsent(input: GrantConsentInput) {
@@ -373,7 +434,12 @@ class IamMockRepository implements IamRepositoryContract {
       status: 'active' as const,
     };
     this.delegations.unshift(delegation);
-    audit('delegate_access', 'delegation', delegation.delegationId, input.delegatorId);
+    audit(
+      'delegate_access',
+      'delegation',
+      delegation.delegationId,
+      input.delegatorId,
+    );
     return delegation;
   }
 
@@ -402,22 +468,41 @@ class IamMockRepository implements IamRepositoryContract {
 
   async search(query: string, tenantId?: string) {
     const q = query.toLowerCase();
-    const users = this.users.filter((u) => (!tenantId || u.tenantId === tenantId) && matchQ(q, u.email, u.displayName));
+    const users = this.users.filter(
+      (u) =>
+        (!tenantId || u.tenantId === tenantId) &&
+        matchQ(q, u.email, u.displayName),
+    );
     const policies = this.policies.filter((p) => matchQ(q, p.name));
     return { users: users.slice(0, 10), policies: policies.slice(0, 10) };
   }
 
   async exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.users.length + this.policies.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.users.length + this.policies.length,
+    };
   }
 
-  async favorite(userId: string, entityType: IamFavorite['entityType'], entityId: string) {
-    const fav = { userId, entityType, entityId, createdAt: new Date().toISOString() };
+  async favorite(
+    userId: string,
+    entityType: IamFavorite['entityType'],
+    entityId: string,
+  ) {
+    const fav = {
+      userId,
+      entityType,
+      entityId,
+      createdAt: new Date().toISOString(),
+    };
     this.favorites.push(fav);
     return fav;
   }
 
-  async getFavorites(userId: string) { return this.favorites.filter((f) => f.userId === userId); }
+  async getFavorites(userId: string) {
+    return this.favorites.filter((f) => f.userId === userId);
+  }
 
   async share(input: ShareIamInput) {
     audit('share', input.entityType, input.entityId);

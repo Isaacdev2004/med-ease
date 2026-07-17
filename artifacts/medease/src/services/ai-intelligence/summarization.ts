@@ -2,8 +2,10 @@ import type { ClinicalSummary } from '@/services/ai-intelligence/types';
 
 export const SUMMARY_TEMPLATES = {
   note: 'Progress note summary highlighting assessment, plan changes, and follow-up items.',
-  encounter: 'Encounter summary covering chief complaint, diagnostics, interventions, and disposition.',
-  discharge: 'Discharge summary with admission reason, hospital course, medications, and outpatient plan.',
+  encounter:
+    'Encounter summary covering chief complaint, diagnostics, interventions, and disposition.',
+  discharge:
+    'Discharge summary with admission reason, hospital course, medications, and outpatient plan.',
 } as const;
 
 export function generateSummary(

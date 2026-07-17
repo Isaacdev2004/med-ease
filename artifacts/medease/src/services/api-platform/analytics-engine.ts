@@ -1,9 +1,17 @@
-import type { ApiAnalytics, ApiEndpoint, ApiKey, WebhookDelivery } from '@/services/api-platform/types';
+import type {
+  ApiAnalytics,
+  ApiEndpoint,
+  ApiKey,
+  WebhookDelivery,
+} from '@/services/api-platform/types';
 import { webhookSuccessRate } from '@/services/api-platform/webhook-engine';
 import { activeEndpointCount } from '@/services/api-platform/openapi-engine';
 import { totalSdkDownloads } from '@/services/api-platform/sdk-engine';
 
-export function computeErrorRate(totalRequests: number, errorCount: number): number {
+export function computeErrorRate(
+  totalRequests: number,
+  errorCount: number,
+): number {
   if (totalRequests === 0) return 0;
   return Math.round((errorCount / totalRequests) * 1000) / 10;
 }
@@ -24,7 +32,9 @@ export function activeApiKeyCount(keys: ApiKey[]): number {
   return keys.filter((k) => k.status === 'active').length;
 }
 
-export function buildTopEndpoints(endpoints: ApiEndpoint[]): { label: string; value: number }[] {
+export function buildTopEndpoints(
+  endpoints: ApiEndpoint[],
+): { label: string; value: number }[] {
   return endpoints.slice(0, 6).map((e, i) => ({
     label: `${e.method} ${e.path}`,
     value: 12000 - i * 1500 + (i % 3) * 200,
@@ -46,15 +56,23 @@ export function computeApiAnalytics(
     activeKeys: activeApiKeyCount(keys),
     webhookSuccessRate: webhookSuccessRate(deliveries),
     topEndpoints: buildTopEndpoints(endpoints),
-    requestTrend: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label, i) => ({
-      label,
-      value: 280_000 + i * 35_000,
-    })),
+    requestTrend: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(
+      (label, i) => ({
+        label,
+        value: 280_000 + i * 35_000,
+      }),
+    ),
     errorTrend: ['W1', 'W2', 'W3', 'W4'].map((label, i) => ({
       label,
       value: 0.5 - i * 0.05,
     })),
-    partnerUsage: ['Acme Health', 'CareBridge', 'MedSync', 'HealthAPI Co', 'DataRx'].map((label, i) => ({
+    partnerUsage: [
+      'Acme Health',
+      'CareBridge',
+      'MedSync',
+      'HealthAPI Co',
+      'DataRx',
+    ].map((label, i) => ({
       label,
       value: 450_000 - i * 60_000,
     })),

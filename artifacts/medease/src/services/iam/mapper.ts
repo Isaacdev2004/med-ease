@@ -1,6 +1,13 @@
-import { toFhirAuditEvent, toFhirProvenance } from '@/services/iam/audit-engine';
+import {
+  toFhirAuditEvent,
+  toFhirProvenance,
+} from '@/services/iam/audit-engine';
 import { toFhirConsent } from '@/services/iam/consent-engine';
-import type { ConsentRecord, IamAuditEvent, IamUser } from '@/services/iam/types';
+import type {
+  ConsentRecord,
+  IamAuditEvent,
+  IamUser,
+} from '@/services/iam/types';
 
 export function toFhirPractitioner(user: IamUser) {
   return {
@@ -11,11 +18,22 @@ export function toFhirPractitioner(user: IamUser) {
   };
 }
 
-export function toFhirOrganization(org: { organizationId: string; name: string }) {
-  return { resourceType: 'Organization', id: org.organizationId, name: org.name };
+export function toFhirOrganization(org: {
+  organizationId: string;
+  name: string;
+}) {
+  return {
+    resourceType: 'Organization',
+    id: org.organizationId,
+    name: org.name,
+  };
 }
 
-export function toFhirRelatedPerson(proxy: { proxyId: string; patientId: string; relationship: string }) {
+export function toFhirRelatedPerson(proxy: {
+  proxyId: string;
+  patientId: string;
+  relationship: string;
+}) {
   return {
     resourceType: 'RelatedPerson',
     id: proxy.proxyId,
@@ -30,9 +48,15 @@ export function mapIamBundle(resources: {
   audit?: IamAuditEvent[];
 }) {
   const entries: { resource: unknown }[] = [];
-  resources.users?.forEach((u) => entries.push({ resource: toFhirPractitioner(u) }));
-  resources.consents?.forEach((c) => entries.push({ resource: toFhirConsent(c) }));
-  resources.audit?.forEach((a) => entries.push({ resource: toFhirAuditEvent(a) }));
+  resources.users?.forEach((u) =>
+    entries.push({ resource: toFhirPractitioner(u) }),
+  );
+  resources.consents?.forEach((c) =>
+    entries.push({ resource: toFhirConsent(c) }),
+  );
+  resources.audit?.forEach((a) =>
+    entries.push({ resource: toFhirAuditEvent(a) }),
+  );
   return { resourceType: 'Bundle', type: 'collection', entry: entries };
 }
 

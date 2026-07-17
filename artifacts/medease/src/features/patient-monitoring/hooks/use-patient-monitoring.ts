@@ -59,7 +59,9 @@ export function useRPMPrograms(patientId?: string) {
 }
 
 export function useTrendAnalysis(patientId?: string, metric?: string) {
-  return useQuery(patientMonitoringQueries.trendAnalysis(patientId ?? '', metric));
+  return useQuery(
+    patientMonitoringQueries.trendAnalysis(patientId ?? '', metric),
+  );
 }
 
 export function useEarlyWarningScores(patientId?: string) {

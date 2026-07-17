@@ -25,7 +25,12 @@ const columns: DataTableColumn<BedRow>[] = [
   {
     id: 'status',
     header: 'Status',
-    cell: (row) => <PortalStatusBadge label={row.status} variant={statusVariant[row.status]} />,
+    cell: (row) => (
+      <PortalStatusBadge
+        label={row.status}
+        variant={statusVariant[row.status]}
+      />
+    ),
   },
   { id: 'patient', header: 'Patient', cell: (row) => row.patient ?? '—' },
 ];
@@ -40,14 +45,22 @@ export default function BedManagementPage() {
     <PageShell
       title="Bed Management"
       subtitle="Real-time bed inventory and assignment status."
-      primaryAction={<PortalActionButton label="Assign bed" successTitle="Bed assigned" />}
+      primaryAction={
+        <PortalActionButton label="Assign bed" successTitle="Bed assigned" />
+      }
     >
       <PortalMetricsGrid
         metrics={[
           { title: 'Available', value: available, status: 'stable' },
           { title: 'Occupied', value: occupied, status: 'observation' },
-          { title: 'Cleaning', value: beds.filter((b) => b.status === 'cleaning').length },
-          { title: 'Reserved', value: beds.filter((b) => b.status === 'reserved').length },
+          {
+            title: 'Cleaning',
+            value: beds.filter((b) => b.status === 'cleaning').length,
+          },
+          {
+            title: 'Reserved',
+            value: beds.filter((b) => b.status === 'reserved').length,
+          },
         ]}
       />
 
@@ -64,7 +77,13 @@ export default function BedManagementPage() {
               onClick={() => {
                 setBeds((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'available' as const, patient: undefined } : item,
+                    item.id === row.id
+                      ? {
+                          ...item,
+                          status: 'available' as const,
+                          patient: undefined,
+                        }
+                      : item,
                   ),
                 );
               }}

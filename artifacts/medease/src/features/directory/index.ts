@@ -5,7 +5,10 @@ export { DirectorySearch } from '@/features/directory/components/DirectorySearch
 export { DirectoryStatsPanel } from '@/features/directory/components/DirectoryStats';
 export { DirectoryToolbar } from '@/features/directory/components/DirectoryToolbar';
 export { FavoriteButton } from '@/features/directory/components/FavoriteButton';
-export { ProviderActions, ProviderHeader } from '@/features/directory/components/ProviderHeader';
+export {
+  ProviderActions,
+  ProviderHeader,
+} from '@/features/directory/components/ProviderHeader';
 export { ProviderBadges } from '@/features/directory/components/ProviderBadges';
 export { ProviderCard } from '@/features/directory/components/ProviderCard';
 export { ProviderProfile } from '@/features/directory/components/ProviderProfile';

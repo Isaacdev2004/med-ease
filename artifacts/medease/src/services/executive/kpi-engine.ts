@@ -1,15 +1,62 @@
-import type { EnterpriseKpi, KpiCategory, KpiTrend } from '@/services/executive/types';
+import type {
+  EnterpriseKpi,
+  KpiCategory,
+  KpiTrend,
+} from '@/services/executive/types';
 
-export const KPI_CATEGORIES: KpiCategory[] = ['clinical', 'operational', 'financial', 'quality', 'workforce', 'population', 'strategic'];
+export const KPI_CATEGORIES: KpiCategory[] = [
+  'clinical',
+  'operational',
+  'financial',
+  'quality',
+  'workforce',
+  'population',
+  'strategic',
+];
 
 export const KPI_NAMES: Record<KpiCategory, string[]> = {
-  clinical: ['Patient Satisfaction', 'Readmission Rate', 'Length of Stay', 'Mortality Index'],
-  operational: ['ED Wait Time', 'OR Utilization', 'Bed Turnover', 'Throughput Index'],
-  financial: ['Net Revenue', 'Collection Rate', 'Denial Rate', 'Operating Margin'],
-  quality: ['HCAHPS Score', 'Infection Rate', 'Compliance Rate', 'Safety Index'],
-  workforce: ['Staffing Ratio', 'Vacancy Rate', 'Overtime Hours', 'Turnover Rate'],
-  population: ['Risk Score', 'Gap Closure', 'Preventive Care', 'Chronic Disease Rate'],
-  strategic: ['Initiative Progress', 'Budget Utilization', 'Milestone Completion', 'ROI Index'],
+  clinical: [
+    'Patient Satisfaction',
+    'Readmission Rate',
+    'Length of Stay',
+    'Mortality Index',
+  ],
+  operational: [
+    'ED Wait Time',
+    'OR Utilization',
+    'Bed Turnover',
+    'Throughput Index',
+  ],
+  financial: [
+    'Net Revenue',
+    'Collection Rate',
+    'Denial Rate',
+    'Operating Margin',
+  ],
+  quality: [
+    'HCAHPS Score',
+    'Infection Rate',
+    'Compliance Rate',
+    'Safety Index',
+  ],
+  workforce: [
+    'Staffing Ratio',
+    'Vacancy Rate',
+    'Overtime Hours',
+    'Turnover Rate',
+  ],
+  population: [
+    'Risk Score',
+    'Gap Closure',
+    'Preventive Care',
+    'Chronic Disease Rate',
+  ],
+  strategic: [
+    'Initiative Progress',
+    'Budget Utilization',
+    'Milestone Completion',
+    'ROI Index',
+  ],
 };
 
 export function computeTrend(current: number, target: number): KpiTrend {

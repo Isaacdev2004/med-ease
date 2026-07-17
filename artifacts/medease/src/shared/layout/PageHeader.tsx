@@ -24,12 +24,12 @@ export function PageHeader({
     >
       <div className="space-y-1">
         <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-        {subtitle ? (
-          <p className="text-muted-foreground">{subtitle}</p>
-        ) : null}
+        {subtitle ? <p className="text-muted-foreground">{subtitle}</p> : null}
       </div>
       {actions ? (
-        <div className="flex flex-wrap items-center gap-2 shrink-0">{actions}</div>
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          {actions}
+        </div>
       ) : null}
     </header>
   );

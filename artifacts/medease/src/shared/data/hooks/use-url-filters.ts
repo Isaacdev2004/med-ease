@@ -24,7 +24,9 @@ export function useUrlFilters(defaults: UrlFilterDefaults = {}) {
       dir: (searchParams.get('dir') ?? defaults.dir ?? 'asc') as 'asc' | 'desc',
       page: Number(searchParams.get('page') ?? defaults.page ?? '1'),
       pageSize: Number(
-        searchParams.get('pageSize') ?? defaults.pageSize ?? String(DEFAULT_PAGE_SIZE),
+        searchParams.get('pageSize') ??
+          defaults.pageSize ??
+          String(DEFAULT_PAGE_SIZE),
       ),
     }),
     [defaults, searchParams],

@@ -30,10 +30,14 @@ function parseCriticalLineCoverage(output, patterns) {
 }
 
 function runPackageCoverage(packageName) {
-  const result = spawnSync('pnpm', ['--filter', packageName, 'run', 'test:coverage'], {
-    encoding: 'utf8',
-    shell: true,
-  });
+  const result = spawnSync(
+    'pnpm',
+    ['--filter', packageName, 'run', 'test:coverage'],
+    {
+      encoding: 'utf8',
+      shell: true,
+    },
+  );
 
   const output = `${result.stdout ?? ''}${result.stderr ?? ''}`;
   process.stdout.write(output);
@@ -56,13 +60,17 @@ function runPackageCoverage(packageName) {
     process.exit(1);
   }
 
-  console.log(`\n✓ ${packageName}: ${aggregateLine}% aggregate line coverage (required ${DEFAULT_MIN_LINE}%)`);
+  console.log(
+    `\n✓ ${packageName}: ${aggregateLine}% aggregate line coverage (required ${DEFAULT_MIN_LINE}%)`,
+  );
 
   const criticalPatterns = CRITICAL_SOURCES[packageName];
   if (criticalPatterns) {
     const criticalLine = parseCriticalLineCoverage(output, criticalPatterns);
     if (criticalLine === null) {
-      console.error(`\nCould not parse critical source coverage for ${packageName}`);
+      console.error(
+        `\nCould not parse critical source coverage for ${packageName}`,
+      );
       process.exit(1);
     }
     if (criticalLine < CRITICAL_MIN_LINE) {

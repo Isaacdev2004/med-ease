@@ -43,5 +43,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminMessagingPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <MessagingShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <MessagingShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

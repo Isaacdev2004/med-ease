@@ -48,28 +48,28 @@ pnpm docker:observability   # E1-07 — Grafana, Prometheus, Loki, Tempo, OTel C
 
 ## Verify services
 
-| Service | URL / Port | Credentials |
-|---------|------------|-------------|
-| API (liveness) | http://localhost:3000/api/healthz | — |
-| API (readiness) | http://localhost:3000/api/healthz/ready | Checks PG, Redis, MinIO, OpenSearch |
-| Swagger | http://localhost:3000/api/docs | OpenAPI UI |
-| Worker | http://localhost:3001/healthz | — |
-| Worker queues | http://localhost:3001/queues | Depth + DLQ stats |
-| Worker metrics | http://localhost:3001/metrics | Prometheus format |
-| API metrics | http://localhost:3000/api/metrics | Prometheus format |
-| Platform info | http://localhost:3000/api/platform/info | Build + schema metadata |
-| Grafana | http://localhost:3002 | `admin` / `medease_grafana_dev` |
-| Prometheus | http://localhost:9090 | Metrics scrape UI |
-| Loki | http://localhost:3100 | Log aggregation API |
-| Tempo | http://localhost:3200 | Trace backend API |
-| PostgreSQL | localhost:5432 | `medease` / `medease_dev_password` |
-| Redis | localhost:6379 | — |
-| MinIO API | http://localhost:9000 | `medease` / `medease_minio_dev` |
-| MinIO Console | http://localhost:9001 | same as above |
-| OpenSearch | http://localhost:9200 | security disabled (dev) |
-| OpenSearch Dashboards | http://localhost:5601 | — |
-| Mailpit UI | http://localhost:8025 | — |
-| pgAdmin | http://localhost:5050 | `admin@medease.local` / `medease_pgadmin_dev` |
+| Service               | URL / Port                              | Credentials                                   |
+| --------------------- | --------------------------------------- | --------------------------------------------- |
+| API (liveness)        | http://localhost:3000/api/healthz       | —                                             |
+| API (readiness)       | http://localhost:3000/api/healthz/ready | Checks PG, Redis, MinIO, OpenSearch           |
+| Swagger               | http://localhost:3000/api/docs          | OpenAPI UI                                    |
+| Worker                | http://localhost:3001/healthz           | —                                             |
+| Worker queues         | http://localhost:3001/queues            | Depth + DLQ stats                             |
+| Worker metrics        | http://localhost:3001/metrics           | Prometheus format                             |
+| API metrics           | http://localhost:3000/api/metrics       | Prometheus format                             |
+| Platform info         | http://localhost:3000/api/platform/info | Build + schema metadata                       |
+| Grafana               | http://localhost:3002                   | `admin` / `medease_grafana_dev`               |
+| Prometheus            | http://localhost:9090                   | Metrics scrape UI                             |
+| Loki                  | http://localhost:3100                   | Log aggregation API                           |
+| Tempo                 | http://localhost:3200                   | Trace backend API                             |
+| PostgreSQL            | localhost:5432                          | `medease` / `medease_dev_password`            |
+| Redis                 | localhost:6379                          | —                                             |
+| MinIO API             | http://localhost:9000                   | `medease` / `medease_minio_dev`               |
+| MinIO Console         | http://localhost:9001                   | same as above                                 |
+| OpenSearch            | http://localhost:9200                   | security disabled (dev)                       |
+| OpenSearch Dashboards | http://localhost:5601                   | —                                             |
+| Mailpit UI            | http://localhost:8025                   | —                                             |
+| pgAdmin               | http://localhost:5050                   | `admin@medease.local` / `medease_pgadmin_dev` |
 
 ### pgAdmin — connect to PostgreSQL
 

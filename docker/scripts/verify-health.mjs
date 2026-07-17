@@ -28,11 +28,14 @@ function loadEnv(path) {
 const env = loadEnv(join(dockerDir, '.env'));
 
 console.log('==> Docker Compose service status\n');
-execSync('docker compose -f compose.yml -f compose.override.yml --env-file .env ps', {
-  cwd: dockerDir,
-  stdio: 'inherit',
-  shell: true,
-});
+execSync(
+  'docker compose -f compose.yml -f compose.override.yml --env-file .env ps',
+  {
+    cwd: dockerDir,
+    stdio: 'inherit',
+    shell: true,
+  },
+);
 
 async function probe(label, url) {
   process.stdout.write(`\n==> ${label}\n`);
@@ -53,10 +56,15 @@ try {
   await probe('API liveness', `http://localhost:${apiPort}/api/healthz`);
   await probe('API readiness', `http://localhost:${apiPort}/api/healthz/ready`);
   await probe('Worker health', `http://localhost:${workerPort}/healthz`);
-  await probe('OpenSearch cluster health', `http://localhost:${opensearchPort}/_cluster/health`);
+  await probe(
+    'OpenSearch cluster health',
+    `http://localhost:${opensearchPort}/_cluster/health`,
+  );
   await probe('Mailpit livez', `http://localhost:${mailpitPort}/livez`);
   console.log('\nAll probes completed successfully.');
 } catch (error) {
-  console.error(`\nHealth verification failed: ${error instanceof Error ? error.message : String(error)}`);
+  console.error(
+    `\nHealth verification failed: ${error instanceof Error ? error.message : String(error)}`,
+  );
   process.exit(1);
 }

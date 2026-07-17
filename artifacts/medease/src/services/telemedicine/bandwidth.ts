@@ -14,5 +14,9 @@ export function runDeviceCheck(sessionId?: string): DeviceCheckResult {
 }
 
 export function measureBandwidth() {
-  return { bandwidthMbps: 10 + Math.random() * 20, latencyMs: 30 + Math.random() * 50, packetLossPercent: Math.random() * 2 };
+  return {
+    bandwidthMbps: 10 + Math.random() * 20,
+    latencyMs: 30 + Math.random() * 50,
+    packetLossPercent: Math.random() * 2,
+  };
 }

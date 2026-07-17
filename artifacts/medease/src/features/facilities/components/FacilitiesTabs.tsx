@@ -46,17 +46,33 @@ function getTabs(variant: FacilitiesTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function FacilitiesTabs({ basePath: _basePath, variant = 'professional' }: FacilitiesTabsProps) {
+export function FacilitiesTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: FacilitiesTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Facilities sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Facilities sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -65,11 +81,18 @@ export function FacilitiesTabs({ basePath: _basePath, variant = 'professional' }
   );
 }
 
-export function getFacilitiesSectionFromPath(pathname: string): FacilitiesSection {
+export function getFacilitiesSectionFromPath(
+  pathname: string,
+): FacilitiesSection {
   if (pathname.includes('/equipment')) return 'equipment';
   if (pathname.includes('/buildings')) return 'buildings';
-  if (pathname.includes('/facility-assets') || pathname.includes('/facilities-assets')) return 'assets';
-  if (pathname.includes('/maintenance') || pathname.includes('/work-orders')) return pathname.includes('/work-orders') ? 'workOrders' : 'maintenance';
+  if (
+    pathname.includes('/facility-assets') ||
+    pathname.includes('/facilities-assets')
+  )
+    return 'assets';
+  if (pathname.includes('/maintenance') || pathname.includes('/work-orders'))
+    return pathname.includes('/work-orders') ? 'workOrders' : 'maintenance';
   if (pathname.includes('/utilities')) return 'utilities';
   if (pathname.includes('/environment')) return 'environment';
   if (pathname.includes('/housekeeping')) return 'housekeeping';

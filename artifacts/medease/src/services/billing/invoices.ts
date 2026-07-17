@@ -1,7 +1,18 @@
 import { calculateInvoiceTotals } from '@/services/billing/pricing';
-import type { CreateInvoiceInput, InvoiceLineItem, PatientInvoice } from '@/services/billing/types';
+import type {
+  CreateInvoiceInput,
+  InvoiceLineItem,
+  PatientInvoice,
+} from '@/services/billing/types';
 
-export function buildInvoice(input: CreateInvoiceInput, invoiceId: string, invoiceNumber: string, patientName: string, facilityName: string, providerName: string): PatientInvoice {
+export function buildInvoice(
+  input: CreateInvoiceInput,
+  invoiceId: string,
+  invoiceNumber: string,
+  patientName: string,
+  facilityName: string,
+  providerName: string,
+): PatientInvoice {
   const lineItems: InvoiceLineItem[] = input.lineItems.map((li, i) => ({
     ...li,
     id: `li-${invoiceId}-${i}`,

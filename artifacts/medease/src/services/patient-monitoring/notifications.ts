@@ -1,4 +1,9 @@
-import type { MonitoringAlert, MonitoringDevice, Observation, RemoteMonitoringProgram } from '@/services/patient-monitoring/types';
+import type {
+  MonitoringAlert,
+  MonitoringDevice,
+  Observation,
+  RemoteMonitoringProgram,
+} from '@/services/patient-monitoring/types';
 
 type MonitoringNotification = {
   id: string;
@@ -8,7 +13,9 @@ type MonitoringNotification = {
   priority: 'low' | 'normal' | 'high' | 'urgent';
 };
 
-export function buildCriticalVitalsNotification(alert: MonitoringAlert): MonitoringNotification {
+export function buildCriticalVitalsNotification(
+  alert: MonitoringAlert,
+): MonitoringNotification {
   return {
     id: `notif-vital-${alert.id}`,
     title: alert.title,
@@ -18,7 +25,10 @@ export function buildCriticalVitalsNotification(alert: MonitoringAlert): Monitor
   };
 }
 
-export function buildMissedReadingNotification(patientId: string, hours: number): MonitoringNotification {
+export function buildMissedReadingNotification(
+  patientId: string,
+  hours: number,
+): MonitoringNotification {
   return {
     id: `notif-missed-${patientId}`,
     title: 'Missed monitoring reading',
@@ -28,7 +38,9 @@ export function buildMissedReadingNotification(patientId: string, hours: number)
   };
 }
 
-export function buildDeviceDisconnectedNotification(device: MonitoringDevice): MonitoringNotification {
+export function buildDeviceDisconnectedNotification(
+  device: MonitoringDevice,
+): MonitoringNotification {
   return {
     id: `notif-device-${device.id}`,
     title: 'Device disconnected',
@@ -38,7 +50,9 @@ export function buildDeviceDisconnectedNotification(device: MonitoringDevice): M
   };
 }
 
-export function buildBatteryLowNotification(device: MonitoringDevice): MonitoringNotification {
+export function buildBatteryLowNotification(
+  device: MonitoringDevice,
+): MonitoringNotification {
   return {
     id: `notif-battery-${device.id}`,
     title: 'Low device battery',
@@ -48,7 +62,10 @@ export function buildBatteryLowNotification(device: MonitoringDevice): Monitorin
   };
 }
 
-export function buildMonitoringReminderNotification(metric: string, dueAt: string): MonitoringNotification {
+export function buildMonitoringReminderNotification(
+  metric: string,
+  dueAt: string,
+): MonitoringNotification {
   return {
     id: `notif-reminder-${metric}-${dueAt}`,
     title: 'Monitoring reminder',
@@ -58,7 +75,9 @@ export function buildMonitoringReminderNotification(metric: string, dueAt: strin
   };
 }
 
-export function buildClinicalEscalationNotification(alert: MonitoringAlert): MonitoringNotification {
+export function buildClinicalEscalationNotification(
+  alert: MonitoringAlert,
+): MonitoringNotification {
   return {
     id: `notif-escalation-${alert.id}`,
     title: 'Clinical escalation',
@@ -68,7 +87,9 @@ export function buildClinicalEscalationNotification(alert: MonitoringAlert): Mon
   };
 }
 
-export function buildRPMEnrollmentNotification(program: RemoteMonitoringProgram): MonitoringNotification {
+export function buildRPMEnrollmentNotification(
+  program: RemoteMonitoringProgram,
+): MonitoringNotification {
   return {
     id: `notif-rpm-${program.id}`,
     title: 'RPM enrollment confirmed',
@@ -78,7 +99,9 @@ export function buildRPMEnrollmentNotification(program: RemoteMonitoringProgram)
   };
 }
 
-export function buildMonitoringCompletedNotification(program: RemoteMonitoringProgram): MonitoringNotification {
+export function buildMonitoringCompletedNotification(
+  program: RemoteMonitoringProgram,
+): MonitoringNotification {
   return {
     id: `notif-rpm-complete-${program.id}`,
     title: 'Monitoring program completed',
@@ -88,7 +111,9 @@ export function buildMonitoringCompletedNotification(program: RemoteMonitoringPr
   };
 }
 
-export function buildObservationRecordedNotification(observation: Observation): MonitoringNotification {
+export function buildObservationRecordedNotification(
+  observation: Observation,
+): MonitoringNotification {
   return {
     id: `notif-obs-${observation.id}`,
     title: 'Observation recorded',

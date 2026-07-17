@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_VEHICLES, type VehicleRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_VEHICLES,
+  type VehicleRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -22,7 +25,11 @@ const columns: DataTableColumn<VehicleRow>[] = [
     cell: (row) => (
       <PortalStatusBadge
         label={row.status}
-        variant={row.status === 'maintenance' || row.status === 'offline' ? 'destructive' : 'outline'}
+        variant={
+          row.status === 'maintenance' || row.status === 'offline'
+            ? 'destructive'
+            : 'outline'
+        }
       />
     ),
   },
@@ -37,14 +44,23 @@ export default function TransportVehiclesPage() {
     <PageShell
       title="Vehicles"
       subtitle="Fleet inventory and maintenance status."
-      primaryAction={<PortalActionButton label="Add vehicle" successTitle="Vehicle added to fleet" />}
+      primaryAction={
+        <PortalActionButton
+          label="Add vehicle"
+          successTitle="Vehicle added to fleet"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
         metrics={[
           { title: 'Fleet size', value: vehicles.length },
           { title: 'Available', value: available, status: 'stable' },
-          { title: 'In maintenance', value: vehicles.filter((v) => v.status === 'maintenance').length, status: 'observation' },
+          {
+            title: 'In maintenance',
+            value: vehicles.filter((v) => v.status === 'maintenance').length,
+            status: 'observation',
+          },
         ]}
       />
 
@@ -61,7 +77,9 @@ export default function TransportVehiclesPage() {
               onClick={() => {
                 setVehicles((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'available' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'available' as const }
+                      : item,
                   ),
                 );
               }}

@@ -1,4 +1,8 @@
-import { createDomainEvent, type DomainEvent, type DomainEventContext } from '../domain-event';
+import {
+  createDomainEvent,
+  type DomainEvent,
+  type DomainEventContext,
+} from '../domain-event';
 
 export const UserEventType = {
   UserCreated: 'UserCreated',
@@ -26,7 +30,8 @@ export const UserEventType = {
   AccountLocked: 'AccountLocked',
 } as const;
 
-export type UserEventTypeName = (typeof UserEventType)[keyof typeof UserEventType];
+export type UserEventTypeName =
+  (typeof UserEventType)[keyof typeof UserEventType];
 
 export type ResourceEventPayload = {
   resourceType: string;
@@ -78,11 +83,15 @@ export const UserEvents = {
   userCreated: (payload: ResourceEventPayload, context?: DomainEventContext) =>
     resourceEvent(UserEventType.UserCreated, payload, context),
 
-  userAccountLocked: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.UserAccountLocked, payload, context),
+  userAccountLocked: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.UserAccountLocked, payload, context),
 
-  userAccountUnlocked: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.UserAccountUnlocked, payload, context),
+  userAccountUnlocked: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.UserAccountUnlocked, payload, context),
 
   roleAssigned: (payload: ResourceEventPayload, context?: DomainEventContext) =>
     resourceEvent(UserEventType.RoleAssigned, payload, context),
@@ -90,8 +99,10 @@ export const UserEvents = {
   roleRemoved: (payload: ResourceEventPayload, context?: DomainEventContext) =>
     resourceEvent(UserEventType.RoleRemoved, payload, context),
 
-  policyCreated: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.PolicyCreated, payload, context),
+  policyCreated: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.PolicyCreated, payload, context),
 
   mfaEnabled: (payload: ResourceEventPayload, context?: DomainEventContext) =>
     resourceEvent(UserEventType.MfaEnabled, payload, context),
@@ -99,29 +110,45 @@ export const UserEvents = {
   mfaDisabled: (payload: ResourceEventPayload, context?: DomainEventContext) =>
     resourceEvent(UserEventType.MfaDisabled, payload, context),
 
-  sessionRevoked: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.SessionRevoked, payload, context),
+  sessionRevoked: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.SessionRevoked, payload, context),
 
-  oauthClientCreated: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.OAuthClientCreated, payload, context),
+  oauthClientCreated: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.OAuthClientCreated, payload, context),
 
-  apiKeyRotated: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.ApiKeyRotated, payload, context),
+  apiKeyRotated: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.ApiKeyRotated, payload, context),
 
-  consentGranted: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.ConsentGranted, payload, context),
+  consentGranted: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.ConsentGranted, payload, context),
 
-  consentRevoked: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.ConsentRevoked, payload, context),
+  consentRevoked: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.ConsentRevoked, payload, context),
 
-  accessDelegated: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.AccessDelegated, payload, context),
+  accessDelegated: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.AccessDelegated, payload, context),
 
-  breakGlassStarted: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.BreakGlassStarted, payload, context),
+  breakGlassStarted: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.BreakGlassStarted, payload, context),
 
-  breakGlassEnded: (payload: ResourceEventPayload, context?: DomainEventContext) =>
-    resourceEvent(UserEventType.BreakGlassEnded, payload, context),
+  breakGlassEnded: (
+    payload: ResourceEventPayload,
+    context?: DomainEventContext,
+  ) => resourceEvent(UserEventType.BreakGlassEnded, payload, context),
 
   dataExported: (payload: ExportEventPayload, context?: DomainEventContext) =>
     createDomainEvent(UserEventType.DataExported, payload, {

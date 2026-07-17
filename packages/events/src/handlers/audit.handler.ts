@@ -1,4 +1,9 @@
-import { AuditEvents, auditContextForAuth, type AuditPublisher, type SecurityEventTypeName } from '@medease/audit';
+import {
+  AuditEvents,
+  auditContextForAuth,
+  type AuditPublisher,
+  type SecurityEventTypeName,
+} from '@medease/audit';
 
 import type { DomainEvent } from '../domain-event';
 import type { DomainEventHandler } from '../handler';
@@ -34,7 +39,10 @@ function authContext(event: DomainEvent) {
   });
 }
 
-function iamAuditInput(event: DomainEvent, action: string): Parameters<typeof AuditEvents.userCreated>[0] {
+function iamAuditInput(
+  event: DomainEvent,
+  action: string,
+): Parameters<typeof AuditEvents.userCreated>[0] {
   const payload = resourcePayload(event);
   return {
     action,
@@ -45,7 +53,9 @@ function iamAuditInput(event: DomainEvent, action: string): Parameters<typeof Au
   };
 }
 
-export function createAuditHandler(publisher: AuditPublisher): DomainEventHandler {
+export function createAuditHandler(
+  publisher: AuditPublisher,
+): DomainEventHandler {
   return {
     supports(type: string): boolean {
       return (
@@ -57,7 +67,10 @@ export function createAuditHandler(publisher: AuditPublisher): DomainEventHandle
 
     async handle(event: DomainEvent): Promise<void> {
       if (event.type.startsWith('SecurityEvent:')) {
-        const eventType = event.type.replace('SecurityEvent:', '') as SecurityEventTypeName;
+        const eventType = event.type.replace(
+          'SecurityEvent:',
+          '',
+        ) as SecurityEventTypeName;
         publisher.publishAsync({
           eventType: `SecurityEvent:${eventType}`,
           context: authContext(event),
@@ -77,7 +90,9 @@ export function createAuditHandler(publisher: AuditPublisher): DomainEventHandle
 
       switch (event.type) {
         case UserEventType.UserCreated:
-          publisher.publishAsync(AuditEvents.userCreated(iamAuditInput(event, 'create_user')));
+          publisher.publishAsync(
+            AuditEvents.userCreated(iamAuditInput(event, 'create_user')),
+          );
           return;
         case UserEventType.UserAccountLocked:
           publisher.publishAsync(
@@ -90,10 +105,14 @@ export function createAuditHandler(publisher: AuditPublisher): DomainEventHandle
           );
           return;
         case UserEventType.RoleAssigned:
-          publisher.publishAsync(AuditEvents.roleAssigned(iamAuditInput(event, 'assign_role')));
+          publisher.publishAsync(
+            AuditEvents.roleAssigned(iamAuditInput(event, 'assign_role')),
+          );
           return;
         case UserEventType.RoleRemoved:
-          publisher.publishAsync(AuditEvents.roleRemoved(iamAuditInput(event, 'remove_role')));
+          publisher.publishAsync(
+            AuditEvents.roleRemoved(iamAuditInput(event, 'remove_role')),
+          );
           return;
         case UserEventType.PolicyCreated:
           publisher.publishAsync(
@@ -101,10 +120,14 @@ export function createAuditHandler(publisher: AuditPublisher): DomainEventHandle
           );
           return;
         case UserEventType.MfaEnabled:
-          publisher.publishAsync(AuditEvents.mfaEnabled(iamAuditInput(event, 'enable_mfa')));
+          publisher.publishAsync(
+            AuditEvents.mfaEnabled(iamAuditInput(event, 'enable_mfa')),
+          );
           return;
         case UserEventType.MfaDisabled:
-          publisher.publishAsync(AuditEvents.mfaDisabled(iamAuditInput(event, 'disable_mfa')));
+          publisher.publishAsync(
+            AuditEvents.mfaDisabled(iamAuditInput(event, 'disable_mfa')),
+          );
           return;
         case UserEventType.SessionRevoked:
           publisher.publishAsync(
@@ -113,7 +136,9 @@ export function createAuditHandler(publisher: AuditPublisher): DomainEventHandle
           return;
         case UserEventType.OAuthClientCreated:
           publisher.publishAsync(
-            AuditEvents.oauthClientCreated(iamAuditInput(event, 'create_oauth_client')),
+            AuditEvents.oauthClientCreated(
+              iamAuditInput(event, 'create_oauth_client'),
+            ),
           );
           return;
         case UserEventType.ApiKeyRotated:
@@ -133,17 +158,23 @@ export function createAuditHandler(publisher: AuditPublisher): DomainEventHandle
           return;
         case UserEventType.AccessDelegated:
           publisher.publishAsync(
-            AuditEvents.accessDelegated(iamAuditInput(event, 'delegate_access')),
+            AuditEvents.accessDelegated(
+              iamAuditInput(event, 'delegate_access'),
+            ),
           );
           return;
         case UserEventType.BreakGlassStarted:
           publisher.publishAsync(
-            AuditEvents.breakGlassStarted(iamAuditInput(event, 'start_break_glass')),
+            AuditEvents.breakGlassStarted(
+              iamAuditInput(event, 'start_break_glass'),
+            ),
           );
           return;
         case UserEventType.BreakGlassEnded:
           publisher.publishAsync(
-            AuditEvents.breakGlassEnded(iamAuditInput(event, 'end_break_glass')),
+            AuditEvents.breakGlassEnded(
+              iamAuditInput(event, 'end_break_glass'),
+            ),
           );
           return;
         case UserEventType.DataExported: {
@@ -158,7 +189,9 @@ export function createAuditHandler(publisher: AuditPublisher): DomainEventHandle
           return;
         }
         case UserEventType.EntityShared:
-          publisher.publishAsync(AuditEvents.entityShared(iamAuditInput(event, 'share')));
+          publisher.publishAsync(
+            AuditEvents.entityShared(iamAuditInput(event, 'share')),
+          );
           return;
         case UserEventType.UserLoggedIn:
           publisher.publishAsync(

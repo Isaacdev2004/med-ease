@@ -1,6 +1,17 @@
-import type { SdohAssessment, SdohDomain } from '@/services/public-health/types';
+import type {
+  SdohAssessment,
+  SdohDomain,
+} from '@/services/public-health/types';
 
-export const SDOH_DOMAINS: SdohDomain[] = ['housing', 'food', 'transportation', 'employment', 'education', 'social_support', 'safety'];
+export const SDOH_DOMAINS: SdohDomain[] = [
+  'housing',
+  'food',
+  'transportation',
+  'employment',
+  'education',
+  'social_support',
+  'safety',
+];
 
 export function sdohRiskLevel(score: number): 'low' | 'moderate' | 'high' {
   if (score >= 70) return 'high';

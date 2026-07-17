@@ -21,7 +21,8 @@ export type VisitType =
 
 export type AppointmentPriority = 'routine' | 'urgent' | 'emergency';
 
-export type CheckInStatus = 'not_checked_in' | 'checked_in' | 'in_waiting_room' | 'with_provider';
+export type CheckInStatus =
+  'not_checked_in' | 'checked_in' | 'in_waiting_room' | 'with_provider';
 
 export type CalendarViewMode = 'month' | 'week' | 'day' | 'agenda' | 'timeline';
 

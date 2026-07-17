@@ -41,10 +41,7 @@ function RouteMetadataEffects({
 export function PortalRouter({ group }: PortalRouterProps) {
   const { permissions, user, organization } = useAuth();
 
-  const authCtx = useMemo(
-    () => ({ permissions }),
-    [permissions],
-  );
+  const authCtx = useMemo(() => ({ permissions }), [permissions]);
 
   const config = useMemo(
     () => buildAuthorizedPortalConfig(group, authCtx),

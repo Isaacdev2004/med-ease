@@ -18,7 +18,10 @@ import type {
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    laboratoryOfflineQueue.enqueue({ label, execute: () => execute().then(() => undefined) });
+    laboratoryOfflineQueue.enqueue({
+      label,
+      execute: () => execute().then(() => undefined),
+    });
     appToast.offline('Lab update queued until you are back online.');
     return Promise.resolve(null);
   }
@@ -34,7 +37,9 @@ export function useLaboratoryMutations() {
 
   const createOrder = useMutation({
     mutationFn: (input: CreateLabOrderInput) =>
-      runOrQueue('Create lab order', () => laboratoryService.createOrder(input)),
+      runOrQueue('Create lab order', () =>
+        laboratoryService.createOrder(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Lab order created.' });
@@ -43,7 +48,9 @@ export function useLaboratoryMutations() {
 
   const cancelOrder = useMutation({
     mutationFn: (input: CancelLabOrderInput) =>
-      runOrQueue('Cancel lab order', () => laboratoryService.cancelOrder(input)),
+      runOrQueue('Cancel lab order', () =>
+        laboratoryService.cancelOrder(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Lab order cancelled.' });
@@ -61,7 +68,9 @@ export function useLaboratoryMutations() {
 
   const releaseResult = useMutation({
     mutationFn: (input: ReleaseResultInput) =>
-      runOrQueue('Release result', () => laboratoryService.releaseResult(input)),
+      runOrQueue('Release result', () =>
+        laboratoryService.releaseResult(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Result released to patient.' });
@@ -70,7 +79,9 @@ export function useLaboratoryMutations() {
 
   const collectSpecimen = useMutation({
     mutationFn: (input: CollectSpecimenInput) =>
-      runOrQueue('Collect specimen', () => laboratoryService.collectSpecimen(input)),
+      runOrQueue('Collect specimen', () =>
+        laboratoryService.collectSpecimen(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Specimen collected.' });
@@ -79,7 +90,9 @@ export function useLaboratoryMutations() {
 
   const approveResult = useMutation({
     mutationFn: (input: ApproveResultInput) =>
-      runOrQueue('Approve result', () => laboratoryService.approveResult(input)),
+      runOrQueue('Approve result', () =>
+        laboratoryService.approveResult(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Result approved and released.' });
@@ -97,7 +110,9 @@ export function useLaboratoryMutations() {
 
   const toggleFavorite = useMutation({
     mutationFn: (reportId: string) =>
-      runOrQueue('Toggle favorite', () => laboratoryService.toggleFavorite(reportId)),
+      runOrQueue('Toggle favorite', () =>
+        laboratoryService.toggleFavorite(reportId),
+      ),
     onSuccess: () => invalidateAll(client),
   });
 

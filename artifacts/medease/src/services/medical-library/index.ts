@@ -8,9 +8,7 @@ export {
   getMedicationProfilePath,
   medicalLibraryService,
 } from '@/services/medical-library/medical-library.service';
-export {
-  MEDICATION_CATEGORY_LABELS,
-} from '@/services/medical-library/medical-library.types';
+export { MEDICATION_CATEGORY_LABELS } from '@/services/medical-library/medical-library.types';
 export type {
   BdpmRecord,
   MedicationCategory,

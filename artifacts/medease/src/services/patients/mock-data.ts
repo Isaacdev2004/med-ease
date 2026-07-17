@@ -46,25 +46,81 @@ export const MOCK_PATIENTS: Patient[] = [
     'active',
     { userId: DEMO_PATIENT_USER_ID, fhirSuffix: '301' },
   ),
-  patient('01930000-0000-7000-8000-000000000302', 'MRN-20481', 'James Wilson', '1978-11-02', 'male', 'active', {
-    fhirSuffix: '302',
-  }),
-  patient('01930000-0000-7000-8000-000000000303', 'MRN-33012', 'Maria Lopez', '1992-07-21', 'female', 'observation', {
-    fhirSuffix: '303',
-  }),
-  patient('01930000-0000-7000-8000-000000000304', 'MRN-44102', 'David Chen', '1965-01-09', 'male', 'active', {
-    fhirSuffix: '304',
-  }),
-  patient('01930000-0000-7000-8000-000000000305', 'MRN-55291', 'Emily Rodriguez', '2010-05-30', 'female', 'inactive', {
-    fhirSuffix: '305',
-  }),
-  patient('01930000-0000-7000-8000-000000000306', 'MRN-66102', 'Michael Brown', '1988-09-17', 'male', 'active', {
-    fhirSuffix: '306',
-  }),
-  patient('01930000-0000-7000-8000-000000000307', 'MRN-77201', 'Aisha Patel', '1974-12-03', 'female', 'active', {
-    fhirSuffix: '307',
-  }),
-  patient('01930000-0000-7000-8000-000000000308', 'MRN-88312', 'Robert Taylor', '1959-04-22', 'male', 'observation', {
-    fhirSuffix: '308',
-  }),
+  patient(
+    '01930000-0000-7000-8000-000000000302',
+    'MRN-20481',
+    'James Wilson',
+    '1978-11-02',
+    'male',
+    'active',
+    {
+      fhirSuffix: '302',
+    },
+  ),
+  patient(
+    '01930000-0000-7000-8000-000000000303',
+    'MRN-33012',
+    'Maria Lopez',
+    '1992-07-21',
+    'female',
+    'observation',
+    {
+      fhirSuffix: '303',
+    },
+  ),
+  patient(
+    '01930000-0000-7000-8000-000000000304',
+    'MRN-44102',
+    'David Chen',
+    '1965-01-09',
+    'male',
+    'active',
+    {
+      fhirSuffix: '304',
+    },
+  ),
+  patient(
+    '01930000-0000-7000-8000-000000000305',
+    'MRN-55291',
+    'Emily Rodriguez',
+    '2010-05-30',
+    'female',
+    'inactive',
+    {
+      fhirSuffix: '305',
+    },
+  ),
+  patient(
+    '01930000-0000-7000-8000-000000000306',
+    'MRN-66102',
+    'Michael Brown',
+    '1988-09-17',
+    'male',
+    'active',
+    {
+      fhirSuffix: '306',
+    },
+  ),
+  patient(
+    '01930000-0000-7000-8000-000000000307',
+    'MRN-77201',
+    'Aisha Patel',
+    '1974-12-03',
+    'female',
+    'active',
+    {
+      fhirSuffix: '307',
+    },
+  ),
+  patient(
+    '01930000-0000-7000-8000-000000000308',
+    'MRN-88312',
+    'Robert Taylor',
+    '1959-04-22',
+    'male',
+    'observation',
+    {
+      fhirSuffix: '308',
+    },
+  ),
 ];

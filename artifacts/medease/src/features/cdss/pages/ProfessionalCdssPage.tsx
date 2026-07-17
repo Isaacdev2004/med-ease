@@ -3,7 +3,17 @@ import { useLocation } from 'wouter';
 import { CdssShell } from '@/features/cdss/components/CdssShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'cdss' | 'clinical-alerts' | 'recommendations' | 'guidelines' | 'order-sets' | 'risk-calculators' | 'cdss-diagnostics' | 'cdss-drug-safety' | 'cdss-preventive' | 'cdss-analytics';
+type Segment =
+  | 'cdss'
+  | 'clinical-alerts'
+  | 'recommendations'
+  | 'guidelines'
+  | 'order-sets'
+  | 'risk-calculators'
+  | 'cdss-diagnostics'
+  | 'cdss-drug-safety'
+  | 'cdss-preventive'
+  | 'cdss-analytics';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/clinical-alerts')) return 'clinical-alerts';
@@ -34,5 +44,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalCdssPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <CdssShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <CdssShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

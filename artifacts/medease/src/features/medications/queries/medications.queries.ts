@@ -58,7 +58,9 @@ export const medicationQueries = {
     staleTime: CACHE_TIMES.reference,
   }),
   prescriptions: (filters?: MedicationFilters) => ({
-    queryKey: queryKeys.medications.prescriptions(filters as Record<string, unknown>),
+    queryKey: queryKeys.medications.prescriptions(
+      filters as Record<string, unknown>,
+    ),
     queryFn: () => medicationService.getPrescriptions(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -74,12 +76,17 @@ export const medicationQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   analytics: (filters?: MedicationFilters) => ({
-    queryKey: queryKeys.medications.analytics(filters as Record<string, unknown>),
+    queryKey: queryKeys.medications.analytics(
+      filters as Record<string, unknown>,
+    ),
     queryFn: () => medicationService.getAnalytics(filters),
     staleTime: CACHE_TIMES.dashboard,
   }),
   calendar: (patientId: string, referenceDate?: Date) => ({
-    queryKey: queryKeys.medications.calendar(patientId, referenceDate?.toISOString()),
+    queryKey: queryKeys.medications.calendar(
+      patientId,
+      referenceDate?.toISOString(),
+    ),
     queryFn: () => medicationService.getCalendar(patientId, referenceDate),
     staleTime: CACHE_TIMES.dashboard,
   }),

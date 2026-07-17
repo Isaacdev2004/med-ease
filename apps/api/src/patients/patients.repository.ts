@@ -27,7 +27,10 @@ import {
   TenantAwareRepository,
   toPaginatedResult,
 } from '@medease/prisma';
-import { ConflictError, ValidationError } from '@workspace/repository-transport/errors';
+import {
+  ConflictError,
+  ValidationError,
+} from '@workspace/repository-transport/errors';
 import { newId } from '@medease/uuid';
 
 import {
@@ -223,7 +226,8 @@ export class PatientsRepository
               occupation: input.preferences.occupation,
               nationality: input.preferences.nationality,
               smoking: input.preferences.smoking,
-              communication: input.preferences.communication as Prisma.InputJsonValue | undefined,
+              communication: input.preferences.communication as
+                Prisma.InputJsonValue | undefined,
             },
           });
         }
@@ -235,7 +239,10 @@ export class PatientsRepository
     }
   }
 
-  async updatePatient(patientId: string, input: UpdatePatientInput): Promise<Patient> {
+  async updatePatient(
+    patientId: string,
+    input: UpdatePatientInput,
+  ): Promise<Patient> {
     try {
       return await this.prisma.runInTransaction(async (tx) => {
         const existing = await tx.patient.findFirst({
@@ -245,7 +252,11 @@ export class PatientsRepository
 
         if (input.version !== undefined && input.version !== existing.version) {
           throw new ConflictError('Patient version conflict', {
-            details: { patientId, expectedVersion: input.version, actualVersion: existing.version },
+            details: {
+              patientId,
+              expectedVersion: input.version,
+              actualVersion: existing.version,
+            },
           });
         }
 
@@ -254,7 +265,9 @@ export class PatientsRepository
           data: {
             mrn: input.mrn,
             fullName: input.fullName,
-            dateOfBirth: input.dateOfBirth ? new Date(input.dateOfBirth) : undefined,
+            dateOfBirth: input.dateOfBirth
+              ? new Date(input.dateOfBirth)
+              : undefined,
             gender: input.gender,
             status: input.status,
             facilityId: input.facilityId,
@@ -304,7 +317,11 @@ export class PatientsRepository
     try {
       return await this.prisma.runInTransaction(async (tx) => {
         const existing = await tx.patient.findFirst({
-          where: { id: patientId, tenantId: this.tenantId, deletedAt: { not: null } },
+          where: {
+            id: patientId,
+            tenantId: this.tenantId,
+            deletedAt: { not: null },
+          },
         });
         assertPatientFound(existing, patientId);
 
@@ -361,7 +378,9 @@ export class PatientsRepository
     });
   }
 
-  async getEmergencyContacts(patientId: string): Promise<PatientEmergencyContact[]> {
+  async getEmergencyContacts(
+    patientId: string,
+  ): Promise<PatientEmergencyContact[]> {
     await this.getPatient(patientId);
 
     return this.prisma.runInTransaction(async (tx) => {
@@ -397,7 +416,10 @@ export class PatientsRepository
   }
 
   /** Persistence lookup — active patients only. */
-  async findByMrn(mrn: string, excludePatientId?: string): Promise<Patient | null> {
+  async findByMrn(
+    mrn: string,
+    excludePatientId?: string,
+  ): Promise<Patient | null> {
     return this.prisma.runInTransaction(async (tx) => {
       const patient = await tx.patient.findFirst({
         where: {
@@ -434,7 +456,10 @@ export class PatientsRepository
     });
   }
 
-  async addAllergy(patientId: string, input: CreatePatientAllergyInput): Promise<PatientAllergy> {
+  async addAllergy(
+    patientId: string,
+    input: CreatePatientAllergyInput,
+  ): Promise<PatientAllergy> {
     try {
       return await this.prisma.runInTransaction(async (tx) => {
         const patient = await tx.patient.findFirst({
@@ -483,7 +508,8 @@ export class PatientsRepository
             occupation: input.occupation,
             nationality: input.nationality,
             smoking: input.smoking,
-            communication: input.communication as Prisma.InputJsonValue | undefined,
+            communication: input.communication as
+              Prisma.InputJsonValue | undefined,
           },
           update: {
             language: input.language,
@@ -491,7 +517,8 @@ export class PatientsRepository
             occupation: input.occupation,
             nationality: input.nationality,
             smoking: input.smoking,
-            communication: input.communication as Prisma.InputJsonValue | undefined,
+            communication: input.communication as
+              Prisma.InputJsonValue | undefined,
           },
         });
 

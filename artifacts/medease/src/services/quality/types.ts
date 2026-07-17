@@ -10,19 +10,32 @@ export type IncidentType =
   | 'other';
 
 export type IncidentSeverity = 'low' | 'medium' | 'high' | 'critical';
-export type IncidentStatus = 'reported' | 'investigating' | 'escalated' | 'resolved' | 'closed';
-export type RiskCategory = 'clinical' | 'operational' | 'financial' | 'it' | 'cybersecurity' | 'regulatory';
+export type IncidentStatus =
+  'reported' | 'investigating' | 'escalated' | 'resolved' | 'closed';
+export type RiskCategory =
+  | 'clinical'
+  | 'operational'
+  | 'financial'
+  | 'it'
+  | 'cybersecurity'
+  | 'regulatory';
 export type RiskLevel = 'low' | 'medium' | 'high' | 'extreme';
-export type RiskStatus = 'identified' | 'assessed' | 'mitigating' | 'monitoring' | 'closed';
+export type RiskStatus =
+  'identified' | 'assessed' | 'mitigating' | 'monitoring' | 'closed';
 export type CapaType = 'corrective' | 'preventive';
-export type CapaStatus = 'open' | 'in_progress' | 'verification' | 'effectiveness_review' | 'closed';
+export type CapaStatus =
+  'open' | 'in_progress' | 'verification' | 'effectiveness_review' | 'closed';
 export type AuditType = 'internal' | 'external' | 'regulatory' | 'inspection';
-export type AuditStatus = 'scheduled' | 'in_progress' | 'findings' | 'follow_up' | 'closed';
+export type AuditStatus =
+  'scheduled' | 'in_progress' | 'findings' | 'follow_up' | 'closed';
 export type PolicyType = 'policy' | 'sop' | 'guideline' | 'protocol';
-export type PolicyStatus = 'draft' | 'review' | 'approved' | 'published' | 'archived' | 'expired';
+export type PolicyStatus =
+  'draft' | 'review' | 'approved' | 'published' | 'archived' | 'expired';
 export type InfectionType = 'clabsi' | 'cauti' | 'ssi' | 'vap' | 'other_hai';
-export type AccreditationFramework = 'jci' | 'nabh' | 'iso_9001' | 'iso_15189' | 'iso_27001' | 'cap' | 'moh';
-export type ComplianceDomain = 'hipaa' | 'gdpr' | 'hds' | 'fhir' | 'audit_log' | 'consent' | 'documentation';
+export type AccreditationFramework =
+  'jci' | 'nabh' | 'iso_9001' | 'iso_15189' | 'iso_27001' | 'cap' | 'moh';
+export type ComplianceDomain =
+  'hipaa' | 'gdpr' | 'hds' | 'fhir' | 'audit_log' | 'consent' | 'documentation';
 
 export interface QualityFilters {
   q?: string;
@@ -208,7 +221,12 @@ export interface QualityDashboard {
   policyCompliance: number;
   recentIncidents: IncidentReport[];
   recentCapa: CapaRecord[];
-  riskHeatMap: { label: string; likelihood: number; impact: number; count: number }[];
+  riskHeatMap: {
+    label: string;
+    likelihood: number;
+    impact: number;
+    count: number;
+  }[];
 }
 
 export interface QualityAnalytics {

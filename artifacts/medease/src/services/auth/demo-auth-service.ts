@@ -1,4 +1,9 @@
-import type { AuthSession, LoginCredentials, LoginResult, UserRole } from '@/types/auth';
+import type {
+  AuthSession,
+  LoginCredentials,
+  LoginResult,
+  UserRole,
+} from '@/types/auth';
 import {
   buildDemoUser,
   findDemoAccount,
@@ -34,7 +39,10 @@ function toStoredRef(userId: string, session: AuthSession): StoredSessionRef {
   };
 }
 
-function buildResult(account: ReturnType<typeof findDemoAccount>, rememberMe?: boolean): LoginResult {
+function buildResult(
+  account: ReturnType<typeof findDemoAccount>,
+  rememberMe?: boolean,
+): LoginResult {
   if (!account) {
     throw new Error('invalid_credentials');
   }

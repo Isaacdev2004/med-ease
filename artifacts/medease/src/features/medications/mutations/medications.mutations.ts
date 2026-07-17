@@ -14,7 +14,10 @@ import type {
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    medicationOfflineQueue.enqueue({ label, execute: () => execute().then(() => undefined) });
+    medicationOfflineQueue.enqueue({
+      label,
+      execute: () => execute().then(() => undefined),
+    });
     appToast.offline('Medication update queued until you are back online.');
     return Promise.resolve(null);
   }
@@ -29,90 +32,184 @@ export function useMedicationMutations() {
   const client = useQueryClient();
 
   const logDose = useMutation({
-    mutationFn: (input: LogDoseInput) => runOrQueue('Log dose', () => medicationService.logDose(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Dose logged' }); },
+    mutationFn: (input: LogDoseInput) =>
+      runOrQueue('Log dose', () => medicationService.logDose(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Dose logged' });
+    },
   });
 
   const requestRefill = useMutation({
-    mutationFn: (input: RefillRequestInput) => runOrQueue('Request refill', () => medicationService.requestRefill(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Refill requested' }); },
+    mutationFn: (input: RefillRequestInput) =>
+      runOrQueue('Request refill', () =>
+        medicationService.requestRefill(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Refill requested' });
+    },
   });
 
   const createPrescription = useMutation({
-    mutationFn: (input: CreatePrescriptionInput) => runOrQueue('Create prescription', () => medicationService.createPrescription(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Prescription created' }); },
+    mutationFn: (input: CreatePrescriptionInput) =>
+      runOrQueue('Create prescription', () =>
+        medicationService.createPrescription(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Prescription created' });
+    },
   });
 
   const cancelPrescription = useMutation({
-    mutationFn: (id: string) => runOrQueue('Cancel prescription', () => medicationService.cancelPrescription(id)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Prescription cancelled' }); },
+    mutationFn: (id: string) =>
+      runOrQueue('Cancel prescription', () =>
+        medicationService.cancelPrescription(id),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Prescription cancelled' });
+    },
   });
 
   const renewPrescription = useMutation({
-    mutationFn: (id: string) => runOrQueue('Renew prescription', () => medicationService.renewPrescription(id)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Prescription renewed' }); },
+    mutationFn: (id: string) =>
+      runOrQueue('Renew prescription', () =>
+        medicationService.renewPrescription(id),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Prescription renewed' });
+    },
   });
 
   const approveRefill = useMutation({
-    mutationFn: (id: string) => runOrQueue('Approve refill', () => medicationService.approveRefill(id)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Refill approved' }); },
+    mutationFn: (id: string) =>
+      runOrQueue('Approve refill', () => medicationService.approveRefill(id)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Refill approved' });
+    },
   });
 
   const rejectRefill = useMutation({
-    mutationFn: (id: string) => runOrQueue('Reject refill', () => medicationService.rejectRefill(id)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Refill rejected' }); },
+    mutationFn: (id: string) =>
+      runOrQueue('Reject refill', () => medicationService.rejectRefill(id)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Refill rejected' });
+    },
   });
 
   const dispense = useMutation({
-    mutationFn: (input: DispenseInput) => runOrQueue('Dispense medication', () => medicationService.dispense(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Medication dispensed' }); },
+    mutationFn: (input: DispenseInput) =>
+      runOrQueue('Dispense medication', () =>
+        medicationService.dispense(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Medication dispensed' });
+    },
   });
 
   const administer = useMutation({
-    mutationFn: (input: AdministerInput) => runOrQueue('Administer medication', () => medicationService.administer(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Administration recorded' }); },
+    mutationFn: (input: AdministerInput) =>
+      runOrQueue('Administer medication', () =>
+        medicationService.administer(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Administration recorded' });
+    },
   });
 
   const pauseMedication = useMutation({
-    mutationFn: (id: string) => runOrQueue('Pause medication', () => medicationService.pauseMedication(id)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Medication paused' }); },
+    mutationFn: (id: string) =>
+      runOrQueue('Pause medication', () =>
+        medicationService.pauseMedication(id),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Medication paused' });
+    },
   });
 
   const resumeMedication = useMutation({
-    mutationFn: (id: string) => runOrQueue('Resume medication', () => medicationService.resumeMedication(id)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Medication resumed' }); },
+    mutationFn: (id: string) =>
+      runOrQueue('Resume medication', () =>
+        medicationService.resumeMedication(id),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Medication resumed' });
+    },
   });
 
   const completeCourse = useMutation({
-    mutationFn: (id: string) => runOrQueue('Complete course', () => medicationService.completeCourse(id)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Medication course completed' }); },
+    mutationFn: (id: string) =>
+      runOrQueue('Complete course', () => medicationService.completeCourse(id)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Medication course completed' });
+    },
   });
 
   const stopMedication = useMutation({
-    mutationFn: (id: string) => runOrQueue('Stop medication', () => medicationService.stopMedication(id)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Medication stopped' }); },
+    mutationFn: (id: string) =>
+      runOrQueue('Stop medication', () => medicationService.stopMedication(id)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Medication stopped' });
+    },
   });
 
   const markReminderDone = useMutation({
-    mutationFn: (id: string) => runOrQueue('Mark reminder done', () => medicationService.markReminderDone(id)),
+    mutationFn: (id: string) =>
+      runOrQueue('Mark reminder done', () =>
+        medicationService.markReminderDone(id),
+      ),
     onSuccess: () => invalidateAll(client),
   });
 
   const toggleFavorite = useMutation({
-    mutationFn: (id: string) => runOrQueue('Toggle favorite', () => medicationService.toggleFavorite(id)),
+    mutationFn: (id: string) =>
+      runOrQueue('Toggle favorite', () => medicationService.toggleFavorite(id)),
     onSuccess: () => invalidateAll(client),
   });
 
   const exportMedications = useMutation({
-    mutationFn: ({ patientId, format }: { patientId: string; format: 'pdf' | 'fhir' | 'csv' }) =>
-      runOrQueue('Export medications', () => medicationService.exportMedications(patientId, format)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Medication export ready' }); },
+    mutationFn: ({
+      patientId,
+      format,
+    }: {
+      patientId: string;
+      format: 'pdf' | 'fhir' | 'csv';
+    }) =>
+      runOrQueue('Export medications', () =>
+        medicationService.exportMedications(patientId, format),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Medication export ready' });
+    },
   });
 
   const shareMedication = useMutation({
-    mutationFn: ({ medicationId, sharedWith }: { medicationId: string; sharedWith: string }) =>
-      runOrQueue('Share medication', () => medicationService.shareMedication(medicationId, sharedWith)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Medication shared' }); },
+    mutationFn: ({
+      medicationId,
+      sharedWith,
+    }: {
+      medicationId: string;
+      sharedWith: string;
+    }) =>
+      runOrQueue('Share medication', () =>
+        medicationService.shareMedication(medicationId, sharedWith),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Medication shared' });
+    },
   });
 
   return {

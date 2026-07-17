@@ -15,7 +15,8 @@ export function useDirectoryMutations() {
   };
 
   const toggleFavorite = useMutation({
-    mutationFn: (providerId: string) => directoryService.toggleFavorite(userId, providerId),
+    mutationFn: (providerId: string) =>
+      directoryService.toggleFavorite(userId, providerId),
     onSuccess: (isFavorite) => {
       invalidate();
       appToast.success({

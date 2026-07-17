@@ -1,7 +1,10 @@
 export { workflowService } from '@/services/workflows/workflow.service';
 export { workflowRepository } from '@/services/workflows/repository';
 export { workflowOfflineQueue } from '@/services/workflows/offline-sync';
-export { computeWorkflowAnalytics, buildWorkflowDashboard } from '@/services/workflows/analytics';
+export {
+  computeWorkflowAnalytics,
+  buildWorkflowDashboard,
+} from '@/services/workflows/analytics';
 export {
   MOCK_WORKFLOW_DEFINITIONS,
   MOCK_WORKFLOW_INSTANCES,

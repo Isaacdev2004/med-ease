@@ -1,8 +1,14 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
-import { RadiologySectionContent, StudyDetailSection } from '@/features/radiology/components/RadiologySections';
-import { RadiologyTabs, getRadiologySectionFromPath } from '@/features/radiology/components/RadiologyTabs';
+import {
+  RadiologySectionContent,
+  StudyDetailSection,
+} from '@/features/radiology/components/RadiologySections';
+import {
+  RadiologyTabs,
+  getRadiologySectionFromPath,
+} from '@/features/radiology/components/RadiologyTabs';
 import { useRadiologyPermissions } from '@/features/radiology/hooks/use-radiology-permissions';
 import { usePatientRadiologyContext } from '@/features/radiology/hooks/use-radiology';
 import type { StudyFilters } from '@/services/radiology/types';
@@ -26,17 +32,23 @@ export function RadiologyShell({
   const perms = useRadiologyPermissions();
   const patientResolve = usePatientRadiologyContext();
   const sectionRaw = getRadiologySectionFromPath(location);
-  const section = variant === 'patient' && sectionRaw === 'list' ? 'dashboard' : sectionRaw;
+  const section =
+    variant === 'patient' && sectionRaw === 'list' ? 'dashboard' : sectionRaw;
 
   const scopedFilters = useMemo((): StudyFilters => {
-    const patientId = explicitPatientId ?? (variant === 'patient' ? patientResolve.data ?? undefined : undefined);
+    const patientId =
+      explicitPatientId ??
+      (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
     return patientId ? { patientId } : {};
   }, [explicitPatientId, patientResolve.data, variant]);
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view radiology records." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view radiology records."
+        />
       </PageShell>
     );
   }
@@ -49,15 +61,27 @@ export function RadiologyShell({
     );
   }
 
-  const isStudyDetail = variant === 'patient' && location.match(/\/radiology\/[^/]+$/) && !location.endsWith('/history');
+  const isStudyDetail =
+    variant === 'patient' &&
+    location.match(/\/radiology\/[^/]+$/) &&
+    !location.endsWith('/history');
 
   return (
-    <PageShell title={title} subtitle="Medical imaging studies, diagnostic reports, DICOM viewer, and radiology analytics.">
+    <PageShell
+      title={title}
+      subtitle="Medical imaging studies, diagnostic reports, DICOM viewer, and radiology analytics."
+    >
       <div className="space-y-6">
-        {!isStudyDetail && location.indexOf('/viewer/') < 0 && location.indexOf('/report/') < 0 ? (
+        {!isStudyDetail &&
+        location.indexOf('/viewer/') < 0 &&
+        location.indexOf('/report/') < 0 ? (
           <RadiologyTabs basePath={basePath} variant={variant} />
         ) : null}
-        {isStudyDetail ? <StudyDetailSection /> : <RadiologySectionContent section={section} filters={scopedFilters} />}
+        {isStudyDetail ? (
+          <StudyDetailSection />
+        ) : (
+          <RadiologySectionContent section={section} filters={scopedFilters} />
+        )}
       </div>
     </PageShell>
   );

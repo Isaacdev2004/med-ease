@@ -22,7 +22,10 @@ export class PatientDto {
   @ApiProperty({ type: String, format: 'date' })
   dateOfBirth!: string;
 
-  @ApiPropertyOptional({ type: String, enum: ['male', 'female', 'other', 'unknown'] })
+  @ApiPropertyOptional({
+    type: String,
+    enum: ['male', 'female', 'other', 'unknown'],
+  })
   gender?: 'male' | 'female' | 'other' | 'unknown';
 
   @ApiProperty({ type: String, enum: ['active', 'inactive', 'observation'] })
@@ -121,7 +124,10 @@ export class PatientAddressDto {
   @ApiProperty({ type: String, format: 'uuid' })
   patientId!: string;
 
-  @ApiProperty({ type: String, enum: ['home', 'work', 'mailing', 'temporary', 'other'] })
+  @ApiProperty({
+    type: String,
+    enum: ['home', 'work', 'mailing', 'temporary', 'other'],
+  })
   type!: string;
 
   @ApiProperty({ type: String })
@@ -194,10 +200,16 @@ export class PatientAllergyDto {
   @ApiProperty({ type: String })
   allergen!: string;
 
-  @ApiProperty({ type: String, enum: ['drug', 'food', 'environmental', 'other'] })
+  @ApiProperty({
+    type: String,
+    enum: ['drug', 'food', 'environmental', 'other'],
+  })
   type!: string;
 
-  @ApiProperty({ type: String, enum: ['mild', 'moderate', 'severe', 'life_threatening'] })
+  @ApiProperty({
+    type: String,
+    enum: ['mild', 'moderate', 'severe', 'life_threatening'],
+  })
   severity!: string;
 
   @ApiPropertyOptional({ type: String })
@@ -291,7 +303,10 @@ export class ApiErrorResponseDto {
   @ApiProperty({ type: Number })
   statusCode!: number;
 
-  @ApiProperty({ type: String, description: 'Error message or validation errors' })
+  @ApiProperty({
+    type: String,
+    description: 'Error message or validation errors',
+  })
   message!: string | string[];
 
   @ApiProperty({ type: String })

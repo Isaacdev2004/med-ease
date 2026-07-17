@@ -33,7 +33,10 @@ export function BedStatusCard({
     <Card className={cn('overflow-hidden', className)}>
       <CardContent className="p-4 flex items-start gap-3">
         <div className="rounded-full bg-muted p-2">
-          <BedDouble className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+          <BedDouble
+            className="h-4 w-4 text-muted-foreground"
+            aria-hidden="true"
+          />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">

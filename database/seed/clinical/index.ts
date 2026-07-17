@@ -127,8 +127,11 @@ export const clinicalSeed: SeedModule = {
       return;
     }
 
-    const { PrismaClient, runInSystemTransaction } = await import('@medease/prisma');
-    type TransactionClient = Parameters<Parameters<typeof runInSystemTransaction>[1]>[0];
+    const { PrismaClient, runInSystemTransaction } =
+      await import('@medease/prisma');
+    type TransactionClient = Parameters<
+      Parameters<typeof runInSystemTransaction>[1]
+    >[0];
     const prisma = new PrismaClient();
 
     try {

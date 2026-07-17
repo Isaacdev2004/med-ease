@@ -42,7 +42,9 @@ export function DirectoryToolbar({
             <ToggleGroup
               type="single"
               value={view}
-              onValueChange={(value) => value && onViewChange(value as DirectoryViewMode)}
+              onValueChange={(value) =>
+                value && onViewChange(value as DirectoryViewMode)
+              }
               aria-label="View mode"
             >
               <ToggleGroupItem value="cards" aria-label="Card view">
@@ -71,7 +73,12 @@ export function DirectoryToolbar({
                 ]}
               />
             ) : (
-              <Button variant="outline" size="sm" disabled title="Export requires admin permission">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled
+                title="Export requires admin permission"
+              >
                 Export
               </Button>
             )}

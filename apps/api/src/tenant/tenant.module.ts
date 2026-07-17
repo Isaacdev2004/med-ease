@@ -7,7 +7,12 @@ import { TenantResolver } from './tenant.resolver';
 
 @Global()
 @Module({
-  providers: [RequestContextMiddleware, TenantMiddleware, RequestContextService, TenantResolver],
+  providers: [
+    RequestContextMiddleware,
+    TenantMiddleware,
+    RequestContextService,
+    TenantResolver,
+  ],
   exports: [RequestContextService, TenantResolver],
 })
 export class TenantModule implements NestModule {

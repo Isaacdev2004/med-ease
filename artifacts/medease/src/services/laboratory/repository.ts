@@ -29,7 +29,10 @@ import {
 } from '@/services/laboratory/mock-data';
 import { LAB_TEST_CATALOG } from '@/services/laboratory/reference-ranges';
 import { matchesOrderFilters } from '@/services/laboratory/orders';
-import { getTestById, computeResultFlag } from '@/services/laboratory/reference-ranges';
+import {
+  getTestById,
+  computeResultFlag,
+} from '@/services/laboratory/reference-ranges';
 import { matchesResultFilters } from '@/services/laboratory/results';
 
 class LaboratoryRepository {
@@ -38,16 +41,36 @@ class LaboratoryRepository {
   private observations = [...MOCK_LAB_OBSERVATIONS];
   private specimens = [...MOCK_SPECIMENS];
   private alerts = [...MOCK_LAB_ALERTS];
-  private favorites = new Set<string>(MOCK_LAB_REPORTS.filter((_, i) => i % 17 === 0).map((r) => r.id));
-  private exports: { id: string; reportId: string; format: ExportResultInput['format']; exportedAt: string; exportedBy: string }[] = [];
-  private shares: { id: string; reportId: string; sharedWith: string; sharedAt: string }[] = [];
+  private favorites = new Set<string>(
+    MOCK_LAB_REPORTS.filter((_, i) => i % 17 === 0).map((r) => r.id),
+  );
+  private exports: {
+    id: string;
+    reportId: string;
+    format: ExportResultInput['format'];
+    exportedAt: string;
+    exportedBy: string;
+  }[] = [];
+  private shares: {
+    id: string;
+    reportId: string;
+    sharedWith: string;
+    sharedAt: string;
+  }[] = [];
 
   listOrders(filters?: LabOrderFilters) {
-    const filtered = this.orders.filter((o) => matchesOrderFilters(o, filters ?? {}));
+    const filtered = this.orders.filter((o) =>
+      matchesOrderFilters(o, filters ?? {}),
+    );
     const page = filters?.page ?? 1;
     const pageSize = filters?.pageSize ?? 25;
     const start = (page - 1) * pageSize;
-    return { items: filtered.slice(start, start + pageSize), total: filtered.length, page, pageSize };
+    return {
+      items: filtered.slice(start, start + pageSize),
+      total: filtered.length,
+      page,
+      pageSize,
+    };
   }
 
   getAllOrders(filters?: LabOrderFilters) {
@@ -65,11 +88,18 @@ class LaboratoryRepository {
     const page = filters?.page ?? 1;
     const pageSize = filters?.pageSize ?? 25;
     const start = (page - 1) * pageSize;
-    return { items: filtered.slice(start, start + pageSize), total: filtered.length, page, pageSize };
+    return {
+      items: filtered.slice(start, start + pageSize),
+      total: filtered.length,
+      page,
+      pageSize,
+    };
   }
 
   getAllResults(filters?: LabResultFilters) {
-    return this.reports.filter((r) => matchesResultFilters(r, this.observations, filters ?? {}));
+    return this.reports.filter((r) =>
+      matchesResultFilters(r, this.observations, filters ?? {}),
+    );
   }
 
   getResult(id: string) {
@@ -81,7 +111,9 @@ class LaboratoryRepository {
   }
 
   getObservations(patientId?: string) {
-    return patientId ? this.observations.filter((o) => o.patientId === patientId) : this.observations;
+    return patientId
+      ? this.observations.filter((o) => o.patientId === patientId)
+      : this.observations;
   }
 
   getSpecimens(orderId?: string, patientId?: string) {
@@ -93,7 +125,9 @@ class LaboratoryRepository {
   }
 
   getAlerts(patientId?: string) {
-    return patientId ? this.alerts.filter((a) => a.patientId === patientId) : this.alerts;
+    return patientId
+      ? this.alerts.filter((a) => a.patientId === patientId)
+      : this.alerts;
   }
 
   getCriticalAlerts(patientId?: string) {
@@ -101,8 +135,8 @@ class LaboratoryRepository {
   }
 
   getPendingResults(patientId?: string) {
-    return this.getAllResults(patientId ? { patientId } : undefined).filter((r) =>
-      r.status === 'pending' || r.status === 'processing',
+    return this.getAllResults(patientId ? { patientId } : undefined).filter(
+      (r) => r.status === 'pending' || r.status === 'processing',
     );
   }
 
@@ -334,26 +368,40 @@ class LaboratoryRepository {
       collectedBy: input.collectedBy,
       collectedAt: now,
       temperature: input.temperature ?? '2–8°C',
-      chainOfCustody: [{ id: 'c1', timestamp: now, status: 'collected' as const, actor: input.collectedBy }],
+      chainOfCustody: [
+        {
+          id: 'c1',
+          timestamp: now,
+          status: 'collected' as const,
+          actor: input.collectedBy,
+        },
+      ],
       createdAt: now,
       updatedAt: now,
     };
     this.specimens.unshift(spec);
     const oIdx = this.orders.findIndex((o) => o.id === input.orderId);
     if (oIdx >= 0) {
-      this.orders[oIdx] = { ...this.orders[oIdx]!, status: 'collected', collectedAt: now, updatedAt: now };
+      this.orders[oIdx] = {
+        ...this.orders[oIdx]!,
+        status: 'collected',
+        collectedAt: now,
+        updatedAt: now,
+      };
     }
     return spec;
   }
 
   search(query: string, patientId?: string) {
     const q = query.toLowerCase();
-    const orders = this.getAllOrders(patientId ? { patientId } : undefined).filter((o) =>
+    const orders = this.getAllOrders(
+      patientId ? { patientId } : undefined,
+    ).filter((o) =>
       `${o.orderNumber} ${o.testNames.join(' ')}`.toLowerCase().includes(q),
     );
-    const results = this.getAllResults(patientId ? { patientId } : undefined).filter((r) =>
-      `${r.title} ${r.reportNumber}`.toLowerCase().includes(q),
-    );
+    const results = this.getAllResults(
+      patientId ? { patientId } : undefined,
+    ).filter((r) => `${r.title} ${r.reportNumber}`.toLowerCase().includes(q));
     return { orders: orders.slice(0, 20), results: results.slice(0, 20) };
   }
 }

@@ -21,10 +21,13 @@ export type RegistryType =
   | 'pediatrics'
   | 'mental_health'
   | 'high_risk';
-export type RiskScoreType = 'charlson' | 'hcc' | 'lace' | 'readmission' | 'mortality';
+export type RiskScoreType =
+  'charlson' | 'hcc' | 'lace' | 'readmission' | 'mortality';
 export type OutreachChannel = 'sms' | 'email' | 'push' | 'whatsapp' | 'phone';
-export type CampaignStatus = 'draft' | 'scheduled' | 'active' | 'completed' | 'cancelled';
-export type ChronicProgramType = 'diabetes' | 'hypertension' | 'heart_failure' | 'ckd' | 'asthma' | 'copd';
+export type CampaignStatus =
+  'draft' | 'scheduled' | 'active' | 'completed' | 'cancelled';
+export type ChronicProgramType =
+  'diabetes' | 'hypertension' | 'heart_failure' | 'ckd' | 'asthma' | 'copd';
 
 export interface PhmFilters {
   q?: string;

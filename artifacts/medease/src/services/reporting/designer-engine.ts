@@ -1,13 +1,24 @@
-import type { ReportDesigner, ReportField, ReportChart, ReportDataSource } from '@/services/reporting/types';
+import type {
+  ReportDesigner,
+  ReportField,
+  ReportChart,
+  ReportDataSource,
+} from '@/services/reporting/types';
 
-export function canvasComplexity(elements: number, dataSources: number): 'simple' | 'moderate' | 'complex' {
+export function canvasComplexity(
+  elements: number,
+  dataSources: number,
+): 'simple' | 'moderate' | 'complex' {
   const score = elements + dataSources * 3;
   if (score < 10) return 'simple';
   if (score < 25) return 'moderate';
   return 'complex';
 }
 
-export function validateDesignerLayout(fields: ReportField[], charts: ReportChart[]): boolean {
+export function validateDesignerLayout(
+  fields: ReportField[],
+  charts: ReportChart[],
+): boolean {
   return fields.length > 0 || charts.length > 0;
 }
 

@@ -25,19 +25,13 @@ export const phoneField = () =>
     .string()
     .trim()
     .min(1, 'Phone number is required.')
-    .regex(
-      /^[+]?[\d\s().-]{7,20}$/,
-      'Please enter a valid phone number.',
-    );
+    .regex(/^[+]?[\d\s().-]{7,20}$/, 'Please enter a valid phone number.');
 
 export const optionalPhoneField = () =>
   z
     .string()
     .trim()
-    .regex(
-      /^$|^[+]?[\d\s().-]{7,20}$/,
-      'Please enter a valid phone number.',
-    )
+    .regex(/^$|^[+]?[\d\s().-]{7,20}$/, 'Please enter a valid phone number.')
     .optional()
     .or(z.literal(''));
 
@@ -48,9 +42,12 @@ export const dateField = (label: string) =>
   });
 
 export const futureDateField = (label: string) =>
-  dateField(label).refine((value) => value >= new Date(new Date().setHours(0, 0, 0, 0)), {
-    message: `${label} must be today or in the future.`,
-  });
+  dateField(label).refine(
+    (value) => value >= new Date(new Date().setHours(0, 0, 0, 0)),
+    {
+      message: `${label} must be today or in the future.`,
+    },
+  );
 
 export const positiveNumberField = (label: string) =>
   z.coerce
@@ -65,7 +62,11 @@ export const fileUploadField = (options?: {
   accept?: string[];
 }) => {
   const maxSizeMb = options?.maxSizeMb ?? 10;
-  const accept = options?.accept ?? ['application/pdf', 'image/jpeg', 'image/png'];
+  const accept = options?.accept ?? [
+    'application/pdf',
+    'image/jpeg',
+    'image/png',
+  ];
 
   return z
     .custom<FileList | File | null | undefined>()

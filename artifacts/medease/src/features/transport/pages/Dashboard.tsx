@@ -9,7 +9,9 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 motion-preset-entrance">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold tracking-tight">Active Dispatch Board</h1>
+        <h1 className="text-3xl font-bold tracking-tight">
+          Active Dispatch Board
+        </h1>
         <Button variant="destructive">Initiate Emergency Override</Button>
       </div>
 
@@ -38,11 +40,17 @@ export default function Dashboard() {
             <CardContent className="space-y-4">
               <div className="border rounded-lg p-3 hover:border-primary transition-colors cursor-pointer bg-primary/5 border-primary/20">
                 <div className="flex justify-between items-start mb-2">
-                  <Badge className="bg-primary text-primary-foreground">Medic 12</Badge>
-                  <span className="text-xs font-bold text-destructive animate-pulse">En Route - P1</span>
+                  <Badge className="bg-primary text-primary-foreground">
+                    Medic 12
+                  </Badge>
+                  <span className="text-xs font-bold text-destructive animate-pulse">
+                    En Route - P1
+                  </span>
                 </div>
                 <p className="text-sm font-medium">Cardiac Arrest (Code 3)</p>
-                <p className="text-xs text-muted-foreground mt-1">Dest: Mount Sinai ER</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Dest: Mount Sinai ER
+                </p>
                 <div className="mt-3 pt-2 border-t text-xs flex justify-between">
                   <span>ETA: 4 mins</span>
                   <span className="font-mono">Unit: ALS</span>
@@ -52,10 +60,16 @@ export default function Dashboard() {
               <div className="border rounded-lg p-3 hover:border-primary transition-colors cursor-pointer">
                 <div className="flex justify-between items-start mb-2">
                   <Badge variant="outline">Medic 04</Badge>
-                  <span className="text-xs font-medium text-muted-foreground">Returning</span>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    Returning
+                  </span>
                 </div>
-                <p className="text-sm font-medium">Inter-facility Transfer (P3)</p>
-                <p className="text-xs text-muted-foreground mt-1">Dest: Base Station</p>
+                <p className="text-sm font-medium">
+                  Inter-facility Transfer (P3)
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Dest: Base Station
+                </p>
                 <div className="mt-3 pt-2 border-t text-xs flex justify-between">
                   <span>ETA: 12 mins</span>
                   <span className="font-mono">Unit: BLS</span>

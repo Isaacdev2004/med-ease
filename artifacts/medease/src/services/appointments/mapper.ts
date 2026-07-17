@@ -1,4 +1,8 @@
-import type { Appointment, CalendarEvent, AppointmentStatus } from '@/services/appointments/types';
+import type {
+  Appointment,
+  CalendarEvent,
+  AppointmentStatus,
+} from '@/services/appointments/types';
 
 const STATUS_COLORS: Record<AppointmentStatus, string> = {
   scheduled: '#3b82f6',
@@ -21,13 +25,22 @@ export function toFhirAppointmentReference(appointment: Appointment) {
     start: appointment.scheduledAt,
     minutesDuration: appointment.durationMinutes,
     participant: [
-      { actor: { reference: `Patient/${appointment.patient.id}` }, status: 'accepted' },
-      { actor: { reference: `Practitioner/${appointment.provider.id}` }, status: 'accepted' },
+      {
+        actor: { reference: `Patient/${appointment.patient.id}` },
+        status: 'accepted',
+      },
+      {
+        actor: { reference: `Practitioner/${appointment.provider.id}` },
+        status: 'accepted',
+      },
     ],
   };
 }
 
-export function toFhirScheduleReference(providerId: string, facilityId: string) {
+export function toFhirScheduleReference(
+  providerId: string,
+  facilityId: string,
+) {
   return {
     resourceType: 'Schedule' as const,
     id: `schedule-${providerId}-${facilityId}`,
@@ -35,7 +48,11 @@ export function toFhirScheduleReference(providerId: string, facilityId: string) 
   };
 }
 
-export function toFhirSlotReference(slotId: string, start: string, end: string) {
+export function toFhirSlotReference(
+  slotId: string,
+  start: string,
+  end: string,
+) {
   return {
     resourceType: 'Slot' as const,
     id: slotId,
@@ -45,7 +62,9 @@ export function toFhirSlotReference(slotId: string, start: string, end: string) 
   };
 }
 
-export function appointmentToCalendarEvent(appointment: Appointment): CalendarEvent {
+export function appointmentToCalendarEvent(
+  appointment: Appointment,
+): CalendarEvent {
   const start = new Date(appointment.scheduledAt);
   const end = new Date(start.getTime() + appointment.durationMinutes * 60_000);
   return {
@@ -63,6 +82,8 @@ export function appointmentToCalendarEvent(appointment: Appointment): CalendarEv
   };
 }
 
-export function mapAppointmentsToCalendarEvents(appointments: Appointment[]): CalendarEvent[] {
+export function mapAppointmentsToCalendarEvents(
+  appointments: Appointment[],
+): CalendarEvent[] {
   return appointments.map(appointmentToCalendarEvent);
 }

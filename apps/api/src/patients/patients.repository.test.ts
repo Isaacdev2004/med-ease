@@ -34,15 +34,19 @@ describe('patients.helpers', () => {
     assert.throws(
       () => assertPatientFound(null, 'patient-1'),
       (error: unknown) =>
-        error instanceof NotFoundError && (error as NotFoundError).name === 'NotFoundError',
+        error instanceof NotFoundError &&
+        (error as NotFoundError).name === 'NotFoundError',
     );
   });
 
   it('mapPatientRepositoryError maps unique constraint to ConflictError', () => {
-    const prismaError = new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
-      code: 'P2002',
-      clientVersion: '6.19.3',
-    });
+    const prismaError = new Prisma.PrismaClientKnownRequestError(
+      'Unique constraint failed',
+      {
+        code: 'P2002',
+        clientVersion: '6.19.3',
+      },
+    );
 
     assert.throws(
       () => mapPatientRepositoryError(prismaError),
@@ -51,10 +55,13 @@ describe('patients.helpers', () => {
   });
 
   it('mapPatientRepositoryError maps P2025 to NotFoundError', () => {
-    const prismaError = new Prisma.PrismaClientKnownRequestError('Record not found', {
-      code: 'P2025',
-      clientVersion: '6.19.3',
-    });
+    const prismaError = new Prisma.PrismaClientKnownRequestError(
+      'Record not found',
+      {
+        code: 'P2025',
+        clientVersion: '6.19.3',
+      },
+    );
 
     assert.throws(
       () => mapPatientRepositoryError(prismaError),
@@ -173,7 +180,9 @@ describe('patient.queries', () => {
   });
 
   it('buildPatientExportWhere excludes archived patients', () => {
-    const where = buildPatientExportWhere(TENANT_ID, { facilityId: 'facility-1' });
+    const where = buildPatientExportWhere(TENANT_ID, {
+      facilityId: 'facility-1',
+    });
     assert.equal(where.tenantId, TENANT_ID);
     assert.equal(where.deletedAt, null);
     assert.equal(where.facilityId, 'facility-1');

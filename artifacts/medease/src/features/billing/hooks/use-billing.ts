@@ -14,7 +14,11 @@ export function useBillingContext() {
   });
 }
 
-export function useBillingDashboard(patientId?: string, providerId?: string, facilityId?: string) {
+export function useBillingDashboard(
+  patientId?: string,
+  providerId?: string,
+  facilityId?: string,
+) {
   return useQuery(billingQueries.dashboard(patientId, providerId, facilityId));
 }
 

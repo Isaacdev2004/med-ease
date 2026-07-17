@@ -18,13 +18,25 @@ const FACILITY_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Population Health', path: 'phm' },
   { segment: 'programs', label: 'Programs', path: 'phm-programs' },
   { segment: 'registries', label: 'Registries', path: 'registries' },
-  { segment: 'community-health', label: 'Community Health', path: 'community-health' },
+  {
+    segment: 'community-health',
+    label: 'Community Health',
+    path: 'community-health',
+  },
 ];
 
 const ADMIN_TABS: Tab[] = [
   { segment: 'analytics', label: 'Analytics', path: 'phm-analytics' },
-  { segment: 'quality-measures', label: 'Quality Measures', path: 'quality-measures' },
-  { segment: 'population-risk', label: 'Population Risk', path: 'population-risk' },
+  {
+    segment: 'quality-measures',
+    label: 'Quality Measures',
+    path: 'quality-measures',
+  },
+  {
+    segment: 'population-risk',
+    label: 'Population Risk',
+    path: 'population-risk',
+  },
   { segment: 'executive', label: 'Executive', path: 'phm-executive' },
   { segment: 'campaigns', label: 'Campaigns', path: 'campaigns' },
 ];
@@ -40,17 +52,33 @@ function getTabs(variant: PhmTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function PhmTabs({ basePath: _basePath, variant = 'professional' }: PhmTabsProps) {
+export function PhmTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: PhmTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Population health sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Population health sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );

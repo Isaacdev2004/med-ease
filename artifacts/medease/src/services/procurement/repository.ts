@@ -1,7 +1,15 @@
-import { approveStep, buildApprovalWorkflow, buildRequisitionFromInput, rejectStep } from '@/services/procurement/approval-engine';
+import {
+  approveStep,
+  buildApprovalWorkflow,
+  buildRequisitionFromInput,
+  rejectStep,
+} from '@/services/procurement/approval-engine';
 import { awardRFQ, buildRFQ } from '@/services/procurement/rfq-engine';
 import { rankSuppliers } from '@/services/procurement/supplier-engine';
-import { computeProcurementAnalytics, computeSpendAnalysis } from '@/services/procurement/analytics';
+import {
+  computeProcurementAnalytics,
+  computeSpendAnalysis,
+} from '@/services/procurement/analytics';
 import { forecastProcurementDemand } from '@/services/procurement/forecasting';
 import {
   buildProcurementDashboard,
@@ -30,7 +38,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -56,9 +69,14 @@ class ProcurementRepository {
 
   searchRequests(filters?: ProcurementFilters) {
     let items = this.requests;
-    if (filters?.department) items = items.filter((r) => r.department === filters.department);
-    if (filters?.status) items = items.filter((r) => r.status === filters.status);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.requisitionNumber, r.title, r.requesterName));
+    if (filters?.department)
+      items = items.filter((r) => r.department === filters.department);
+    if (filters?.status)
+      items = items.filter((r) => r.status === filters.status);
+    if (filters?.q)
+      items = items.filter((r) =>
+        matchQ(filters.q, r.requisitionNumber, r.title, r.requesterName),
+      );
     items = [...items].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     return paginate(items, filters?.page, filters?.pageSize);
   }
@@ -69,7 +87,11 @@ class ProcurementRepository {
 
   createRequisition(input: CreateRequisitionInput) {
     const id = `req-${String(++this.nextId)}`;
-    const req = buildRequisitionFromInput(input, id, `PR-${20250000 + this.nextId}`);
+    const req = buildRequisitionFromInput(
+      input,
+      id,
+      `PR-${20250000 + this.nextId}`,
+    );
     this.requests.unshift(req);
     const wf = buildApprovalWorkflow('requisition', id, req.totalEstimate);
     this.approvals.unshift(wf);
@@ -82,31 +104,59 @@ class ProcurementRepository {
     this.requests[idx]!.status = 'approved';
     this.requests[idx]!.updatedAt = new Date().toISOString();
     const wfIdx = this.approvals.findIndex((a) => a.entityId === requestId);
-    if (wfIdx >= 0) this.approvals[wfIdx] = approveStep(this.approvals[wfIdx]!, approverId, approverName);
+    if (wfIdx >= 0)
+      this.approvals[wfIdx] = approveStep(
+        this.approvals[wfIdx]!,
+        approverId,
+        approverName,
+      );
     return this.requests[idx]!;
   }
 
-  rejectRequest(requestId: string, approverId: string, approverName: string, reason?: string) {
+  rejectRequest(
+    requestId: string,
+    approverId: string,
+    approverName: string,
+    reason?: string,
+  ) {
     const idx = this.requests.findIndex((r) => r.requestId === requestId);
     if (idx < 0) return null;
     this.requests[idx]!.status = 'rejected';
     this.requests[idx]!.updatedAt = new Date().toISOString();
     const wfIdx = this.approvals.findIndex((a) => a.entityId === requestId);
-    if (wfIdx >= 0) this.approvals[wfIdx] = rejectStep(this.approvals[wfIdx]!, approverId, approverName, reason);
+    if (wfIdx >= 0)
+      this.approvals[wfIdx] = rejectStep(
+        this.approvals[wfIdx]!,
+        approverId,
+        approverName,
+        reason,
+      );
     return this.requests[idx]!;
   }
 
   searchOrders(filters?: ProcurementFilters) {
     let items = this.orders;
-    if (filters?.department) items = items.filter((o) => o.department === filters.department);
-    if (filters?.status) items = items.filter((o) => o.status === filters.status);
-    if (filters?.supplierId) items = items.filter((o) => o.supplierId === filters.supplierId);
-    if (filters?.q) items = items.filter((o) => matchQ(filters.q, o.poNumber, o.supplierName));
-    return paginate([...items].sort((a, b) => b.createdAt.localeCompare(a.createdAt)), filters?.page, filters?.pageSize);
+    if (filters?.department)
+      items = items.filter((o) => o.department === filters.department);
+    if (filters?.status)
+      items = items.filter((o) => o.status === filters.status);
+    if (filters?.supplierId)
+      items = items.filter((o) => o.supplierId === filters.supplierId);
+    if (filters?.q)
+      items = items.filter((o) =>
+        matchQ(filters.q, o.poNumber, o.supplierName),
+      );
+    return paginate(
+      [...items].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getOrder(purchaseOrderId: string) {
-    return this.orders.find((o) => o.purchaseOrderId === purchaseOrderId) ?? null;
+    return (
+      this.orders.find((o) => o.purchaseOrderId === purchaseOrderId) ?? null
+    );
   }
 
   createPO(input: CreatePOInput) {
@@ -143,22 +193,35 @@ class ProcurementRepository {
       updatedAt: new Date().toISOString(),
     };
     this.orders.unshift(order);
-    this.approvals.unshift(buildApprovalWorkflow('purchase_order', id, order.total));
+    this.approvals.unshift(
+      buildApprovalWorkflow('purchase_order', id, order.total),
+    );
     return order;
   }
 
   approvePO(purchaseOrderId: string, approverId: string, approverName: string) {
-    const idx = this.orders.findIndex((o) => o.purchaseOrderId === purchaseOrderId);
+    const idx = this.orders.findIndex(
+      (o) => o.purchaseOrderId === purchaseOrderId,
+    );
     if (idx < 0) return null;
     this.orders[idx]!.status = 'approved';
     this.orders[idx]!.updatedAt = new Date().toISOString();
-    const wfIdx = this.approvals.findIndex((a) => a.entityId === purchaseOrderId);
-    if (wfIdx >= 0) this.approvals[wfIdx] = approveStep(this.approvals[wfIdx]!, approverId, approverName);
+    const wfIdx = this.approvals.findIndex(
+      (a) => a.entityId === purchaseOrderId,
+    );
+    if (wfIdx >= 0)
+      this.approvals[wfIdx] = approveStep(
+        this.approvals[wfIdx]!,
+        approverId,
+        approverName,
+      );
     return this.orders[idx]!;
   }
 
   receiveGoods(input: ReceiveGoodsInput) {
-    const idx = this.orders.findIndex((o) => o.purchaseOrderId === input.purchaseOrderId);
+    const idx = this.orders.findIndex(
+      (o) => o.purchaseOrderId === input.purchaseOrderId,
+    );
     if (idx < 0) return null;
     const po = this.orders[idx]!;
     for (const rl of input.lineItems) {
@@ -176,7 +239,7 @@ class ProcurementRepository {
       poNumber: po.poNumber,
       supplierId: po.supplierId,
       warehouseId: input.warehouseId,
-      status: allReceived ? 'complete' as const : 'partial' as const,
+      status: allReceived ? ('complete' as const) : ('partial' as const),
       lineItems: po.items.map((l) => ({
         lineId: l.lineId,
         description: l.description,
@@ -192,14 +255,18 @@ class ProcurementRepository {
   }
 
   cancelOrder(purchaseOrderId: string) {
-    const idx = this.orders.findIndex((o) => o.purchaseOrderId === purchaseOrderId);
+    const idx = this.orders.findIndex(
+      (o) => o.purchaseOrderId === purchaseOrderId,
+    );
     if (idx < 0) return null;
     this.orders[idx]!.status = 'cancelled';
     return this.orders[idx]!;
   }
 
   closeOrder(purchaseOrderId: string) {
-    const idx = this.orders.findIndex((o) => o.purchaseOrderId === purchaseOrderId);
+    const idx = this.orders.findIndex(
+      (o) => o.purchaseOrderId === purchaseOrderId,
+    );
     if (idx < 0) return null;
     this.orders[idx]!.status = 'closed';
     return this.orders[idx]!;
@@ -207,10 +274,17 @@ class ProcurementRepository {
 
   searchRFQs(filters?: ProcurementFilters) {
     let items = this.rfqs;
-    if (filters?.department) items = items.filter((r) => r.department === filters.department);
-    if (filters?.status) items = items.filter((r) => r.status === filters.status);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.rfqNumber, r.title));
-    return paginate([...items].sort((a, b) => b.createdAt.localeCompare(a.createdAt)), filters?.page, filters?.pageSize);
+    if (filters?.department)
+      items = items.filter((r) => r.department === filters.department);
+    if (filters?.status)
+      items = items.filter((r) => r.status === filters.status);
+    if (filters?.q)
+      items = items.filter((r) => matchQ(filters.q, r.rfqNumber, r.title));
+    return paginate(
+      [...items].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   createRFQ(input: CreateRFQInput) {
@@ -229,7 +303,10 @@ class ProcurementRepository {
 
   searchSuppliers(filters?: ProcurementFilters) {
     let items = this.suppliers.filter((s) => s.status === 'active');
-    if (filters?.q) items = items.filter((s) => matchQ(filters.q, s.name, s.code, s.contactEmail));
+    if (filters?.q)
+      items = items.filter((s) =>
+        matchQ(filters.q, s.name, s.code, s.contactEmail),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -239,16 +316,21 @@ class ProcurementRepository {
 
   searchContracts(filters?: ProcurementFilters) {
     let items = this.contracts;
-    if (filters?.department) items = items.filter((c) => c.department === filters.department);
-    if (filters?.status) items = items.filter((c) => c.status === filters.status);
-    if (filters?.supplierId) items = items.filter((c) => c.supplierId === filters.supplierId);
+    if (filters?.department)
+      items = items.filter((c) => c.department === filters.department);
+    if (filters?.status)
+      items = items.filter((c) => c.status === filters.status);
+    if (filters?.supplierId)
+      items = items.filter((c) => c.supplierId === filters.supplierId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getBudgets(filters?: ProcurementFilters) {
     let items = this.budgets;
-    if (filters?.department) items = items.filter((b) => b.department === filters.department);
-    if (filters?.costCenterId) items = items.filter((b) => b.costCenterId === filters.costCenterId);
+    if (filters?.department)
+      items = items.filter((b) => b.department === filters.department);
+    if (filters?.costCenterId)
+      items = items.filter((b) => b.costCenterId === filters.costCenterId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -258,13 +340,17 @@ class ProcurementRepository {
 
   searchInvoices(filters?: ProcurementFilters) {
     let items = this.invoices;
-    if (filters?.supplierId) items = items.filter((i) => i.supplierId === filters.supplierId);
-    if (filters?.status) items = items.filter((i) => i.status === filters.status);
+    if (filters?.supplierId)
+      items = items.filter((i) => i.supplierId === filters.supplierId);
+    if (filters?.status)
+      items = items.filter((i) => i.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   createInvoice(input: CreateInvoiceInput) {
-    const po = this.orders.find((o) => o.purchaseOrderId === input.purchaseOrderId);
+    const po = this.orders.find(
+      (o) => o.purchaseOrderId === input.purchaseOrderId,
+    );
     if (!po) return null;
     const inv = {
       invoiceId: `pinv-${String(++this.nextId)}`,
@@ -304,7 +390,8 @@ class ProcurementRepository {
 
   searchDeliveries(filters?: ProcurementFilters) {
     let items = this.deliveries;
-    if (filters?.status) items = items.filter((d) => d.status === filters.status);
+    if (filters?.status)
+      items = items.filter((d) => d.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -333,11 +420,16 @@ class ProcurementRepository {
   }
 
   forecast(department?: string) {
-    return forecastProcurementDemand(department as Parameters<typeof forecastProcurementDemand>[0]);
+    return forecastProcurementDemand(
+      department as Parameters<typeof forecastProcurementDemand>[0],
+    );
   }
 
   search(query: string, department?: string) {
-    const filters: ProcurementFilters = { q: query, department: department as ProcurementFilters['department'] };
+    const filters: ProcurementFilters = {
+      q: query,
+      department: department as ProcurementFilters['department'],
+    };
     return {
       requests: this.searchRequests({ ...filters, pageSize: 5 }).items,
       orders: this.searchOrders({ ...filters, pageSize: 5 }).items,
@@ -347,10 +439,18 @@ class ProcurementRepository {
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx'): ProcurementExport {
-    return { format, generatedAt: new Date().toISOString(), recordCount: this.orders.length };
+    return {
+      format,
+      generatedAt: new Date().toISOString(),
+      recordCount: this.orders.length,
+    };
   }
 
-  favorite(userId: string, entityType: ProcurementFavorite['entityType'], entityId: string) {
+  favorite(
+    userId: string,
+    entityType: ProcurementFavorite['entityType'],
+    entityId: string,
+  ) {
     const fav: ProcurementFavorite = {
       favoriteId: `fav-${Date.now()}`,
       userId,

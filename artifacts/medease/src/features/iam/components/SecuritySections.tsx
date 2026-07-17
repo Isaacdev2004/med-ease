@@ -93,14 +93,18 @@ export function DashboardSection({ filters }: SectionProps) {
   const dashboard = useIamDashboard(filters?.tenantId);
   const risk = useRiskScores(filters);
   const { exportData } = useIamMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading security dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={Shield} title="No security data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading security dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Shield} title="No security data" />;
   return (
     <div className="space-y-6">
       <SecurityDashboard dashboard={dashboard.data} />
       <ZeroTrustDashboard dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(risk.data?.items ?? []).slice(0, 6).map((r) => <RiskScoreCard key={r.userId} risk={r} />)}
+        {(risk.data?.items ?? []).slice(0, 6).map((r) => (
+          <RiskScoreCard key={r.userId} risk={r} />
+        ))}
       </div>
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
@@ -114,11 +118,17 @@ export function MyAccessSection({ filters }: SectionProps) {
   if (users.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      {(users.data?.items ?? []).slice(0, 1).map((u) => <UserCard key={u.userId} user={u} />)}
+      {(users.data?.items ?? []).slice(0, 1).map((u) => (
+        <UserCard key={u.userId} user={u} />
+      ))}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(roles.data?.items ?? []).slice(0, 3).map((r) => <RoleCard key={r.roleId} role={r} />)}
+        {(roles.data?.items ?? []).slice(0, 3).map((r) => (
+          <RoleCard key={r.roleId} role={r} />
+        ))}
       </div>
-      {permissions.data && <PermissionMatrix permissions={permissions.data.items} />}
+      {permissions.data && (
+        <PermissionMatrix permissions={permissions.data.items} />
+      )}
     </div>
   );
 }
@@ -130,10 +140,14 @@ export function MyDevicesSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(mfa.data?.items ?? []).slice(0, 6).map((d) => <MFASetupCard key={d.deviceId} device={d} />)}
+        {(mfa.data?.items ?? []).slice(0, 6).map((d) => (
+          <MFASetupCard key={d.deviceId} device={d} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(devices.data?.items ?? []).slice(0, 6).map((d) => <TrustedDeviceCard key={d.deviceId} device={d} />)}
+        {(devices.data?.items ?? []).slice(0, 6).map((d) => (
+          <TrustedDeviceCard key={d.deviceId} device={d} />
+        ))}
       </div>
     </div>
   );
@@ -157,7 +171,11 @@ export function MySessionsSection({ filters }: SectionProps) {
         <button
           type="button"
           className="text-sm text-primary underline"
-          onClick={() => revokeSession.mutate({ sessionId: sessions.data!.items[0]!.sessionId })}
+          onClick={() =>
+            revokeSession.mutate({
+              sessionId: sessions.data!.items[0]!.sessionId,
+            })
+          }
         >
           Revoke oldest session (demo)
         </button>
@@ -171,7 +189,9 @@ export function UsersSection({ filters }: SectionProps) {
   if (users.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(users.data?.items ?? []).slice(0, 12).map((u) => <UserCard key={u.userId} user={u} />)}
+      {(users.data?.items ?? []).slice(0, 12).map((u) => (
+        <UserCard key={u.userId} user={u} />
+      ))}
     </div>
   );
 }
@@ -181,7 +201,9 @@ export function RolesSection({ filters }: SectionProps) {
   if (roles.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(roles.data?.items ?? []).map((r) => <RoleCard key={r.roleId} role={r} />)}
+      {(roles.data?.items ?? []).map((r) => (
+        <RoleCard key={r.roleId} role={r} />
+      ))}
     </div>
   );
 }
@@ -206,13 +228,17 @@ export function IdentitySection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(users.data?.items ?? []).slice(0, 9).map((u) => <UserCard key={u.userId} user={u} />)}
+        {(users.data?.items ?? []).slice(0, 9).map((u) => (
+          <UserCard key={u.userId} user={u} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(tenants.data?.items ?? []).slice(0, 6).map((t) => (
           <div key={t.tenantId} className="rounded-lg border p-4 text-sm">
             <p className="font-medium">{t.name}</p>
-            <p className="text-xs text-muted-foreground">{t.userCount.toLocaleString()} users</p>
+            <p className="text-xs text-muted-foreground">
+              {t.userCount.toLocaleString()} users
+            </p>
           </div>
         ))}
       </div>
@@ -232,10 +258,15 @@ export function TenantsSection({ filters }: SectionProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {(tenants.data?.items ?? []).map((t) => (
-        <div key={t.tenantId} className="rounded-lg border p-4 text-sm space-y-1">
+        <div
+          key={t.tenantId}
+          className="rounded-lg border p-4 text-sm space-y-1"
+        >
           <p className="font-medium">{t.name}</p>
           <p className="text-xs capitalize">{t.status}</p>
-          <p className="text-xs text-muted-foreground">{t.organizationCount} orgs · {t.userCount.toLocaleString()} users</p>
+          <p className="text-xs text-muted-foreground">
+            {t.organizationCount} orgs · {t.userCount.toLocaleString()} users
+          </p>
         </div>
       ))}
     </div>
@@ -249,7 +280,9 @@ export function SessionsSection({ filters }: SectionProps) {
     <div className="space-y-6">
       <SessionTimeline sessions={sessions.data?.items ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(sessions.data?.items ?? []).slice(0, 9).map((s) => <SessionCard key={s.sessionId} session={s} />)}
+        {(sessions.data?.items ?? []).slice(0, 9).map((s) => (
+          <SessionCard key={s.sessionId} session={s} />
+        ))}
       </div>
     </div>
   );
@@ -260,7 +293,9 @@ export function OauthClientsSection({ filters }: SectionProps) {
   if (clients.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(clients.data?.items ?? []).slice(0, 12).map((c) => <OAuthClientCard key={c.clientId} client={c} />)}
+      {(clients.data?.items ?? []).slice(0, 12).map((c) => (
+        <OAuthClientCard key={c.clientId} client={c} />
+      ))}
     </div>
   );
 }
@@ -270,7 +305,9 @@ export function ApiKeysSection({ filters }: SectionProps) {
   if (keys.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(keys.data?.items ?? []).slice(0, 12).map((k) => <ApiKeyCard key={k.keyId} apiKey={k} />)}
+      {(keys.data?.items ?? []).slice(0, 12).map((k) => (
+        <ApiKeyCard key={k.keyId} apiKey={k} />
+      ))}
     </div>
   );
 }
@@ -281,8 +318,12 @@ export function SsoSection({ filters }: SectionProps) {
   if (saml.isLoading || oidc.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {(saml.data?.items ?? []).map((p) => <SsoProviderCard key={p.providerId} provider={p} />)}
-      {(oidc.data?.items ?? []).map((p) => <SsoProviderCard key={p.providerId} provider={p} />)}
+      {(saml.data?.items ?? []).map((p) => (
+        <SsoProviderCard key={p.providerId} provider={p} />
+      ))}
+      {(oidc.data?.items ?? []).map((p) => (
+        <SsoProviderCard key={p.providerId} provider={p} />
+      ))}
     </div>
   );
 }
@@ -292,7 +333,9 @@ export function SamlSection({ filters }: SectionProps) {
   if (saml.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {(saml.data?.items ?? []).map((p) => <SsoProviderCard key={p.providerId} provider={p} />)}
+      {(saml.data?.items ?? []).map((p) => (
+        <SsoProviderCard key={p.providerId} provider={p} />
+      ))}
     </div>
   );
 }
@@ -302,7 +345,9 @@ export function OpenIdSection({ filters }: SectionProps) {
   if (oidc.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {(oidc.data?.items ?? []).map((p) => <SsoProviderCard key={p.providerId} provider={p} />)}
+      {(oidc.data?.items ?? []).map((p) => (
+        <SsoProviderCard key={p.providerId} provider={p} />
+      ))}
     </div>
   );
 }
@@ -312,7 +357,9 @@ export function MfaSection({ filters }: SectionProps) {
   if (mfa.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(mfa.data?.items ?? []).slice(0, 12).map((d) => <MFASetupCard key={d.deviceId} device={d} />)}
+      {(mfa.data?.items ?? []).slice(0, 12).map((d) => (
+        <MFASetupCard key={d.deviceId} device={d} />
+      ))}
     </div>
   );
 }
@@ -322,7 +369,9 @@ export function DeviceTrustSection({ filters }: SectionProps) {
   if (devices.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(devices.data?.items ?? []).slice(0, 12).map((d) => <TrustedDeviceCard key={d.deviceId} device={d} />)}
+      {(devices.data?.items ?? []).slice(0, 12).map((d) => (
+        <TrustedDeviceCard key={d.deviceId} device={d} />
+      ))}
     </div>
   );
 }
@@ -334,10 +383,14 @@ export function ConsentSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(consents.data?.items ?? []).slice(0, 9).map((c) => <IamConsentCard key={c.consentId} consent={c} />)}
+        {(consents.data?.items ?? []).slice(0, 9).map((c) => (
+          <IamConsentCard key={c.consentId} consent={c} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(proxy.data?.items ?? []).slice(0, 6).map((p) => <ProxyAccessCard key={p.proxyId} proxy={p} />)}
+        {(proxy.data?.items ?? []).slice(0, 6).map((p) => (
+          <ProxyAccessCard key={p.proxyId} proxy={p} />
+        ))}
       </div>
     </div>
   );
@@ -348,7 +401,9 @@ export function DelegationSection({ filters }: SectionProps) {
   if (delegations.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(delegations.data?.items ?? []).map((d) => <DelegationCard key={d.delegationId} delegation={d} />)}
+      {(delegations.data?.items ?? []).map((d) => (
+        <DelegationCard key={d.delegationId} delegation={d} />
+      ))}
     </div>
   );
 }
@@ -363,7 +418,13 @@ export function BreakGlassSection({ filters }: SectionProps) {
       <button
         type="button"
         className="text-sm text-primary underline mr-4"
-        onClick={() => startBreakGlass.mutate({ userId: 'user-00001', reason: 'Emergency clinical access', patientId: 'pat-001' })}
+        onClick={() =>
+          startBreakGlass.mutate({
+            userId: 'user-00001',
+            reason: 'Emergency clinical access',
+            patientId: 'pat-001',
+          })
+        }
       >
         Start break-glass (demo)
       </button>
@@ -371,7 +432,9 @@ export function BreakGlassSection({ filters }: SectionProps) {
         <button
           type="button"
           className="text-sm text-primary underline"
-          onClick={() => endBreakGlass.mutate({ eventId: events.data!.items[0]!.eventId })}
+          onClick={() =>
+            endBreakGlass.mutate({ eventId: events.data!.items[0]!.eventId })
+          }
         >
           End break-glass (demo)
         </button>
@@ -385,7 +448,9 @@ export function SecurityIncidentsSection({ filters }: SectionProps) {
   if (incidents.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(incidents.data?.items ?? []).map((i) => <SecurityIncidentCard key={i.incidentId} incident={i} />)}
+      {(incidents.data?.items ?? []).map((i) => (
+        <SecurityIncidentCard key={i.incidentId} incident={i} />
+      ))}
     </div>
   );
 }
@@ -413,33 +478,65 @@ export function AuditEventsSection({ filters }: SectionProps) {
   return <AuditSection filters={filters} />;
 }
 
-export function SecuritySectionContent({ section, filters }: { section: IamSection; filters?: IamFilters; variant?: 'professional' | 'facility' | 'admin' }) {
+export function SecuritySectionContent({
+  section,
+  filters,
+}: {
+  section: IamSection;
+  filters?: IamFilters;
+  variant?: 'professional' | 'facility' | 'admin';
+}) {
   switch (section) {
-    case 'my-access': return <MyAccessSection filters={filters} />;
-    case 'my-devices': return <MyDevicesSection filters={filters} />;
-    case 'my-sessions': return <MySessionsSection filters={filters} />;
-    case 'users': return <UsersSection filters={filters} />;
-    case 'roles': return <RolesSection filters={filters} />;
-    case 'permissions': return <PermissionsSection filters={filters} />;
-    case 'policies': return <PoliciesSection filters={filters} />;
-    case 'identity': return <IdentitySection filters={filters} />;
-    case 'organizations': return <OrganizationsSection filters={filters} />;
-    case 'tenants': return <TenantsSection filters={filters} />;
-    case 'sessions': return <SessionsSection filters={filters} />;
-    case 'oauth-clients': return <OauthClientsSection filters={filters} />;
-    case 'api-keys': return <ApiKeysSection filters={filters} />;
-    case 'sso': return <SsoSection filters={filters} />;
-    case 'saml': return <SamlSection filters={filters} />;
-    case 'openid': return <OpenIdSection filters={filters} />;
-    case 'mfa': return <MfaSection filters={filters} />;
-    case 'device-trust': return <DeviceTrustSection filters={filters} />;
-    case 'consent': return <ConsentSection filters={filters} />;
-    case 'delegation': return <DelegationSection filters={filters} />;
-    case 'break-glass': return <BreakGlassSection filters={filters} />;
-    case 'security-incidents': return <SecurityIncidentsSection filters={filters} />;
-    case 'security-analytics': return <SecurityAnalyticsSection filters={filters} />;
+    case 'my-access':
+      return <MyAccessSection filters={filters} />;
+    case 'my-devices':
+      return <MyDevicesSection filters={filters} />;
+    case 'my-sessions':
+      return <MySessionsSection filters={filters} />;
+    case 'users':
+      return <UsersSection filters={filters} />;
+    case 'roles':
+      return <RolesSection filters={filters} />;
+    case 'permissions':
+      return <PermissionsSection filters={filters} />;
+    case 'policies':
+      return <PoliciesSection filters={filters} />;
+    case 'identity':
+      return <IdentitySection filters={filters} />;
+    case 'organizations':
+      return <OrganizationsSection filters={filters} />;
+    case 'tenants':
+      return <TenantsSection filters={filters} />;
+    case 'sessions':
+      return <SessionsSection filters={filters} />;
+    case 'oauth-clients':
+      return <OauthClientsSection filters={filters} />;
+    case 'api-keys':
+      return <ApiKeysSection filters={filters} />;
+    case 'sso':
+      return <SsoSection filters={filters} />;
+    case 'saml':
+      return <SamlSection filters={filters} />;
+    case 'openid':
+      return <OpenIdSection filters={filters} />;
+    case 'mfa':
+      return <MfaSection filters={filters} />;
+    case 'device-trust':
+      return <DeviceTrustSection filters={filters} />;
+    case 'consent':
+      return <ConsentSection filters={filters} />;
+    case 'delegation':
+      return <DelegationSection filters={filters} />;
+    case 'break-glass':
+      return <BreakGlassSection filters={filters} />;
+    case 'security-incidents':
+      return <SecurityIncidentsSection filters={filters} />;
+    case 'security-analytics':
+      return <SecurityAnalyticsSection filters={filters} />;
     case 'audit':
-    case 'audit-events': return <AuditSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'audit-events':
+      return <AuditSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

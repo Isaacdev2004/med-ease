@@ -14,7 +14,9 @@ export class PlatformController {
   constructor(private readonly configService: MedeaseConfigService) {}
 
   @Get('info')
-  @ApiOperation({ summary: 'Runtime platform metadata for deployments and debugging' })
+  @ApiOperation({
+    summary: 'Runtime platform metadata for deployments and debugging',
+  })
   @ApiOkResponse({ description: 'Application build and schema metadata' })
   info() {
     const observability = this.configService.observability;

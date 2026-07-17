@@ -1,7 +1,10 @@
 export { apiPlatformService } from '@/services/api-platform/api-platform.service';
 export { apiPlatformRepository } from '@/services/api-platform/repository';
 export { apiPlatformOfflineQueue } from '@/services/api-platform/offline-sync';
-export { computeApiPlatformAnalytics, buildApiDashboard } from '@/services/api-platform/analytics';
+export {
+  computeApiPlatformAnalytics,
+  buildApiDashboard,
+} from '@/services/api-platform/analytics';
 export {
   MOCK_API_KEYS,
   MOCK_OAUTH_APPS,

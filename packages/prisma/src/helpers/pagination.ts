@@ -17,7 +17,10 @@ const MAX_PAGE_SIZE = 100;
 
 export function normalizePagination(params: PaginationParams = {}) {
   const page = Math.max(DEFAULT_PAGE, params.page ?? DEFAULT_PAGE);
-  const pageSize = Math.min(MAX_PAGE_SIZE, Math.max(1, params.pageSize ?? DEFAULT_PAGE_SIZE));
+  const pageSize = Math.min(
+    MAX_PAGE_SIZE,
+    Math.max(1, params.pageSize ?? DEFAULT_PAGE_SIZE),
+  );
   const skip = (page - 1) * pageSize;
   return { page, pageSize, skip, take: pageSize };
 }

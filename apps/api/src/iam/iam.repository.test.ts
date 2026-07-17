@@ -49,7 +49,9 @@ describe('iam.helpers', () => {
 
 describe('iam.mapper permissions', () => {
   it('paginates ALL_PERMISSIONS consistently with mapper', () => {
-    const mapped = ALL_PERMISSIONS.map((name, index) => mapPermission(name, index));
+    const mapped = ALL_PERMISSIONS.map((name, index) =>
+      mapPermission(name, index),
+    );
     assert.equal(mapped.length, ALL_PERMISSIONS.length);
     assert.equal(mapped[0]?.name, ALL_PERMISSIONS[0]);
     assert.equal(mapped[0]?.module, permissionModule(ALL_PERMISSIONS[0]!));
@@ -97,7 +99,11 @@ describe('iam.mapper entities', () => {
 
     assert.equal(user.userId, '11111111-1111-1111-1111-111111111111');
     assert.equal(user.displayName, 'Test User');
-    assert.deepEqual(user.roles, ['physician', '44444444-4444-4444-4444-444444444444', 'Custom Role']);
+    assert.deepEqual(user.roles, [
+      'physician',
+      '44444444-4444-4444-4444-444444444444',
+      'Custom Role',
+    ]);
     assert.equal(user.mfaEnabled, true);
   });
 

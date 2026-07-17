@@ -2,7 +2,12 @@ import { toFhirCondition } from '@/services/public-health/surveillance';
 import { toFhirImmunization } from '@/services/public-health/immunization';
 import { toFhirRelatedPerson } from '@/services/public-health/contact-tracing';
 import { toFhirQuestionnaireResponse } from '@/services/public-health/sdoh';
-import type { ContactTracingRecord, DiseaseCase, ImmunizationRecord, SdohAssessment } from '@/services/public-health/types';
+import type {
+  ContactTracingRecord,
+  DiseaseCase,
+  ImmunizationRecord,
+  SdohAssessment,
+} from '@/services/public-health/types';
 
 export function mapCaseToFhir(caseRecord: DiseaseCase) {
   return toFhirCondition(caseRecord);
@@ -20,7 +25,10 @@ export function mapSdohToFhir(assessment: SdohAssessment) {
   return toFhirQuestionnaireResponse(assessment);
 }
 
-export function mapOutbreakToFhirGroup(outbreakId: string, memberIds: string[]) {
+export function mapOutbreakToFhirGroup(
+  outbreakId: string,
+  memberIds: string[],
+) {
   return {
     resourceType: 'Group',
     id: outbreakId,

@@ -43,10 +43,27 @@ export default function ProfilePage() {
             <CardTitle className="text-base">Personal information</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
-            <PortalFormField id="profile-name" label="Full name" defaultValue={profile.name} />
-            <PortalFormField id="profile-email" label="Email" defaultValue={profile.email} type="email" />
-            <PortalFormField id="profile-phone" label="Phone" defaultValue={profile.phone} />
-            <PortalFormField id="profile-license" label="License" defaultValue={profile.license} />
+            <PortalFormField
+              id="profile-name"
+              label="Full name"
+              defaultValue={profile.name}
+            />
+            <PortalFormField
+              id="profile-email"
+              label="Email"
+              defaultValue={profile.email}
+              type="email"
+            />
+            <PortalFormField
+              id="profile-phone"
+              label="Phone"
+              defaultValue={profile.phone}
+            />
+            <PortalFormField
+              id="profile-license"
+              label="License"
+              defaultValue={profile.license}
+            />
           </CardContent>
         </Card>
 
@@ -75,8 +92,14 @@ export default function ProfilePage() {
         </PortalInfoCard>
       </div>
 
-      <SectionHeader title="Recent activity" description="Account changes and verifications." />
-      <PortalInfoCard title="Verification status" actionLabel="Request verification">
+      <SectionHeader
+        title="Recent activity"
+        description="Account changes and verifications."
+      />
+      <PortalInfoCard
+        title="Verification status"
+        actionLabel="Request verification"
+      >
         <PortalField label="Identity" value="Verified" />
         <PortalField label="License" value="Verified — expires Dec 2027" />
         <PortalField label="Two-factor auth" value="Enabled" />

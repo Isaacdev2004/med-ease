@@ -2,7 +2,10 @@ import { computeQualityAnalytics } from '@/services/quality/analytics';
 import { gapAnalysis, frameworkScore } from '@/services/quality/accreditation';
 import { openFindingsCount } from '@/services/quality/audit-engine';
 import { canCloseCapa, nextCapaStatus } from '@/services/quality/capa-engine';
-import { canEscalateIncident, prioritizeIncident } from '@/services/quality/incident-engine';
+import {
+  canEscalateIncident,
+  prioritizeIncident,
+} from '@/services/quality/incident-engine';
 import { outbreakClusters } from '@/services/quality/infection-control';
 import { assessRisk } from '@/services/quality/risk-engine';
 import {
@@ -31,7 +34,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -52,12 +60,20 @@ class QualityRepository {
 
   getIncidents(filters?: QualityFilters) {
     let items = this.incidents;
-    if (filters?.facilityId) items = items.filter((i) => i.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((i) => i.status === filters.status);
-    if (filters?.severity) items = items.filter((i) => i.severity === filters.severity);
+    if (filters?.facilityId)
+      items = items.filter((i) => i.facilityId === filters.facilityId);
+    if (filters?.status)
+      items = items.filter((i) => i.status === filters.status);
+    if (filters?.severity)
+      items = items.filter((i) => i.severity === filters.severity);
     if (filters?.type) items = items.filter((i) => i.type === filters.type);
-    if (filters?.q) items = items.filter((i) => matchQ(filters.q, i.title, i.description));
-    return paginate([...items].sort((a, b) => prioritizeIncident(b) - prioritizeIncident(a)), filters?.page, filters?.pageSize);
+    if (filters?.q)
+      items = items.filter((i) => matchQ(filters.q, i.title, i.description));
+    return paginate(
+      [...items].sort((a, b) => prioritizeIncident(b) - prioritizeIncident(a)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getIncident(incidentId: string) {
@@ -66,10 +82,14 @@ class QualityRepository {
 
   getRisks(filters?: QualityFilters) {
     let items = this.risks;
-    if (filters?.facilityId) items = items.filter((r) => r.facilityId === filters.facilityId);
-    if (filters?.category) items = items.filter((r) => r.category === filters.category);
-    if (filters?.status) items = items.filter((r) => r.status === filters.status);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.title, r.description));
+    if (filters?.facilityId)
+      items = items.filter((r) => r.facilityId === filters.facilityId);
+    if (filters?.category)
+      items = items.filter((r) => r.category === filters.category);
+    if (filters?.status)
+      items = items.filter((r) => r.status === filters.status);
+    if (filters?.q)
+      items = items.filter((r) => matchQ(filters.q, r.title, r.description));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -79,17 +99,22 @@ class QualityRepository {
 
   getCapa(filters?: QualityFilters) {
     let items = this.capa;
-    if (filters?.facilityId) items = items.filter((c) => c.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((c) => c.status === filters.status);
+    if (filters?.facilityId)
+      items = items.filter((c) => c.facilityId === filters.facilityId);
+    if (filters?.status)
+      items = items.filter((c) => c.status === filters.status);
     if (filters?.type) items = items.filter((c) => c.type === filters.type);
-    if (filters?.q) items = items.filter((c) => matchQ(filters.q, c.title, c.actionPlan));
+    if (filters?.q)
+      items = items.filter((c) => matchQ(filters.q, c.title, c.actionPlan));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getAudits(filters?: QualityFilters) {
     let items = this.audits;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((a) => a.status === filters.status);
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.status)
+      items = items.filter((a) => a.status === filters.status);
     if (filters?.type) items = items.filter((a) => a.type === filters.type);
     if (filters?.q) items = items.filter((a) => matchQ(filters.q, a.title));
     return paginate(items, filters?.page, filters?.pageSize);
@@ -102,10 +127,15 @@ class QualityRepository {
 
   getPolicies(filters?: QualityFilters) {
     let items = this.policies;
-    if (filters?.facilityId) items = items.filter((p) => !p.facilityId || p.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((p) => p.status === filters.status);
+    if (filters?.facilityId)
+      items = items.filter(
+        (p) => !p.facilityId || p.facilityId === filters.facilityId,
+      );
+    if (filters?.status)
+      items = items.filter((p) => p.status === filters.status);
     if (filters?.type) items = items.filter((p) => p.type === filters.type);
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.title, p.contentSummary));
+    if (filters?.q)
+      items = items.filter((p) => matchQ(filters.q, p.title, p.contentSummary));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -121,20 +151,26 @@ class QualityRepository {
 
   getCompliance(filters?: QualityFilters) {
     let items = MOCK_COMPLIANCE;
-    if (filters?.facilityId) items = items.filter((c) => c.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((c) => c.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getInfectionControl(filters?: QualityFilters) {
     let items = MOCK_INFECTIONS;
-    if (filters?.facilityId) items = items.filter((i) => i.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((i) => i.facilityId === filters.facilityId);
     if (filters?.type) items = items.filter((i) => i.type === filters.type);
-    return { records: paginate(items, filters?.page, filters?.pageSize), outbreaks: outbreakClusters(items) };
+    return {
+      records: paginate(items, filters?.page, filters?.pageSize),
+      outbreaks: outbreakClusters(items),
+    };
   }
 
   getQualityIndicators(filters?: QualityFilters) {
     let items = MOCK_QUALITY_INDICATORS;
-    if (filters?.facilityId) items = items.filter((i) => i.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((i) => i.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -186,13 +222,23 @@ class QualityRepository {
       departmentId: input.departmentId,
       ownerId: input.ownerId,
       mitigationPlan: input.mitigationPlan,
-      reviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]!,
+      reviewDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split('T')[0]!,
     };
     this.risks.unshift(risk);
     return risk;
   }
 
-  updateRisk(riskId: string, updates: Partial<{ status: string; mitigationPlan: string; likelihood: number; impact: number }>) {
+  updateRisk(
+    riskId: string,
+    updates: Partial<{
+      status: string;
+      mitigationPlan: string;
+      likelihood: number;
+      impact: number;
+    }>,
+  ) {
     const idx = this.risks.findIndex((r) => r.riskId === riskId);
     if (idx < 0) return null;
     const risk = { ...this.risks[idx]! };
@@ -260,7 +306,9 @@ class QualityRepository {
   }
 
   uploadEvidence(auditId: string, findingId: string) {
-    const idx = this.findings.findIndex((f) => f.findingId === findingId && f.auditId === auditId);
+    const idx = this.findings.findIndex(
+      (f) => f.findingId === findingId && f.auditId === auditId,
+    );
     if (idx < 0) return null;
     this.findings[idx]!.evidenceAttached = true;
     return this.findings[idx];
@@ -311,31 +359,71 @@ class QualityRepository {
   }
 
   accreditationFrameworkScores() {
-    return ['jci', 'nabh', 'iso_9001', 'iso_15189', 'iso_27001', 'cap', 'moh'].map((f) => ({
+    return [
+      'jci',
+      'nabh',
+      'iso_9001',
+      'iso_15189',
+      'iso_27001',
+      'cap',
+      'moh',
+    ].map((f) => ({
       framework: f,
-      score: frameworkScore(MOCK_ACCREDITATION, f as typeof MOCK_ACCREDITATION[0]['framework']),
+      score: frameworkScore(
+        MOCK_ACCREDITATION,
+        f as (typeof MOCK_ACCREDITATION)[0]['framework'],
+      ),
     }));
   }
 
   search(query: string, facilityId?: string) {
     const q = query.toLowerCase();
-    const filter = <T extends { facilityId?: string }>(items: T[], ...fields: (string | undefined)[]) =>
-      items.filter((item) => (!facilityId || item.facilityId === facilityId) && fields.some((f) => f?.toLowerCase().includes(q))).slice(0, 12);
+    const filter = <T extends { facilityId?: string }>(
+      items: T[],
+      ...fields: (string | undefined)[]
+    ) =>
+      items
+        .filter(
+          (item) =>
+            (!facilityId || item.facilityId === facilityId) &&
+            fields.some((f) => f?.toLowerCase().includes(q)),
+        )
+        .slice(0, 12);
 
     return {
-      incidents: filter(this.incidents, ...this.incidents.slice(0, 100).map((i) => i.title)),
-      risks: filter(this.risks, ...this.risks.slice(0, 100).map((r) => r.title)),
+      incidents: filter(
+        this.incidents,
+        ...this.incidents.slice(0, 100).map((i) => i.title),
+      ),
+      risks: filter(
+        this.risks,
+        ...this.risks.slice(0, 100).map((r) => r.title),
+      ),
       capa: filter(this.capa, ...this.capa.slice(0, 100).map((c) => c.title)),
-      policies: filter(this.policies, ...this.policies.slice(0, 100).map((p) => p.title)),
-      audits: filter(this.audits, ...this.audits.slice(0, 100).map((a) => a.title)),
+      policies: filter(
+        this.policies,
+        ...this.policies.slice(0, 100).map((p) => p.title),
+      ),
+      audits: filter(
+        this.audits,
+        ...this.audits.slice(0, 100).map((a) => a.title),
+      ),
     };
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.incidents.length + this.risks.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.incidents.length + this.risks.length,
+    };
   }
 
-  favorite(userId: string, entityType: QualityFavorite['entityType'], entityId: string) {
+  favorite(
+    userId: string,
+    entityType: QualityFavorite['entityType'],
+    entityId: string,
+  ) {
     const fav: QualityFavorite = {
       favoriteId: `fav-${String(++this.nextId)}`,
       userId,

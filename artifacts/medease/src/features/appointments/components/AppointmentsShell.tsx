@@ -3,7 +3,10 @@ import { useLocation } from 'wouter';
 
 import { AppointmentFiltersBar } from '@/features/appointments/components/ScheduleComponents';
 import { AppointmentSectionContent } from '@/features/appointments/components/AppointmentSections';
-import { AppointmentTabs, getAppointmentSectionFromPath } from '@/features/appointments/components/AppointmentTabs';
+import {
+  AppointmentTabs,
+  getAppointmentSectionFromPath,
+} from '@/features/appointments/components/AppointmentTabs';
 import { useAppointmentPermissions } from '@/features/appointments/hooks/use-appointment-permissions';
 import { usePatientAppointmentFilters } from '@/features/appointments/hooks/use-appointments';
 import type { AppointmentFilters } from '@/services/appointments/types';
@@ -39,7 +42,10 @@ export function AppointmentsShell({
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view appointments." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view appointments."
+        />
       </PageShell>
     );
   }
@@ -68,7 +74,9 @@ export function AppointmentsShell({
           <AppointmentFiltersBar
             filters={scopedFilters}
             onChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))}
-            onSearch={(q) => setFilters((prev) => ({ ...prev, q: q || undefined }))}
+            onSearch={(q) =>
+              setFilters((prev) => ({ ...prev, q: q || undefined }))
+            }
           />
         ) : undefined
       }

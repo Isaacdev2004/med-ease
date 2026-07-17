@@ -3,15 +3,25 @@ import { useLocation } from 'wouter';
 import { CommandCenterShell } from '@/features/executive/components/CommandCenterShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'executive' | 'enterprise-dashboard' | 'enterprise-kpis' | 'benchmarking' | 'strategic-initiatives' | 'executive-analytics' | 'executive-forecasting' | 'enterprise-alerts';
+type Segment =
+  | 'executive'
+  | 'enterprise-dashboard'
+  | 'enterprise-kpis'
+  | 'benchmarking'
+  | 'strategic-initiatives'
+  | 'executive-analytics'
+  | 'executive-forecasting'
+  | 'enterprise-alerts';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/enterprise-dashboard')) return 'enterprise-dashboard';
   if (location.includes('/enterprise-kpis')) return 'enterprise-kpis';
   if (location.includes('/benchmarking')) return 'benchmarking';
-  if (location.includes('/strategic-initiatives')) return 'strategic-initiatives';
+  if (location.includes('/strategic-initiatives'))
+    return 'strategic-initiatives';
   if (location.includes('/executive-analytics')) return 'executive-analytics';
-  if (location.includes('/executive-forecasting')) return 'executive-forecasting';
+  if (location.includes('/executive-forecasting'))
+    return 'executive-forecasting';
   if (location.includes('/enterprise-alerts')) return 'enterprise-alerts';
   return 'executive';
 }
@@ -30,5 +40,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminExecutivePage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <CommandCenterShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <CommandCenterShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

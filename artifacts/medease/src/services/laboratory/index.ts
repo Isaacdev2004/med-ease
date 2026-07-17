@@ -1,10 +1,24 @@
 export { laboratoryService } from '@/services/laboratory/laboratory.service';
 export { laboratoryOfflineQueue } from '@/services/laboratory/offline-sync';
-export { LAB_TEST_CATALOG, computeResultFlag, getReferenceRange } from '@/services/laboratory/reference-ranges';
-export { categorizeOrders, sortOrdersByDate } from '@/services/laboratory/orders';
-export { getCriticalObservations, flagSeverity } from '@/services/laboratory/results';
+export {
+  LAB_TEST_CATALOG,
+  computeResultFlag,
+  getReferenceRange,
+} from '@/services/laboratory/reference-ranges';
+export {
+  categorizeOrders,
+  sortOrdersByDate,
+} from '@/services/laboratory/orders';
+export {
+  getCriticalObservations,
+  flagSeverity,
+} from '@/services/laboratory/results';
 export { alertSeverityColor } from '@/services/laboratory/alerts';
-export { toFhirServiceRequest, toFhirDiagnosticReport, toFhirObservation } from '@/services/laboratory/mapper';
+export {
+  toFhirServiceRequest,
+  toFhirDiagnosticReport,
+  toFhirObservation,
+} from '@/services/laboratory/mapper';
 export { laboratoryRepository } from '@/services/laboratory/repository';
 export {
   MOCK_LAB_ORDERS,

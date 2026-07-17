@@ -1,14 +1,23 @@
-import type { InsuranceClaim, SubmitClaimInput } from '@/services/billing/types';
+import type {
+  InsuranceClaim,
+  SubmitClaimInput,
+} from '@/services/billing/types';
 
 export function validateClaim(input: SubmitClaimInput): string[] {
   const errors: string[] = [];
-  if (!input.diagnosisCodes.length) errors.push('At least one diagnosis code required');
-  if (!input.procedureCodes.length) errors.push('At least one procedure code required');
+  if (!input.diagnosisCodes.length)
+    errors.push('At least one diagnosis code required');
+  if (!input.procedureCodes.length)
+    errors.push('At least one procedure code required');
   if (input.totalClaim <= 0) errors.push('Claim amount must be positive');
   return errors;
 }
 
-export function submitClaim(input: SubmitClaimInput, claimId: string, patientName: string): InsuranceClaim {
+export function submitClaim(
+  input: SubmitClaimInput,
+  claimId: string,
+  patientName: string,
+): InsuranceClaim {
   const now = new Date().toISOString();
   return {
     claimId,
@@ -38,10 +47,14 @@ export function submitClaim(input: SubmitClaimInput, claimId: string, patientNam
   };
 }
 
-export function approveClaim(claim: InsuranceClaim, approvedAmount: number): InsuranceClaim {
+export function approveClaim(
+  claim: InsuranceClaim,
+  approvedAmount: number,
+): InsuranceClaim {
   return {
     ...claim,
-    status: approvedAmount >= claim.totalClaim ? 'approved' : 'partially_approved',
+    status:
+      approvedAmount >= claim.totalClaim ? 'approved' : 'partially_approved',
     approvedAmount,
     deniedAmount: claim.totalClaim - approvedAmount,
     adjudicationDate: new Date().toISOString(),
@@ -49,7 +62,10 @@ export function approveClaim(claim: InsuranceClaim, approvedAmount: number): Ins
   };
 }
 
-export function denyClaim(claim: InsuranceClaim, reason: string): InsuranceClaim {
+export function denyClaim(
+  claim: InsuranceClaim,
+  reason: string,
+): InsuranceClaim {
   return {
     ...claim,
     status: 'denied',
@@ -71,9 +87,20 @@ export function resubmitClaim(claim: InsuranceClaim): InsuranceClaim {
 }
 
 export function verifyEligibility(policyNumber: string) {
-  return { eligible: true, policyNumber, verifiedAt: new Date().toISOString(), copay: 25, deductibleRemaining: 500 };
+  return {
+    eligible: true,
+    policyNumber,
+    verifiedAt: new Date().toISOString(),
+    copay: 25,
+    deductibleRemaining: 500,
+  };
 }
 
 export function checkPreauthorization(procedureCode: string) {
-  return { required: procedureCode.startsWith('CPT-8'), authorizationNumber: procedureCode.startsWith('CPT-8') ? `AUTH-${Date.now()}` : undefined };
+  return {
+    required: procedureCode.startsWith('CPT-8'),
+    authorizationNumber: procedureCode.startsWith('CPT-8')
+      ? `AUTH-${Date.now()}`
+      : undefined,
+  };
 }

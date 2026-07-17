@@ -15,7 +15,9 @@ export const documentQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   documents: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.list(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.list(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getDocuments(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -26,17 +28,23 @@ export const documentQueries = {
     enabled: Boolean(documentId),
   }),
   folders: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.folders(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.folders(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getFolders(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   categories: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.categories(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.categories(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getCategories(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   templates: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.templates(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.templates(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getTemplates(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -53,53 +61,74 @@ export const documentQueries = {
     enabled: Boolean(documentId),
   }),
   search: (query: string, filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.search(query, filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.search(
+      query,
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.search(query, filters),
     staleTime: CACHE_TIMES.patientList,
     enabled: query.length >= 2,
   }),
   ocr: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.ocr(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.ocr(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getOcrResults(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   signatureRequests: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.signatureRequests(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.signatureRequests(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getSignatureRequests(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   signatures: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.signatures(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.signatures(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getSignatures(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   sharedLinks: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.sharedLinks(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.sharedLinks(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getSharedLinks(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   retention: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.retention(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.retention(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getRetentionPolicies(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   legalHolds: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.legalHolds(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.legalHolds(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getLegalHolds(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   archives: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.archives(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.archives(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getArchives(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   records: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.records(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.records(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getRecords(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   accessLogs: (filters?: DocumentFilters) => ({
-    queryKey: queryKeys.documents.accessLogs(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.documents.accessLogs(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => documentService.getAccessLogs(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

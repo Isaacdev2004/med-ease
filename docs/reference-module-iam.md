@@ -4,35 +4,35 @@ IAM is the **canonical reference implementation** for every backend domain modul
 
 ## Checklist
 
-| Layer | Location | Status |
-|-------|----------|--------|
-| Prisma models | `database/prisma/iam.prisma` | ✅ |
-| Migration | `database/prisma/migrations/*_e2_06_iam` | ✅ |
-| Repository contract | `packages/iam-contract/src/iam-repository.contract.ts` | ✅ |
-| Backend repository | `apps/api/src/iam/iam.repository.ts` | ✅ |
-| Service | `apps/api/src/iam/iam.service.ts` | ✅ |
-| Controller + OpenAPI | `apps/api/src/iam/iam.controller.ts` | ✅ |
-| Domain events | `packages/events/src/events/user.events.ts` | ✅ |
-| Audit handler | `packages/events/src/handlers/audit.handler.ts` | ✅ |
-| Frontend mock repository | `artifacts/medease/src/services/iam/repository.mock.ts` | ✅ |
-| Frontend HTTP adapter | `artifacts/medease/src/services/iam/repository.ts` | ✅ |
-| DTO mappers | `artifacts/medease/src/services/iam/dto-mappers.ts` | ✅ |
-| Contract tests | `artifacts/medease/src/services/iam/__contract__/` | ✅ |
-| RLS | tenant-scoped queries via `TenantAwareRepository` | ✅ |
-| Permissions | `@RequirePermission` on controller routes | ✅ |
+| Layer                    | Location                                                | Status |
+| ------------------------ | ------------------------------------------------------- | ------ |
+| Prisma models            | `database/prisma/iam.prisma`                            | ✅     |
+| Migration                | `database/prisma/migrations/*_e2_06_iam`                | ✅     |
+| Repository contract      | `packages/iam-contract/src/iam-repository.contract.ts`  | ✅     |
+| Backend repository       | `apps/api/src/iam/iam.repository.ts`                    | ✅     |
+| Service                  | `apps/api/src/iam/iam.service.ts`                       | ✅     |
+| Controller + OpenAPI     | `apps/api/src/iam/iam.controller.ts`                    | ✅     |
+| Domain events            | `packages/events/src/events/user.events.ts`             | ✅     |
+| Audit handler            | `packages/events/src/handlers/audit.handler.ts`         | ✅     |
+| Frontend mock repository | `artifacts/medease/src/services/iam/repository.mock.ts` | ✅     |
+| Frontend HTTP adapter    | `artifacts/medease/src/services/iam/repository.ts`      | ✅     |
+| DTO mappers              | `artifacts/medease/src/services/iam/dto-mappers.ts`     | ✅     |
+| Contract tests           | `artifacts/medease/src/services/iam/__contract__/`      | ✅     |
+| RLS                      | tenant-scoped queries via `TenantAwareRepository`       | ✅     |
+| Permissions              | `@RequirePermission` on controller routes               | ✅     |
 
 ## Shared repository helpers (`@medease/prisma`)
 
 Extract once, reuse in every module:
 
-| Helper | File |
-|--------|------|
-| Pagination | `helpers/pagination.ts` |
-| Contract pagination | `helpers/contract-pagination.ts` |
-| Search | `helpers/search.ts` |
-| Export | `helpers/export.ts` |
-| Prisma errors | `helpers/repository-errors.ts` |
-| Tenant scope | `repositories/tenant-aware.repository.ts` |
+| Helper              | File                                      |
+| ------------------- | ----------------------------------------- |
+| Pagination          | `helpers/pagination.ts`                   |
+| Contract pagination | `helpers/contract-pagination.ts`          |
+| Search              | `helpers/search.ts`                       |
+| Export              | `helpers/export.ts`                       |
+| Prisma errors       | `helpers/repository-errors.ts`            |
+| Tenant scope        | `repositories/tenant-aware.repository.ts` |
 
 ## Implementation pipeline (repeat for each module)
 

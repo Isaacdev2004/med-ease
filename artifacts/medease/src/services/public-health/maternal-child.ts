@@ -1,4 +1,7 @@
-import type { MaternalRecord, ChildHealthRecord } from '@/services/public-health/types';
+import type {
+  MaternalRecord,
+  ChildHealthRecord,
+} from '@/services/public-health/types';
 
 export function maternalRiskScore(record: MaternalRecord): number {
   const base = { low: 1, moderate: 3, high: 5 }[record.riskLevel];
@@ -6,5 +9,7 @@ export function maternalRiskScore(record: MaternalRecord): number {
 }
 
 export function childNeedsReferral(record: ChildHealthRecord): boolean {
-  return record.wellnessStatus === 'referral_needed' || !record.immunizationUpToDate;
+  return (
+    record.wellnessStatus === 'referral_needed' || !record.immunizationUpToDate
+  );
 }

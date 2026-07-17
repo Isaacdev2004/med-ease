@@ -1,7 +1,10 @@
 export { reportingService } from '@/services/reporting/reporting.service';
 export { reportingRepository } from '@/services/reporting/repository';
 export { reportingOfflineQueue } from '@/services/reporting/offline-sync';
-export { computeReportAnalytics, buildReportDashboard } from '@/services/reporting/analytics';
+export {
+  computeReportAnalytics,
+  buildReportDashboard,
+} from '@/services/reporting/analytics';
 export {
   MOCK_REPORT_DEFINITIONS,
   MOCK_REPORT_INSTANCES,

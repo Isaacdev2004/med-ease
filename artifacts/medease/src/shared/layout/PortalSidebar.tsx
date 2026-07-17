@@ -1,4 +1,10 @@
-import { ChevronLeft, ChevronRight, HelpCircle, LogOut, Settings } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  HelpCircle,
+  LogOut,
+  Settings,
+} from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 
 import type { NavItem } from '@/config/navigation/types';
@@ -60,10 +66,14 @@ export function PortalSidebar({
           onClick={onNavigate}
         >
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <span className="font-serif italic text-lg font-bold leading-none">M</span>
+            <span className="font-serif italic text-lg font-bold leading-none">
+              M
+            </span>
           </div>
           {!collapsed ? (
-            <span className="text-lg text-sidebar-foreground truncate">Med'ease</span>
+            <span className="text-lg text-sidebar-foreground truncate">
+              Med'ease
+            </span>
           ) : null}
         </Link>
       </div>
@@ -79,7 +89,8 @@ export function PortalSidebar({
       <nav className="flex-1 overflow-y-auto px-2 py-2 space-y-1">
         {navigation.map((item) => {
           const isActive =
-            relativeLocation === item.href || relativeLocation.startsWith(`${item.href}/`);
+            relativeLocation === item.href ||
+            relativeLocation.startsWith(`${item.href}/`);
           const Icon = item.icon;
 
           return (
@@ -104,11 +115,15 @@ export function PortalSidebar({
                   isActive ? 'text-primary' : 'text-sidebar-foreground/50',
                 )}
               />
-              {!collapsed ? <span className="truncate">{item.label}</span> : null}
+              {!collapsed ? (
+                <span className="truncate">{item.label}</span>
+              ) : null}
               {item.href.endsWith('/notifications') && unreadCount > 0 ? (
                 <NotificationBadge count={unreadCount} className="ml-auto" />
               ) : item.badge && !collapsed ? (
-                <span className="ml-auto text-xs text-muted-foreground">{item.badge}</span>
+                <span className="ml-auto text-xs text-muted-foreground">
+                  {item.badge}
+                </span>
               ) : null}
             </Link>
           );

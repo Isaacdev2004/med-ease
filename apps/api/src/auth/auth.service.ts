@@ -40,7 +40,11 @@ export class AuthService {
     private readonly permissionService: PermissionService,
   ) {}
 
-  async login(dto: LoginDto, res: Response, meta: RequestMeta): Promise<LoginResultDto> {
+  async login(
+    dto: LoginDto,
+    res: Response,
+    meta: RequestMeta,
+  ): Promise<LoginResultDto> {
     const email = dto.email.trim().toLowerCase();
 
     const user = await this.prisma.runInSystemTransaction(async (tx) =>
@@ -60,7 +64,10 @@ export class AuthService {
       throw AuthHttpException.accountDisabled();
     }
 
-    if (user.status === 'locked' || (user.lockedUntil && user.lockedUntil > new Date())) {
+    if (
+      user.status === 'locked' ||
+      (user.lockedUntil && user.lockedUntil > new Date())
+    ) {
       await this.recordFailedLogin(user.id, email, 'account_locked', meta);
       throw AuthHttpException.accountLocked();
     }
@@ -93,7 +100,11 @@ export class AuthService {
       });
     });
 
-    const result = await this.createSession(user, dto.rememberMe ?? false, meta);
+    const result = await this.createSession(
+      user,
+      dto.rememberMe ?? false,
+      meta,
+    );
     this.setRefreshCookie(res, result.refreshToken, result.refreshMaxAgeMs);
 
     await this.securityEvents.record({
@@ -108,7 +119,11 @@ export class AuthService {
     return result.loginResult;
   }
 
-  async refresh(refreshToken: string | undefined, res: Response, meta: RequestMeta) {
+  async refresh(
+    refreshToken: string | undefined,
+    res: Response,
+    meta: RequestMeta,
+  ) {
     if (!refreshToken) {
       throw AuthHttpException.sessionExpired();
     }
@@ -132,7 +147,11 @@ export class AuthService {
       }),
     );
 
-    if (!session || session.status !== 'active' || session.expiresAt <= new Date()) {
+    if (
+      !session ||
+      session.status !== 'active' ||
+      session.expiresAt <= new Date()
+    ) {
       throw AuthHttpException.sessionExpired();
     }
 
@@ -173,7 +192,10 @@ export class AuthService {
     };
   }
 
-  async logout(refreshToken: string | undefined, meta: RequestMeta): Promise<void> {
+  async logout(
+    refreshToken: string | undefined,
+    meta: RequestMeta,
+  ): Promise<void> {
     if (!refreshToken) {
       return;
     }
@@ -222,13 +244,16 @@ export class AuthService {
     };
   }
 
-  buildPayload(user: {
-    id: string;
-    email: string;
-    role: IdentityRole;
-    tenantId: string;
-    organizationId: string;
-  }, sessionId: string): JwtAccessPayload {
+  buildPayload(
+    user: {
+      id: string;
+      email: string;
+      role: IdentityRole;
+      tenantId: string;
+      organizationId: string;
+    },
+    sessionId: string,
+  ): JwtAccessPayload {
     return {
       sub: user.id,
       email: user.email,
@@ -375,16 +400,23 @@ export class AuthService {
     };
   }
 
-  private async handleFailedPassword(userId: string, email: string, meta: RequestMeta) {
+  private async handleFailedPassword(
+    userId: string,
+    email: string,
+    meta: RequestMeta,
+  ) {
     const user = await this.prisma.runInSystemTransaction(async (tx) => {
       const updated = await tx.user.update({
         where: { id: userId },
         data: { failedLoginCount: { increment: 1 } },
       });
 
-      const shouldLock = updated.failedLoginCount >= this.config.auth.maxFailedAttempts;
+      const shouldLock =
+        updated.failedLoginCount >= this.config.auth.maxFailedAttempts;
       if (shouldLock) {
-        const lockedUntil = new Date(Date.now() + this.config.auth.lockoutMinutes * 60_000);
+        const lockedUntil = new Date(
+          Date.now() + this.config.auth.lockoutMinutes * 60_000,
+        );
         return tx.user.update({
           where: { id: userId },
           data: { status: 'locked', lockedUntil },
@@ -448,7 +480,9 @@ export class AuthService {
 
   private refreshTtlMs(rememberMe: boolean) {
     return parseDurationToMs(
-      rememberMe ? this.config.auth.refreshRememberExpiry : this.config.auth.refreshExpiry,
+      rememberMe
+        ? this.config.auth.refreshRememberExpiry
+        : this.config.auth.refreshExpiry,
     );
   }
 

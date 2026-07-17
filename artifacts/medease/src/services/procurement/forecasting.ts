@@ -1,7 +1,15 @@
-import { MOCK_PURCHASE_ORDERS, MOCK_PURCHASE_REQUESTS } from '@/services/procurement/mock-data';
-import type { DemandForecast, ProcurementDepartment } from '@/services/procurement/types';
+import {
+  MOCK_PURCHASE_ORDERS,
+  MOCK_PURCHASE_REQUESTS,
+} from '@/services/procurement/mock-data';
+import type {
+  DemandForecast,
+  ProcurementDepartment,
+} from '@/services/procurement/types';
 
-export function forecastProcurementDemand(department?: ProcurementDepartment): DemandForecast[] {
+export function forecastProcurementDemand(
+  department?: ProcurementDepartment,
+): DemandForecast[] {
   const requests = department
     ? MOCK_PURCHASE_REQUESTS.filter((r) => r.department === department)
     : MOCK_PURCHASE_REQUESTS.slice(0, 100);
@@ -18,7 +26,9 @@ export function forecastProcurementDemand(department?: ProcurementDepartment): D
       currentDemand,
       projectedDemand: projected,
       leadTimeDays: leadTime,
-      recommendedOrderDate: new Date(Date.now() + (leadTime - 5) * 86400000).toISOString(),
+      recommendedOrderDate: new Date(
+        Date.now() + (leadTime - 5) * 86400000,
+      ).toISOString(),
       confidence: 0.7 + (idx % 25) / 100,
     };
   });
@@ -39,12 +49,21 @@ export function forecastPurchaseSpend(department?: ProcurementDepartment) {
   return monthly;
 }
 
-export function calculateSafetyStock(avgDailyUsage: number, leadTimeDays: number, serviceLevel = 0.95) {
+export function calculateSafetyStock(
+  avgDailyUsage: number,
+  leadTimeDays: number,
+  serviceLevel = 0.95,
+) {
   const zScore = serviceLevel >= 0.95 ? 1.65 : 1.28;
-  return Math.ceil(avgDailyUsage * leadTimeDays + zScore * Math.sqrt(leadTimeDays) * avgDailyUsage * 0.2);
+  return Math.ceil(
+    avgDailyUsage * leadTimeDays +
+      zScore * Math.sqrt(leadTimeDays) * avgDailyUsage * 0.2,
+  );
 }
 
 export function seasonalAdjustment(baseDemand: number, month: number): number {
-  const seasonal = [0.9, 0.95, 1.0, 1.05, 1.1, 1.08, 0.95, 0.92, 1.0, 1.05, 1.12, 1.15];
+  const seasonal = [
+    0.9, 0.95, 1.0, 1.05, 1.1, 1.08, 0.95, 0.92, 1.0, 1.05, 1.12, 1.15,
+  ];
   return Math.round(baseDemand * (seasonal[month] ?? 1));
 }

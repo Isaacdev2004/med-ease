@@ -4,7 +4,10 @@ export function canSubmitPublication(pub: Publication): boolean {
   return pub.status === 'draft';
 }
 
-export function publicationImpactScore(citations: number, journalTier: number): number {
+export function publicationImpactScore(
+  citations: number,
+  journalTier: number,
+): number {
   return Math.round(citations * journalTier);
 }
 
@@ -19,4 +22,10 @@ export function toFhirCitation(pub: Publication) {
   };
 }
 
-export const PUBLICATION_STATUSES: PublicationStatus[] = ['draft', 'submitted', 'under_review', 'accepted', 'published'];
+export const PUBLICATION_STATUSES: PublicationStatus[] = [
+  'draft',
+  'submitted',
+  'under_review',
+  'accepted',
+  'published',
+];

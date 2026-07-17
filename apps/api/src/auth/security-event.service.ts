@@ -48,23 +48,37 @@ export class SecurityEventService {
 
     switch (input.eventType) {
       case 'login_success':
-        await this.eventBus.publish(UserEvents.userLoggedIn(authPayload, context));
+        await this.eventBus.publish(
+          UserEvents.userLoggedIn(authPayload, context),
+        );
         break;
       case 'login_failure':
-        await this.eventBus.publish(UserEvents.userLoginFailed(authPayload, context));
+        await this.eventBus.publish(
+          UserEvents.userLoginFailed(authPayload, context),
+        );
         break;
       case 'logout':
-        await this.eventBus.publish(UserEvents.userLoggedOut(authPayload, context));
+        await this.eventBus.publish(
+          UserEvents.userLoggedOut(authPayload, context),
+        );
         break;
       case 'token_refresh':
-        await this.eventBus.publish(UserEvents.tokenRefreshed(authPayload, context));
+        await this.eventBus.publish(
+          UserEvents.tokenRefreshed(authPayload, context),
+        );
         break;
       case 'account_locked':
-        await this.eventBus.publish(UserEvents.accountLocked(authPayload, context));
+        await this.eventBus.publish(
+          UserEvents.accountLocked(authPayload, context),
+        );
         break;
       default:
         await this.eventBus.publish(
-          createDomainEvent(`SecurityEvent:${input.eventType}`, authPayload, context),
+          createDomainEvent(
+            `SecurityEvent:${input.eventType}`,
+            authPayload,
+            context,
+          ),
         );
         break;
     }

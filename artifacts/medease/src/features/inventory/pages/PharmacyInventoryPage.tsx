@@ -16,6 +16,19 @@ function titleFor(location: string) {
 
 export default function PharmacyInventoryPage() {
   const [location] = useLocation();
-  const segment = location.includes('/stock') ? 'stock' : location.includes('/expiry') ? 'expiry' : location.includes('/purchase-orders') ? 'purchase-orders' : 'inventory';
-  return <InventoryShell basePath={resolvePath(location, segment)} variant="pharmacy" title={titleFor(location)} department="pharmacy" />;
+  const segment = location.includes('/stock')
+    ? 'stock'
+    : location.includes('/expiry')
+      ? 'expiry'
+      : location.includes('/purchase-orders')
+        ? 'purchase-orders'
+        : 'inventory';
+  return (
+    <InventoryShell
+      basePath={resolvePath(location, segment)}
+      variant="pharmacy"
+      title={titleFor(location)}
+      department="pharmacy"
+    />
+  );
 }

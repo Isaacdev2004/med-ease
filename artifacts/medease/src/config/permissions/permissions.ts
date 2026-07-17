@@ -572,8 +572,7 @@ export function hasPermission(
   permissions: Iterable<string>,
   required: Permission | string,
 ): boolean {
-  const set =
-    permissions instanceof Set ? permissions : new Set(permissions);
+  const set = permissions instanceof Set ? permissions : new Set(permissions);
   return set.has(required);
 }
 

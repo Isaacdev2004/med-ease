@@ -1,8 +1,29 @@
-export { createClinicianPatientRecordRoute, createClinicianPatientRecordRoutes, createPatientRecordsRoutes } from '@/features/patient-records/routes';
-export { PatientBanner, HealthScoreWidget, HealthStatusBanner } from '@/features/patient-records/components/PatientBanner';
+export {
+  createClinicianPatientRecordRoute,
+  createClinicianPatientRecordRoutes,
+  createPatientRecordsRoutes,
+} from '@/features/patient-records/routes';
+export {
+  PatientBanner,
+  HealthScoreWidget,
+  HealthStatusBanner,
+} from '@/features/patient-records/components/PatientBanner';
 export { PatientRecordsShell } from '@/features/patient-records/components/PatientRecordsShell';
-export { RecordSectionContent, AllergiesSection, CarePlansSection, DocumentsSection, EmergencySection, LaboratorySection, MedicationsSection, SummarySection, TimelineSection } from '@/features/patient-records/components/RecordSections';
-export { RecordTabs, getSectionFromPath } from '@/features/patient-records/components/RecordTabs';
+export {
+  RecordSectionContent,
+  AllergiesSection,
+  CarePlansSection,
+  DocumentsSection,
+  EmergencySection,
+  LaboratorySection,
+  MedicationsSection,
+  SummarySection,
+  TimelineSection,
+} from '@/features/patient-records/components/RecordSections';
+export {
+  RecordTabs,
+  getSectionFromPath,
+} from '@/features/patient-records/components/RecordTabs';
 export { usePatientRecordPermissions } from '@/features/patient-records/hooks/use-patient-record-permissions';
 export {
   useEmergencySummary,

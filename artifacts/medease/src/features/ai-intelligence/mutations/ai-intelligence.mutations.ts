@@ -16,7 +16,10 @@ import type {
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    aiOfflineQueue.enqueue({ label, execute: () => execute().then(() => undefined) });
+    aiOfflineQueue.enqueue({
+      label,
+      execute: () => execute().then(() => undefined),
+    });
     appToast.offline('AI update queued until you are back online.');
     return Promise.resolve(null);
   }
@@ -31,49 +34,106 @@ export function useAiIntelligenceMutations() {
   const client = useQueryClient();
 
   const generatePrediction = useMutation({
-    mutationFn: (input: GeneratePredictionInput) => runOrQueue('Generate prediction', () => aiIntelligenceService.generatePrediction(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Prediction generated.' }); },
+    mutationFn: (input: GeneratePredictionInput) =>
+      runOrQueue('Generate prediction', () =>
+        aiIntelligenceService.generatePrediction(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Prediction generated.' });
+    },
   });
 
   const createClinicalSummary = useMutation({
-    mutationFn: (input: CreateClinicalSummaryInput) => runOrQueue('Create clinical summary', () => aiIntelligenceService.createClinicalSummary(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Clinical summary created.' }); },
+    mutationFn: (input: CreateClinicalSummaryInput) =>
+      runOrQueue('Create clinical summary', () =>
+        aiIntelligenceService.createClinicalSummary(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Clinical summary created.' });
+    },
   });
 
   const startCopilotSession = useMutation({
-    mutationFn: (input: StartCopilotSessionInput) => runOrQueue('Start copilot session', () => aiIntelligenceService.startCopilotSession(input)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Copilot session started.' }); },
+    mutationFn: (input: StartCopilotSessionInput) =>
+      runOrQueue('Start copilot session', () =>
+        aiIntelligenceService.startCopilotSession(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Copilot session started.' });
+    },
   });
 
   const rateRecommendation = useMutation({
-    mutationFn: (input: RateRecommendationInput) => runOrQueue('Rate recommendation', () => aiIntelligenceService.rateRecommendation(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Recommendation rated.' }); },
+    mutationFn: (input: RateRecommendationInput) =>
+      runOrQueue('Rate recommendation', () =>
+        aiIntelligenceService.rateRecommendation(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Recommendation rated.' });
+    },
   });
 
   const approveModelDeployment = useMutation({
-    mutationFn: (input: ApproveModelDeploymentInput) => runOrQueue('Approve model deployment', () => aiIntelligenceService.approveModelDeployment(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Model approved for deployment.' }); },
+    mutationFn: (input: ApproveModelDeploymentInput) =>
+      runOrQueue('Approve model deployment', () =>
+        aiIntelligenceService.approveModelDeployment(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Model approved for deployment.' });
+    },
   });
 
   const archiveModel = useMutation({
-    mutationFn: (input: ArchiveModelInput) => runOrQueue('Archive model', () => aiIntelligenceService.archiveModel(input)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Model archived.' }); },
+    mutationFn: (input: ArchiveModelInput) =>
+      runOrQueue('Archive model', () =>
+        aiIntelligenceService.archiveModel(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Model archived.' });
+    },
   });
 
   const exportData = useMutation({
-    mutationFn: (format: 'csv' | 'pdf' | 'xlsx') => runOrQueue('Export AI data', () => aiIntelligenceService.exportData(format)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Export complete.' }); },
+    mutationFn: (format: 'csv' | 'pdf' | 'xlsx') =>
+      runOrQueue('Export AI data', () =>
+        aiIntelligenceService.exportData(format),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Export complete.' });
+    },
   });
 
   const favorite = useMutation({
-    mutationFn: ({ userId, entityType, entityId }: { userId: string; entityType: 'prediction' | 'recommendation' | 'model' | 'summary' | 'forecast'; entityId: string }) =>
-      runOrQueue('Favorite', () => aiIntelligenceService.favorite(userId, entityType, entityId)),
+    mutationFn: ({
+      userId,
+      entityType,
+      entityId,
+    }: {
+      userId: string;
+      entityType:
+        'prediction' | 'recommendation' | 'model' | 'summary' | 'forecast';
+      entityId: string;
+    }) =>
+      runOrQueue('Favorite', () =>
+        aiIntelligenceService.favorite(userId, entityType, entityId),
+      ),
     onSuccess: () => invalidateAll(client),
   });
 
   const share = useMutation({
-    mutationFn: (input: ShareAiInput) => runOrQueue('Share AI insight', () => aiIntelligenceService.share(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Shared successfully.' }); },
+    mutationFn: (input: ShareAiInput) =>
+      runOrQueue('Share AI insight', () => aiIntelligenceService.share(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Shared successfully.' });
+    },
   });
 
   return {

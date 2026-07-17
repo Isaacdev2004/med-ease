@@ -20,14 +20,23 @@ export {
   buildAgendaEvents,
   BLOCKED_HOLIDAYS,
 } from '@/services/appointments/calendar';
-export { validateBookingSlot, suggestNextAvailableSlot } from '@/services/appointments/scheduler';
+export {
+  validateBookingSlot,
+  suggestNextAvailableSlot,
+} from '@/services/appointments/scheduler';
 export {
   buildAppointmentReminder,
   buildCheckInNotification,
   buildCancellationNotification,
 } from '@/services/appointments/notifications';
 export { appointmentRepository } from '@/services/appointments/repository';
-export { MOCK_APPOINTMENTS, MOCK_WAITLIST, PROVIDERS, FACILITIES, buildQueueFromAppointments } from '@/services/appointments/mock-data';
+export {
+  MOCK_APPOINTMENTS,
+  MOCK_WAITLIST,
+  PROVIDERS,
+  FACILITIES,
+  buildQueueFromAppointments,
+} from '@/services/appointments/mock-data';
 export type {
   Appointment,
   AppointmentAnalytics,
@@ -49,4 +58,7 @@ export type {
   VisitType,
   WaitlistEntry,
 } from '@/services/appointments/types';
-export { AUTH_USER_PATIENT_MAP, SPECIALTIES } from '@/services/appointments/types';
+export {
+  AUTH_USER_PATIENT_MAP,
+  SPECIALTIES,
+} from '@/services/appointments/types';

@@ -32,7 +32,8 @@ export function UnsavedChangesDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Unsaved changes</AlertDialogTitle>
           <AlertDialogDescription>
-            You have unsaved changes. Would you like to save a draft before leaving?
+            You have unsaved changes. Would you like to save a draft before
+            leaving?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="flex-col gap-2 sm:flex-row">

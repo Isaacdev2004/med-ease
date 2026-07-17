@@ -1,7 +1,13 @@
 import { computePopulationAnalytics } from '@/services/population-health/analytics';
 import { gapPriority } from '@/services/population-health/care-gap-engine';
-import { parseCriteriaString, buildCohortFromCriteria } from '@/services/population-health/cohort-builder';
-import { filterByRegistryType, sortRegistriesByGap } from '@/services/population-health/registry-engine';
+import {
+  parseCriteriaString,
+  buildCohortFromCriteria,
+} from '@/services/population-health/cohort-builder';
+import {
+  filterByRegistryType,
+  sortRegistriesByGap,
+} from '@/services/population-health/registry-engine';
 import {
   buildPhmDashboard,
   MOCK_CAMPAIGNS,
@@ -25,7 +31,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -43,72 +54,110 @@ class PopulationHealthRepository {
 
   getPopulation(filters?: PhmFilters) {
     let items = MOCK_POPULATION;
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
-    if (filters?.riskTier) items = items.filter((p) => p.riskTier === filters.riskTier);
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.patientName, p.primaryCondition));
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
+    if (filters?.riskTier)
+      items = items.filter((p) => p.riskTier === filters.riskTier);
+    if (filters?.q)
+      items = items.filter((p) =>
+        matchQ(filters.q, p.patientName, p.primaryCondition),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getHighRiskPatients(filters?: PhmFilters) {
-    let items = MOCK_POPULATION.filter((p) => p.riskTier === 'high' || p.riskTier === 'rising');
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
+    let items = MOCK_POPULATION.filter(
+      (p) => p.riskTier === 'high' || p.riskTier === 'rising',
+    );
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getRegistries(filters?: PhmFilters) {
     let items = MOCK_REGISTRIES;
-    if (filters?.facilityId) items = items.filter((r) => !r.facilityId || r.facilityId === filters.facilityId);
-    if (filters?.registryType) items = filterByRegistryType(items, filters.registryType);
+    if (filters?.facilityId)
+      items = items.filter(
+        (r) => !r.facilityId || r.facilityId === filters.facilityId,
+      );
+    if (filters?.registryType)
+      items = filterByRegistryType(items, filters.registryType);
     if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.name));
-    return paginate(sortRegistriesByGap(items), filters?.page, filters?.pageSize);
+    return paginate(
+      sortRegistriesByGap(items),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getCareGaps(filters?: PhmFilters) {
     let items = this.careGaps;
-    if (filters?.facilityId) items = items.filter((g) => g.facilityId === filters.facilityId);
-    if (filters?.gapType) items = items.filter((g) => g.type === filters.gapType);
-    if (filters?.status) items = items.filter((g) => g.status === filters.status);
-    if (filters?.q) items = items.filter((g) => matchQ(filters.q, g.patientName, g.title));
-    return paginate([...items].sort((a, b) => gapPriority(b) - gapPriority(a)), filters?.page, filters?.pageSize);
+    if (filters?.facilityId)
+      items = items.filter((g) => g.facilityId === filters.facilityId);
+    if (filters?.gapType)
+      items = items.filter((g) => g.type === filters.gapType);
+    if (filters?.status)
+      items = items.filter((g) => g.status === filters.status);
+    if (filters?.q)
+      items = items.filter((g) => matchQ(filters.q, g.patientName, g.title));
+    return paginate(
+      [...items].sort((a, b) => gapPriority(b) - gapPriority(a)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getRiskScores(filters?: PhmFilters) {
     let items = MOCK_RISK_SCORES;
-    if (filters?.facilityId) items = items.filter((s) => s.facilityId === filters.facilityId);
-    if (filters?.riskTier) items = items.filter((s) => s.tier === filters.riskTier);
+    if (filters?.facilityId)
+      items = items.filter((s) => s.facilityId === filters.facilityId);
+    if (filters?.riskTier)
+      items = items.filter((s) => s.tier === filters.riskTier);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getCohorts(filters?: PhmFilters) {
     let items = this.cohorts;
-    if (filters?.facilityId) items = items.filter((c) => !c.facilityId || c.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((c) => matchQ(filters.q, c.name, c.description));
+    if (filters?.facilityId)
+      items = items.filter(
+        (c) => !c.facilityId || c.facilityId === filters.facilityId,
+      );
+    if (filters?.q)
+      items = items.filter((c) => matchQ(filters.q, c.name, c.description));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getChronicPrograms(filters?: PhmFilters) {
     let items = MOCK_CHRONIC_PROGRAMS;
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getPreventiveCare(filters?: PhmFilters) {
     let items = MOCK_PREVENTIVE;
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getOutreach(filters?: PhmFilters) {
     let items = this.campaigns;
-    if (filters?.facilityId) items = items.filter((c) => !c.facilityId || c.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((c) => c.status === filters.status);
+    if (filters?.facilityId)
+      items = items.filter(
+        (c) => !c.facilityId || c.facilityId === filters.facilityId,
+      );
+    if (filters?.status)
+      items = items.filter((c) => c.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getCommunityHealth(filters?: PhmFilters) {
     let items = MOCK_COMMUNITY;
-    if (filters?.facilityId) items = items.filter((c) => c.facilityId === filters.facilityId);
-    if (filters?.regionId) items = items.filter((c) => c.regionId === filters.regionId);
+    if (filters?.facilityId)
+      items = items.filter((c) => c.facilityId === filters.facilityId);
+    if (filters?.regionId)
+      items = items.filter((c) => c.regionId === filters.regionId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -119,7 +168,9 @@ class PopulationHealthRepository {
   createCohort(input: CreateCohortInput) {
     const criteria = parseCriteriaString(input.criteria);
     const members = buildCohortFromCriteria(
-      MOCK_POPULATION.filter((p) => !input.facilityId || p.facilityId === input.facilityId),
+      MOCK_POPULATION.filter(
+        (p) => !input.facilityId || p.facilityId === input.facilityId,
+      ),
       criteria,
     );
     const cohort = {
@@ -170,23 +221,40 @@ class PopulationHealthRepository {
 
   search(query: string, facilityId?: string) {
     const q = query.toLowerCase();
-    const matches = (...fields: (string | undefined)[]) => fields.some((f) => f?.toLowerCase().includes(q));
+    const matches = (...fields: (string | undefined)[]) =>
+      fields.some((f) => f?.toLowerCase().includes(q));
     const scoped = <T extends { facilityId?: string }>(items: T[]) =>
       items.filter((item) => !facilityId || item.facilityId === facilityId);
 
     return {
-      population: scoped(MOCK_POPULATION).filter((p) => matches(p.patientName, p.primaryCondition)).slice(0, 12),
-      gaps: scoped(this.careGaps).filter((g) => matches(g.title, g.patientName)).slice(0, 12),
-      registries: scoped(MOCK_REGISTRIES).filter((r) => matches(r.name)).slice(0, 12),
-      cohorts: scoped(this.cohorts).filter((c) => matches(c.name, c.description)).slice(0, 12),
+      population: scoped(MOCK_POPULATION)
+        .filter((p) => matches(p.patientName, p.primaryCondition))
+        .slice(0, 12),
+      gaps: scoped(this.careGaps)
+        .filter((g) => matches(g.title, g.patientName))
+        .slice(0, 12),
+      registries: scoped(MOCK_REGISTRIES)
+        .filter((r) => matches(r.name))
+        .slice(0, 12),
+      cohorts: scoped(this.cohorts)
+        .filter((c) => matches(c.name, c.description))
+        .slice(0, 12),
     };
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.careGaps.length + MOCK_POPULATION.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.careGaps.length + MOCK_POPULATION.length,
+    };
   }
 
-  favorite(userId: string, entityType: PhmFavorite['entityType'], entityId: string) {
+  favorite(
+    userId: string,
+    entityType: PhmFavorite['entityType'],
+    entityId: string,
+  ) {
     const fav: PhmFavorite = {
       favoriteId: `fav-${String(++this.nextId)}`,
       userId,

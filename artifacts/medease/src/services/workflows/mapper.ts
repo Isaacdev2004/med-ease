@@ -1,5 +1,9 @@
 /** FHIR / interoperability mapper stubs for workflow audit trails. */
-export function toFhirProvenance(instanceId: string, actorId: string, action: string) {
+export function toFhirProvenance(
+  instanceId: string,
+  actorId: string,
+  action: string,
+) {
   return {
     resourceType: 'Provenance',
     target: [{ reference: `WorkflowInstance/${instanceId}` }],

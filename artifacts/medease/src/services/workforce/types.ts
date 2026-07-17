@@ -1,13 +1,34 @@
-export type EmploymentType = 'full_time' | 'part_time' | 'contract' | 'agency' | 'volunteer' | 'locum';
-export type EmploymentStatus = 'active' | 'on_leave' | 'suspended' | 'terminated' | 'probation';
-export type ShiftType = 'day' | 'night' | 'evening' | 'on_call' | 'weekend' | 'holiday';
-export type ShiftStatus = 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'swapped';
-export type LeaveType = 'annual' | 'sick' | 'maternity' | 'paternity' | 'unpaid' | 'study' | 'compassionate';
-export type LeaveStatus = 'draft' | 'pending' | 'approved' | 'rejected' | 'cancelled';
-export type AttendanceStatus = 'present' | 'absent' | 'late' | 'early_departure' | 'on_break' | 'remote';
-export type CredentialStatus = 'valid' | 'expiring' | 'expired' | 'pending_verification' | 'revoked';
-export type TrainingStatus = 'not_started' | 'in_progress' | 'completed' | 'overdue' | 'expired';
-export type PerformanceRating = 'exceptional' | 'exceeds' | 'meets' | 'needs_improvement' | 'unsatisfactory';
+export type EmploymentType =
+  'full_time' | 'part_time' | 'contract' | 'agency' | 'volunteer' | 'locum';
+export type EmploymentStatus =
+  'active' | 'on_leave' | 'suspended' | 'terminated' | 'probation';
+export type ShiftType =
+  'day' | 'night' | 'evening' | 'on_call' | 'weekend' | 'holiday';
+export type ShiftStatus =
+  | 'scheduled'
+  | 'confirmed'
+  | 'in_progress'
+  | 'completed'
+  | 'cancelled'
+  | 'swapped';
+export type LeaveType =
+  | 'annual'
+  | 'sick'
+  | 'maternity'
+  | 'paternity'
+  | 'unpaid'
+  | 'study'
+  | 'compassionate';
+export type LeaveStatus =
+  'draft' | 'pending' | 'approved' | 'rejected' | 'cancelled';
+export type AttendanceStatus =
+  'present' | 'absent' | 'late' | 'early_departure' | 'on_break' | 'remote';
+export type CredentialStatus =
+  'valid' | 'expiring' | 'expired' | 'pending_verification' | 'revoked';
+export type TrainingStatus =
+  'not_started' | 'in_progress' | 'completed' | 'overdue' | 'expired';
+export type PerformanceRating =
+  'exceptional' | 'exceeds' | 'meets' | 'needs_improvement' | 'unsatisfactory';
 
 export interface WorkforceFilters {
   q?: string;
@@ -38,7 +59,14 @@ export interface Department {
   facilityName: string;
   headEmployeeId?: string;
   staffCount: number;
-  type: 'clinical' | 'administrative' | 'support' | 'laboratory' | 'radiology' | 'pharmacy' | 'theatre';
+  type:
+    | 'clinical'
+    | 'administrative'
+    | 'support'
+    | 'laboratory'
+    | 'radiology'
+    | 'pharmacy'
+    | 'theatre';
 }
 
 export interface Team {
@@ -52,7 +80,14 @@ export interface Team {
 export interface OrganizationUnit {
   unitId: string;
   name: string;
-  type: 'hospital' | 'clinic' | 'pharmacy' | 'laboratory' | 'radiology' | 'theatre' | 'department';
+  type:
+    | 'hospital'
+    | 'clinic'
+    | 'pharmacy'
+    | 'laboratory'
+    | 'radiology'
+    | 'theatre'
+    | 'department';
   parentId?: string;
   facilityId: string;
   staffCount: number;

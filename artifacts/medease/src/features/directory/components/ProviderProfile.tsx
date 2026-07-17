@@ -49,19 +49,25 @@ export function ProviderProfile({
             {provider.insuranceAccepted?.length ? (
               <div>
                 <p className="font-medium mb-2">Insurance accepted</p>
-                <p className="text-muted-foreground">{provider.insuranceAccepted.join(', ')}</p>
+                <p className="text-muted-foreground">
+                  {provider.insuranceAccepted.join(', ')}
+                </p>
               </div>
             ) : null}
             {provider.accessibility?.length ? (
               <div>
                 <p className="font-medium mb-2">Accessibility</p>
-                <p className="text-muted-foreground">{provider.accessibility.join(', ')}</p>
+                <p className="text-muted-foreground">
+                  {provider.accessibility.join(', ')}
+                </p>
               </div>
             ) : null}
             {provider.languages.length ? (
               <div>
                 <p className="font-medium mb-2">Languages</p>
-                <p className="text-muted-foreground">{provider.languages.join(', ')}</p>
+                <p className="text-muted-foreground">
+                  {provider.languages.join(', ')}
+                </p>
               </div>
             ) : null}
           </CardContent>
@@ -91,7 +97,11 @@ export function ProviderProfile({
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               {related.map((item) => (
-                <ProviderCard key={item.id} provider={item} portalBase={portalBase} />
+                <ProviderCard
+                  key={item.id}
+                  provider={item}
+                  portalBase={portalBase}
+                />
               ))}
             </CardContent>
           </Card>
@@ -127,7 +137,10 @@ export function ProviderProfile({
         {provider.website ? (
           <Card>
             <CardContent className="pt-6">
-              <Link href={provider.website} className="text-sm text-primary hover:underline">
+              <Link
+                href={provider.website}
+                className="text-sm text-primary hover:underline"
+              >
                 Visit website
               </Link>
             </CardContent>

@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { loadConfig, type MedeaseConfig, type MedeaseEnv } from '@medease/config';
+import {
+  loadConfig,
+  type MedeaseConfig,
+  type MedeaseEnv,
+} from '@medease/config';
 
 @Injectable()
 export class MedeaseConfigService {

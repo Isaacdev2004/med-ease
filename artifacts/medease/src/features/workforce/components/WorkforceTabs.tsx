@@ -26,7 +26,11 @@ const FACILITY_TABS: Tab[] = [
 const ADMIN_TABS: Tab[] = [
   { segment: 'dashboard', label: 'HR Dashboard', path: 'workforce' },
   { segment: 'employees', label: 'Employees', path: 'employees' },
-  { segment: 'departments', label: 'Departments', path: 'workforce-departments' },
+  {
+    segment: 'departments',
+    label: 'Departments',
+    path: 'workforce-departments',
+  },
   { segment: 'organization', label: 'Organization', path: 'organization' },
   { segment: 'schedules', label: 'Schedules', path: 'schedules' },
   { segment: 'payroll', label: 'Payroll', path: 'payroll' },
@@ -46,17 +50,33 @@ function getTabs(variant: WorkforceTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function WorkforceTabs({ basePath: _basePath, variant = 'professional' }: WorkforceTabsProps) {
+export function WorkforceTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: WorkforceTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Workforce sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Workforce sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -65,12 +85,15 @@ export function WorkforceTabs({ basePath: _basePath, variant = 'professional' }:
   );
 }
 
-export function getWorkforceSectionFromPath(pathname: string): WorkforceSection {
+export function getWorkforceSectionFromPath(
+  pathname: string,
+): WorkforceSection {
   if (pathname.includes('/workforce-schedule')) return 'schedule';
   if (pathname.includes('/employees')) return 'employees';
   if (pathname.includes('/workforce-departments')) return 'departments';
   if (pathname.includes('/organization')) return 'organization';
-  if (pathname.includes('/schedules') || pathname.includes('/scheduling')) return pathname.includes('/scheduling') ? 'scheduling' : 'schedules';
+  if (pathname.includes('/schedules') || pathname.includes('/scheduling'))
+    return pathname.includes('/scheduling') ? 'scheduling' : 'schedules';
   if (pathname.includes('/staff')) return 'staff';
   if (pathname.includes('/attendance')) return 'attendance';
   if (pathname.includes('/leave')) return 'leave';

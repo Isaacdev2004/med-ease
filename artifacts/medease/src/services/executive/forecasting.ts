@@ -1,8 +1,19 @@
-import type { ExecutiveForecast, ForecastHorizon } from '@/services/executive/types';
+import type {
+  ExecutiveForecast,
+  ForecastHorizon,
+} from '@/services/executive/types';
 
-export const FORECAST_HORIZONS: ForecastHorizon[] = ['30d', '90d', '180d', '365d'];
+export const FORECAST_HORIZONS: ForecastHorizon[] = [
+  '30d',
+  '90d',
+  '180d',
+  '365d',
+];
 
-export function buildForecastTrend(baseValue: number, points = 6): { label: string; value: number }[] {
+export function buildForecastTrend(
+  baseValue: number,
+  points = 6,
+): { label: string; value: number }[] {
   return Array.from({ length: points }, (_, i) => ({
     label: `M${i + 1}`,
     value: Math.round(baseValue * (1 + (i % 2 === 0 ? 0.03 : -0.01) * i)),

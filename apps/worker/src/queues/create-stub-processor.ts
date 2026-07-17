@@ -1,4 +1,8 @@
-import type { QueueName, QueueProcessorFn, QueueProcessorResult } from '@medease/queue';
+import type {
+  QueueName,
+  QueueProcessorFn,
+  QueueProcessorResult,
+} from '@medease/queue';
 
 /** Stub processor — validates envelope pipeline without domain logic. */
 export function createStubProcessor(queue: QueueName): QueueProcessorFn {

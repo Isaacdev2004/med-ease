@@ -113,7 +113,12 @@ export const patientMonitoringService = {
 
   async getTrendAnalysis(patientId: string, metric?: string) {
     await delay();
-    return patientMonitoringRepository.getTrendAnalysis(patientId, metric as Parameters<typeof patientMonitoringRepository.getTrendAnalysis>[1]);
+    return patientMonitoringRepository.getTrendAnalysis(
+      patientId,
+      metric as Parameters<
+        typeof patientMonitoringRepository.getTrendAnalysis
+      >[1],
+    );
   },
 
   async getEarlyWarningScores(patientId?: string) {
@@ -156,8 +161,16 @@ export const patientMonitoringService = {
     return patientMonitoringRepository.exportObservations(patientId, format);
   },
 
-  async shareObservations(patientId: string, sharedWith: string, observationIds: string[]) {
+  async shareObservations(
+    patientId: string,
+    sharedWith: string,
+    observationIds: string[],
+  ) {
     await delay();
-    return patientMonitoringRepository.shareObservations(patientId, sharedWith, observationIds);
+    return patientMonitoringRepository.shareObservations(
+      patientId,
+      sharedWith,
+      observationIds,
+    );
   },
 };

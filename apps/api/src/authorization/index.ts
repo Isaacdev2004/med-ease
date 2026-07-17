@@ -3,7 +3,10 @@ export {
   AuthenticationRequiredException,
   AuthorizationHttpException,
 } from './authorization.exceptions';
-export { PermissionService, type ResolvedAuthorizationContext } from './permission.service';
+export {
+  PermissionService,
+  type ResolvedAuthorizationContext,
+} from './permission.service';
 export { PolicyService } from './policy.service';
 export { PermissionsGuard } from './guards/permissions.guard';
 export {

@@ -1,4 +1,7 @@
-import type { DrugInteraction, PatientMedication } from '@/services/medications/types';
+import type {
+  DrugInteraction,
+  PatientMedication,
+} from '@/services/medications/types';
 import { MOCK_INTERACTIONS } from '@/services/medications/mock-data';
 
 export function checkMedicationInteractions(
@@ -25,7 +28,10 @@ export function checkMedicationInteractions(
 
   for (const med of medications) {
     for (const allergen of allergies) {
-      if (med.name.toLowerCase().includes(allergen.toLowerCase()) || med.genericName.toLowerCase().includes(allergen.toLowerCase())) {
+      if (
+        med.name.toLowerCase().includes(allergen.toLowerCase()) ||
+        med.genericName.toLowerCase().includes(allergen.toLowerCase())
+      ) {
         dynamic.push({
           id: `dyn-allergy-${med.id}`,
           patientId,
@@ -43,7 +49,14 @@ export function checkMedicationInteractions(
   return [...known, ...dynamic];
 }
 
-export function getInteractionSeverityColor(severity: DrugInteraction['severity']): string {
-  const map = { critical: '#ef4444', high: '#f97316', moderate: '#eab308', low: '#3b82f6' };
+export function getInteractionSeverityColor(
+  severity: DrugInteraction['severity'],
+): string {
+  const map = {
+    critical: '#ef4444',
+    high: '#f97316',
+    moderate: '#eab308',
+    low: '#3b82f6',
+  };
   return map[severity];
 }

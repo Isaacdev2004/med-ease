@@ -2,7 +2,10 @@ import { useMemo, useState } from 'react';
 import { useLocation } from 'wouter';
 
 import { MedicationSectionContent } from '@/features/medications/components/MedicationSections';
-import { MedicationTabs, getMedicationSectionFromPath } from '@/features/medications/components/MedicationTabs';
+import {
+  MedicationTabs,
+  getMedicationSectionFromPath,
+} from '@/features/medications/components/MedicationTabs';
 import { useMedicationPermissions } from '@/features/medications/hooks/use-medication-permissions';
 import { usePatientMedicationContext } from '@/features/medications/hooks/use-medications';
 import type { MedicationFilters } from '@/services/medications/types';
@@ -29,14 +32,21 @@ export function MedicationsShell({
   const section = getMedicationSectionFromPath(location);
 
   const scopedFilters = useMemo(() => {
-    const patientId = explicitPatientId ?? (variant === 'patient' ? patientResolve.data ?? undefined : filters.patientId);
+    const patientId =
+      explicitPatientId ??
+      (variant === 'patient'
+        ? (patientResolve.data ?? undefined)
+        : filters.patientId);
     return { ...filters, ...(patientId ? { patientId } : {}) };
   }, [explicitPatientId, filters, patientResolve.data, variant]);
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view medications." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view medications."
+        />
       </PageShell>
     );
   }
@@ -60,7 +70,12 @@ export function MedicationsShell({
             className="h-9 w-full max-w-xs rounded-md border bg-background px-3 text-sm"
             placeholder="Filter by patient or drug…"
             aria-label="Search medications"
-            onChange={(e) => setFilters((prev) => ({ ...prev, q: e.target.value || undefined }))}
+            onChange={(e) =>
+              setFilters((prev) => ({
+                ...prev,
+                q: e.target.value || undefined,
+              }))
+            }
           />
         ) : undefined
       }

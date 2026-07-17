@@ -23,7 +23,10 @@ export {
   type JwtTenantClaims,
 } from './request-context/tenant-context';
 
-export { resolveRuntimeBuildInfo, type RuntimeBuildInfo } from './runtime/build-info';
+export {
+  resolveRuntimeBuildInfo,
+  type RuntimeBuildInfo,
+} from './runtime/build-info';
 
 export {
   MetricsRegistry,
@@ -33,7 +36,11 @@ export {
   METRIC_PREFIX,
 } from './metrics/registry';
 
-export { initTelemetry, shutdownTelemetry, type TelemetryInitOptions } from './telemetry/init';
+export {
+  initTelemetry,
+  shutdownTelemetry,
+  type TelemetryInitOptions,
+} from './telemetry/init';
 
 export {
   runWithSpan,

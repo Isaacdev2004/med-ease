@@ -358,12 +358,7 @@ export const ROUTES = {
 } as const;
 
 export type PortalId =
-  | 'patient'
-  | 'professional'
-  | 'facility'
-  | 'pharmacy'
-  | 'transport'
-  | 'admin';
+  'patient' | 'professional' | 'facility' | 'pharmacy' | 'transport' | 'admin';
 
 export const PORTAL_PATHS: Record<PortalId, string> = {
   patient: ROUTES.patient.root,

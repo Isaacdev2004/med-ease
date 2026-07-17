@@ -65,7 +65,11 @@ export function FormWizard<T extends FieldValues>({
           >
             Back
           </Button>
-          <LoadingButton type="button" loading={submitting} onClick={() => void goNext()}>
+          <LoadingButton
+            type="button"
+            loading={submitting}
+            onClick={() => void goNext()}
+          >
             {isLastStep ? 'Submit' : 'Continue'}
           </LoadingButton>
         </div>

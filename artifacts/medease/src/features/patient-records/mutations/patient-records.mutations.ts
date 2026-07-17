@@ -8,7 +8,12 @@ import type { VitalReading } from '@/services/patient-records/types';
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (!navigator.onLine) {
-    patientRecordOfflineQueue.enqueue({ label, execute: async () => { await execute(); } });
+    patientRecordOfflineQueue.enqueue({
+      label,
+      execute: async () => {
+        await execute();
+      },
+    });
     appToast.offline('Record update queued until you are back online.');
     return Promise.resolve();
   }
@@ -19,12 +24,16 @@ export function usePatientRecordMutations(patientId: string) {
   const queryClient = useQueryClient();
 
   const invalidate = () => {
-    void queryClient.invalidateQueries({ queryKey: queryKeys.patientRecords.all });
+    void queryClient.invalidateQueries({
+      queryKey: queryKeys.patientRecords.all,
+    });
   };
 
   const addVital = useMutation({
     mutationFn: (reading: Omit<VitalReading, 'id'>) =>
-      runOrQueue('Add vital', () => patientRecordService.addVitalReading(patientId, reading)),
+      runOrQueue('Add vital', () =>
+        patientRecordService.addVitalReading(patientId, reading),
+      ),
     onSuccess: invalidate,
   });
 

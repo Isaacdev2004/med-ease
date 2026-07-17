@@ -1,6 +1,12 @@
 import type { ReactNode } from 'react';
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/shared/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/shared/ui/sheet';
 import { Button } from '@/shared/ui/button';
 import { SlidersHorizontal } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
@@ -26,7 +32,9 @@ export function FilterPanel({
 }: FilterPanelProps) {
   if (mode === 'inline') {
     return (
-      <div className={cn('rounded-lg border bg-card p-4', className)}>{children}</div>
+      <div className={cn('rounded-lg border bg-card p-4', className)}>
+        {children}
+      </div>
     );
   }
 

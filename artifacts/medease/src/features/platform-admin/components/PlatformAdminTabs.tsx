@@ -16,17 +16,29 @@ const ADMIN_TABS: Tab[] = [
   { segment: 'branding', label: 'Branding', path: 'branding' },
   { segment: 'licenses', label: 'Licenses', path: 'licenses' },
   { segment: 'storage', label: 'Storage', path: 'storage' },
-  { segment: 'feature-flags-admin', label: 'Feature Flags', path: 'feature-flags-admin' },
+  {
+    segment: 'feature-flags-admin',
+    label: 'Feature Flags',
+    path: 'feature-flags-admin',
+  },
   { segment: 'system-jobs', label: 'System Jobs', path: 'system-jobs' },
   { segment: 'system-health', label: 'System Health', path: 'system-health' },
   { segment: 'backups', label: 'Backups', path: 'backups' },
   { segment: 'maintenance', label: 'Maintenance', path: 'maintenance' },
   { segment: 'platform-audit', label: 'Audit', path: 'platform-audit' },
-  { segment: 'configurations', label: 'Configurations', path: 'configurations' },
+  {
+    segment: 'configurations',
+    label: 'Configurations',
+    path: 'configurations',
+  },
 ];
 
 const READONLY_TABS: Tab[] = [
-  { segment: 'platform-settings', label: 'Platform Settings', path: 'platform-settings' },
+  {
+    segment: 'platform-settings',
+    label: 'Platform Settings',
+    path: 'platform-settings',
+  },
 ];
 
 interface PlatformAdminTabsProps {
@@ -34,17 +46,33 @@ interface PlatformAdminTabsProps {
   variant?: 'admin' | 'readonly';
 }
 
-export function PlatformAdminTabs({ basePath: _basePath, variant = 'admin' }: PlatformAdminTabsProps) {
+export function PlatformAdminTabs({
+  basePath: _basePath,
+  variant = 'admin',
+}: PlatformAdminTabsProps) {
   const [location] = useLocation();
   const tabs = variant === 'readonly' ? READONLY_TABS : ADMIN_TABS;
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Platform admin sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Platform admin sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.path} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.path}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -74,7 +102,9 @@ const PATH_MAP: [string, PlatformAdminSection][] = [
   ['/backups', 'backups'],
 ];
 
-export function getPlatformAdminSectionFromPath(pathname: string): PlatformAdminSection {
+export function getPlatformAdminSectionFromPath(
+  pathname: string,
+): PlatformAdminSection {
   for (const [path, section] of PATH_MAP) {
     if (pathname.includes(path)) return section;
   }

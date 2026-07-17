@@ -1,9 +1,18 @@
 export { medicationService } from '@/services/medications/medication.service';
 export { medicationOfflineQueue } from '@/services/medications/offline-sync';
 export { computeAdherence } from '@/services/medications/adherence';
-export { checkMedicationInteractions, getInteractionSeverityColor } from '@/services/medications/interaction-engine';
-export { buildRefillRequest, computeExpectedRefillDate } from '@/services/medications/refill';
-export { buildDoseReminders, buildRefillReminder } from '@/services/medications/reminders';
+export {
+  checkMedicationInteractions,
+  getInteractionSeverityColor,
+} from '@/services/medications/interaction-engine';
+export {
+  buildRefillRequest,
+  computeExpectedRefillDate,
+} from '@/services/medications/refill';
+export {
+  buildDoseReminders,
+  buildRefillReminder,
+} from '@/services/medications/reminders';
 export {
   buildMedicationCalendar,
   getTodayDoses,

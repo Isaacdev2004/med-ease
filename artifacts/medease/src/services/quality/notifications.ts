@@ -5,7 +5,10 @@ export type QualityNotificationType =
   | 'policy_review'
   | 'infection_alert';
 
-export function buildQualityNotification(type: QualityNotificationType, context: Record<string, string>) {
+export function buildQualityNotification(
+  type: QualityNotificationType,
+  context: Record<string, string>,
+) {
   const templates: Record<QualityNotificationType, string> = {
     incident_escalation: `Incident escalated: ${context.incident ?? 'event'}`,
     capa_due: `CAPA due: ${context.capa ?? 'action'} by ${context.date ?? 'soon'}`,
@@ -13,5 +16,10 @@ export function buildQualityNotification(type: QualityNotificationType, context:
     policy_review: `Policy review due: ${context.policy ?? 'document'}`,
     infection_alert: `Infection alert: ${context.type ?? 'HAI'} in ${context.department ?? 'department'}`,
   };
-  return { type, message: templates[type], context, createdAt: new Date().toISOString() };
+  return {
+    type,
+    message: templates[type],
+    context,
+    createdAt: new Date().toISOString(),
+  };
 }

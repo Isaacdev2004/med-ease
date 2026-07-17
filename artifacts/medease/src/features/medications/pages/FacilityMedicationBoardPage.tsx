@@ -3,11 +3,20 @@ import { useLocation } from 'wouter';
 import { MedicationsShell } from '@/features/medications/components/MedicationsShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type FacilitySegment = 'medications' | 'emar' | 'administration' | 'medication-board' | 'medication-administration';
+type FacilitySegment =
+  | 'medications'
+  | 'emar'
+  | 'administration'
+  | 'medication-board'
+  | 'medication-administration';
 
 function resolveFacilitySegment(location: string): FacilitySegment {
   if (location.includes('/emar')) return 'emar';
-  if (location.includes('/administration') || location.includes('medication-administration')) return 'administration';
+  if (
+    location.includes('/administration') ||
+    location.includes('medication-administration')
+  )
+    return 'administration';
   if (location.includes('/medications')) return 'medications';
   if (location.includes('medication-board')) return 'medication-board';
   return 'medications';

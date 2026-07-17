@@ -23,7 +23,10 @@ export function LoadingButton({
   return (
     <Button
       disabled={disabled || loading}
-      className={cn('min-h-[var(--touch-min)] min-w-[var(--touch-min)]', className)}
+      className={cn(
+        'min-h-[var(--touch-min)] min-w-[var(--touch-min)]',
+        className,
+      )}
       size={size}
       style={{ '--touch-min': `${TOUCH_TARGET_MIN}px` } as CSSProperties}
       aria-busy={loading}

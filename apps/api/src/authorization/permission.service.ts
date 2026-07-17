@@ -39,7 +39,11 @@ export class PermissionService {
     const jwtPermissions = (user.permissions ?? []).join('|');
     const cached = user.sessionId ? this.cache.get(user.sessionId) : undefined;
 
-    if (cached && cached.role === user.role && cached.jwtPermissions === jwtPermissions) {
+    if (
+      cached &&
+      cached.role === user.role &&
+      cached.jwtPermissions === jwtPermissions
+    ) {
       return cached.permissions;
     }
 

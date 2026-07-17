@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_TRANSPORT_SCHEDULES, type TransportScheduleRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_TRANSPORT_SCHEDULES,
+  type TransportScheduleRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -26,13 +29,20 @@ const columns: DataTableColumn<TransportScheduleRow>[] = [
 export default function TransportSchedulesPage() {
   const [schedules, setSchedules] = useState(MOCK_TRANSPORT_SCHEDULES);
 
-  const active = schedules.filter((row) => row.status === 'scheduled' || row.status === 'dispatched').length;
+  const active = schedules.filter(
+    (row) => row.status === 'scheduled' || row.status === 'dispatched',
+  ).length;
 
   return (
     <PageShell
       title="Schedules"
       subtitle="Patient transport pickups and route planning."
-      primaryAction={<PortalActionButton label="Create schedule" successTitle="Transport scheduled" />}
+      primaryAction={
+        <PortalActionButton
+          label="Create schedule"
+          successTitle="Transport scheduled"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
@@ -56,7 +66,9 @@ export default function TransportSchedulesPage() {
               onClick={() => {
                 setSchedules((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'dispatched' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'dispatched' as const }
+                      : item,
                   ),
                 );
               }}

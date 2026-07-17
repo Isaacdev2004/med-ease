@@ -1,5 +1,6 @@
 export type ReportStatus = 'draft' | 'published' | 'archived';
-export type InstanceStatus = 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
+export type InstanceStatus =
+  'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
 export type ScheduleStatus = 'active' | 'paused' | 'disabled';
 export type ExportFormat = 'pdf' | 'xlsx' | 'csv';
 export type ExportStatus = 'queued' | 'processing' | 'completed' | 'failed';

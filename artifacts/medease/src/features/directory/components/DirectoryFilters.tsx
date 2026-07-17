@@ -8,7 +8,10 @@ import {
 } from '@/shared/ui/select';
 import { Switch } from '@/shared/ui/switch';
 import { FilterPanel } from '@/shared/components';
-import type { DirectorySort, ProviderType } from '@/services/directory/directory.types';
+import type {
+  DirectorySort,
+  ProviderType,
+} from '@/services/directory/directory.types';
 
 interface DirectoryFiltersProps {
   specialty: string;
@@ -97,7 +100,10 @@ export function DirectoryFilters({
         </div>
         <div className="space-y-2">
           <Label htmlFor="directory-sort">Sort by</Label>
-          <Select value={sort} onValueChange={(v) => onSortChange(v as DirectorySort)}>
+          <Select
+            value={sort}
+            onValueChange={(v) => onSortChange(v as DirectorySort)}
+          >
             <SelectTrigger id="directory-sort">
               <SelectValue placeholder="Relevance" />
             </SelectTrigger>
@@ -112,7 +118,10 @@ export function DirectoryFilters({
         </div>
         <div className="space-y-2">
           <Label htmlFor="directory-specialty">Specialty</Label>
-          <Select value={specialty || 'all'} onValueChange={(v) => onSpecialtyChange(v === 'all' ? '' : v)}>
+          <Select
+            value={specialty || 'all'}
+            onValueChange={(v) => onSpecialtyChange(v === 'all' ? '' : v)}
+          >
             <SelectTrigger id="directory-specialty">
               <SelectValue placeholder="All specialties" />
             </SelectTrigger>
@@ -128,7 +137,10 @@ export function DirectoryFilters({
         </div>
         <div className="space-y-2">
           <Label htmlFor="directory-department">Department</Label>
-          <Select value={department || 'all'} onValueChange={(v) => onDepartmentChange(v === 'all' ? '' : v)}>
+          <Select
+            value={department || 'all'}
+            onValueChange={(v) => onDepartmentChange(v === 'all' ? '' : v)}
+          >
             <SelectTrigger id="directory-department">
               <SelectValue placeholder="All departments" />
             </SelectTrigger>
@@ -144,7 +156,10 @@ export function DirectoryFilters({
         </div>
         <div className="space-y-2">
           <Label htmlFor="directory-city">City</Label>
-          <Select value={city || 'all'} onValueChange={(v) => onCityChange(v === 'all' ? '' : v)}>
+          <Select
+            value={city || 'all'}
+            onValueChange={(v) => onCityChange(v === 'all' ? '' : v)}
+          >
             <SelectTrigger id="directory-city">
               <SelectValue placeholder="All cities" />
             </SelectTrigger>
@@ -162,19 +177,35 @@ export function DirectoryFilters({
       <div className="mt-4 space-y-3 border-t pt-4">
         <div className="flex items-center justify-between">
           <Label htmlFor="filter-favorites">Favorites only</Label>
-          <Switch id="filter-favorites" checked={favoritesOnly} onCheckedChange={onFavoritesChange} />
+          <Switch
+            id="filter-favorites"
+            checked={favoritesOnly}
+            onCheckedChange={onFavoritesChange}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="filter-tele">Teleconsultation</Label>
-          <Switch id="filter-tele" checked={teleconsultation} onCheckedChange={onTeleconsultationChange} />
+          <Switch
+            id="filter-tele"
+            checked={teleconsultation}
+            onCheckedChange={onTeleconsultationChange}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="filter-emergency">Emergency services</Label>
-          <Switch id="filter-emergency" checked={emergency} onCheckedChange={onEmergencyChange} />
+          <Switch
+            id="filter-emergency"
+            checked={emergency}
+            onCheckedChange={onEmergencyChange}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="filter-open">Open now</Label>
-          <Switch id="filter-open" checked={openNow} onCheckedChange={onOpenNowChange} />
+          <Switch
+            id="filter-open"
+            checked={openNow}
+            onCheckedChange={onOpenNowChange}
+          />
         </div>
       </div>
     </FilterPanel>

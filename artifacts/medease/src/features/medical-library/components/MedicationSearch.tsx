@@ -28,7 +28,10 @@ function saveRecent(query: string) {
   if (!query.trim()) return;
   const recent = loadRecent().filter((item) => item !== query);
   recent.unshift(query);
-  localStorage.setItem(RECENT_MEDICATION_SEARCHES_KEY, JSON.stringify(recent.slice(0, 8)));
+  localStorage.setItem(
+    RECENT_MEDICATION_SEARCHES_KEY,
+    JSON.stringify(recent.slice(0, 8)),
+  );
 }
 
 export function MedicationSearch({
@@ -39,7 +42,9 @@ export function MedicationSearch({
 }: MedicationSearchProps) {
   const [focused, setFocused] = useState(false);
   const [recent, setRecent] = useState<string[]>([]);
-  const suggestions = defaultValue ? medicalLibraryService.getSuggestions(defaultValue) : [];
+  const suggestions = defaultValue
+    ? medicalLibraryService.getSuggestions(defaultValue)
+    : [];
   const popular = medicalLibraryService.getPopularMedications();
 
   useEffect(() => {
@@ -75,13 +80,22 @@ export function MedicationSearch({
         aria-label="Search medical library"
       />
       {focused ? (
-        <div className="absolute z-20 mt-2 w-full rounded-lg border bg-popover p-3 shadow-md" role="listbox">
+        <div
+          className="absolute z-20 mt-2 w-full rounded-lg border bg-popover p-3 shadow-md"
+          role="listbox"
+        >
           {suggestions.length > 0 ? (
             <div className="mb-3">
-              <p className="text-xs font-medium text-muted-foreground mb-2">Suggestions</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">
+                Suggestions
+              </p>
               <div className="flex flex-wrap gap-2">
                 {suggestions.map((item) => (
-                  <button key={item} type="button" onMouseDown={() => apply(item)}>
+                  <button
+                    key={item}
+                    type="button"
+                    onMouseDown={() => apply(item)}
+                  >
                     <Badge variant="secondary">{item}</Badge>
                   </button>
                 ))}
@@ -90,10 +104,16 @@ export function MedicationSearch({
           ) : null}
           {recent.length > 0 ? (
             <div className="mb-3">
-              <p className="text-xs font-medium text-muted-foreground mb-2">Recent</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">
+                Recent
+              </p>
               <div className="flex flex-wrap gap-2">
                 {recent.map((item) => (
-                  <button key={item} type="button" onMouseDown={() => apply(item)}>
+                  <button
+                    key={item}
+                    type="button"
+                    onMouseDown={() => apply(item)}
+                  >
                     <Badge variant="outline">{item}</Badge>
                   </button>
                 ))}
@@ -101,10 +121,16 @@ export function MedicationSearch({
             </div>
           ) : null}
           <div>
-            <p className="text-xs font-medium text-muted-foreground mb-2">Popular</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2">
+              Popular
+            </p>
             <div className="flex flex-wrap gap-2">
               {popular.map((item) => (
-                <button key={item} type="button" onMouseDown={() => apply(item)}>
+                <button
+                  key={item}
+                  type="button"
+                  onMouseDown={() => apply(item)}
+                >
                   <Badge variant="outline">{item}</Badge>
                 </button>
               ))}

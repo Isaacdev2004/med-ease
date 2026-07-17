@@ -1,6 +1,13 @@
-import { computeHoursWorked, clockIn, clockOut } from '@/services/workforce/attendance';
+import {
+  computeHoursWorked,
+  clockIn,
+  clockOut,
+} from '@/services/workforce/attendance';
 import { renewCertification } from '@/services/workforce/credential-engine';
-import { computeCoverage, computeWorkforceAnalytics } from '@/services/workforce/analytics';
+import {
+  computeCoverage,
+  computeWorkforceAnalytics,
+} from '@/services/workforce/analytics';
 import { detectShiftConflicts } from '@/services/workforce/scheduling-engine';
 import {
   buildWorkforceDashboard,
@@ -27,7 +34,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -47,11 +59,21 @@ class WorkforceRepository {
 
   searchEmployees(filters?: WorkforceFilters) {
     let items = this.employees;
-    if (filters?.departmentId) items = items.filter((e) => e.departmentId === filters.departmentId);
-    if (filters?.facilityId) items = items.filter((e) => e.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((e) => e.status === filters.status);
-    if (filters?.q) items = items.filter((e) => matchQ(filters.q, e.fullName, e.email, e.employeeNumber, e.jobTitle));
-    return paginate([...items].sort((a, b) => a.fullName.localeCompare(b.fullName)), filters?.page, filters?.pageSize);
+    if (filters?.departmentId)
+      items = items.filter((e) => e.departmentId === filters.departmentId);
+    if (filters?.facilityId)
+      items = items.filter((e) => e.facilityId === filters.facilityId);
+    if (filters?.status)
+      items = items.filter((e) => e.status === filters.status);
+    if (filters?.q)
+      items = items.filter((e) =>
+        matchQ(filters.q, e.fullName, e.email, e.employeeNumber, e.jobTitle),
+      );
+    return paginate(
+      [...items].sort((a, b) => a.fullName.localeCompare(b.fullName)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getEmployee(employeeId: string) {
@@ -59,7 +81,9 @@ class WorkforceRepository {
   }
 
   createEmployee(input: CreateEmployeeInput) {
-    const dept = MOCK_DEPARTMENTS.find((d) => d.departmentId === input.departmentId);
+    const dept = MOCK_DEPARTMENTS.find(
+      (d) => d.departmentId === input.departmentId,
+    );
     const id = `emp-${String(++this.nextId)}`;
     const emp = {
       employeeId: id,
@@ -93,7 +117,10 @@ class WorkforceRepository {
     const idx = this.employees.findIndex((e) => e.employeeId === employeeId);
     if (idx < 0) return null;
     const emp = this.employees[idx]!;
-    if (updates.jobTitle) { emp.jobTitle = updates.jobTitle; emp.roleName = updates.jobTitle; }
+    if (updates.jobTitle) {
+      emp.jobTitle = updates.jobTitle;
+      emp.roleName = updates.jobTitle;
+    }
     if (updates.phone) emp.phone = updates.phone;
     if (updates.email) emp.email = updates.email;
     emp.updatedAt = new Date().toISOString();
@@ -103,15 +130,22 @@ class WorkforceRepository {
 
   getDepartments(filters?: WorkforceFilters) {
     let items = MOCK_DEPARTMENTS;
-    if (filters?.facilityId) items = items.filter((d) => d.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((d) => d.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getSchedules(filters?: WorkforceFilters) {
     let items = this.shifts;
-    if (filters?.employeeId) items = items.filter((s) => s.employeeId === filters.employeeId);
-    if (filters?.departmentId) items = items.filter((s) => s.departmentId === filters.departmentId);
-    return paginate([...items].sort((a, b) => b.startTime.localeCompare(a.startTime)), filters?.page, filters?.pageSize);
+    if (filters?.employeeId)
+      items = items.filter((s) => s.employeeId === filters.employeeId);
+    if (filters?.departmentId)
+      items = items.filter((s) => s.departmentId === filters.departmentId);
+    return paginate(
+      [...items].sort((a, b) => b.startTime.localeCompare(a.startTime)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   assignShift(input: AssignShiftInput) {
@@ -137,24 +171,36 @@ class WorkforceRepository {
 
   getRoster(departmentId?: string) {
     const roster = departmentId
-      ? MOCK_ROSTERS.find((r) => r.departmentId === departmentId) ?? MOCK_ROSTERS[0]!
+      ? (MOCK_ROSTERS.find((r) => r.departmentId === departmentId) ??
+        MOCK_ROSTERS[0]!)
       : MOCK_ROSTERS[0]!;
     return roster;
   }
 
   getAttendance(filters?: WorkforceFilters) {
     let items = this.attendance;
-    if (filters?.employeeId) items = items.filter((a) => a.employeeId === filters.employeeId);
-    if (filters?.departmentId) items = items.filter((a) => a.departmentId === filters.departmentId);
-    return paginate([...items].sort((a, b) => b.date.localeCompare(a.date)), filters?.page, filters?.pageSize);
+    if (filters?.employeeId)
+      items = items.filter((a) => a.employeeId === filters.employeeId);
+    if (filters?.departmentId)
+      items = items.filter((a) => a.departmentId === filters.departmentId);
+    return paginate(
+      [...items].sort((a, b) => b.date.localeCompare(a.date)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   clock(input: ClockInput) {
     const emp = this.getEmployee(input.employeeId);
     if (!emp) return null;
-    const event = input.type === 'clock_in' ? clockIn(input.employeeId, input.location) : clockOut(input.employeeId, input.location);
+    const event =
+      input.type === 'clock_in'
+        ? clockIn(input.employeeId, input.location)
+        : clockOut(input.employeeId, input.location);
     const today = new Date().toISOString().slice(0, 10);
-    const idx = this.attendance.findIndex((a) => a.employeeId === input.employeeId && a.date === today);
+    const idx = this.attendance.findIndex(
+      (a) => a.employeeId === input.employeeId && a.date === today,
+    );
     if (input.type === 'clock_in') {
       const record = {
         attendanceId: `att-${String(++this.nextId)}`,
@@ -168,7 +214,12 @@ class WorkforceRepository {
         lateMinutes: 0,
         departmentId: emp.departmentId,
       };
-      if (idx >= 0) this.attendance[idx] = { ...this.attendance[idx]!, clockIn: event.timestamp, status: 'present' };
+      if (idx >= 0)
+        this.attendance[idx] = {
+          ...this.attendance[idx]!,
+          clockIn: event.timestamp,
+          status: 'present',
+        };
       else this.attendance.unshift(record);
     } else if (idx >= 0) {
       const rec = this.attendance[idx]!;
@@ -181,14 +232,21 @@ class WorkforceRepository {
 
   getLeaveRequests(filters?: WorkforceFilters) {
     let items = this.leaveRequests;
-    if (filters?.employeeId) items = items.filter((l) => l.employeeId === filters.employeeId);
-    if (filters?.status) items = items.filter((l) => l.status === filters.status);
+    if (filters?.employeeId)
+      items = items.filter((l) => l.employeeId === filters.employeeId);
+    if (filters?.status)
+      items = items.filter((l) => l.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   createLeaveRequest(input: LeaveRequestInput) {
     const emp = this.getEmployee(input.employeeId);
-    const days = Math.ceil((new Date(input.endDate).getTime() - new Date(input.startDate).getTime()) / 86400000) + 1;
+    const days =
+      Math.ceil(
+        (new Date(input.endDate).getTime() -
+          new Date(input.startDate).getTime()) /
+          86400000,
+      ) + 1;
     const req = {
       leaveId: `lv-${String(++this.nextId)}`,
       employeeId: input.employeeId,
@@ -222,8 +280,10 @@ class WorkforceRepository {
 
   getTraining(filters?: WorkforceFilters) {
     let items = this.training;
-    if (filters?.employeeId) items = items.filter((t) => t.employeeId === filters.employeeId);
-    if (filters?.status) items = items.filter((t) => t.status === filters.status);
+    if (filters?.employeeId)
+      items = items.filter((t) => t.employeeId === filters.employeeId);
+    if (filters?.status)
+      items = items.filter((t) => t.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -246,7 +306,8 @@ class WorkforceRepository {
 
   getPerformance(filters?: WorkforceFilters) {
     let items = MOCK_PERFORMANCE;
-    if (filters?.employeeId) items = items.filter((p) => p.employeeId === filters.employeeId);
+    if (filters?.employeeId)
+      items = items.filter((p) => p.employeeId === filters.employeeId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -260,7 +321,9 @@ class WorkforceRepository {
     const idx = this.employees.findIndex((e) => e.employeeId === employeeId);
     if (idx < 0) return null;
     const emp = this.employees[idx]!;
-    const cIdx = emp.certifications.findIndex((c) => c.certificationId === certificationId);
+    const cIdx = emp.certifications.findIndex(
+      (c) => c.certificationId === certificationId,
+    );
     if (cIdx < 0) return null;
     emp.certifications[cIdx] = renewCertification(emp.certifications[cIdx]!);
     this.employees[idx] = emp;
@@ -269,13 +332,15 @@ class WorkforceRepository {
 
   getPayroll(filters?: WorkforceFilters) {
     let items = MOCK_PAYROLL;
-    if (filters?.employeeId) items = items.filter((p) => p.employeeId === filters.employeeId);
+    if (filters?.employeeId)
+      items = items.filter((p) => p.employeeId === filters.employeeId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getOnCall(filters?: WorkforceFilters) {
     let items = MOCK_ON_CALL;
-    if (filters?.departmentId) items = items.filter((o) => o.departmentId === filters.departmentId);
+    if (filters?.departmentId)
+      items = items.filter((o) => o.departmentId === filters.departmentId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -304,11 +369,25 @@ class WorkforceRepository {
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, generatedAt: new Date().toISOString(), recordCount: this.employees.length };
+    return {
+      format,
+      generatedAt: new Date().toISOString(),
+      recordCount: this.employees.length,
+    };
   }
 
-  favorite(userId: string, entityType: WorkforceFavorite['entityType'], entityId: string) {
-    const fav: WorkforceFavorite = { favoriteId: `fav-${Date.now()}`, userId, entityType, entityId, createdAt: new Date().toISOString() };
+  favorite(
+    userId: string,
+    entityType: WorkforceFavorite['entityType'],
+    entityId: string,
+  ) {
+    const fav: WorkforceFavorite = {
+      favoriteId: `fav-${Date.now()}`,
+      userId,
+      entityType,
+      entityId,
+      createdAt: new Date().toISOString(),
+    };
     this.favorites.push(fav);
     return fav;
   }

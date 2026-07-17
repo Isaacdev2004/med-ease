@@ -30,7 +30,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const message =
       typeof exceptionResponse === 'string'
         ? exceptionResponse
-        : ((exceptionResponse as { message?: string | string[] }).message ?? 'Unexpected error');
+        : ((exceptionResponse as { message?: string | string[] }).message ??
+          'Unexpected error');
 
     if (status >= 500) {
       this.logger.error(
@@ -38,7 +39,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
           path: request.url,
           method: request.method,
           status,
-          error: exception instanceof Error ? exception.message : String(exception),
+          error:
+            exception instanceof Error ? exception.message : String(exception),
         },
         'Unhandled exception',
       );

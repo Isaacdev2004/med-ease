@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { laboratoryQueries } from '@/features/laboratory/queries/laboratory.queries';
-import type { LabOrderFilters, LabResultFilters } from '@/services/laboratory/types';
+import type {
+  LabOrderFilters,
+  LabResultFilters,
+} from '@/services/laboratory/types';
 import { laboratoryService } from '@/services/laboratory/laboratory.service';
 import { useAuth } from '@/services/auth/auth-context';
 
@@ -14,7 +17,10 @@ export function useLaboratoryOrders(filters?: LabOrderFilters) {
 }
 
 export function useLaboratoryOrder(id: string | undefined) {
-  return useQuery({ ...laboratoryQueries.order(id ?? ''), enabled: Boolean(id) });
+  return useQuery({
+    ...laboratoryQueries.order(id ?? ''),
+    enabled: Boolean(id),
+  });
 }
 
 export function useLaboratoryResults(filters?: LabResultFilters) {
@@ -22,19 +28,31 @@ export function useLaboratoryResults(filters?: LabResultFilters) {
 }
 
 export function useLaboratoryResult(id: string | undefined) {
-  return useQuery({ ...laboratoryQueries.result(id ?? ''), enabled: Boolean(id) });
+  return useQuery({
+    ...laboratoryQueries.result(id ?? ''),
+    enabled: Boolean(id),
+  });
 }
 
 export function usePatientLaboratory(patientId: string | undefined) {
-  return useQuery({ ...laboratoryQueries.patientLab(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...laboratoryQueries.patientLab(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useLaboratoryTimeline(patientId: string | undefined) {
-  return useQuery({ ...laboratoryQueries.timeline(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...laboratoryQueries.timeline(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useLaboratoryTrends(patientId: string | undefined) {
-  return useQuery({ ...laboratoryQueries.trends(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...laboratoryQueries.trends(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useLaboratoryAlerts(patientId?: string) {
@@ -69,7 +87,10 @@ export function usePatientLabs(patientId: string | undefined) {
   return usePatientLaboratory(patientId);
 }
 
-export function useTrendAnalysis(patientId: string | undefined, testId?: string) {
+export function useTrendAnalysis(
+  patientId: string | undefined,
+  testId?: string,
+) {
   return useQuery({
     ...laboratoryQueries.trendAnalysis(patientId ?? '', testId),
     enabled: Boolean(patientId),

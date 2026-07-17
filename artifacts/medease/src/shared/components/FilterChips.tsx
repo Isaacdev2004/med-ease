@@ -18,7 +18,12 @@ interface FilterChipsProps {
 }
 
 /** Displays active filters as removable chips — synced with URL parameters. */
-export function FilterChips({ filters, onRemove, onClearAll, className }: FilterChipsProps) {
+export function FilterChips({
+  filters,
+  onRemove,
+  onClearAll,
+  className,
+}: FilterChipsProps) {
   if (filters.length === 0) return null;
 
   return (

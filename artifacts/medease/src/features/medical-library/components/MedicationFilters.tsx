@@ -1,8 +1,17 @@
 import { Label } from '@/shared/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/select';
 import { Switch } from '@/shared/ui/switch';
 import { FilterPanel } from '@/shared/components';
-import type { MedicationCategory, MedicationSort } from '@/services/medical-library/medical-library.types';
+import type {
+  MedicationCategory,
+  MedicationSort,
+} from '@/services/medical-library/medical-library.types';
 import { MEDICATION_CATEGORY_LABELS } from '@/services/medical-library';
 
 interface MedicationFiltersProps {
@@ -59,12 +68,17 @@ export function MedicationFilters({
         <div className="space-y-2">
           <Label htmlFor="med-category">Category</Label>
           <Select value={category} onValueChange={onCategoryChange}>
-            <SelectTrigger id="med-category"><SelectValue placeholder="All categories" /></SelectTrigger>
+            <SelectTrigger id="med-category">
+              <SelectValue placeholder="All categories" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All categories</SelectItem>
-              {(facets?.categories ?? Object.keys(MEDICATION_CATEGORY_LABELS)).map((item) => (
+              {(
+                facets?.categories ?? Object.keys(MEDICATION_CATEGORY_LABELS)
+              ).map((item) => (
                 <SelectItem key={item} value={item}>
-                  {MEDICATION_CATEGORY_LABELS[item as MedicationCategory] ?? item}
+                  {MEDICATION_CATEGORY_LABELS[item as MedicationCategory] ??
+                    item}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -72,23 +86,39 @@ export function MedicationFilters({
         </div>
         <div className="space-y-2">
           <Label htmlFor="med-sort">Sort by</Label>
-          <Select value={sort} onValueChange={(v) => onSortChange(v as MedicationSort)}>
-            <SelectTrigger id="med-sort"><SelectValue /></SelectTrigger>
+          <Select
+            value={sort}
+            onValueChange={(v) => onSortChange(v as MedicationSort)}
+          >
+            <SelectTrigger id="med-sort">
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               {SORT_OPTIONS.map((o) => (
-                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                <SelectItem key={o.value} value={o.value}>
+                  {o.label}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="med-class">Therapeutic class</Label>
-          <Select value={therapeuticClass || 'all'} onValueChange={(v) => onTherapeuticClassChange(v === 'all' ? '' : v)}>
-            <SelectTrigger id="med-class"><SelectValue placeholder="All classes" /></SelectTrigger>
+          <Select
+            value={therapeuticClass || 'all'}
+            onValueChange={(v) =>
+              onTherapeuticClassChange(v === 'all' ? '' : v)
+            }
+          >
+            <SelectTrigger id="med-class">
+              <SelectValue placeholder="All classes" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All classes</SelectItem>
               {(facets?.therapeuticClasses ?? []).map((item) => (
-                <SelectItem key={item} value={item}>{item}</SelectItem>
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -97,19 +127,35 @@ export function MedicationFilters({
       <div className="mt-4 space-y-3 border-t pt-4">
         <div className="flex items-center justify-between">
           <Label htmlFor="fav-only">Favorites only</Label>
-          <Switch id="fav-only" checked={favoritesOnly} onCheckedChange={onFavoritesChange} />
+          <Switch
+            id="fav-only"
+            checked={favoritesOnly}
+            onCheckedChange={onFavoritesChange}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="otc-only">Over-the-counter only</Label>
-          <Switch id="otc-only" checked={overTheCounter} onCheckedChange={onOverTheCounterChange} />
+          <Switch
+            id="otc-only"
+            checked={overTheCounter}
+            onCheckedChange={onOverTheCounterChange}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="pediatric">Pediatric approved</Label>
-          <Switch id="pediatric" checked={pediatric} onCheckedChange={onPediatricChange} />
+          <Switch
+            id="pediatric"
+            checked={pediatric}
+            onCheckedChange={onPediatricChange}
+          />
         </div>
         <div className="flex items-center justify-between">
           <Label htmlFor="geriatric">Geriatric approved</Label>
-          <Switch id="geriatric" checked={geriatric} onCheckedChange={onGeriatricChange} />
+          <Switch
+            id="geriatric"
+            checked={geriatric}
+            onCheckedChange={onGeriatricChange}
+          />
         </div>
       </div>
     </FilterPanel>

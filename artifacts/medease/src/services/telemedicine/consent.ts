@@ -1,4 +1,8 @@
-export function recordConsent(sessionId: string, patientId: string, consented: boolean) {
+export function recordConsent(
+  sessionId: string,
+  patientId: string,
+  consented: boolean,
+) {
   return {
     sessionId,
     patientId,

@@ -1,4 +1,8 @@
-import type { BenchmarkReport, EnterpriseKpi, ExecutiveForecast } from '@/services/executive/types';
+import type {
+  BenchmarkReport,
+  EnterpriseKpi,
+  ExecutiveForecast,
+} from '@/services/executive/types';
 
 export function toFhirMeasureReport(kpi: EnterpriseKpi) {
   return {
@@ -32,19 +36,41 @@ export function toFhirBasic(report: BenchmarkReport) {
   };
 }
 
-export function mapExecutiveBundle(resources: { kpis?: EnterpriseKpi[]; forecasts?: ExecutiveForecast[] }) {
+export function mapExecutiveBundle(resources: {
+  kpis?: EnterpriseKpi[];
+  forecasts?: ExecutiveForecast[];
+}) {
   const entries: { resource: unknown }[] = [];
-  resources.kpis?.forEach((k) => entries.push({ resource: toFhirMeasureReport(k) }));
-  resources.forecasts?.forEach((f) => entries.push({
-    resource: { resourceType: 'MeasureReport', id: f.forecastId, measure: f.metric, group: [{ measureScore: { value: f.predictedValue } }] },
-  }));
+  resources.kpis?.forEach((k) =>
+    entries.push({ resource: toFhirMeasureReport(k) }),
+  );
+  resources.forecasts?.forEach((f) =>
+    entries.push({
+      resource: {
+        resourceType: 'MeasureReport',
+        id: f.forecastId,
+        measure: f.metric,
+        group: [{ measureScore: { value: f.predictedValue } }],
+      },
+    }),
+  );
   return { resourceType: 'Bundle', type: 'collection', entry: entries };
 }
 
 export function toFhirAuditEvent(action: string, resourceId: string) {
-  return { resourceType: 'AuditEvent', type: { text: action }, recorded: new Date().toISOString(), entity: [{ what: { reference: resourceId } }] };
+  return {
+    resourceType: 'AuditEvent',
+    type: { text: action },
+    recorded: new Date().toISOString(),
+    entity: [{ what: { reference: resourceId } }],
+  };
 }
 
 export function toFhirProvenance(resourceId: string, actorId: string) {
-  return { resourceType: 'Provenance', target: [{ reference: resourceId }], recorded: new Date().toISOString(), agent: [{ who: { reference: `Practitioner/${actorId}` } }] };
+  return {
+    resourceType: 'Provenance',
+    target: [{ reference: resourceId }],
+    recorded: new Date().toISOString(),
+    agent: [{ who: { reference: `Practitioner/${actorId}` } }],
+  };
 }

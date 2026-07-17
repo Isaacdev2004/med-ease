@@ -50,27 +50,45 @@ interface SectionProps {
   variant?: 'professional' | 'facility' | 'admin';
 }
 
-const ALL_CATEGORIES: ReportCategory[] = ['clinical', 'finance', 'audit', 'moh', 'insurance', 'hospital', 'patient', 'research'];
+const ALL_CATEGORIES: ReportCategory[] = [
+  'clinical',
+  'finance',
+  'audit',
+  'moh',
+  'insurance',
+  'hospital',
+  'patient',
+  'research',
+];
 
 export function DashboardSection({ filters }: SectionProps) {
   const dashboard = useReportDashboard(filters?.facilityId);
   const defs = useReportDefinitions(filters);
   const instances = useReportInstances(filters);
   const { exportData } = useReportingMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading report dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={FileBarChart} title="No reporting data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading report dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={FileBarChart} title="No reporting data" />;
   return (
     <div className="space-y-6">
       <ReportDashboardPanel dashboard={dashboard.data} />
       <CategoryBrowser categories={ALL_CATEGORIES} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(defs.data?.items ?? []).slice(0, 6).map((r) => <ReportCard key={r.reportId} report={r} />)}
+        {(defs.data?.items ?? []).slice(0, 6).map((r) => (
+          <ReportCard key={r.reportId} report={r} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(instances.data?.items ?? []).slice(0, 6).map((i) => <InstanceCard key={i.instanceId} instance={i} />)}
+        {(instances.data?.items ?? []).slice(0, 6).map((i) => (
+          <InstanceCard key={i.instanceId} instance={i} />
+        ))}
       </div>
       <ReportTimeline exports={dashboard.data.recentExports} />
-      <ExportPanel exports={dashboard.data.recentExports} onExport={(fmt) => exportData.mutate(fmt)} />
+      <ExportPanel
+        exports={dashboard.data.recentExports}
+        onExport={(fmt) => exportData.mutate(fmt)}
+      />
     </div>
   );
 }
@@ -84,13 +102,27 @@ export function MyReportsSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(instances.data?.items ?? []).slice(0, 12).map((i) => <InstanceCard key={i.instanceId} instance={i} />)}
+        {(instances.data?.items ?? []).slice(0, 12).map((i) => (
+          <InstanceCard key={i.instanceId} instance={i} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(exports.data?.items ?? []).slice(0, 6).map((e) => <ExportCard key={e.exportId} exportItem={e} />)}
+        {(exports.data?.items ?? []).slice(0, 6).map((e) => (
+          <ExportCard key={e.exportId} exportItem={e} />
+        ))}
       </div>
       {(defs.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => runReport.mutate({ reportId: defs.data!.items[0]!.reportId, generatedBy: filters?.userId ?? 'current-user', facilityId: filters?.facilityId })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            runReport.mutate({
+              reportId: defs.data!.items[0]!.reportId,
+              generatedBy: filters?.userId ?? 'current-user',
+              facilityId: filters?.facilityId,
+            })
+          }
+        >
           Run report (demo)
         </button>
       )}
@@ -105,10 +137,18 @@ export function ScheduledReportsSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(schedules.data?.items ?? []).map((s) => <ScheduleCard key={s.scheduleId} schedule={s} />)}
+        {(schedules.data?.items ?? []).map((s) => (
+          <ScheduleCard key={s.scheduleId} schedule={s} />
+        ))}
       </div>
       {(schedules.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => toggleSchedule.mutate(schedules.data!.items[0]!.scheduleId)}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            toggleSchedule.mutate(schedules.data!.items[0]!.scheduleId)
+          }
+        >
           Toggle first schedule (demo)
         </button>
       )}
@@ -123,9 +163,22 @@ export function DesignerSection({ filters }: SectionProps) {
   if (defs.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      <ReportDesigner definitions={defs.data?.items ?? []} designer={designers.data?.items[0]} />
+      <ReportDesigner
+        definitions={defs.data?.items ?? []}
+        designer={designers.data?.items[0]}
+      />
       {(defs.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => updateDesigner.mutate({ reportId: defs.data!.items[0]!.reportId, editedBy: 'current-user', canvasElements: 12 })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            updateDesigner.mutate({
+              reportId: defs.data!.items[0]!.reportId,
+              editedBy: 'current-user',
+              canvasElements: 12,
+            })
+          }
+        >
           Save designer (demo)
         </button>
       )}
@@ -142,7 +195,9 @@ export function LibrarySection({ filters }: SectionProps) {
     <div className="space-y-6">
       <FilterBuilder onFilter={setCategory} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(templates.data?.items ?? []).slice(0, 6).map((t) => <TemplateCard key={t.templateId} template={t} />)}
+        {(templates.data?.items ?? []).slice(0, 6).map((t) => (
+          <TemplateCard key={t.templateId} template={t} />
+        ))}
       </div>
       <ReportLibraryGrid reports={defs.data?.items ?? []} />
     </div>
@@ -157,10 +212,24 @@ export function SchedulesSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(schedules.data?.items ?? []).map((s) => <ScheduleCard key={s.scheduleId} schedule={s} />)}
+        {(schedules.data?.items ?? []).map((s) => (
+          <ScheduleCard key={s.scheduleId} schedule={s} />
+        ))}
       </div>
       {(defs.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => scheduleReport.mutate({ reportId: defs.data!.items[0]!.reportId, name: 'Weekly Summary', cron: '0 6 * * 1', format: 'pdf', recipients: ['admin@hospital.org'] })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            scheduleReport.mutate({
+              reportId: defs.data!.items[0]!.reportId,
+              name: 'Weekly Summary',
+              cron: '0 6 * * 1',
+              format: 'pdf',
+              recipients: ['admin@hospital.org'],
+            })
+          }
+        >
           Create schedule (demo)
         </button>
       )}
@@ -175,18 +244,42 @@ export function ExportsSection({ filters }: SectionProps) {
   if (exports.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      <ExportPanel exports={exports.data?.items ?? []} onExport={(fmt) => exportData.mutate(fmt)} />
+      <ExportPanel
+        exports={exports.data?.items ?? []}
+        onExport={(fmt) => exportData.mutate(fmt)}
+      />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(exports.data?.items ?? []).slice(0, 9).map((e) => <ExportCard key={e.exportId} exportItem={e} />)}
+        {(exports.data?.items ?? []).slice(0, 9).map((e) => (
+          <ExportCard key={e.exportId} exportItem={e} />
+        ))}
       </div>
       <div className="flex gap-4">
         {(defs.data?.items ?? [])[0] && (
-          <button type="button" className="text-sm text-primary underline" onClick={() => exportReport.mutate({ reportId: defs.data!.items[0]!.reportId, format: 'pdf', requestedBy: 'current-user' })}>
+          <button
+            type="button"
+            className="text-sm text-primary underline"
+            onClick={() =>
+              exportReport.mutate({
+                reportId: defs.data!.items[0]!.reportId,
+                format: 'pdf',
+                requestedBy: 'current-user',
+              })
+            }
+          >
             Export report (demo)
           </button>
         )}
         {(exports.data?.items ?? []).find((e) => e.status === 'failed') && (
-          <button type="button" className="text-sm text-primary underline" onClick={() => retryExport.mutate(exports.data!.items.find((e) => e.status === 'failed')!.exportId)}>
+          <button
+            type="button"
+            className="text-sm text-primary underline"
+            onClick={() =>
+              retryExport.mutate(
+                exports.data!.items.find((e) => e.status === 'failed')!
+                  .exportId,
+              )
+            }
+          >
             Retry failed export (demo)
           </button>
         )}
@@ -214,16 +307,32 @@ export function ComplianceSection({ filters }: SectionProps) {
   );
 }
 
-export function ReportingSectionContent({ section, filters }: { section: ReportingSection; filters?: ReportFilters; variant?: 'professional' | 'facility' | 'admin' }) {
+export function ReportingSectionContent({
+  section,
+  filters,
+}: {
+  section: ReportingSection;
+  filters?: ReportFilters;
+  variant?: 'professional' | 'facility' | 'admin';
+}) {
   switch (section) {
-    case 'my-reports': return <MyReportsSection filters={filters} />;
-    case 'scheduled-reports': return <ScheduledReportsSection filters={filters} />;
-    case 'report-designer': return <DesignerSection filters={filters} />;
-    case 'report-library': return <LibrarySection filters={filters} />;
-    case 'report-schedules': return <SchedulesSection filters={filters} />;
-    case 'report-exports': return <ExportsSection filters={filters} />;
-    case 'report-analytics': return <AnalyticsSection filters={filters} />;
-    case 'compliance-reports': return <ComplianceSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'my-reports':
+      return <MyReportsSection filters={filters} />;
+    case 'scheduled-reports':
+      return <ScheduledReportsSection filters={filters} />;
+    case 'report-designer':
+      return <DesignerSection filters={filters} />;
+    case 'report-library':
+      return <LibrarySection filters={filters} />;
+    case 'report-schedules':
+      return <SchedulesSection filters={filters} />;
+    case 'report-exports':
+      return <ExportsSection filters={filters} />;
+    case 'report-analytics':
+      return <AnalyticsSection filters={filters} />;
+    case 'compliance-reports':
+      return <ComplianceSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

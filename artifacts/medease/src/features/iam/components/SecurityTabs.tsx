@@ -39,8 +39,16 @@ const ADMIN_TABS: Tab[] = [
   { segment: 'consent', label: 'Consent', path: 'consent' },
   { segment: 'delegation', label: 'Delegation', path: 'delegation' },
   { segment: 'break-glass', label: 'Break-Glass', path: 'break-glass' },
-  { segment: 'security-incidents', label: 'Incidents', path: 'security-incidents' },
-  { segment: 'security-analytics', label: 'Analytics', path: 'security-analytics' },
+  {
+    segment: 'security-incidents',
+    label: 'Incidents',
+    path: 'security-incidents',
+  },
+  {
+    segment: 'security-analytics',
+    label: 'Analytics',
+    path: 'security-analytics',
+  },
   { segment: 'audit-events', label: 'Audit Events', path: 'audit-events' },
 ];
 
@@ -55,12 +63,18 @@ function getTabs(variant: SecurityTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function SecurityTabs({ basePath: _basePath, variant = 'professional' }: SecurityTabsProps) {
+export function SecurityTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: SecurityTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Security sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Security sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
@@ -70,7 +84,9 @@ export function SecurityTabs({ basePath: _basePath, variant = 'professional' }: 
             href={href}
             className={cn(
               'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-              active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
             )}
             aria-current={active ? 'page' : undefined}
           >

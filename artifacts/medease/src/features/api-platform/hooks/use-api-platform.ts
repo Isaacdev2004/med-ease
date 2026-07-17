@@ -59,6 +59,9 @@ export function useSandboxes(filters?: ApiPlatformFilters) {
   return useQuery(apiPlatformQueries.sandboxes(filters));
 }
 
-export function useApiPlatformSearch(query: string, filters?: ApiPlatformFilters) {
+export function useApiPlatformSearch(
+  query: string,
+  filters?: ApiPlatformFilters,
+) {
   return useQuery(apiPlatformQueries.search(query, filters));
 }

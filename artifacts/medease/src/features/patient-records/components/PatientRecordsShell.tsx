@@ -2,9 +2,15 @@ import { useLocation } from 'wouter';
 
 import { PatientBanner } from '@/features/patient-records/components/PatientBanner';
 import { RecordSectionContent } from '@/features/patient-records/components/RecordSections';
-import { getSectionFromPath, RecordTabs } from '@/features/patient-records/components/RecordTabs';
+import {
+  getSectionFromPath,
+  RecordTabs,
+} from '@/features/patient-records/components/RecordTabs';
 import { usePatientRecordPermissions } from '@/features/patient-records/hooks/use-patient-record-permissions';
-import { usePatientId, usePatientRecord } from '@/features/patient-records/hooks/use-patient-records';
+import {
+  usePatientId,
+  usePatientRecord,
+} from '@/features/patient-records/hooks/use-patient-records';
 import { LoadingView, PageShell } from '@/shared/components';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { FileQuestion } from 'lucide-react';
@@ -14,7 +20,10 @@ interface PatientRecordsShellProps {
   routePatientId?: string;
 }
 
-export function PatientRecordsShell({ basePath, routePatientId }: PatientRecordsShellProps) {
+export function PatientRecordsShell({
+  basePath,
+  routePatientId,
+}: PatientRecordsShellProps) {
   const [location] = useLocation();
   const perms = usePatientRecordPermissions();
   const resolveQuery = usePatientId(routePatientId);
@@ -25,7 +34,10 @@ export function PatientRecordsShell({ basePath, routePatientId }: PatientRecords
   if (!perms.canView) {
     return (
       <PageShell title="Health Records">
-        <EmptyState title="Access denied" description="You do not have permission to view health records." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view health records."
+        />
       </PageShell>
     );
   }
@@ -41,7 +53,11 @@ export function PatientRecordsShell({ basePath, routePatientId }: PatientRecords
   if (!recordQuery.data || !patientId) {
     return (
       <PageShell title="Health Records">
-        <EmptyState icon={FileQuestion} title="Record not found" description="Unable to load patient health record." />
+        <EmptyState
+          icon={FileQuestion}
+          title="Record not found"
+          description="Unable to load patient health record."
+        />
       </PageShell>
     );
   }
@@ -59,7 +75,10 @@ export function PatientRecordsShell({ basePath, routePatientId }: PatientRecords
           healthScore={record.healthScore}
           alerts={record.alerts}
         />
-        <RecordTabs basePath={basePath} medicationsOnly={perms.canViewMedicationsOnly} />
+        <RecordTabs
+          basePath={basePath}
+          medicationsOnly={perms.canViewMedicationsOnly}
+        />
         <RecordSectionContent
           section={perms.canViewMedicationsOnly ? 'medications' : section}
           record={record}

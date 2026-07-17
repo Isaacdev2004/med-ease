@@ -1,5 +1,9 @@
 /** FHIR mapper stubs for document interoperability. */
-export function toFhirDocumentReference(documentId: string, title: string, patientId?: string) {
+export function toFhirDocumentReference(
+  documentId: string,
+  title: string,
+  patientId?: string,
+) {
   return {
     resourceType: 'DocumentReference',
     id: documentId,

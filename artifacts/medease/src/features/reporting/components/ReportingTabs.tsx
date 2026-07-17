@@ -13,7 +13,11 @@ const PROFESSIONAL_TABS: Tab[] = [
 
 const FACILITY_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Reports', path: 'reports' },
-  { segment: 'scheduled-reports', label: 'Scheduled', path: 'scheduled-reports' },
+  {
+    segment: 'scheduled-reports',
+    label: 'Scheduled',
+    path: 'scheduled-reports',
+  },
 ];
 
 const ADMIN_TABS: Tab[] = [
@@ -23,7 +27,11 @@ const ADMIN_TABS: Tab[] = [
   { segment: 'report-schedules', label: 'Schedules', path: 'report-schedules' },
   { segment: 'report-exports', label: 'Exports', path: 'report-exports' },
   { segment: 'report-analytics', label: 'Analytics', path: 'report-analytics' },
-  { segment: 'compliance-reports', label: 'Compliance', path: 'compliance-reports' },
+  {
+    segment: 'compliance-reports',
+    label: 'Compliance',
+    path: 'compliance-reports',
+  },
 ];
 
 interface ReportingTabsProps {
@@ -37,17 +45,33 @@ function getTabs(variant: ReportingTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function ReportingTabs({ basePath: _basePath, variant = 'professional' }: ReportingTabsProps) {
+export function ReportingTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: ReportingTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Reporting sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Reporting sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.path} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.path}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -67,7 +91,9 @@ const PATH_MAP: [string, ReportingSection][] = [
   ['/my-reports', 'my-reports'],
 ];
 
-export function getReportingSectionFromPath(pathname: string): ReportingSection {
+export function getReportingSectionFromPath(
+  pathname: string,
+): ReportingSection {
   for (const [path, section] of PATH_MAP) {
     if (pathname.includes(path)) return section;
   }

@@ -5,7 +5,9 @@ import { medicalLibraryService } from '@/services/medical-library/medical-librar
 
 export const medicalLibraryQueries = {
   search: (filters?: MedicationFilters) => ({
-    queryKey: queryKeys.medicalLibrary.search(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.medicalLibrary.search(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => medicalLibraryService.search(filters),
     staleTime: CACHE_TIMES.reference,
   }),

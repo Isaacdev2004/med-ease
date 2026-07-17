@@ -1,11 +1,7 @@
 import type { ApiError } from '@/types/api';
 
 export type QueryErrorKind =
-  | 'network'
-  | 'validation'
-  | 'permission'
-  | 'not_found'
-  | 'unknown';
+  'network' | 'validation' | 'permission' | 'not_found' | 'unknown';
 
 export function classifyQueryError(error: unknown): QueryErrorKind {
   if (error instanceof TypeError && error.message.includes('fetch')) {
@@ -58,7 +54,10 @@ export function getFriendlyQueryErrorMessage(error: unknown): string {
   }
 }
 
-export function shouldRetryQuery(failureCount: number, error: unknown): boolean {
+export function shouldRetryQuery(
+  failureCount: number,
+  error: unknown,
+): boolean {
   const kind = classifyQueryError(error);
   if (kind === 'permission' || kind === 'validation' || kind === 'not_found') {
     return false;

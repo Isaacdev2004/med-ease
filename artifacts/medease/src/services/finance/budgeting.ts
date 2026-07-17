@@ -1,9 +1,20 @@
 import type { Budget } from '@/services/finance/types';
 
-export function varianceAnalysis(budget: Budget): { variance: number; variancePercent: number; status: 'under' | 'over' | 'on_track' } {
+export function varianceAnalysis(budget: Budget): {
+  variance: number;
+  variancePercent: number;
+  status: 'under' | 'over' | 'on_track';
+} {
   const variance = budget.allocated - budget.spent;
-  const variancePercent = budget.allocated ? Math.round((variance / budget.allocated) * 100) : 0;
-  const status = variancePercent > 10 ? 'under' : variancePercent < -10 ? 'over' : 'on_track';
+  const variancePercent = budget.allocated
+    ? Math.round((variance / budget.allocated) * 100)
+    : 0;
+  const status =
+    variancePercent > 10
+      ? 'under'
+      : variancePercent < -10
+        ? 'over'
+        : 'on_track';
   return { variance, variancePercent, status };
 }
 
@@ -12,7 +23,9 @@ export function forecastSpend(budget: Budget, monthsElapsed: number): number {
   return Math.round(monthlyRate * 12);
 }
 
-export function departmentBudgetUtilization(budgets: Budget[]): { departmentId: string; utilization: number }[] {
+export function departmentBudgetUtilization(
+  budgets: Budget[],
+): { departmentId: string; utilization: number }[] {
   const byDept = new Map<string, { allocated: number; spent: number }>();
   for (const b of budgets) {
     const key = b.departmentId ?? 'general';
@@ -36,6 +49,11 @@ export function budgetVarianceSummary(budgets: Budget[]) {
     spent,
     variance,
     variancePercent: allocated ? Math.round((variance / allocated) * 100) : 0,
-    items: budgets.slice(0, 20).map((b) => ({ budgetId: b.budgetId, name: b.name, variance: b.variance, variancePercent: b.variancePercent })),
+    items: budgets.slice(0, 20).map((b) => ({
+      budgetId: b.budgetId,
+      name: b.name,
+      variance: b.variance,
+      variancePercent: b.variancePercent,
+    })),
   };
 }

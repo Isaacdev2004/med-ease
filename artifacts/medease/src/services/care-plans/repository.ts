@@ -29,7 +29,12 @@ function matchesPlan(plan: CarePlan, filters: CarePlanFilters): boolean {
   if (filters.pathwayId && plan.pathwayId !== filters.pathwayId) return false;
   if (filters.q) {
     const q = filters.q.toLowerCase();
-    if (!`${plan.title} ${plan.primaryDiagnosis} ${plan.patientName}`.toLowerCase().includes(q)) return false;
+    if (
+      !`${plan.title} ${plan.primaryDiagnosis} ${plan.patientName}`
+        .toLowerCase()
+        .includes(q)
+    )
+      return false;
   }
   return true;
 }
@@ -44,7 +49,12 @@ class CarePlanRepository {
     const page = filters?.page ?? 1;
     const pageSize = filters?.pageSize ?? 25;
     const start = (page - 1) * pageSize;
-    return { items: filtered.slice(start, start + pageSize), total: filtered.length, page, pageSize };
+    return {
+      items: filtered.slice(start, start + pageSize),
+      total: filtered.length,
+      page,
+      pageSize,
+    };
   }
 
   getAllPlans(filters?: CarePlanFilters) {
@@ -56,7 +66,11 @@ class CarePlanRepository {
   }
 
   getActivePlan(patientId: string) {
-    return this.plans.find((p) => p.patientId === patientId && p.status === 'active') ?? null;
+    return (
+      this.plans.find(
+        (p) => p.patientId === patientId && p.status === 'active',
+      ) ?? null
+    );
   }
 
   getGoals(carePlanId?: string, patientId?: string) {
@@ -159,14 +173,22 @@ class CarePlanRepository {
   suspendPlan(id: string) {
     const idx = this.plans.findIndex((p) => p.id === id);
     if (idx < 0) return null;
-    this.plans[idx] = { ...this.plans[idx]!, status: 'suspended', updatedAt: new Date().toISOString() };
+    this.plans[idx] = {
+      ...this.plans[idx]!,
+      status: 'suspended',
+      updatedAt: new Date().toISOString(),
+    };
     return this.plans[idx]!;
   }
 
   archivePlan(id: string) {
     const idx = this.plans.findIndex((p) => p.id === id);
     if (idx < 0) return null;
-    this.plans[idx] = { ...this.plans[idx]!, status: 'archived', updatedAt: new Date().toISOString() };
+    this.plans[idx] = {
+      ...this.plans[idx]!,
+      status: 'archived',
+      updatedAt: new Date().toISOString(),
+    };
     return this.plans[idx]!;
   }
 }

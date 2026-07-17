@@ -1,7 +1,10 @@
 export { researchService } from '@/services/research/research.service';
 export { researchRepository } from '@/services/research/repository';
 export { researchOfflineQueue } from '@/services/research/offline-sync';
-export { computeResearchAnalytics, buildResearchDashboard } from '@/services/research/analytics';
+export {
+  computeResearchAnalytics,
+  buildResearchDashboard,
+} from '@/services/research/analytics';
 export {
   MOCK_TRIALS,
   MOCK_PARTICIPANTS,

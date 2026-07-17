@@ -22,5 +22,12 @@ export default function FacilityBillingPage() {
     claims: 'Claims',
     payments: 'Payments',
   };
-  return <BillingShell basePath={basePath} variant="facility" title={titles[segment]} facilityId="fac-001" />;
+  return (
+    <BillingShell
+      basePath={basePath}
+      variant="facility"
+      title={titles[segment]}
+      facilityId="fac-001"
+    />
+  );
 }

@@ -1,6 +1,9 @@
 import { computeReportAnalytics } from '@/services/reporting/analytics';
 import { mergeDesignerState } from '@/services/reporting/designer-engine';
-import { estimateFileSizeKb, nextExportStatus } from '@/services/reporting/export-engine';
+import {
+  estimateFileSizeKb,
+  nextExportStatus,
+} from '@/services/reporting/export-engine';
 import {
   MOCK_COMPLIANCE_REPORTS,
   MOCK_REPORT_AUDITS,
@@ -29,7 +32,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -58,35 +66,55 @@ class ReportingRepository {
   private favorites: ReportFavorite[] = [];
   private nextId = 880000;
 
-  dashboard(facilityId?: string) { return buildReportDashboard(facilityId); }
-  analytics(facilityId?: string) { return computeReportAnalytics(facilityId); }
+  dashboard(facilityId?: string) {
+    return buildReportDashboard(facilityId);
+  }
+  analytics(facilityId?: string) {
+    return computeReportAnalytics(facilityId);
+  }
 
   getDefinitions(filters?: ReportFilters) {
     let items = this.definitions;
-    if (filters?.category) items = items.filter((d) => d.category === filters.category);
-    if (filters?.status) items = items.filter((d) => d.status === filters.status);
-    if (filters?.q) items = items.filter((d) => matchQ(filters.q, d.name, d.description));
+    if (filters?.category)
+      items = items.filter((d) => d.category === filters.category);
+    if (filters?.status)
+      items = items.filter((d) => d.status === filters.status);
+    if (filters?.q)
+      items = items.filter((d) => matchQ(filters.q, d.name, d.description));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getDefinition(reportId: string) { return this.definitions.find((d) => d.reportId === reportId) ?? null; }
+  getDefinition(reportId: string) {
+    return this.definitions.find((d) => d.reportId === reportId) ?? null;
+  }
 
   getInstances(filters?: ReportFilters) {
     let items = this.instances;
-    if (filters?.facilityId) items = items.filter((i) => i.facilityId === filters.facilityId);
-    if (filters?.category) items = items.filter((i) => i.category === filters.category);
-    if (filters?.status) items = items.filter((i) => i.status === filters.status);
-    if (filters?.userId) items = items.filter((i) => i.generatedBy === filters.userId);
-    if (filters?.q) items = items.filter((i) => matchQ(filters.q, i.reportName, i.instanceId));
+    if (filters?.facilityId)
+      items = items.filter((i) => i.facilityId === filters.facilityId);
+    if (filters?.category)
+      items = items.filter((i) => i.category === filters.category);
+    if (filters?.status)
+      items = items.filter((i) => i.status === filters.status);
+    if (filters?.userId)
+      items = items.filter((i) => i.generatedBy === filters.userId);
+    if (filters?.q)
+      items = items.filter((i) =>
+        matchQ(filters.q, i.reportName, i.instanceId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getInstance(instanceId: string) { return this.instances.find((i) => i.instanceId === instanceId) ?? null; }
+  getInstance(instanceId: string) {
+    return this.instances.find((i) => i.instanceId === instanceId) ?? null;
+  }
 
   getTemplates(filters?: ReportFilters) {
     let items = MOCK_REPORT_TEMPLATES;
-    if (filters?.category) items = items.filter((t) => t.category === filters.category);
-    if (filters?.q) items = items.filter((t) => matchQ(filters.q, t.name, t.subcategory));
+    if (filters?.category)
+      items = items.filter((t) => t.category === filters.category);
+    if (filters?.q)
+      items = items.filter((t) => matchQ(filters.q, t.name, t.subcategory));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -98,9 +126,12 @@ class ReportingRepository {
 
   getExports(filters?: ReportFilters) {
     let items = this.exports;
-    if (filters?.status) items = items.filter((e) => e.status === filters.status);
-    if (filters?.userId) items = items.filter((e) => e.requestedBy === filters.userId);
-    if (filters?.q) items = items.filter((e) => matchQ(filters.q, e.reportName));
+    if (filters?.status)
+      items = items.filter((e) => e.status === filters.status);
+    if (filters?.userId)
+      items = items.filter((e) => e.requestedBy === filters.userId);
+    if (filters?.q)
+      items = items.filter((e) => matchQ(filters.q, e.reportName));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -110,23 +141,35 @@ class ReportingRepository {
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getDesigner(reportId: string) { return this.designers.find((d) => d.reportId === reportId) ?? null; }
+  getDesigner(reportId: string) {
+    return this.designers.find((d) => d.reportId === reportId) ?? null;
+  }
 
-  getFields(reportId: string) { return MOCK_REPORT_FIELDS.filter((f) => f.reportId === reportId); }
-  getCharts(reportId: string) { return MOCK_REPORT_CHARTS.filter((c) => c.reportId === reportId); }
-  getDataSources(reportId: string) { return MOCK_REPORT_DATA_SOURCES.filter((s) => s.reportId === reportId); }
+  getFields(reportId: string) {
+    return MOCK_REPORT_FIELDS.filter((f) => f.reportId === reportId);
+  }
+  getCharts(reportId: string) {
+    return MOCK_REPORT_CHARTS.filter((c) => c.reportId === reportId);
+  }
+  getDataSources(reportId: string) {
+    return MOCK_REPORT_DATA_SOURCES.filter((s) => s.reportId === reportId);
+  }
 
   getComplianceReports(filters?: ReportFilters) {
     let items = MOCK_COMPLIANCE_REPORTS;
-    if (filters?.category) items = items.filter((c) => c.category === filters.category);
-    if (filters?.status) items = items.filter((c) => c.status === filters.status);
-    if (filters?.q) items = items.filter((c) => matchQ(filters.q, c.name, c.regulatoryBody));
+    if (filters?.category)
+      items = items.filter((c) => c.category === filters.category);
+    if (filters?.status)
+      items = items.filter((c) => c.status === filters.status);
+    if (filters?.q)
+      items = items.filter((c) => matchQ(filters.q, c.name, c.regulatoryBody));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getAudits(filters?: ReportFilters) {
     let items = MOCK_REPORT_AUDITS;
-    if (filters?.userId) items = items.filter((a) => a.actorId === filters.userId);
+    if (filters?.userId)
+      items = items.filter((a) => a.actorId === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -258,27 +301,57 @@ class ReportingRepository {
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.instances.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.instances.length,
+    };
   }
 
-  favorite(userId: string, entityType: 'report' | 'instance' | 'template', entityId: string) {
-    if (!this.favorites.some((f) => f.userId === userId && f.entityId === entityId)) {
-      this.favorites.push({ userId, entityType, entityId, createdAt: new Date().toISOString() });
+  favorite(
+    userId: string,
+    entityType: 'report' | 'instance' | 'template',
+    entityId: string,
+  ) {
+    if (
+      !this.favorites.some(
+        (f) => f.userId === userId && f.entityId === entityId,
+      )
+    ) {
+      this.favorites.push({
+        userId,
+        entityType,
+        entityId,
+        createdAt: new Date().toISOString(),
+      });
     }
     return { userId, entityType, entityId };
   }
 
-  getFavorites(userId: string) { return this.favorites.filter((f) => f.userId === userId); }
+  getFavorites(userId: string) {
+    return this.favorites.filter((f) => f.userId === userId);
+  }
 
   share(input: ShareReportInput) {
     audit(input.reportId, 'share');
-    return { reportId: input.reportId, sharedWith: input.sharedWith, sharedAt: new Date().toISOString() };
+    return {
+      reportId: input.reportId,
+      sharedWith: input.sharedWith,
+      sharedAt: new Date().toISOString(),
+    };
   }
 
   search(query: string, filters?: ReportFilters) {
-    const defs = this.definitions.filter((d) => matchQ(query, d.name, d.description));
-    const inst = this.instances.filter((i) => matchQ(query, i.reportName, i.instanceId));
-    return { definitions: paginate(defs, filters?.page, filters?.pageSize), instances: paginate(inst, filters?.page, filters?.pageSize) };
+    const defs = this.definitions.filter((d) =>
+      matchQ(query, d.name, d.description),
+    );
+    const inst = this.instances.filter((i) =>
+      matchQ(query, i.reportName, i.instanceId),
+    );
+    return {
+      definitions: paginate(defs, filters?.page, filters?.pageSize),
+      instances: paginate(inst, filters?.page, filters?.pageSize),
+    };
   }
 }
 

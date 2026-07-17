@@ -6,7 +6,10 @@ export interface ExportResult {
   recordCount: number;
 }
 
-export function buildExportResult(format: ExportFormat, recordCount: number): ExportResult {
+export function buildExportResult(
+  format: ExportFormat,
+  recordCount: number,
+): ExportResult {
   return {
     format,
     exportedAt: new Date().toISOString(),

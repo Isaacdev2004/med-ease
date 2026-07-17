@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { PhmSectionContent } from '@/features/population-health/components/PhmSections';
-import { PhmTabs, getPhmSectionFromPath } from '@/features/population-health/components/PhmTabs';
+import {
+  PhmTabs,
+  getPhmSectionFromPath,
+} from '@/features/population-health/components/PhmTabs';
 import { usePhmPermissions } from '@/features/population-health/hooks/use-phm-permissions';
 import type { PhmFilters } from '@/services/population-health/types';
 import { PageShell } from '@/shared/components';
@@ -25,18 +28,27 @@ export function PhmShell({
   const perms = usePhmPermissions();
   const section = getPhmSectionFromPath(location);
 
-  const scopedFilters = useMemo((): PhmFilters => ({ facilityId }), [facilityId]);
+  const scopedFilters = useMemo(
+    (): PhmFilters => ({ facilityId }),
+    [facilityId],
+  );
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view population health data." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view population health data."
+        />
       </PageShell>
     );
   }
 
   return (
-    <PageShell title={title} subtitle="Enterprise population health management, care gap closure, risk stratification, registries, and outreach campaigns.">
+    <PageShell
+      title={title}
+      subtitle="Enterprise population health management, care gap closure, risk stratification, registries, and outreach campaigns."
+    >
       <div className="space-y-6">
         <PhmTabs basePath={basePath} variant={variant} />
         <PhmSectionContent section={section} filters={scopedFilters} />

@@ -22,5 +22,11 @@ export default function FacilityTelemedicinePage() {
     providers: 'Telehealth Providers',
     analytics: 'Telemedicine Analytics',
   };
-  return <TelemedicineShell basePath={basePath} variant="facility" title={titles[segment]} />;
+  return (
+    <TelemedicineShell
+      basePath={basePath}
+      variant="facility"
+      title={titles[segment]}
+    />
+  );
 }

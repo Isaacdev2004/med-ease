@@ -34,7 +34,11 @@ export function NotificationGroup({
       </h2>
       <div className="space-y-2" role="list">
         {notifications.map((notification) => (
-          <NotificationItem key={notification.id} notification={notification} {...handlers} />
+          <NotificationItem
+            key={notification.id}
+            notification={notification}
+            {...handlers}
+          />
         ))}
       </div>
     </section>

@@ -57,11 +57,15 @@ export function DirectoryCard({
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="font-semibold leading-tight">{name}</h3>
-              <p className="text-xs text-muted-foreground mt-1">{TYPE_LABELS[type]}</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {TYPE_LABELS[type]}
+              </p>
             </div>
             <StatusBadge status={status} />
           </div>
-          {subtitle ? <p className="text-sm text-muted-foreground mt-2">{subtitle}</p> : null}
+          {subtitle ? (
+            <p className="text-sm text-muted-foreground mt-2">{subtitle}</p>
+          ) : null}
         </div>
       </CardHeader>
       <CardContent className="space-y-2 text-sm">
@@ -73,7 +77,10 @@ export function DirectoryCard({
         ) : null}
         {location ? (
           <p className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-muted-foreground shrink-0" aria-hidden="true" />
+            <MapPin
+              className="h-4 w-4 text-muted-foreground shrink-0"
+              aria-hidden="true"
+            />
             {location}
           </p>
         ) : null}
@@ -85,7 +92,10 @@ export function DirectoryCard({
         ) : null}
         {phone ? (
           <p className="flex items-center gap-2">
-            <Phone className="h-4 w-4 text-muted-foreground shrink-0" aria-hidden="true" />
+            <Phone
+              className="h-4 w-4 text-muted-foreground shrink-0"
+              aria-hidden="true"
+            />
             {phone}
           </p>
         ) : null}

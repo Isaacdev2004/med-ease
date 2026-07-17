@@ -16,12 +16,18 @@ const MOCK_NOTIFICATIONS: MedNotification[] = [
     timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
     read: false,
     actor: { id: 'sys', name: 'Scheduling System' },
-    target: { type: 'appointment', id: 'apt-1', label: 'Cardiology Visit', href: '/patient/appointments/apt-1' },
+    target: {
+      type: 'appointment',
+      id: 'apt-1',
+      label: 'Cardiology Visit',
+      href: '/patient/appointments/apt-1',
+    },
   },
   {
     id: 'n-2',
     title: 'Transfer request pending approval',
-    message: 'Sarah Jenkins transfer from Mount Sinai to NYU Langone requires review.',
+    message:
+      'Sarah Jenkins transfer from Mount Sinai to NYU Langone requires review.',
     type: 'transfer',
     priority: 'critical',
     category: 'transfer',
@@ -29,7 +35,12 @@ const MOCK_NOTIFICATIONS: MedNotification[] = [
     read: false,
     pinned: true,
     actor: { id: 'u-2', name: 'Dispatch Unit A' },
-    target: { type: 'transfer', id: 'tr-1', label: 'Transfer #TR-1029', href: '/transport/transfer-requests' },
+    target: {
+      type: 'transfer',
+      id: 'tr-1',
+      label: 'Transfer #TR-1029',
+      href: '/transport/transfer-requests',
+    },
   },
   {
     id: 'n-3',
@@ -141,8 +152,10 @@ function applyFilters(items: MedNotification[], filters?: NotificationFilters) {
 
   if (filters?.unread) result = result.filter((item) => !item.read);
   if (filters?.pinned) result = result.filter((item) => item.pinned);
-  if (filters?.category) result = result.filter((item) => item.category === filters.category);
-  if (filters?.priority) result = result.filter((item) => item.priority === filters.priority);
+  if (filters?.category)
+    result = result.filter((item) => item.category === filters.category);
+  if (filters?.priority)
+    result = result.filter((item) => item.priority === filters.priority);
   if (filters?.q?.trim()) {
     const q = filters.q.trim().toLowerCase();
     result = result.filter(
@@ -159,7 +172,10 @@ function applyFilters(items: MedNotification[], filters?: NotificationFilters) {
 }
 
 export const notificationService = {
-  async list(userId: string, filters?: NotificationFilters): Promise<MedNotification[]> {
+  async list(
+    userId: string,
+    filters?: NotificationFilters,
+  ): Promise<MedNotification[]> {
     void userId;
     await delay(200);
     return applyFilters(store, filters);
@@ -194,7 +210,11 @@ export const notificationService = {
     return applyFilters(store);
   },
 
-  async pin(userId: string, id: string, pinned: boolean): Promise<MedNotification[]> {
+  async pin(
+    userId: string,
+    id: string,
+    pinned: boolean,
+  ): Promise<MedNotification[]> {
     void userId;
     store = store.map((item) => (item.id === id ? { ...item, pinned } : item));
     return applyFilters(store);
@@ -212,9 +232,15 @@ export const notificationService = {
     return applyFilters(store);
   },
 
-  async add(userId: string, notification: MedNotification): Promise<MedNotification[]> {
+  async add(
+    userId: string,
+    notification: MedNotification,
+  ): Promise<MedNotification[]> {
     void userId;
-    store = [notification, ...store.filter((item) => item.id !== notification.id)];
+    store = [
+      notification,
+      ...store.filter((item) => item.id !== notification.id),
+    ];
     return applyFilters(store);
   },
 
@@ -222,7 +248,8 @@ export const notificationService = {
     void userId;
     await delay(150);
     return [...MOCK_ACTIVITY].sort(
-      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
     );
   },
 
@@ -238,7 +265,9 @@ function delay(ms: number) {
 }
 
 /** Demo helper — inject a realtime notification for development. */
-export function createDemoNotification(partial?: Partial<MedNotification>): MedNotification {
+export function createDemoNotification(
+  partial?: Partial<MedNotification>,
+): MedNotification {
   return {
     id: `n-${crypto.randomUUID()}`,
     title: partial?.title ?? 'New realtime update',

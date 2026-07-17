@@ -4,8 +4,10 @@ import { MonitoringShell } from '@/features/patient-monitoring/components/Monito
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
 function resolvePatientBasePath(location: string) {
-  if (location.includes('/vitals')) return resolveModuleBasePath(location, 'vitals');
-  if (location.includes('/observations')) return resolveModuleBasePath(location, 'observations');
+  if (location.includes('/vitals'))
+    return resolveModuleBasePath(location, 'vitals');
+  if (location.includes('/observations'))
+    return resolveModuleBasePath(location, 'observations');
   if (location.includes('/rpm')) return resolveModuleBasePath(location, 'rpm');
   return resolveModuleBasePath(location, 'monitoring');
 }
@@ -20,5 +22,7 @@ export default function PatientMonitoringPage() {
       : location.includes('/rpm')
         ? 'Remote Monitoring'
         : 'My Monitoring';
-  return <MonitoringShell basePath={basePath} variant="patient" title={title} />;
+  return (
+    <MonitoringShell basePath={basePath} variant="patient" title={title} />
+  );
 }

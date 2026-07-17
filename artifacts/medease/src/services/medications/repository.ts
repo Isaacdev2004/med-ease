@@ -29,15 +29,28 @@ import {
 } from '@/services/medications/mock-data';
 import { buildRefillRequest } from '@/services/medications/refill';
 
-function matchesFilters(med: PatientMedication, filters: MedicationFilters): boolean {
+function matchesFilters(
+  med: PatientMedication,
+  filters: MedicationFilters,
+): boolean {
   if (filters.patientId && med.patientId !== filters.patientId) return false;
   if (filters.status && med.status !== filters.status) return false;
-  if (filters.physician && !med.prescribingPhysician.includes(filters.physician)) return false;
-  if (filters.pharmacy && med.dispensingPharmacy !== filters.pharmacy) return false;
+  if (
+    filters.physician &&
+    !med.prescribingPhysician.includes(filters.physician)
+  )
+    return false;
+  if (filters.pharmacy && med.dispensingPharmacy !== filters.pharmacy)
+    return false;
   if (filters.condition && med.condition !== filters.condition) return false;
   if (filters.q) {
     const q = filters.q.toLowerCase();
-    if (!`${med.name} ${med.genericName} ${med.prescribingPhysician}`.toLowerCase().includes(q)) return false;
+    if (
+      !`${med.name} ${med.genericName} ${med.prescribingPhysician}`
+        .toLowerCase()
+        .includes(q)
+    )
+      return false;
   }
   return true;
 }
@@ -51,14 +64,23 @@ class MedicationRepository {
   private administrations = [...MOCK_ADMINISTRATIONS];
   private dispenses = [...MOCK_DISPENSES];
   private courses = [...MOCK_COURSES];
-  private favorites = new Set<string>(MOCK_MEDICATIONS.filter((_, i) => i % 19 === 0).map((m) => m.id));
+  private favorites = new Set<string>(
+    MOCK_MEDICATIONS.filter((_, i) => i % 19 === 0).map((m) => m.id),
+  );
 
   listMedications(filters?: MedicationFilters) {
-    const filtered = this.medications.filter((m) => matchesFilters(m, filters ?? {}));
+    const filtered = this.medications.filter((m) =>
+      matchesFilters(m, filters ?? {}),
+    );
     const page = filters?.page ?? 1;
     const pageSize = filters?.pageSize ?? 25;
     const start = (page - 1) * pageSize;
-    return { items: filtered.slice(start, start + pageSize), total: filtered.length, page, pageSize };
+    return {
+      items: filtered.slice(start, start + pageSize),
+      total: filtered.length,
+      page,
+      pageSize,
+    };
   }
 
   getAllMedications(filters?: MedicationFilters) {
@@ -74,39 +96,57 @@ class MedicationRepository {
   }
 
   listPrescriptions(filters?: MedicationFilters) {
-    return this.prescriptions.filter((p) => !filters?.patientId || p.patientId === filters.patientId);
+    return this.prescriptions.filter(
+      (p) => !filters?.patientId || p.patientId === filters.patientId,
+    );
   }
 
   getSchedule(patientId?: string) {
-    return patientId ? this.schedule.filter((s) => s.patientId === patientId) : this.schedule;
+    return patientId
+      ? this.schedule.filter((s) => s.patientId === patientId)
+      : this.schedule;
   }
 
   getLogs(patientId?: string) {
-    return patientId ? this.logs.filter((l) => l.patientId === patientId) : this.logs;
+    return patientId
+      ? this.logs.filter((l) => l.patientId === patientId)
+      : this.logs;
   }
 
   getReminders(patientId?: string) {
-    return patientId ? MOCK_REMINDERS.filter((r) => r.patientId === patientId) : MOCK_REMINDERS;
+    return patientId
+      ? MOCK_REMINDERS.filter((r) => r.patientId === patientId)
+      : MOCK_REMINDERS;
   }
 
   getRefills(patientId?: string) {
-    return patientId ? this.refills.filter((r) => r.patientId === patientId) : this.refills;
+    return patientId
+      ? this.refills.filter((r) => r.patientId === patientId)
+      : this.refills;
   }
 
   getInteractions(patientId?: string) {
-    return patientId ? MOCK_INTERACTIONS.filter((i) => i.patientId === patientId) : MOCK_INTERACTIONS;
+    return patientId
+      ? MOCK_INTERACTIONS.filter((i) => i.patientId === patientId)
+      : MOCK_INTERACTIONS;
   }
 
   getAdministrations(patientId?: string) {
-    return patientId ? this.administrations.filter((a) => a.patientId === patientId) : this.administrations;
+    return patientId
+      ? this.administrations.filter((a) => a.patientId === patientId)
+      : this.administrations;
   }
 
   getDispenses(patientId?: string) {
-    return patientId ? this.dispenses.filter((d) => d.patientId === patientId) : this.dispenses;
+    return patientId
+      ? this.dispenses.filter((d) => d.patientId === patientId)
+      : this.dispenses;
   }
 
   getCourses(patientId?: string) {
-    return patientId ? this.courses.filter((c) => c.patientId === patientId) : this.courses;
+    return patientId
+      ? this.courses.filter((c) => c.patientId === patientId)
+      : this.courses;
   }
 
   getEducation(medicationId: string) {
@@ -142,7 +182,10 @@ class MedicationRepository {
 
   createPrescription(input: CreatePrescriptionInput): Prescription {
     const idx = this.prescriptions.length;
-    const rx = generatePrescription(idx, parseInt(input.patientId.replace(/\D/g, ''), 10) - 1);
+    const rx = generatePrescription(
+      idx,
+      parseInt(input.patientId.replace(/\D/g, ''), 10) - 1,
+    );
     const created: Prescription = {
       ...rx,
       id: `rx-${String(idx + 1).padStart(4, '0')}`,
@@ -174,9 +217,17 @@ class MedicationRepository {
   cancelPrescription(id: string): Prescription {
     const idx = this.prescriptions.findIndex((p) => p.id === id);
     if (idx === -1) throw new Error('Prescription not found');
-    this.prescriptions[idx] = { ...this.prescriptions[idx]!, status: 'cancelled', updatedAt: new Date().toISOString() };
+    this.prescriptions[idx] = {
+      ...this.prescriptions[idx]!,
+      status: 'cancelled',
+      updatedAt: new Date().toISOString(),
+    };
     const medIdx = this.medications.findIndex((m) => m.prescriptionId === id);
-    if (medIdx >= 0) this.medications[medIdx] = { ...this.medications[medIdx]!, status: 'cancelled' };
+    if (medIdx >= 0)
+      this.medications[medIdx] = {
+        ...this.medications[medIdx]!,
+        status: 'cancelled',
+      };
     return this.prescriptions[idx]!;
   }
 
@@ -244,11 +295,18 @@ class MedicationRepository {
     };
     this.logs.unshift(log);
     if (input.scheduledDoseId) {
-      const doseIdx = this.schedule.findIndex((d) => d.id === input.scheduledDoseId);
+      const doseIdx = this.schedule.findIndex(
+        (d) => d.id === input.scheduledDoseId,
+      );
       if (doseIdx >= 0) {
         this.schedule[doseIdx] = {
           ...this.schedule[doseIdx]!,
-          status: input.status === 'taken' ? 'taken' : input.status === 'late' ? 'late' : 'skipped',
+          status:
+            input.status === 'taken'
+              ? 'taken'
+              : input.status === 'late'
+                ? 'late'
+                : 'skipped',
         };
       }
     }
@@ -257,7 +315,9 @@ class MedicationRepository {
 
   requestRefill(input: RefillRequestInput): RefillRequest {
     const rx = this.getPrescription(input.prescriptionId);
-    const med = this.medications.find((m) => m.prescriptionId === input.prescriptionId);
+    const med = this.medications.find(
+      (m) => m.prescriptionId === input.prescriptionId,
+    );
     const request = buildRefillRequest(
       input,
       med?.name ?? rx?.medication.name ?? 'Medication',
@@ -300,9 +360,15 @@ class MedicationRepository {
     const idx = this.medications.findIndex((m) => m.id === medicationId);
     if (idx === -1) throw new Error('Medication not found');
     this.medications[idx] = { ...this.medications[idx]!, status: 'completed' };
-    const courseIdx = this.courses.findIndex((c) => c.medicationId === medicationId);
+    const courseIdx = this.courses.findIndex(
+      (c) => c.medicationId === medicationId,
+    );
     if (courseIdx >= 0) {
-      this.courses[courseIdx] = { ...this.courses[courseIdx]!, status: 'completed', completedDoses: this.courses[courseIdx]!.totalDoses };
+      this.courses[courseIdx] = {
+        ...this.courses[courseIdx]!,
+        status: 'completed',
+        completedDoses: this.courses[courseIdx]!.totalDoses,
+      };
     }
     return this.medications[idx]!;
   }
@@ -337,10 +403,12 @@ class MedicationRepository {
 
   search(query: string, patientId?: string) {
     const q = query.toLowerCase();
-    const meds = this.getAllMedications(patientId ? { patientId } : undefined).filter((m) =>
-      `${m.name} ${m.genericName}`.toLowerCase().includes(q),
-    );
-    const rx = this.listPrescriptions(patientId ? { patientId } : undefined).filter((p) =>
+    const meds = this.getAllMedications(
+      patientId ? { patientId } : undefined,
+    ).filter((m) => `${m.name} ${m.genericName}`.toLowerCase().includes(q));
+    const rx = this.listPrescriptions(
+      patientId ? { patientId } : undefined,
+    ).filter((p) =>
       `${p.medication.name} ${p.prescriptionNumber}`.toLowerCase().includes(q),
     );
     return { medications: meds.slice(0, 20), prescriptions: rx.slice(0, 20) };

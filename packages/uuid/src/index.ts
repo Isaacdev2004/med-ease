@@ -11,7 +11,10 @@ export function newId(): string {
 }
 
 /** Deterministic UUID v5 for seed data aligned with frontend mock IDs. */
-export function deterministicId(name: string, namespace: string = MEDEASE_UUID_NAMESPACE): string {
+export function deterministicId(
+  name: string,
+  namespace: string = MEDEASE_UUID_NAMESPACE,
+): string {
   return uuidv5(name, namespace);
 }
 

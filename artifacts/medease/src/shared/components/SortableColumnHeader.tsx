@@ -31,7 +31,9 @@ export function SortableColumnHeader({
       size="sm"
       className={cn('-ml-3 h-8 px-2 font-medium', className)}
       onClick={() => onSort?.(columnId)}
-      aria-sort={isActive ? (direction === 'asc' ? 'ascending' : 'descending') : 'none'}
+      aria-sort={
+        isActive ? (direction === 'asc' ? 'ascending' : 'descending') : 'none'
+      }
     >
       {label}
       {isActive ? (
@@ -41,7 +43,10 @@ export function SortableColumnHeader({
           <ArrowDown className="ml-2 h-3.5 w-3.5" aria-hidden="true" />
         )
       ) : (
-        <ArrowUpDown className="ml-2 h-3.5 w-3.5 opacity-40" aria-hidden="true" />
+        <ArrowUpDown
+          className="ml-2 h-3.5 w-3.5 opacity-40"
+          aria-hidden="true"
+        />
       )}
     </Button>
   );

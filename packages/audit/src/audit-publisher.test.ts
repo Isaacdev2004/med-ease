@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { runWithRequestContext, createBaseRequestContext } from '@medease/observability';
+import {
+  runWithRequestContext,
+  createBaseRequestContext,
+} from '@medease/observability';
 import type { QueueJobEnvelope } from '@medease/queue';
 
 import { AuditEvents } from './audit-events';
@@ -11,7 +14,10 @@ import type { AuditRecordPayload } from './audit-types';
 
 describe('AuditPublisher', () => {
   it('enqueues domain events with request context fields', async () => {
-    const enqueued: Array<{ jobName: string; envelope: QueueJobEnvelope<AuditRecordPayload> }> = [];
+    const enqueued: Array<{
+      jobName: string;
+      envelope: QueueJobEnvelope<AuditRecordPayload>;
+    }> = [];
 
     const publisher = new AuditPublisher(async (jobName, envelope) => {
       enqueued.push({ jobName, envelope });
@@ -19,7 +25,10 @@ describe('AuditPublisher', () => {
 
     await runWithRequestContext(
       {
-        ...createBaseRequestContext({ requestId: 'req-1', correlationId: 'corr-1' }),
+        ...createBaseRequestContext({
+          requestId: 'req-1',
+          correlationId: 'corr-1',
+        }),
         tenantId: 'tenant-a',
         userId: 'user-a',
         organizationId: 'org-a',
@@ -84,7 +93,9 @@ describe('AuditPublisher', () => {
       enqueued.push(envelope);
     });
 
-    await publisher.publish(AuditEvents.userLoginFailed({ metadata: { email: 'a@b.com' } }));
+    await publisher.publish(
+      AuditEvents.userLoginFailed({ metadata: { email: 'a@b.com' } }),
+    );
 
     assert.equal(enqueued[0]?.actorId, SYSTEM_ACTOR_ID);
     assert.equal(enqueued[0]?.payload.eventType, 'login_failure');

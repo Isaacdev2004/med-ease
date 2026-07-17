@@ -19,26 +19,42 @@ export function MedicationWarnings({ medication }: MedicationWarningsProps) {
         </Alert>
       ))}
       <Card>
-        <CardHeader><CardTitle>Contraindications</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Contraindications</CardTitle>
+        </CardHeader>
         <CardContent>
           <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-            {medication.contraindications.map((item) => <li key={item}>{item}</li>)}
+            {medication.contraindications.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </CardContent>
       </Card>
       <Card>
-        <CardHeader><CardTitle>Precautions</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Precautions</CardTitle>
+        </CardHeader>
         <CardContent>
           <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-            {medication.precautions.map((item) => <li key={item}>{item}</li>)}
+            {medication.precautions.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </CardContent>
       </Card>
       <Card>
-        <CardHeader><CardTitle>Pregnancy & Breastfeeding</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle>Pregnancy & Breastfeeding</CardTitle>
+        </CardHeader>
         <CardContent className="text-sm space-y-2">
-          <p><span className="font-medium">Pregnancy:</span> {medication.pregnancySafety}</p>
-          <p><span className="font-medium">Breastfeeding:</span> {medication.breastfeedingSafety}</p>
+          <p>
+            <span className="font-medium">Pregnancy:</span>{' '}
+            {medication.pregnancySafety}
+          </p>
+          <p>
+            <span className="font-medium">Breastfeeding:</span>{' '}
+            {medication.breastfeedingSafety}
+          </p>
         </CardContent>
       </Card>
     </div>

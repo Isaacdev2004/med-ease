@@ -20,12 +20,22 @@ function filterTimeline(
   return timeline.filter((entry) => {
     if (filters.category && entry.category !== filters.category) return false;
     if (filters.severity && entry.severity !== filters.severity) return false;
-    if (filters.provider && entry.actor && !entry.actor.includes(filters.provider)) return false;
-    if (filters.dateFrom && new Date(entry.date) < new Date(filters.dateFrom)) return false;
-    if (filters.dateTo && new Date(entry.date) > new Date(filters.dateTo)) return false;
+    if (
+      filters.provider &&
+      entry.actor &&
+      !entry.actor.includes(filters.provider)
+    )
+      return false;
+    if (filters.dateFrom && new Date(entry.date) < new Date(filters.dateFrom))
+      return false;
+    if (filters.dateTo && new Date(entry.date) > new Date(filters.dateTo))
+      return false;
     if (filters.q) {
       const q = filters.q.toLowerCase();
-      if (!entry.title.toLowerCase().includes(q) && !entry.description.toLowerCase().includes(q)) {
+      if (
+        !entry.title.toLowerCase().includes(q) &&
+        !entry.description.toLowerCase().includes(q)
+      ) {
         return false;
       }
     }
@@ -34,7 +44,10 @@ function filterTimeline(
 }
 
 export const patientRecordService = {
-  async resolvePatientId(userId: string, explicitId?: string): Promise<string | null> {
+  async resolvePatientId(
+    userId: string,
+    explicitId?: string,
+  ): Promise<string | null> {
     await delay(50);
     if (explicitId) return explicitId;
     return getPatientIdForUser(userId);
@@ -54,7 +67,11 @@ export const patientRecordService = {
     await delay(150);
     const record = patientRecordRepository.getById(patientId);
     if (!record) return null;
-    return { summary: record.summary, healthScore: record.healthScore, alerts: record.alerts };
+    return {
+      summary: record.summary,
+      healthScore: record.healthScore,
+      alerts: record.alerts,
+    };
   },
 
   async getTimeline(patientId: string, filters?: PatientRecordFilters) {
@@ -127,7 +144,10 @@ export const patientRecordService = {
   async getStats() {
     await delay(100);
     const all = patientRecordRepository.getAll();
-    const activeAlerts = all.reduce((sum, r) => sum + r.alerts.filter((a) => a.active).length, 0);
+    const activeAlerts = all.reduce(
+      (sum, r) => sum + r.alerts.filter((a) => a.active).length,
+      0,
+    );
     const pendingCarePlans = all.reduce(
       (sum, r) => sum + r.carePlans.filter((c) => c.status === 'active').length,
       0,
@@ -145,7 +165,10 @@ export const patientRecordService = {
   },
 };
 
-export function getPatientRecordBasePath(portalBase: string, patientId?: string) {
+export function getPatientRecordBasePath(
+  portalBase: string,
+  patientId?: string,
+) {
   if (patientId) return `${portalBase}/patient/${patientId}`;
   return `${portalBase}/records`;
 }

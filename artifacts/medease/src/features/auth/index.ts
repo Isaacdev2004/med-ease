@@ -1,5 +1,1 @@
-export {
-  LoginRoute,
-  RegisterRoute,
-  ForgotPasswordRoute,
-} from './routes';
+export { LoginRoute, RegisterRoute, ForgotPasswordRoute } from './routes';

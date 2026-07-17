@@ -10,11 +10,16 @@ import { Observable, tap } from 'rxjs';
 
 import { CORRELATION_ID_HEADER, REQUEST_ID_HEADER } from '@medease/constants';
 
-import { HTTP_METRICS, type HttpMetrics } from '../../observability/observability.module';
+import {
+  HTTP_METRICS,
+  type HttpMetrics,
+} from '../../observability/observability.module';
 
 @Injectable()
 export class MetricsInterceptor implements NestInterceptor {
-  constructor(@Inject(HTTP_METRICS) private readonly httpMetrics: HttpMetrics) {}
+  constructor(
+    @Inject(HTTP_METRICS) private readonly httpMetrics: HttpMetrics,
+  ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const http = context.switchToHttp();
@@ -31,9 +36,15 @@ export class MetricsInterceptor implements NestInterceptor {
   }
 
   private record(request: Request, response: Response, startedAt: bigint) {
-    const durationSeconds = Number(process.hrtime.bigint() - startedAt) / 1_000_000_000;
+    const durationSeconds =
+      Number(process.hrtime.bigint() - startedAt) / 1_000_000_000;
     const route = request.route?.path ?? request.path ?? 'unknown';
-    this.httpMetrics.recordRequest(request.method, route, response.statusCode, durationSeconds);
+    this.httpMetrics.recordRequest(
+      request.method,
+      route,
+      response.statusCode,
+      durationSeconds,
+    );
   }
 }
 
@@ -46,16 +57,31 @@ export class RequestContextInterceptor implements NestInterceptor {
     const response = http.getResponse<Response>();
     const startedAt = Date.now();
 
-    if (!response.getHeader(REQUEST_ID_HEADER) && request.headers[REQUEST_ID_HEADER]) {
-      response.setHeader(REQUEST_ID_HEADER, request.headers[REQUEST_ID_HEADER] as string);
+    if (
+      !response.getHeader(REQUEST_ID_HEADER) &&
+      request.headers[REQUEST_ID_HEADER]
+    ) {
+      response.setHeader(
+        REQUEST_ID_HEADER,
+        request.headers[REQUEST_ID_HEADER] as string,
+      );
     }
-    if (!response.getHeader(CORRELATION_ID_HEADER) && request.headers[CORRELATION_ID_HEADER]) {
-      response.setHeader(CORRELATION_ID_HEADER, request.headers[CORRELATION_ID_HEADER] as string);
+    if (
+      !response.getHeader(CORRELATION_ID_HEADER) &&
+      request.headers[CORRELATION_ID_HEADER]
+    ) {
+      response.setHeader(
+        CORRELATION_ID_HEADER,
+        request.headers[CORRELATION_ID_HEADER] as string,
+      );
     }
 
     return next.handle().pipe(
       tap(() => {
-        response.setHeader('x-response-time-ms', String(Date.now() - startedAt));
+        response.setHeader(
+          'x-response-time-ms',
+          String(Date.now() - startedAt),
+        );
       }),
     );
   }

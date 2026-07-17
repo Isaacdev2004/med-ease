@@ -8,7 +8,9 @@ import {
 export class MetricsCollector {
   private readonly registry: MetricsRegistry;
   private readonly queueMetrics: ReturnType<typeof createQueueMetrics>;
-  private readonly dependencyMetrics: ReturnType<typeof createDependencyMetrics>;
+  private readonly dependencyMetrics: ReturnType<
+    typeof createDependencyMetrics
+  >;
   private readonly processed = new Map<string, number>();
   private readonly failed = new Map<string, number>();
   private readonly durationMs = new Map<string, number>();
@@ -55,7 +57,9 @@ export class MetricsCollector {
   }
 
   allSnapshots(queueNames: string[]): Record<string, QueueMetricsSnapshot> {
-    return Object.fromEntries(queueNames.map((queue) => [queue, this.snapshot(queue)]));
+    return Object.fromEntries(
+      queueNames.map((queue) => [queue, this.snapshot(queue)]),
+    );
   }
 
   async renderPrometheus(): Promise<string> {

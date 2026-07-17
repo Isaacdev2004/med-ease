@@ -1,4 +1,7 @@
-import type { ChatMessage, TelemedicineSession } from '@/services/telemedicine/types';
+import type {
+  ChatMessage,
+  TelemedicineSession,
+} from '@/services/telemedicine/types';
 
 type TelemedicineNotification = {
   id: string;
@@ -8,7 +11,9 @@ type TelemedicineNotification = {
   priority: 'low' | 'normal' | 'high' | 'urgent';
 };
 
-export function buildAppointmentReminderNotification(session: TelemedicineSession): TelemedicineNotification {
+export function buildAppointmentReminderNotification(
+  session: TelemedicineSession,
+): TelemedicineNotification {
   return {
     id: `notif-reminder-${session.sessionId}`,
     title: 'Telemedicine appointment reminder',
@@ -18,7 +23,9 @@ export function buildAppointmentReminderNotification(session: TelemedicineSessio
   };
 }
 
-export function buildJoinSessionNotification(session: TelemedicineSession): TelemedicineNotification {
+export function buildJoinSessionNotification(
+  session: TelemedicineSession,
+): TelemedicineNotification {
   return {
     id: `notif-join-${session.sessionId}`,
     title: 'Join your virtual visit',
@@ -28,7 +35,9 @@ export function buildJoinSessionNotification(session: TelemedicineSession): Tele
   };
 }
 
-export function buildWaitingRoomNotification(patientName: string): TelemedicineNotification {
+export function buildWaitingRoomNotification(
+  patientName: string,
+): TelemedicineNotification {
   return {
     id: `notif-wr-${Date.now()}`,
     title: 'Patient in waiting room',
@@ -38,7 +47,9 @@ export function buildWaitingRoomNotification(patientName: string): TelemedicineN
   };
 }
 
-export function buildSessionStartedNotification(session: TelemedicineSession): TelemedicineNotification {
+export function buildSessionStartedNotification(
+  session: TelemedicineSession,
+): TelemedicineNotification {
   return {
     id: `notif-start-${session.sessionId}`,
     title: 'Session started',
@@ -49,14 +60,28 @@ export function buildSessionStartedNotification(session: TelemedicineSession): T
 }
 
 export function buildRecordingStartedNotification(): TelemedicineNotification {
-  return { id: `notif-rec-start-${Date.now()}`, title: 'Recording started', message: 'This session is being recorded with your consent', type: 'telemedicine', priority: 'normal' };
+  return {
+    id: `notif-rec-start-${Date.now()}`,
+    title: 'Recording started',
+    message: 'This session is being recorded with your consent',
+    type: 'telemedicine',
+    priority: 'normal',
+  };
 }
 
 export function buildRecordingStoppedNotification(): TelemedicineNotification {
-  return { id: `notif-rec-stop-${Date.now()}`, title: 'Recording stopped', message: 'Session recording has ended', type: 'telemedicine', priority: 'low' };
+  return {
+    id: `notif-rec-stop-${Date.now()}`,
+    title: 'Recording stopped',
+    message: 'Session recording has ended',
+    type: 'telemedicine',
+    priority: 'low',
+  };
 }
 
-export function buildMissedVisitNotification(session: TelemedicineSession): TelemedicineNotification {
+export function buildMissedVisitNotification(
+  session: TelemedicineSession,
+): TelemedicineNotification {
   return {
     id: `notif-missed-${session.sessionId}`,
     title: 'Missed virtual visit',
@@ -66,26 +91,72 @@ export function buildMissedVisitNotification(session: TelemedicineSession): Tele
   };
 }
 
-export function buildProviderJoinedNotification(clinicianName: string): TelemedicineNotification {
-  return { id: `notif-prov-${Date.now()}`, title: 'Provider joined', message: `${clinicianName} has joined the session`, type: 'telemedicine', priority: 'normal' };
+export function buildProviderJoinedNotification(
+  clinicianName: string,
+): TelemedicineNotification {
+  return {
+    id: `notif-prov-${Date.now()}`,
+    title: 'Provider joined',
+    message: `${clinicianName} has joined the session`,
+    type: 'telemedicine',
+    priority: 'normal',
+  };
 }
 
-export function buildChatMessageNotification(message: ChatMessage): TelemedicineNotification {
-  return { id: `notif-chat-${message.id}`, title: 'New secure message', message: message.content.slice(0, 100), type: 'telemedicine', priority: 'normal' };
+export function buildChatMessageNotification(
+  message: ChatMessage,
+): TelemedicineNotification {
+  return {
+    id: `notif-chat-${message.id}`,
+    title: 'New secure message',
+    message: message.content.slice(0, 100),
+    type: 'telemedicine',
+    priority: 'normal',
+  };
 }
 
-export function buildFileUploadedNotification(fileName: string): TelemedicineNotification {
-  return { id: `notif-file-${Date.now()}`, title: 'File uploaded', message: `${fileName} was shared in the session`, type: 'telemedicine', priority: 'low' };
+export function buildFileUploadedNotification(
+  fileName: string,
+): TelemedicineNotification {
+  return {
+    id: `notif-file-${Date.now()}`,
+    title: 'File uploaded',
+    message: `${fileName} was shared in the session`,
+    type: 'telemedicine',
+    priority: 'low',
+  };
 }
 
-export function buildVisitSummaryNotification(session: TelemedicineSession): TelemedicineNotification {
-  return { id: `notif-summary-${session.sessionId}`, title: 'Visit summary available', message: 'Your telemedicine visit summary is ready to review', type: 'telemedicine', priority: 'normal' };
+export function buildVisitSummaryNotification(
+  session: TelemedicineSession,
+): TelemedicineNotification {
+  return {
+    id: `notif-summary-${session.sessionId}`,
+    title: 'Visit summary available',
+    message: 'Your telemedicine visit summary is ready to review',
+    type: 'telemedicine',
+    priority: 'normal',
+  };
 }
 
-export function buildFollowUpReminderNotification(session: TelemedicineSession): TelemedicineNotification {
-  return { id: `notif-followup-${session.sessionId}`, title: 'Follow-up reminder', message: session.notes ?? 'Schedule your follow-up visit', type: 'telemedicine', priority: 'normal' };
+export function buildFollowUpReminderNotification(
+  session: TelemedicineSession,
+): TelemedicineNotification {
+  return {
+    id: `notif-followup-${session.sessionId}`,
+    title: 'Follow-up reminder',
+    message: session.notes ?? 'Schedule your follow-up visit',
+    type: 'telemedicine',
+    priority: 'normal',
+  };
 }
 
 export function buildPrescriptionReadyNotification(): TelemedicineNotification {
-  return { id: `notif-rx-${Date.now()}`, title: 'Prescription ready', message: 'Your prescription from the virtual visit is available', type: 'telemedicine', priority: 'normal' };
+  return {
+    id: `notif-rx-${Date.now()}`,
+    title: 'Prescription ready',
+    message: 'Your prescription from the virtual visit is available',
+    type: 'telemedicine',
+    priority: 'normal',
+  };
 }

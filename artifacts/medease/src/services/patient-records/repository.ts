@@ -1,4 +1,7 @@
-import type { PatientHealthRecord, PatientRecordFilters } from '@/services/patient-records/types';
+import type {
+  PatientHealthRecord,
+  PatientRecordFilters,
+} from '@/services/patient-records/types';
 import { MOCK_PATIENT_RECORDS } from '@/services/patient-records/mock-data';
 
 /** In-memory repository — swap for Supabase/PostgreSQL adapter later. */
@@ -42,7 +45,10 @@ class PatientRecordRepository {
     };
   }
 
-  update(patientId: string, updater: (record: PatientHealthRecord) => PatientHealthRecord) {
+  update(
+    patientId: string,
+    updater: (record: PatientHealthRecord) => PatientHealthRecord,
+  ) {
     const current = this.getById(patientId);
     if (!current) return null;
     const next = updater(current);
@@ -51,4 +57,6 @@ class PatientRecordRepository {
   }
 }
 
-export const patientRecordRepository = new PatientRecordRepository(MOCK_PATIENT_RECORDS);
+export const patientRecordRepository = new PatientRecordRepository(
+  MOCK_PATIENT_RECORDS,
+);

@@ -4,7 +4,13 @@ import { AlarmClock, Calendar, Pill, Route, Syringe } from 'lucide-react';
 import type { ReminderItem } from '@/services/notifications/notification.types';
 import { StatusBadge } from '@/shared/components/StatusBadge';
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card';
 import { cn } from '@/shared/lib/utils';
 
 const REMINDER_ICONS = {
@@ -23,7 +29,12 @@ interface ReminderCardProps {
   className?: string;
 }
 
-export function ReminderCard({ reminder, onComplete, onSnooze, className }: ReminderCardProps) {
+export function ReminderCard({
+  reminder,
+  onComplete,
+  onSnooze,
+  className,
+}: ReminderCardProps) {
   const Icon = REMINDER_ICONS[reminder.type];
 
   return (
@@ -35,11 +46,19 @@ export function ReminderCard({ reminder, onComplete, onSnooze, className }: Remi
         <div className="flex-1 space-y-1">
           <CardTitle className="text-base">{reminder.title}</CardTitle>
           {reminder.description ? (
-            <p className="text-sm text-muted-foreground">{reminder.description}</p>
+            <p className="text-sm text-muted-foreground">
+              {reminder.description}
+            </p>
           ) : null}
         </div>
         <StatusBadge
-          status={reminder.priority === 'critical' ? 'critical' : reminder.priority === 'high' ? 'warning' : 'info'}
+          status={
+            reminder.priority === 'critical'
+              ? 'critical'
+              : reminder.priority === 'high'
+                ? 'warning'
+                : 'info'
+          }
         />
       </CardHeader>
       <CardContent className="text-sm text-muted-foreground">
@@ -49,7 +68,11 @@ export function ReminderCard({ reminder, onComplete, onSnooze, className }: Remi
         <Button size="sm" onClick={() => onComplete?.(reminder.id)}>
           Complete
         </Button>
-        <Button size="sm" variant="outline" onClick={() => onSnooze?.(reminder.id)}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => onSnooze?.(reminder.id)}
+        >
           Snooze
         </Button>
       </CardFooter>
@@ -85,7 +108,10 @@ export function AlertCard({
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="text-base">{title}</CardTitle>
-          <StatusBadge status={priority === 'critical' ? 'critical' : 'warning'} label={priority} />
+          <StatusBadge
+            status={priority === 'critical' ? 'critical' : 'warning'}
+            label={priority}
+          />
         </div>
       </CardHeader>
       <CardContent className="space-y-2">

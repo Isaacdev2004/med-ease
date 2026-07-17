@@ -28,8 +28,10 @@ export interface AuthFriendlyError {
 export const AUTH_ERROR_MESSAGES: Record<string, string> = {
   invalid_credentials: 'The email or password you entered is incorrect.',
   session_expired: 'Your session has expired. Please sign in again.',
-  account_disabled: 'Your account has been disabled. Contact your administrator.',
-  insufficient_permissions: 'You do not have permission to perform this action.',
+  account_disabled:
+    'Your account has been disabled. Contact your administrator.',
+  insufficient_permissions:
+    'You do not have permission to perform this action.',
   organization_unavailable:
     'Your organization is currently unavailable. Try again later.',
   network_error: 'Unable to connect. Check your network and try again.',

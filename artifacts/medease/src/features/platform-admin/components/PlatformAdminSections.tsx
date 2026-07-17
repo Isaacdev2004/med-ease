@@ -74,13 +74,17 @@ export function DashboardSection({ filters }: SectionProps) {
   const dashboard = usePlatformDashboard(filters?.tenantId);
   const tenants = useTenants(filters);
   const { exportData } = usePlatformAdminMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading platform dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={Building2} title="No platform data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading platform dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Building2} title="No platform data" />;
   return (
     <div className="space-y-6">
       <PlatformDashboardPanel dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(tenants.data?.items ?? []).slice(0, 6).map((t) => <TenantCard key={t.tenantId} tenant={t} />)}
+        {(tenants.data?.items ?? []).slice(0, 6).map((t) => (
+          <TenantCard key={t.tenantId} tenant={t} />
+        ))}
       </div>
       <AuditTimeline audits={dashboard.data.recentAudits} />
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
@@ -95,12 +99,30 @@ export function TenantsSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(tenants.data?.items ?? []).map((t) => <TenantCard key={t.tenantId} tenant={t} />)}
+        {(tenants.data?.items ?? []).map((t) => (
+          <TenantCard key={t.tenantId} tenant={t} />
+        ))}
       </div>
       {(tenants.data?.items ?? [])[0] && (
         <div className="flex gap-4">
-          <button type="button" className="text-sm text-primary underline" onClick={() => activateTenant.mutate(tenants.data!.items[0]!.tenantId)}>Activate first tenant (demo)</button>
-          <button type="button" className="text-sm text-primary underline" onClick={() => suspendTenant.mutate(tenants.data!.items[0]!.tenantId)}>Suspend first tenant (demo)</button>
+          <button
+            type="button"
+            className="text-sm text-primary underline"
+            onClick={() =>
+              activateTenant.mutate(tenants.data!.items[0]!.tenantId)
+            }
+          >
+            Activate first tenant (demo)
+          </button>
+          <button
+            type="button"
+            className="text-sm text-primary underline"
+            onClick={() =>
+              suspendTenant.mutate(tenants.data!.items[0]!.tenantId)
+            }
+          >
+            Suspend first tenant (demo)
+          </button>
         </div>
       )}
     </div>
@@ -115,7 +137,16 @@ export function HospitalSetupSection({ filters }: SectionProps) {
     <div className="space-y-6">
       <HospitalSetupPanel hospitals={hospitals.data?.items ?? []} />
       {(hospitals.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => updateHospital.mutate({ hospitalId: hospitals.data!.items[0]!.hospitalId, bedCapacity: 500 })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            updateHospital.mutate({
+              hospitalId: hospitals.data!.items[0]!.hospitalId,
+              bedCapacity: 500,
+            })
+          }
+        >
           Update bed capacity (demo)
         </button>
       )}
@@ -131,7 +162,16 @@ export function FacilitySetupSection({ filters }: SectionProps) {
     <div className="space-y-6">
       <FacilitySetupPanel facilities={facilities.data?.items ?? []} />
       {(facilities.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => updateFacility.mutate({ facilityId: facilities.data!.items[0]!.facilityId, timezone: 'Europe/London' })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            updateFacility.mutate({
+              facilityId: facilities.data!.items[0]!.facilityId,
+              timezone: 'Europe/London',
+            })
+          }
+        >
           Update timezone (demo)
         </button>
       )}
@@ -144,7 +184,9 @@ export function DepartmentsSection({ filters }: SectionProps) {
   if (departments.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(departments.data?.items ?? []).map((d) => <DepartmentCard key={d.departmentId} department={d} />)}
+      {(departments.data?.items ?? []).map((d) => (
+        <DepartmentCard key={d.departmentId} department={d} />
+      ))}
     </div>
   );
 }
@@ -156,9 +198,21 @@ export function LocalizationSection({ filters, variant }: SectionProps) {
   if (!localization.data) return <EmptyState title="No localization config" />;
   return (
     <div className="space-y-6">
-      <LocalizationPanel localization={localization.data} readOnly={variant === 'readonly'} />
+      <LocalizationPanel
+        localization={localization.data}
+        readOnly={variant === 'readonly'}
+      />
       {variant !== 'readonly' && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => updateLocalization.mutate({ tenantId: localization.data!.tenantId, defaultLanguage: 'en-GB' })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            updateLocalization.mutate({
+              tenantId: localization.data!.tenantId,
+              defaultLanguage: 'en-GB',
+            })
+          }
+        >
           Switch to en-GB (demo)
         </button>
       )}
@@ -173,9 +227,21 @@ export function BrandingSection({ filters, variant }: SectionProps) {
   if (!branding.data) return <EmptyState title="No branding config" />;
   return (
     <div className="space-y-6">
-      <BrandingPanel branding={branding.data} readOnly={variant === 'readonly'} />
+      <BrandingPanel
+        branding={branding.data}
+        readOnly={variant === 'readonly'}
+      />
       {variant !== 'readonly' && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => updateBranding.mutate({ tenantId: branding.data!.tenantId, primaryColor: '#059669' })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            updateBranding.mutate({
+              tenantId: branding.data!.tenantId,
+              primaryColor: '#059669',
+            })
+          }
+        >
           Update primary color (demo)
         </button>
       )}
@@ -188,7 +254,9 @@ export function LicensesSection({ filters }: SectionProps) {
   if (licenses.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(licenses.data?.items ?? []).map((l) => <LicenseCard key={l.licenseId} license={l} />)}
+      {(licenses.data?.items ?? []).map((l) => (
+        <LicenseCard key={l.licenseId} license={l} />
+      ))}
     </div>
   );
 }
@@ -207,7 +275,16 @@ export function FeatureFlagsSection({ filters }: SectionProps) {
     <div className="space-y-6">
       <FeatureFlagPanel flags={flags.data?.items ?? []} />
       {(flags.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => toggleFeatureFlag.mutate({ flagId: flags.data!.items[0]!.flagId, enabled: !flags.data!.items[0]!.enabled })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            toggleFeatureFlag.mutate({
+              flagId: flags.data!.items[0]!.flagId,
+              enabled: !flags.data!.items[0]!.enabled,
+            })
+          }
+        >
           Toggle first flag (demo)
         </button>
       )}
@@ -228,7 +305,10 @@ export function SystemJobsSection({ filters }: SectionProps) {
         {(queues.data ?? []).map((q) => (
           <div key={q.queueId} className="rounded-lg border p-4 text-sm">
             <p className="font-medium">{q.name}</p>
-            <p className="text-xs text-muted-foreground">{q.pendingCount} pending · {q.processingCount} processing · {q.failedCount} failed</p>
+            <p className="text-xs text-muted-foreground">
+              {q.pendingCount} pending · {q.processingCount} processing ·{' '}
+              {q.failedCount} failed
+            </p>
           </div>
         ))}
       </div>
@@ -236,12 +316,22 @@ export function SystemJobsSection({ filters }: SectionProps) {
         {(workers.data ?? []).slice(0, 6).map((w) => (
           <div key={w.workerId} className="rounded-lg border p-4 text-sm">
             <p className="font-medium">{w.name}</p>
-            <p className="text-xs text-muted-foreground capitalize">{w.status} · {w.processedCount.toLocaleString()} processed</p>
+            <p className="text-xs text-muted-foreground capitalize">
+              {w.status} · {w.processedCount.toLocaleString()} processed
+            </p>
           </div>
         ))}
       </div>
       {(jobs.data?.items ?? []).find((j) => j.status === 'failed') && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => retryJob.mutate(jobs.data!.items.find((j) => j.status === 'failed')!.jobId)}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            retryJob.mutate(
+              jobs.data!.items.find((j) => j.status === 'failed')!.jobId,
+            )
+          }
+        >
           Retry failed job (demo)
         </button>
       )}
@@ -268,7 +358,13 @@ export function BackupsSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <BackupPanel backups={backups.data?.items ?? []} />
-      <button type="button" className="text-sm text-primary underline" onClick={() => triggerBackup.mutate({ name: 'Manual Backup', type: 'full' })}>
+      <button
+        type="button"
+        className="text-sm text-primary underline"
+        onClick={() =>
+          triggerBackup.mutate({ name: 'Manual Backup', type: 'full' })
+        }
+      >
         Trigger full backup (demo)
       </button>
     </div>
@@ -282,13 +378,19 @@ export function MaintenanceSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <MaintenancePanel maintenance={maintenance.data?.items ?? []} />
-      <button type="button" className="text-sm text-primary underline" onClick={() => scheduleMaintenance.mutate({
-        title: 'Scheduled Upgrade',
-        message: 'Platform database migration.',
-        scheduledStart: new Date(Date.now() + 86400000).toISOString(),
-        scheduledEnd: new Date(Date.now() + 90000000).toISOString(),
-        affectedServices: ['API Gateway', 'Database'],
-      })}>
+      <button
+        type="button"
+        className="text-sm text-primary underline"
+        onClick={() =>
+          scheduleMaintenance.mutate({
+            title: 'Scheduled Upgrade',
+            message: 'Platform database migration.',
+            scheduledStart: new Date(Date.now() + 86400000).toISOString(),
+            scheduledEnd: new Date(Date.now() + 90000000).toISOString(),
+            affectedServices: ['API Gateway', 'Database'],
+          })
+        }
+      >
         Schedule maintenance (demo)
       </button>
     </div>
@@ -312,11 +414,14 @@ export function PlatformSettingsSection({ filters }: SectionProps) {
   const health = useSystemHealth();
   const localization = useLocalization(filters?.tenantId);
   const branding = useBranding(filters?.tenantId);
-  if (health.isLoading || localization.isLoading || branding.isLoading) return <LoadingView />;
+  if (health.isLoading || localization.isLoading || branding.isLoading)
+    return <LoadingView />;
   return (
     <div className="space-y-6">
       <HealthDashboard services={(health.data ?? []).slice(0, 4)} />
-      {localization.data && <LocalizationPanel localization={localization.data} readOnly />}
+      {localization.data && (
+        <LocalizationPanel localization={localization.data} readOnly />
+      )}
       {branding.data && <BrandingPanel branding={branding.data} readOnly />}
     </div>
   );
@@ -332,22 +437,39 @@ export function PlatformAdminSectionContent({
   variant?: 'admin' | 'readonly';
 }) {
   switch (section) {
-    case 'tenants': return <TenantsSection filters={filters} />;
-    case 'hospital-setup': return <HospitalSetupSection filters={filters} />;
-    case 'facility-setup': return <FacilitySetupSection filters={filters} />;
-    case 'departments': return <DepartmentsSection filters={filters} />;
-    case 'localization': return <LocalizationSection filters={filters} variant={variant} />;
-    case 'branding': return <BrandingSection filters={filters} variant={variant} />;
-    case 'licenses': return <LicensesSection filters={filters} />;
-    case 'storage': return <StorageSection filters={filters} />;
-    case 'feature-flags-admin': return <FeatureFlagsSection filters={filters} />;
-    case 'system-jobs': return <SystemJobsSection filters={filters} />;
-    case 'system-health': return <SystemHealthSection />;
-    case 'backups': return <BackupsSection filters={filters} />;
-    case 'maintenance': return <MaintenanceSection filters={filters} />;
-    case 'platform-audit': return <PlatformAuditSection filters={filters} />;
-    case 'configurations': return <ConfigurationsSection filters={filters} />;
-    case 'platform-settings': return <PlatformSettingsSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'tenants':
+      return <TenantsSection filters={filters} />;
+    case 'hospital-setup':
+      return <HospitalSetupSection filters={filters} />;
+    case 'facility-setup':
+      return <FacilitySetupSection filters={filters} />;
+    case 'departments':
+      return <DepartmentsSection filters={filters} />;
+    case 'localization':
+      return <LocalizationSection filters={filters} variant={variant} />;
+    case 'branding':
+      return <BrandingSection filters={filters} variant={variant} />;
+    case 'licenses':
+      return <LicensesSection filters={filters} />;
+    case 'storage':
+      return <StorageSection filters={filters} />;
+    case 'feature-flags-admin':
+      return <FeatureFlagsSection filters={filters} />;
+    case 'system-jobs':
+      return <SystemJobsSection filters={filters} />;
+    case 'system-health':
+      return <SystemHealthSection />;
+    case 'backups':
+      return <BackupsSection filters={filters} />;
+    case 'maintenance':
+      return <MaintenanceSection filters={filters} />;
+    case 'platform-audit':
+      return <PlatformAuditSection filters={filters} />;
+    case 'configurations':
+      return <ConfigurationsSection filters={filters} />;
+    case 'platform-settings':
+      return <PlatformSettingsSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

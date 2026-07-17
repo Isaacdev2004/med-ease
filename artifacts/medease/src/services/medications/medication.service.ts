@@ -54,7 +54,10 @@ export const medicationService = {
 
   async getTodayMedications(patientId: string) {
     await delay(100);
-    return getTodayDoses(medicationRepository.getSchedule(patientId), patientId);
+    return getTodayDoses(
+      medicationRepository.getSchedule(patientId),
+      patientId,
+    );
   },
 
   async getSchedule(patientId?: string) {
@@ -64,7 +67,10 @@ export const medicationService = {
 
   async getUpcomingMedications(patientId: string) {
     await delay();
-    return getUpcomingDoses(medicationRepository.getSchedule(patientId), patientId);
+    return getUpcomingDoses(
+      medicationRepository.getSchedule(patientId),
+      patientId,
+    );
   },
 
   async getHistory(patientId: string) {
@@ -106,10 +112,15 @@ export const medicationService = {
   async getDashboard(patientId: string): Promise<MedicationDashboard> {
     await delay();
     const today = await this.getTodayMedications(patientId);
-    const meds = medicationRepository.getAllMedications({ patientId, status: 'active' });
+    const meds = medicationRepository.getAllMedications({
+      patientId,
+      status: 'active',
+    });
     const adherence = await this.getAdherence(patientId);
     const interactions = await this.getInteractions(patientId);
-    const refills = medicationRepository.getRefills(patientId).filter((r) => r.status === 'pending');
+    const refills = medicationRepository
+      .getRefills(patientId)
+      .filter((r) => r.status === 'pending');
     const timeline = medicationRepository.getTimeline(patientId);
 
     return {
@@ -121,7 +132,8 @@ export const medicationService = {
       upcoming: today.filter((d) => d.status === 'pending').length,
       refillAlerts: refills.length,
       interactionAlerts: interactions.filter((i) => i.active).length,
-      prescriptionAlerts: meds.filter((m) => (m.remainingDays ?? 99) < 7).length,
+      prescriptionAlerts: meds.filter((m) => (m.remainingDays ?? 99) < 7)
+        .length,
       medicationScore: adherence.medicationScore,
       adherencePercent: adherence.compliancePercent,
       recentActivity: timeline.slice(0, 8),
@@ -130,7 +142,10 @@ export const medicationService = {
 
   async getCalendar(patientId: string, referenceDate = new Date()) {
     await delay();
-    return buildMedicationCalendar(medicationRepository.getSchedule(patientId), referenceDate);
+    return buildMedicationCalendar(
+      medicationRepository.getSchedule(patientId),
+      referenceDate,
+    );
   },
 
   async getAnalytics(filters?: MedicationFilters) {

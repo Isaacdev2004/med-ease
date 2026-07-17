@@ -10,7 +10,9 @@ const lazyComponentCache = new Map<
   LazyExoticComponent<ComponentType>
 >();
 
-function resolveLazyComponent(load: LazyLoader): LazyExoticComponent<ComponentType> {
+function resolveLazyComponent(
+  load: LazyLoader,
+): LazyExoticComponent<ComponentType> {
   const cached = lazyComponentCache.get(load);
   if (cached) {
     return cached;

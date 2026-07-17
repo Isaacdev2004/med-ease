@@ -1,10 +1,15 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const patientPage = () => import('@/features/telemedicine/pages/PatientTelemedicinePage');
-const sessionPage = () => import('@/features/telemedicine/pages/SessionDetailPage');
-const professionalPage = () => import('@/features/telemedicine/pages/ProfessionalTelemedicinePage');
-const facilityPage = () => import('@/features/telemedicine/pages/FacilityTelemedicinePage');
-const adminPage = () => import('@/features/telemedicine/pages/AdminTelemedicinePage');
+const patientPage = () =>
+  import('@/features/telemedicine/pages/PatientTelemedicinePage');
+const sessionPage = () =>
+  import('@/features/telemedicine/pages/SessionDetailPage');
+const professionalPage = () =>
+  import('@/features/telemedicine/pages/ProfessionalTelemedicinePage');
+const facilityPage = () =>
+  import('@/features/telemedicine/pages/FacilityTelemedicinePage');
+const adminPage = () =>
+  import('@/features/telemedicine/pages/AdminTelemedicinePage');
 
 export function createPatientTelemedicineRoutes(options: {
   analyticsPrefix: string;
@@ -124,7 +129,9 @@ export function createProfessionalTelemedicineRoutes(
   ];
 }
 
-export function createFacilityTelemedicineRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createFacilityTelemedicineRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/telemedicine',
@@ -165,7 +172,9 @@ export function createFacilityTelemedicineRoutes(analyticsPrefix: string): Route
   ];
 }
 
-export function createAdminTelemedicineRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createAdminTelemedicineRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/telemedicine',

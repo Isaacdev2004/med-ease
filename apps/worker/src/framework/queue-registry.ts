@@ -20,8 +20,14 @@ import {
 import type { Logger } from '@medease/logger';
 import type { ConnectionOptions } from 'bullmq';
 
-import { runDeadLetterHooks, runQueueMiddlewarePipeline } from './queue-middleware.js';
-import { createPlatformLifecycleHooks, mergeLifecycleHooks } from './processor-lifecycle.js';
+import {
+  runDeadLetterHooks,
+  runQueueMiddlewarePipeline,
+} from './queue-middleware.js';
+import {
+  createPlatformLifecycleHooks,
+  mergeLifecycleHooks,
+} from './processor-lifecycle.js';
 import type { MetricsCollector } from '../metrics/metrics-collector.js';
 
 export interface RegisteredQueue {
@@ -48,7 +54,10 @@ export class QueueRegistry {
     }
 
     const producer = createQueueProducer(definition.name, this.connection);
-    const hooks = mergeLifecycleHooks(createPlatformLifecycleHooks(this.logger), definition.hooks);
+    const hooks = mergeLifecycleHooks(
+      createPlatformLifecycleHooks(this.logger),
+      definition.hooks,
+    );
 
     const worker = new BullWorker<QueueJobEnvelope>(
       definition.name,
@@ -88,7 +97,9 @@ export class QueueRegistry {
 
   getScheduler(): QueueScheduler {
     if (!this.scheduler) {
-      throw new Error('Scheduler unavailable until at least one queue is registered');
+      throw new Error(
+        'Scheduler unavailable until at least one queue is registered',
+      );
     }
     return this.scheduler;
   }
@@ -103,9 +114,14 @@ export class QueueRegistry {
 
   async seedBootstrapJobs() {
     for (const { definition, producer } of this.queues.values()) {
-      const envelope = createBootstrapEnvelope(definition.name, { queue: definition.name });
+      const envelope = createBootstrapEnvelope(definition.name, {
+        queue: definition.name,
+      });
       await enqueueEnvelope(producer, envelope.eventType, envelope);
-      this.logger.info({ queue: definition.name, envelopeId: envelope.id }, 'Bootstrap job enqueued');
+      this.logger.info(
+        { queue: definition.name, envelopeId: envelope.id },
+        'Bootstrap job enqueued',
+      );
     }
   }
 
@@ -182,7 +198,12 @@ export function createQueueRegistry(
   metrics: MetricsCollector,
   concurrency?: number,
 ) {
-  return new QueueRegistry(parseRedisUrl(redisUrl), logger, metrics, concurrency);
+  return new QueueRegistry(
+    parseRedisUrl(redisUrl),
+    logger,
+    metrics,
+    concurrency,
+  );
 }
 
 export { QUEUE_NAMES };

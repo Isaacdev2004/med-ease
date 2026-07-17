@@ -7,7 +7,9 @@ const source = join(root, 'src', 'generated');
 const target = join(root, 'dist', 'generated');
 
 if (!existsSync(source)) {
-  console.error('Missing generated Prisma client. Run `pnpm prisma:generate` first.');
+  console.error(
+    'Missing generated Prisma client. Run `pnpm prisma:generate` first.',
+  );
   process.exit(1);
 }
 

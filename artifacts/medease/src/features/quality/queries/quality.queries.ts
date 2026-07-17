@@ -10,7 +10,9 @@ export const qualityQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   incidents: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.incidents(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.incidents(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getIncidents(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -21,37 +23,51 @@ export const qualityQueries = {
     enabled: Boolean(incidentId),
   }),
   risks: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.risks(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.risks(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getRisks(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   riskRegister: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.riskRegister(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.riskRegister(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getRiskRegister(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   capa: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.capa(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.capa(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getCapa(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   audits: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.audits(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.audits(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getAudits(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   inspections: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.inspections(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.inspections(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getInspections(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   policies: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.policies(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.policies(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getPolicies(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   documents: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.documents(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.documents(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getDocuments(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -61,17 +77,23 @@ export const qualityQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   compliance: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.compliance(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.compliance(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getCompliance(filters),
     staleTime: CACHE_TIMES.dashboard,
   }),
   infection: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.infection(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.infection(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getInfectionControl(filters),
     staleTime: CACHE_TIMES.dashboard,
   }),
   qualityIndicators: (filters?: QualityFilters) => ({
-    queryKey: queryKeys.quality.qualityIndicators(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.quality.qualityIndicators(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => qualityService.getQualityIndicators(filters),
     staleTime: CACHE_TIMES.dashboard,
   }),

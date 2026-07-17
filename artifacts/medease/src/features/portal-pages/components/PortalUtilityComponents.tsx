@@ -11,7 +11,13 @@ import {
 } from '@/shared/components';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Switch } from '@/shared/ui/switch';
@@ -41,7 +47,10 @@ export function PortalActionButton({
       className={className}
       onClick={() => {
         onClick?.();
-        appToast.success({ title: successTitle, description: successDescription });
+        appToast.success({
+          title: successTitle,
+          description: successDescription,
+        });
       }}
     >
       {label}
@@ -56,7 +65,13 @@ interface PortalMetric {
   status?: HealthcareStatus;
 }
 
-export function PortalMetricsGrid({ metrics, columns = 4 }: { metrics: PortalMetric[]; columns?: 2 | 3 | 4 }) {
+export function PortalMetricsGrid({
+  metrics,
+  columns = 4,
+}: {
+  metrics: PortalMetric[];
+  columns?: 2 | 3 | 4;
+}) {
   return (
     <KpiDashboardGrid columns={columns}>
       {metrics.map((metric) => (
@@ -107,7 +122,12 @@ export function PortalDataTableSection<T>({
           ) : undefined
         }
       />
-      <DataTable columns={columns} data={data} getRowId={getRowId} rowActions={rowActions} />
+      <DataTable
+        columns={columns}
+        data={data}
+        getRowId={getRowId}
+        rowActions={rowActions}
+      />
     </section>
   );
 }
@@ -120,7 +140,13 @@ interface PortalInfoCardProps {
   className?: string;
 }
 
-export function PortalInfoCard({ title, children, actionLabel, successTitle, className }: PortalInfoCardProps) {
+export function PortalInfoCard({
+  title,
+  children,
+  actionLabel,
+  successTitle,
+  className,
+}: PortalInfoCardProps) {
   return (
     <Card className={cn(className)}>
       <CardHeader>
@@ -173,7 +199,9 @@ export function PortalSettingsToggle({
     <div className="flex items-center justify-between gap-4 rounded-lg border p-4">
       <div className="space-y-0.5">
         <Label htmlFor={id}>{label}</Label>
-        {description ? <p className="text-xs text-muted-foreground">{description}</p> : null}
+        {description ? (
+          <p className="text-xs text-muted-foreground">{description}</p>
+        ) : null}
       </div>
       <Switch
         id={id}
@@ -194,7 +222,12 @@ interface PortalFormFieldProps {
   type?: string;
 }
 
-export function PortalFormField({ id, label, defaultValue, type = 'text' }: PortalFormFieldProps) {
+export function PortalFormField({
+  id,
+  label,
+  defaultValue,
+  type = 'text',
+}: PortalFormFieldProps) {
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
@@ -231,15 +264,26 @@ export function PortalListCard({
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-base">{title}</CardTitle>
         {actionLabel ? (
-          <PortalActionButton label={actionLabel} variant="outline" successTitle={`${actionLabel} completed`} />
+          <PortalActionButton
+            label={actionLabel}
+            variant="outline"
+            successTitle={`${actionLabel} completed`}
+          />
         ) : null}
       </CardHeader>
       <CardContent className="space-y-2">
         {items.map((item) => (
-          <div key={item.id} className="flex items-center justify-between gap-2 border-b pb-2 last:border-0 text-sm">
+          <div
+            key={item.id}
+            className="flex items-center justify-between gap-2 border-b pb-2 last:border-0 text-sm"
+          >
             <div className="min-w-0">
               <p className="font-medium truncate">{item.primary}</p>
-              {item.secondary ? <p className="text-xs text-muted-foreground truncate">{item.secondary}</p> : null}
+              {item.secondary ? (
+                <p className="text-xs text-muted-foreground truncate">
+                  {item.secondary}
+                </p>
+              ) : null}
             </div>
             {item.badge ? <PortalStatusBadge label={item.badge} /> : null}
           </div>

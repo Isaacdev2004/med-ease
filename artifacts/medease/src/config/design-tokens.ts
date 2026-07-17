@@ -68,7 +68,13 @@ export const HEALTHCARE_STATUS_LABELS: Record<HealthcareStatus, string> = {
 
 export const HEALTHCARE_STATUS_VARIANT: Record<
   HealthcareStatus,
-  'destructive' | 'success' | 'warning' | 'info' | 'secondary' | 'outline' | 'default'
+  | 'destructive'
+  | 'success'
+  | 'warning'
+  | 'info'
+  | 'secondary'
+  | 'outline'
+  | 'default'
 > = {
   critical: 'destructive',
   stable: 'success',

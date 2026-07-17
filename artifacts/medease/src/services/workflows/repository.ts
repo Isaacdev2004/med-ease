@@ -38,7 +38,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -69,52 +74,79 @@ class WorkflowRepository {
   private favorites: WorkflowFavorite[] = [];
   private nextId = 770000;
 
-  dashboard(facilityId?: string) { return buildWorkflowDashboard(facilityId); }
-  analytics(facilityId?: string) { return computeWorkflowAnalytics(facilityId); }
+  dashboard(facilityId?: string) {
+    return buildWorkflowDashboard(facilityId);
+  }
+  analytics(facilityId?: string) {
+    return computeWorkflowAnalytics(facilityId);
+  }
 
   getDefinitions(filters?: WorkflowFilters) {
     let items = this.definitions;
-    if (filters?.module) items = items.filter((d) => d.module === filters.module);
-    if (filters?.status) items = items.filter((d) => d.status === filters.status);
-    if (filters?.q) items = items.filter((d) => matchQ(filters.q, d.name, d.description));
+    if (filters?.module)
+      items = items.filter((d) => d.module === filters.module);
+    if (filters?.status)
+      items = items.filter((d) => d.status === filters.status);
+    if (filters?.q)
+      items = items.filter((d) => matchQ(filters.q, d.name, d.description));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getDefinition(workflowId: string) { return this.definitions.find((d) => d.workflowId === workflowId) ?? null; }
+  getDefinition(workflowId: string) {
+    return this.definitions.find((d) => d.workflowId === workflowId) ?? null;
+  }
 
   getInstances(filters?: WorkflowFilters) {
     let items = this.instances;
-    if (filters?.facilityId) items = items.filter((i) => i.facilityId === filters.facilityId);
-    if (filters?.module) items = items.filter((i) => i.module === filters.module);
-    if (filters?.status) items = items.filter((i) => i.status === filters.status);
-    if (filters?.q) items = items.filter((i) => matchQ(filters.q, i.workflowName, i.instanceId));
+    if (filters?.facilityId)
+      items = items.filter((i) => i.facilityId === filters.facilityId);
+    if (filters?.module)
+      items = items.filter((i) => i.module === filters.module);
+    if (filters?.status)
+      items = items.filter((i) => i.status === filters.status);
+    if (filters?.q)
+      items = items.filter((i) =>
+        matchQ(filters.q, i.workflowName, i.instanceId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getInstance(instanceId: string) { return this.instances.find((i) => i.instanceId === instanceId) ?? null; }
+  getInstance(instanceId: string) {
+    return this.instances.find((i) => i.instanceId === instanceId) ?? null;
+  }
 
   getTasks(filters?: WorkflowFilters) {
     let items = this.tasks;
-    if (filters?.module) items = items.filter((t) => t.module === filters.module);
-    if (filters?.status) items = items.filter((t) => t.status === filters.status);
-    if (filters?.assigneeId) items = items.filter((t) => t.assigneeId === filters.assigneeId);
-    if (filters?.userId) items = items.filter((t) => t.assigneeId === filters.userId);
-    if (filters?.q) items = items.filter((t) => matchQ(filters.q, t.title, t.workflowName));
+    if (filters?.module)
+      items = items.filter((t) => t.module === filters.module);
+    if (filters?.status)
+      items = items.filter((t) => t.status === filters.status);
+    if (filters?.assigneeId)
+      items = items.filter((t) => t.assigneeId === filters.assigneeId);
+    if (filters?.userId)
+      items = items.filter((t) => t.assigneeId === filters.userId);
+    if (filters?.q)
+      items = items.filter((t) => matchQ(filters.q, t.title, t.workflowName));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getApprovals(filters?: WorkflowFilters) {
     let items = this.approvals;
-    if (filters?.module) items = items.filter((a) => a.module === filters.module);
-    if (filters?.status) items = items.filter((a) => a.status === filters.status);
-    if (filters?.userId) items = items.filter((a) => a.requesterId === filters.userId);
+    if (filters?.module)
+      items = items.filter((a) => a.module === filters.module);
+    if (filters?.status)
+      items = items.filter((a) => a.status === filters.status);
+    if (filters?.userId)
+      items = items.filter((a) => a.requesterId === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getRules(filters?: WorkflowFilters) {
     let items = this.rules;
-    if (filters?.module) items = items.filter((r) => r.module === filters.module);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.name, r.condition));
+    if (filters?.module)
+      items = items.filter((r) => r.module === filters.module);
+    if (filters?.q)
+      items = items.filter((r) => matchQ(filters.q, r.name, r.condition));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -126,22 +158,28 @@ class WorkflowRepository {
 
   getJobs(filters?: WorkflowFilters) {
     let items = MOCK_BACKGROUND_JOBS;
-    if (filters?.module) items = items.filter((j) => j.module === filters.module);
-    if (filters?.status) items = items.filter((j) => j.status === filters.status);
+    if (filters?.module)
+      items = items.filter((j) => j.module === filters.module);
+    if (filters?.status)
+      items = items.filter((j) => j.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getEvents(filters?: WorkflowFilters) {
     let items = MOCK_WORKFLOW_EVENTS;
-    if (filters?.module) items = items.filter((e) => e.module === filters.module);
+    if (filters?.module)
+      items = items.filter((e) => e.module === filters.module);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getEventQueues() { return MOCK_EVENT_QUEUES; }
+  getEventQueues() {
+    return MOCK_EVENT_QUEUES;
+  }
 
   getSlas(filters?: WorkflowFilters) {
     let items = MOCK_SLAS;
-    if (filters?.status) items = items.filter((s) => s.status === filters.status);
+    if (filters?.status)
+      items = items.filter((s) => s.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -153,7 +191,8 @@ class WorkflowRepository {
 
   getTemplates(filters?: WorkflowFilters) {
     let items = MOCK_PROCESS_TEMPLATES;
-    if (filters?.module) items = items.filter((t) => t.module === filters.module);
+    if (filters?.module)
+      items = items.filter((t) => t.module === filters.module);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -165,7 +204,8 @@ class WorkflowRepository {
 
   getAudits(filters?: WorkflowFilters) {
     let items = MOCK_WORKFLOW_AUDITS;
-    if (filters?.userId) items = items.filter((a) => a.actorId === filters.userId);
+    if (filters?.userId)
+      items = items.filter((a) => a.actorId === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -210,7 +250,12 @@ class WorkflowRepository {
       slaStatus: 'on_track' as const,
     };
     this.instances.unshift(instance);
-    const event = createEvent('workflow.started', instance.instanceId, def.module, def.name);
+    const event = createEvent(
+      'workflow.started',
+      instance.instanceId,
+      def.module,
+      def.name,
+    );
     workflowEventBus.publish(event);
     audit(instance.instanceId, 'start', input.startedBy);
     return instance;
@@ -258,7 +303,9 @@ class WorkflowRepository {
   }
 
   approve(input: ApproveInput) {
-    const approval = this.approvals.find((a) => a.approvalId === input.approvalId);
+    const approval = this.approvals.find(
+      (a) => a.approvalId === input.approvalId,
+    );
     if (!approval) return null;
     approval.status = nextApprovalStatus('approve');
     audit(approval.instanceId, 'approve', input.approverId);
@@ -266,7 +313,9 @@ class WorkflowRepository {
   }
 
   reject(input: RejectInput) {
-    const approval = this.approvals.find((a) => a.approvalId === input.approvalId);
+    const approval = this.approvals.find(
+      (a) => a.approvalId === input.approvalId,
+    );
     if (!approval) return null;
     approval.status = nextApprovalStatus('reject');
     audit(approval.instanceId, 'reject', input.approverId);
@@ -318,27 +367,57 @@ class WorkflowRepository {
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.instances.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.instances.length,
+    };
   }
 
-  favorite(userId: string, entityType: 'workflow' | 'instance' | 'template', entityId: string) {
-    if (!this.favorites.some((f) => f.userId === userId && f.entityId === entityId)) {
-      this.favorites.push({ userId, entityType, entityId, createdAt: new Date().toISOString() });
+  favorite(
+    userId: string,
+    entityType: 'workflow' | 'instance' | 'template',
+    entityId: string,
+  ) {
+    if (
+      !this.favorites.some(
+        (f) => f.userId === userId && f.entityId === entityId,
+      )
+    ) {
+      this.favorites.push({
+        userId,
+        entityType,
+        entityId,
+        createdAt: new Date().toISOString(),
+      });
     }
     return { userId, entityType, entityId };
   }
 
-  getFavorites(userId: string) { return this.favorites.filter((f) => f.userId === userId); }
+  getFavorites(userId: string) {
+    return this.favorites.filter((f) => f.userId === userId);
+  }
 
   share(input: ShareWorkflowInput) {
     audit(input.workflowId, 'share');
-    return { workflowId: input.workflowId, sharedWith: input.sharedWith, sharedAt: new Date().toISOString() };
+    return {
+      workflowId: input.workflowId,
+      sharedWith: input.sharedWith,
+      sharedAt: new Date().toISOString(),
+    };
   }
 
   search(query: string, filters?: WorkflowFilters) {
-    const defs = this.definitions.filter((d) => matchQ(query, d.name, d.description));
-    const inst = this.instances.filter((i) => matchQ(query, i.workflowName, i.instanceId));
-    return { definitions: paginate(defs, filters?.page, filters?.pageSize), instances: paginate(inst, filters?.page, filters?.pageSize) };
+    const defs = this.definitions.filter((d) =>
+      matchQ(query, d.name, d.description),
+    );
+    const inst = this.instances.filter((i) =>
+      matchQ(query, i.workflowName, i.instanceId),
+    );
+    return {
+      definitions: paginate(defs, filters?.page, filters?.pageSize),
+      instances: paginate(inst, filters?.page, filters?.pageSize),
+    };
   }
 }
 

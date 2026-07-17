@@ -2,7 +2,9 @@ import type { ProcessorLifecycleHooks } from '@medease/queue';
 import type { Logger } from '@medease/logger';
 
 /** Default platform lifecycle hooks — modules extend rather than replace. */
-export function createPlatformLifecycleHooks(logger: Logger): ProcessorLifecycleHooks {
+export function createPlatformLifecycleHooks(
+  logger: Logger,
+): ProcessorLifecycleHooks {
   return {
     beforeProcess(context) {
       logger.info(

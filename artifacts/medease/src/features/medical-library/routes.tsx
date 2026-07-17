@@ -1,7 +1,9 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const libraryPage = () => import('@/features/medical-library/pages/MedicalLibraryPage');
-const profilePage = () => import('@/features/medical-library/pages/MedicationProfilePage');
+const libraryPage = () =>
+  import('@/features/medical-library/pages/MedicalLibraryPage');
+const profilePage = () =>
+  import('@/features/medical-library/pages/MedicationProfilePage');
 
 export function createMedicalLibraryRoutes(options: {
   analyticsPrefix: string;

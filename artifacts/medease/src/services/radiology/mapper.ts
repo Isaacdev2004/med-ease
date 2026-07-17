@@ -1,4 +1,7 @@
-import type { DiagnosticReport, RadiologyStudy } from '@/services/radiology/types';
+import type {
+  DiagnosticReport,
+  RadiologyStudy,
+} from '@/services/radiology/types';
 
 export function toFhirImagingStudy(study: RadiologyStudy) {
   return {

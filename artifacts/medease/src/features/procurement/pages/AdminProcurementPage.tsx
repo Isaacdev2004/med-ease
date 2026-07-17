@@ -3,7 +3,15 @@ import { useLocation } from 'wouter';
 import { ProcurementShell } from '@/features/procurement/components/ProcurementShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type AdminSegment = 'procurement' | 'purchase-orders' | 'rfqs' | 'contracts' | 'suppliers' | 'budgets' | 'approvals' | 'analytics';
+type AdminSegment =
+  | 'procurement'
+  | 'purchase-orders'
+  | 'rfqs'
+  | 'contracts'
+  | 'suppliers'
+  | 'budgets'
+  | 'approvals'
+  | 'analytics';
 
 function resolveSegment(location: string): AdminSegment {
   if (location.includes('/purchase-orders')) return 'purchase-orders';
@@ -30,5 +38,11 @@ export default function AdminProcurementPage() {
     approvals: 'Approvals',
     analytics: 'Procurement Analytics',
   };
-  return <ProcurementShell basePath={basePath} variant="admin" title={titles[segment]} />;
+  return (
+    <ProcurementShell
+      basePath={basePath}
+      variant="admin"
+      title={titles[segment]}
+    />
+  );
 }

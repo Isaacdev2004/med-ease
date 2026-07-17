@@ -2,8 +2,17 @@ export { patientMonitoringService } from '@/services/patient-monitoring/patient-
 export { patientMonitoringRepository } from '@/services/patient-monitoring/repository';
 export { patientMonitoringOfflineQueue } from '@/services/patient-monitoring/offline-sync';
 export { computeMonitoringAnalytics } from '@/services/patient-monitoring/analytics';
-export { calculateNEWS2, calculateMEWS, classifyBloodPressure, classifyGlucose } from '@/services/patient-monitoring/scoring';
-export { buildDailyTrend, buildWeeklyTrend, buildRecoveryTrend } from '@/services/patient-monitoring/trends';
+export {
+  calculateNEWS2,
+  calculateMEWS,
+  classifyBloodPressure,
+  classifyGlucose,
+} from '@/services/patient-monitoring/scoring';
+export {
+  buildDailyTrend,
+  buildWeeklyTrend,
+  buildRecoveryTrend,
+} from '@/services/patient-monitoring/trends';
 export {
   toFhirObservation,
   toFhirDevice,
@@ -45,4 +54,7 @@ export type {
   AlertSeverity,
   DeviceStatus,
 } from '@/services/patient-monitoring/types';
-export { AUTH_USER_PATIENT_MAP, MONITORED_PATIENT_IDS } from '@/services/patient-monitoring/types';
+export {
+  AUTH_USER_PATIENT_MAP,
+  MONITORED_PATIENT_IDS,
+} from '@/services/patient-monitoring/types';

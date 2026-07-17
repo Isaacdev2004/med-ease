@@ -26,7 +26,9 @@ export const appToast = {
   error(input: ToastInput) {
     baseToast({ ...input, variant: mapVariant('error') });
   },
-  permissionDenied(description = 'You do not have permission to perform this action.') {
+  permissionDenied(
+    description = 'You do not have permission to perform this action.',
+  ) {
     this.error({ title: 'Permission denied', description });
   },
   offline(description = 'Changes will sync when you are back online.') {

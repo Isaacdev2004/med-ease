@@ -1,16 +1,28 @@
-import type { EnvironmentalReading, UtilitySystem, UtilityStatus } from '@/services/facilities/types';
+import type {
+  EnvironmentalReading,
+  UtilitySystem,
+  UtilityStatus,
+} from '@/services/facilities/types';
 
-export function evaluateUtilityStatus(reading: number, threshold: number): UtilityStatus {
+export function evaluateUtilityStatus(
+  reading: number,
+  threshold: number,
+): UtilityStatus {
   if (reading >= threshold * 1.2) return 'critical';
   if (reading >= threshold) return 'warning';
   return 'normal';
 }
 
-export function aggregateUtilityAlerts(utilities: UtilitySystem[]): UtilitySystem[] {
+export function aggregateUtilityAlerts(
+  utilities: UtilitySystem[],
+): UtilitySystem[] {
   return utilities.filter((u) => u.status !== 'normal');
 }
 
-export function generatorStatus(isOnline: boolean, fuelPercent: number): UtilityStatus {
+export function generatorStatus(
+  isOnline: boolean,
+  fuelPercent: number,
+): UtilityStatus {
   if (!isOnline) return 'offline';
   if (fuelPercent < 20) return 'critical';
   if (fuelPercent < 40) return 'warning';

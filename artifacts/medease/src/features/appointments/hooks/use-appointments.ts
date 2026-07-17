@@ -1,7 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { appointmentQueries } from '@/features/appointments/queries/appointments.queries';
-import type { AppointmentFilters, CalendarViewMode } from '@/services/appointments/types';
+import type {
+  AppointmentFilters,
+  CalendarViewMode,
+} from '@/services/appointments/types';
 import { appointmentService } from '@/services/appointments/appointment.service';
 import { useAuth } from '@/services/auth/auth-context';
 
@@ -32,8 +35,14 @@ export function useAppointmentCalendar(
   return useQuery(appointmentQueries.calendar(filters, referenceDate, mode));
 }
 
-export function useProviderAvailability(providerId: string, facilityId: string, date: string) {
-  return useQuery(appointmentQueries.availability(providerId, facilityId, date));
+export function useProviderAvailability(
+  providerId: string,
+  facilityId: string,
+  date: string,
+) {
+  return useQuery(
+    appointmentQueries.availability(providerId, facilityId, date),
+  );
 }
 
 export function useFacilitySchedule(facilityId: string, date: string) {
@@ -56,7 +65,11 @@ export function useAppointmentAnalytics(filters?: AppointmentFilters) {
   return useQuery(appointmentQueries.analytics(filters));
 }
 
-export function useAvailableSlots(providerId: string, facilityId: string, date: string) {
+export function useAvailableSlots(
+  providerId: string,
+  facilityId: string,
+  date: string,
+) {
   return useQuery(appointmentQueries.slots(providerId, facilityId, date));
 }
 
@@ -69,7 +82,10 @@ export function usePatientAppointmentFilters() {
   });
 }
 
-export function usePatientAppointments(patientId?: string, extra?: AppointmentFilters) {
+export function usePatientAppointments(
+  patientId?: string,
+  extra?: AppointmentFilters,
+) {
   const filters: AppointmentFilters = { ...extra, patientId };
   return useAppointments(patientId ? filters : undefined);
 }

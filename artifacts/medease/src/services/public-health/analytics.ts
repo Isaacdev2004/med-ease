@@ -11,19 +11,40 @@ import {
   MOCK_SDOH,
 } from '@/services/public-health/mock-data';
 
-export function computePublicHealthAnalytics(facilityId?: string): PublicHealthAnalytics {
+export function computePublicHealthAnalytics(
+  facilityId?: string,
+): PublicHealthAnalytics {
   const dashboard = buildPublicHealthDashboard(facilityId);
-  const cases = facilityId ? MOCK_DISEASE_CASES.filter((c) => c.facilityId === facilityId) : MOCK_DISEASE_CASES;
-  const immunizations = facilityId ? MOCK_IMMUNIZATIONS.filter((i) => i.facilityId === facilityId) : MOCK_IMMUNIZATIONS;
-  const contacts = facilityId ? MOCK_CONTACT_TRACING.filter((c) => c.facilityId === facilityId) : MOCK_CONTACT_TRACING;
-  const programs = facilityId ? MOCK_COMMUNITY_PROGRAMS.filter((p) => p.facilityId === facilityId) : MOCK_COMMUNITY_PROGRAMS;
-  const sdoh = facilityId ? MOCK_SDOH.filter((s) => s.facilityId === facilityId) : MOCK_SDOH;
+  const cases = facilityId
+    ? MOCK_DISEASE_CASES.filter((c) => c.facilityId === facilityId)
+    : MOCK_DISEASE_CASES;
+  const immunizations = facilityId
+    ? MOCK_IMMUNIZATIONS.filter((i) => i.facilityId === facilityId)
+    : MOCK_IMMUNIZATIONS;
+  const contacts = facilityId
+    ? MOCK_CONTACT_TRACING.filter((c) => c.facilityId === facilityId)
+    : MOCK_CONTACT_TRACING;
+  const programs = facilityId
+    ? MOCK_COMMUNITY_PROGRAMS.filter((p) => p.facilityId === facilityId)
+    : MOCK_COMMUNITY_PROGRAMS;
+  const sdoh = facilityId
+    ? MOCK_SDOH.filter((s) => s.facilityId === facilityId)
+    : MOCK_SDOH;
 
-  const administered = immunizations.filter((i) => i.status === 'administered').length;
+  const administered = immunizations.filter(
+    (i) => i.status === 'administered',
+  ).length;
 
   return {
-    incidenceRate: Math.round((cases.filter((c) => c.status === 'confirmed').length / Math.max(cases.length, 1)) * 1000) / 10,
-    immunizationCoverage: Math.round((administered / Math.max(immunizations.length, 1)) * 100),
+    incidenceRate:
+      Math.round(
+        (cases.filter((c) => c.status === 'confirmed').length /
+          Math.max(cases.length, 1)) *
+          1000,
+      ) / 10,
+    immunizationCoverage: Math.round(
+      (administered / Math.max(immunizations.length, 1)) * 100,
+    ),
     outbreakResponseTime: 4.2,
     contactTracingCompletion: contactCompletionRate(contacts),
     sdohInterventionRate: interventionRate(sdoh),
@@ -37,10 +58,12 @@ export function computePublicHealthAnalytics(facilityId?: string): PublicHealthA
       label,
       value: Math.round(administered / 4 + i * 50),
     })),
-    regionalHeatmap: ['North', 'South', 'East', 'West', 'Central'].map((label, i) => ({
-      label,
-      value: Math.round(cases.length / 5 + i * 20),
-    })),
+    regionalHeatmap: ['North', 'South', 'East', 'West', 'Central'].map(
+      (label, i) => ({
+        label,
+        value: Math.round(cases.length / 5 + i * 20),
+      }),
+    ),
   };
 }
 

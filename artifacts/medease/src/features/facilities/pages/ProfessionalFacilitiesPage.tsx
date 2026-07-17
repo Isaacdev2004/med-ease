@@ -20,5 +20,12 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalFacilitiesPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <FacilitiesShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} facilityId="fac-001" />;
+  return (
+    <FacilitiesShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+      facilityId="fac-001"
+    />
+  );
 }

@@ -12,7 +12,9 @@ import {
   tenantIsolationPolicy,
 } from './policy.service';
 
-function sampleUser(overrides: Partial<JwtAccessPayload> = {}): JwtAccessPayload {
+function sampleUser(
+  overrides: Partial<JwtAccessPayload> = {},
+): JwtAccessPayload {
   return {
     sub: 'user-1',
     email: 'doctor@medease.health',
@@ -53,20 +55,26 @@ describe('PermissionService', () => {
 
   it('authorizes wildcard finance permissions for platform admin', () => {
     const service = new PermissionService();
-    const allowed = service.isAuthorized(sampleUser({ role: 'platform_admin' }), {
-      permissions: ['finance.admin'],
-      mode: 'all',
-    });
+    const allowed = service.isAuthorized(
+      sampleUser({ role: 'platform_admin' }),
+      {
+        permissions: ['finance.admin'],
+        mode: 'all',
+      },
+    );
 
     assert.equal(allowed, true);
   });
 
   it('denies missing permissions', () => {
     const service = new PermissionService();
-    const allowed = service.isAuthorized(sampleUser({ role: 'transport_dispatcher' }), {
-      permissions: ['patients.write'],
-      mode: 'all',
-    });
+    const allowed = service.isAuthorized(
+      sampleUser({ role: 'transport_dispatcher' }),
+      {
+        permissions: ['patients.write'],
+        mode: 'all',
+      },
+    );
 
     assert.equal(allowed, false);
   });

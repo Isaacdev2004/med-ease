@@ -1,1 +1,4 @@
-export { computeDocumentAnalytics, buildDocumentDashboard } from '@/services/documents/mock-data';
+export {
+  computeDocumentAnalytics,
+  buildDocumentDashboard,
+} from '@/services/documents/mock-data';

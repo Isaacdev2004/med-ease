@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { MonitoringSectionContent } from '@/features/patient-monitoring/components/MonitoringSections';
-import { MonitoringTabs, getMonitoringSectionFromPath } from '@/features/patient-monitoring/components/MonitoringTabs';
+import {
+  MonitoringTabs,
+  getMonitoringSectionFromPath,
+} from '@/features/patient-monitoring/components/MonitoringTabs';
 import { useMonitoringPermissions } from '@/features/patient-monitoring/hooks/use-monitoring-permissions';
 import { usePatientMonitoringContext } from '@/features/patient-monitoring/hooks/use-patient-monitoring';
 import type { MonitoringFilters } from '@/services/patient-monitoring/types';
@@ -28,14 +31,19 @@ export function MonitoringShell({
   const section = getMonitoringSectionFromPath(location);
 
   const scopedFilters = useMemo((): MonitoringFilters => {
-    const patientId = explicitPatientId ?? (variant === 'patient' ? patientResolve.data ?? undefined : undefined);
+    const patientId =
+      explicitPatientId ??
+      (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
     return patientId ? { patientId } : {};
   }, [explicitPatientId, patientResolve.data, variant]);
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view patient monitoring." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view patient monitoring."
+        />
       </PageShell>
     );
   }

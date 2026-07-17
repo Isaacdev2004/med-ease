@@ -20,4 +20,5 @@ class PatientMonitoringOfflineQueue {
   }
 }
 
-export const patientMonitoringOfflineQueue = new PatientMonitoringOfflineQueue();
+export const patientMonitoringOfflineQueue =
+  new PatientMonitoringOfflineQueue();

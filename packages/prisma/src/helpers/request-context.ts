@@ -10,7 +10,9 @@ export interface PrismaRequestContextInput {
   role?: string;
 }
 
-export function toPrismaRequestContext(context: RequestContext | undefined): PrismaRequestContextInput | null {
+export function toPrismaRequestContext(
+  context: RequestContext | undefined,
+): PrismaRequestContextInput | null {
   if (!context?.tenantId) {
     return null;
   }
@@ -40,11 +42,17 @@ export async function applyPrismaRequestContext(
   );
 }
 
-export async function applySystemRequestContext(client: PrismaClient | TransactionClient): Promise<void> {
-  await client.$executeRaw(Prisma.sql`SELECT platform.set_system_request_context()`);
+export async function applySystemRequestContext(
+  client: PrismaClient | TransactionClient,
+): Promise<void> {
+  await client.$executeRaw(
+    Prisma.sql`SELECT platform.set_system_request_context()`,
+  );
 }
 
-export async function clearPrismaRequestContext(client: PrismaClient | TransactionClient): Promise<void> {
+export async function clearPrismaRequestContext(
+  client: PrismaClient | TransactionClient,
+): Promise<void> {
   await client.$executeRaw(Prisma.sql`SELECT platform.clear_request_context()`);
 }
 
@@ -75,7 +83,11 @@ export async function runInTransactionWithRequestContext<T>(
     return runInTransaction(prisma, fn);
   }
 
-  return runInContextTransaction(prisma, (tx) => applyPrismaRequestContext(tx, prismaContext), fn);
+  return runInContextTransaction(
+    prisma,
+    (tx) => applyPrismaRequestContext(tx, prismaContext),
+    fn,
+  );
 }
 
 export async function runInSystemTransaction<T>(

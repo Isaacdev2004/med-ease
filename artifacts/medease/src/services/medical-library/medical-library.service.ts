@@ -6,9 +6,7 @@ import type {
   MedicationRecord,
   MedicationSearchResult,
 } from '@/services/medical-library/medical-library.types';
-import {
-  MEDICATION_CATEGORY_LABELS,
-} from '@/services/medical-library/medical-library.types';
+import { MEDICATION_CATEGORY_LABELS } from '@/services/medical-library/medical-library.types';
 import {
   MOCK_MEDICATIONS,
   POPULAR_MEDICATIONS,
@@ -63,24 +61,41 @@ function applyFilters(
   const q = normalizeQuery(filters.q);
 
   return medications.filter((med) => {
-    if (filters.category && filters.category !== 'all' && med.category !== filters.category) {
+    if (
+      filters.category &&
+      filters.category !== 'all' &&
+      med.category !== filters.category
+    ) {
       return false;
     }
-    if (filters.therapeuticClass && med.therapeuticClass !== filters.therapeuticClass) {
+    if (
+      filters.therapeuticClass &&
+      med.therapeuticClass !== filters.therapeuticClass
+    ) {
       return false;
     }
-    if (filters.atcCode && !med.atcCode.startsWith(filters.atcCode)) return false;
-    if (filters.prescriptionRequired !== undefined && med.prescriptionRequired !== filters.prescriptionRequired) {
+    if (filters.atcCode && !med.atcCode.startsWith(filters.atcCode))
+      return false;
+    if (
+      filters.prescriptionRequired !== undefined &&
+      med.prescriptionRequired !== filters.prescriptionRequired
+    ) {
       return false;
     }
     if (filters.overTheCounter && med.prescriptionRequired) return false;
     if (filters.route && med.route !== filters.route) return false;
-    if (filters.manufacturer && med.manufacturer !== filters.manufacturer) return false;
-    if (filters.pregnancySafety && med.pregnancySafety !== filters.pregnancySafety) return false;
+    if (filters.manufacturer && med.manufacturer !== filters.manufacturer)
+      return false;
+    if (
+      filters.pregnancySafety &&
+      med.pregnancySafety !== filters.pregnancySafety
+    )
+      return false;
     if (filters.pediatric && !med.pediatricApproved) return false;
     if (filters.geriatric && !med.geriatricApproved) return false;
     if (filters.controlledSubstance && !med.controlledSubstance) return false;
-    if (filters.available !== undefined && med.available !== filters.available) return false;
+    if (filters.available !== undefined && med.available !== filters.available)
+      return false;
     if (filters.favoritesOnly && !favoriteIds.has(med.id)) return false;
     return matchesQuery(med, q);
   });
@@ -98,12 +113,17 @@ function sortMedications(
       return items.sort((a, b) => b.searchCount - a.searchCount);
     case 'updated':
       return items.sort(
-        (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
       );
     case 'therapeutic_class':
-      return items.sort((a, b) => a.therapeuticClass.localeCompare(b.therapeuticClass));
+      return items.sort((a, b) =>
+        a.therapeuticClass.localeCompare(b.therapeuticClass),
+      );
     case 'manufacturer':
-      return items.sort((a, b) => (a.manufacturer ?? '').localeCompare(b.manufacturer ?? ''));
+      return items.sort((a, b) =>
+        (a.manufacturer ?? '').localeCompare(b.manufacturer ?? ''),
+      );
     case 'alphabetical':
     default:
       if (!q) return items.sort((a, b) => a.name.localeCompare(b.name));
@@ -137,7 +157,9 @@ function buildFacets(medications: MedicationRecord[]) {
 }
 
 export const medicalLibraryService = {
-  async search(filters: MedicationFilters = {}): Promise<MedicationSearchResult> {
+  async search(
+    filters: MedicationFilters = {},
+  ): Promise<MedicationSearchResult> {
     await delay();
     const page = filters.page ?? 1;
     const pageSize = filters.pageSize ?? 12;
@@ -169,14 +191,18 @@ export const medicalLibraryService = {
     const med = MOCK_MEDICATIONS.find((item) => item.id === id);
     if (!med) return [];
     return MOCK_MEDICATIONS.filter(
-      (item) => med.relatedMedicationIds.includes(item.id) || (item.category === med.category && item.id !== id),
+      (item) =>
+        med.relatedMedicationIds.includes(item.id) ||
+        (item.category === med.category && item.id !== id),
     ).slice(0, 4);
   },
 
   async getCategories(): Promise<MedicationCategoryInfo[]> {
     await delay(100);
     const counts = getCategoryCounts();
-    return (Object.keys(MEDICATION_CATEGORY_LABELS) as MedicationCategory[]).map((id) => ({
+    return (
+      Object.keys(MEDICATION_CATEGORY_LABELS) as MedicationCategory[]
+    ).map((id) => ({
       id,
       label: MEDICATION_CATEGORY_LABELS[id],
       description: `Browse ${MEDICATION_CATEGORY_LABELS[id].toLowerCase()} medications`,
@@ -229,8 +255,10 @@ export const medicalLibraryService = {
     for (const med of MOCK_MEDICATIONS) {
       if (med.name.toLowerCase().includes(q)) matches.add(med.name);
       if (med.brandName?.toLowerCase().includes(q)) matches.add(med.brandName);
-      if (med.genericName.toLowerCase().includes(q)) matches.add(med.genericName);
-      if (med.atcCode.toLowerCase().includes(q)) matches.add(`${med.name} (${med.atcCode})`);
+      if (med.genericName.toLowerCase().includes(q))
+        matches.add(med.genericName);
+      if (med.atcCode.toLowerCase().includes(q))
+        matches.add(`${med.name} (${med.atcCode})`);
       for (const ingredient of med.activeIngredients) {
         if (ingredient.toLowerCase().includes(q)) matches.add(ingredient);
       }
@@ -239,6 +267,9 @@ export const medicalLibraryService = {
   },
 };
 
-export function getMedicationProfilePath(portalBase: string, medicationId: string) {
+export function getMedicationProfilePath(
+  portalBase: string,
+  medicationId: string,
+) {
   return `${portalBase}/medical-library/${medicationId}`;
 }

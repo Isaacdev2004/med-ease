@@ -10,7 +10,9 @@ export const radiologyQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   studies: (filters?: StudyFilters) => ({
-    queryKey: queryKeys.radiology.allStudies(filters as Record<string, unknown>),
+    queryKey: queryKeys.radiology.allStudies(
+      filters as Record<string, unknown>,
+    ),
     queryFn: () => radiologyService.getAllStudies(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

@@ -46,7 +46,9 @@ export class QueueEnvelopeValidationError extends Error {
   }
 }
 
-export function createEnvelope<T>(input: CreateEnvelopeInput<T>): QueueJobEnvelope<T> {
+export function createEnvelope<T>(
+  input: CreateEnvelopeInput<T>,
+): QueueJobEnvelope<T> {
   return {
     id: input.id ?? newId(),
     tenantId: input.tenantId,
@@ -83,9 +85,13 @@ function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
-export function validateEnvelope<T = unknown>(value: unknown): QueueJobEnvelope<T> {
+export function validateEnvelope<T = unknown>(
+  value: unknown,
+): QueueJobEnvelope<T> {
   if (!value || typeof value !== 'object') {
-    throw new QueueEnvelopeValidationError('Job data must be a QueueJobEnvelope object');
+    throw new QueueEnvelopeValidationError(
+      'Job data must be a QueueJobEnvelope object',
+    );
   }
 
   const record = value as Record<string, unknown>;
@@ -97,7 +103,9 @@ export function validateEnvelope<T = unknown>(value: unknown): QueueJobEnvelope<
     throw new QueueEnvelopeValidationError('Envelope.tenantId is required');
   }
   if (!isNonEmptyString(record.correlationId)) {
-    throw new QueueEnvelopeValidationError('Envelope.correlationId is required');
+    throw new QueueEnvelopeValidationError(
+      'Envelope.correlationId is required',
+    );
   }
   if (!isNonEmptyString(record.source)) {
     throw new QueueEnvelopeValidationError('Envelope.source is required');
@@ -113,13 +121,19 @@ export function validateEnvelope<T = unknown>(value: unknown): QueueJobEnvelope<
   }
 
   if (record.facilityId !== undefined && !isNonEmptyString(record.facilityId)) {
-    throw new QueueEnvelopeValidationError('Envelope.facilityId must be a non-empty string when set');
+    throw new QueueEnvelopeValidationError(
+      'Envelope.facilityId must be a non-empty string when set',
+    );
   }
   if (record.requestId !== undefined && !isNonEmptyString(record.requestId)) {
-    throw new QueueEnvelopeValidationError('Envelope.requestId must be a non-empty string when set');
+    throw new QueueEnvelopeValidationError(
+      'Envelope.requestId must be a non-empty string when set',
+    );
   }
   if (record.actorId !== undefined && !isNonEmptyString(record.actorId)) {
-    throw new QueueEnvelopeValidationError('Envelope.actorId must be a non-empty string when set');
+    throw new QueueEnvelopeValidationError(
+      'Envelope.actorId must be a non-empty string when set',
+    );
   }
 
   return record as unknown as QueueJobEnvelope<T>;

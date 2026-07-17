@@ -11,7 +11,10 @@ export default function Dashboard() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-3xl font-bold tracking-tight">Dispensing Queue</h1>
         <div className="flex items-center gap-2">
-          <Input placeholder="Scan barcode or Rx #..." className="w-64 bg-background" />
+          <Input
+            placeholder="Scan barcode or Rx #..."
+            className="w-64 bg-background"
+          />
           <Button>Lookup</Button>
         </div>
       </div>
@@ -19,7 +22,9 @@ export default function Dashboard() {
       <div className="grid gap-6 md:grid-cols-4">
         <Card className="bg-primary text-primary-foreground">
           <CardHeader className="pb-2">
-            <CardTitle className="text-primary-foreground/90 text-sm font-medium">To Fill</CardTitle>
+            <CardTitle className="text-primary-foreground/90 text-sm font-medium">
+              To Fill
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold">24</div>
@@ -27,7 +32,9 @@ export default function Dashboard() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-muted-foreground text-sm font-medium">To Verify (RPh)</CardTitle>
+            <CardTitle className="text-muted-foreground text-sm font-medium">
+              To Verify (RPh)
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold text-foreground">12</div>
@@ -35,7 +42,9 @@ export default function Dashboard() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-muted-foreground text-sm font-medium">Ready for Pickup</CardTitle>
+            <CardTitle className="text-muted-foreground text-sm font-medium">
+              Ready for Pickup
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold text-foreground">56</div>
@@ -60,22 +69,57 @@ export default function Dashboard() {
         <CardContent className="p-0">
           <div className="divide-y">
             {[
-              { rx: 'RX-88349', patient: 'Johnson, A.', drug: 'Amoxicillin 500mg Cap', type: 'Antibiotic', status: 'Filling', time: '10 mins' },
-              { rx: 'RX-88350', patient: 'Smith, B.', drug: 'Lisinopril 20mg Tab', type: 'Maintenance', status: 'Pending Verification', time: '25 mins' },
-              { rx: 'RX-88351', patient: 'Williams, C.', drug: 'Oxycodone-Acetaminophen 5-325mg', type: 'Controlled (CII)', status: 'Needs RPh Review', time: '40 mins' },
+              {
+                rx: 'RX-88349',
+                patient: 'Johnson, A.',
+                drug: 'Amoxicillin 500mg Cap',
+                type: 'Antibiotic',
+                status: 'Filling',
+                time: '10 mins',
+              },
+              {
+                rx: 'RX-88350',
+                patient: 'Smith, B.',
+                drug: 'Lisinopril 20mg Tab',
+                type: 'Maintenance',
+                status: 'Pending Verification',
+                time: '25 mins',
+              },
+              {
+                rx: 'RX-88351',
+                patient: 'Williams, C.',
+                drug: 'Oxycodone-Acetaminophen 5-325mg',
+                type: 'Controlled (CII)',
+                status: 'Needs RPh Review',
+                time: '40 mins',
+              },
             ].map((item, i) => (
-              <div key={i} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 hover:bg-muted/50 transition-colors">
+              <div
+                key={i}
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 hover:bg-muted/50 transition-colors"
+              >
                 <div className="flex items-center gap-4">
                   <div className="bg-muted p-3 rounded-lg flex-shrink-0">
                     <Pill className="h-5 w-5 text-muted-foreground" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-semibold text-muted-foreground">{item.rx}</span>
-                      {item.type.includes('CII') && <Badge variant="destructive" className="h-5 px-1.5 text-xs">CII</Badge>}
+                      <span className="font-mono text-xs font-semibold text-muted-foreground">
+                        {item.rx}
+                      </span>
+                      {item.type.includes('CII') && (
+                        <Badge
+                          variant="destructive"
+                          className="h-5 px-1.5 text-xs"
+                        >
+                          CII
+                        </Badge>
+                      )}
                     </div>
                     <h4 className="font-semibold">{item.drug}</h4>
-                    <p className="text-sm text-muted-foreground">Patient: {item.patient}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Patient: {item.patient}
+                    </p>
                   </div>
                 </div>
                 <div className="mt-4 sm:mt-0 flex sm:flex-col items-center sm:items-end gap-2 w-full sm:w-auto justify-between">

@@ -3,7 +3,8 @@ import { useLocation } from 'wouter';
 import { InteroperabilityShell } from '@/features/interoperability/components/InteroperabilityShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'interoperability' | 'external-records' | 'interop-fhir' | 'interop-dicom';
+type Segment =
+  'interoperability' | 'external-records' | 'interop-fhir' | 'interop-dicom';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/external-records')) return 'external-records';
@@ -22,5 +23,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalInteroperabilityPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <InteroperabilityShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <InteroperabilityShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

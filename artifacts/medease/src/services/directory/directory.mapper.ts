@@ -27,7 +27,10 @@ function defaultStatus(type: ProviderType): HealthcareStatus {
 }
 
 /** Maps a FINESS record into the unified directory provider model. */
-export function mapFinessToProvider(record: FinessRecord, index: number): DirectoryProvider {
+export function mapFinessToProvider(
+  record: FinessRecord,
+  index: number,
+): DirectoryProvider {
   const type = mapCategoryToType(record.category);
   const name = record.commercialName ?? record.legalName;
 
@@ -36,7 +39,9 @@ export function mapFinessToProvider(record: FinessRecord, index: number): Direct
     finessNumber: record.finessNumber,
     type,
     name,
-    facilityType: FACILITY_TYPES.has(record.category) ? record.category : undefined,
+    facilityType: FACILITY_TYPES.has(record.category)
+      ? record.category
+      : undefined,
     address: {
       street: record.street,
       city: record.city,
@@ -48,9 +53,12 @@ export function mapFinessToProvider(record: FinessRecord, index: number): Direct
     distanceKm: 1.2 + index * 0.8,
     availability: type === 'pharmacy' ? 'Open now' : 'Accepting patients',
     status: defaultStatus(type),
-    languages: ['French', index % 2 === 0 ? 'English' : 'Arabic'].filter(Boolean),
+    languages: ['French', index % 2 === 0 ? 'English' : 'Arabic'].filter(
+      Boolean,
+    ),
     teleconsultation: type === 'medical_center',
-    emergencyServices: type === 'facility' && record.category.includes('hospitalier'),
+    emergencyServices:
+      type === 'facility' && record.category.includes('hospitalier'),
     accessibility: ['Wheelchair access', 'Elevator'],
     openingHours: {
       Monday: '08:00 – 19:00',
@@ -61,7 +69,8 @@ export function mapFinessToProvider(record: FinessRecord, index: number): Direct
       Saturday: '09:00 – 13:00',
       Sunday: 'Closed',
     },
-    services: type === 'facility' ? ['Emergency', 'Imaging', 'Laboratory'] : undefined,
+    services:
+      type === 'facility' ? ['Emergency', 'Imaging', 'Laboratory'] : undefined,
     updatedAt: new Date(Date.now() - index * 86400000).toISOString(),
   };
 }
@@ -101,7 +110,7 @@ const PROFESSIONAL_MOCK: DirectoryProvider[] = [
     specialty: 'Cardiology',
     medicalSpecialty: 'Cardiologie et maladies vasculaires',
     address: {
-      street: '5 Place d\'Arsonval',
+      street: "5 Place d'Arsonval",
       city: 'Lyon',
       department: 'Rhône',
       postalCode: '69003',

@@ -28,7 +28,8 @@ export function useNotificationFilters() {
     setSearch: (value: string) => url.setParam('q', value || null),
     setCategory: (value: string) => url.setParam('status', value || null),
     setPriority: (value: string) => url.setParam('sort', value || null),
-    setUnreadOnly: (value: boolean) => url.setParam('unread', value ? '1' : null),
+    setUnreadOnly: (value: boolean) =>
+      url.setParam('unread', value ? '1' : null),
     clearFilters: url.clearFilters,
     page: url.page,
     pageSize: url.pageSize,

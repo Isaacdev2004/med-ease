@@ -5,6 +5,8 @@ export function isDelegationActive(delegation: DelegationRecord): boolean {
   return new Date(delegation.endsAt).getTime() > Date.now();
 }
 
-export function activeDelegations(delegations: DelegationRecord[]): DelegationRecord[] {
+export function activeDelegations(
+  delegations: DelegationRecord[],
+): DelegationRecord[] {
   return delegations.filter(isDelegationActive);
 }

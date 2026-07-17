@@ -42,7 +42,10 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(compression());
   app.enableCors({
-    origin: corsOrigin === '*' ? true : corsOrigin.split(',').map((value) => value.trim()),
+    origin:
+      corsOrigin === '*'
+        ? true
+        : corsOrigin.split(',').map((value) => value.trim()),
     credentials: true,
   });
 

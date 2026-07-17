@@ -28,7 +28,9 @@ import type {
 } from '@/services/iam/types';
 
 function asRecord(value: unknown): Record<string, unknown> {
-  return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+  return value && typeof value === 'object'
+    ? (value as Record<string, unknown>)
+    : {};
 }
 
 function asString(value: unknown, fallback = ''): string {
@@ -44,7 +46,9 @@ function asBoolean(value: unknown, fallback = false): boolean {
 }
 
 function asStringArray(value: unknown): string[] {
-  return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string')
+    : [];
 }
 
 export function mapUserDto(dto: unknown): IamUser {
@@ -59,7 +63,8 @@ export function mapUserDto(dto: unknown): IamUser {
     status: asString(raw.status, 'pending') as IamUser['status'],
     roles: asStringArray(raw.roles),
     mfaEnabled: asBoolean(raw.mfaEnabled),
-    lastLoginAt: typeof raw.lastLoginAt === 'string' ? raw.lastLoginAt : undefined,
+    lastLoginAt:
+      typeof raw.lastLoginAt === 'string' ? raw.lastLoginAt : undefined,
     createdAt: asString(raw.createdAt),
   };
 }
@@ -121,7 +126,9 @@ export function mapPolicyDto(dto: unknown): IamPolicy {
     resource: asString(raw.resource),
     action: asString(raw.action),
     conditions: Array.isArray(raw.conditions)
-      ? raw.conditions.filter((item): item is string => typeof item === 'string')
+      ? raw.conditions.filter(
+          (item): item is string => typeof item === 'string',
+        )
       : undefined,
     tenantId: typeof raw.tenantId === 'string' ? raw.tenantId : undefined,
     enabled: asBoolean(raw.enabled, true),
@@ -358,7 +365,9 @@ export function mapDashboardDto(dto: unknown): IamDashboard {
     recentIncidents: Array.isArray(raw.recentIncidents)
       ? raw.recentIncidents.map(mapSecurityIncidentDto)
       : [],
-    recentAudit: Array.isArray(raw.recentAudit) ? raw.recentAudit.map(mapAuditDto) : [],
+    recentAudit: Array.isArray(raw.recentAudit)
+      ? raw.recentAudit.map(mapAuditDto)
+      : [],
   };
 }
 
@@ -386,7 +395,10 @@ export function mapAnalyticsDto(dto: unknown): IamAnalytics {
   };
 }
 
-export function mapPaginatedDto<T>(dto: unknown, mapItem: (item: unknown) => T): PaginatedResult<T> {
+export function mapPaginatedDto<T>(
+  dto: unknown,
+  mapItem: (item: unknown) => T,
+): PaginatedResult<T> {
   const raw = asRecord(dto);
   const items = Array.isArray(raw.items) ? raw.items.map(mapItem) : [];
   return {
@@ -397,7 +409,10 @@ export function mapPaginatedDto<T>(dto: unknown, mapItem: (item: unknown) => T):
   };
 }
 
-export function mapSearchResultDto(dto: unknown): { users: IamUser[]; policies: IamPolicy[] } {
+export function mapSearchResultDto(dto: unknown): {
+  users: IamUser[];
+  policies: IamPolicy[];
+} {
   const raw = asRecord(dto);
   return {
     users: Array.isArray(raw.users) ? raw.users.map(mapUserDto) : [],
@@ -405,17 +420,24 @@ export function mapSearchResultDto(dto: unknown): { users: IamUser[]; policies: 
   };
 }
 
-export function mapExportResultDto(dto: unknown): { format: 'csv' | 'pdf' | 'xlsx'; exportedAt: string; recordCount: number } {
+export function mapExportResultDto(dto: unknown): {
+  format: 'csv' | 'pdf' | 'xlsx';
+  exportedAt: string;
+  recordCount: number;
+} {
   const raw = asRecord(dto);
   const format = asString(raw.format, 'csv');
   return {
-    format: (format === 'pdf' || format === 'xlsx' ? format : 'csv'),
+    format: format === 'pdf' || format === 'xlsx' ? format : 'csv',
     exportedAt: asString(raw.exportedAt),
     recordCount: asNumber(raw.recordCount),
   };
 }
 
-export function mapShareResultDto(dto: unknown): { shared: boolean; recipients: number } {
+export function mapShareResultDto(dto: unknown): {
+  shared: boolean;
+  recipients: number;
+} {
   const raw = asRecord(dto);
   return {
     shared: asBoolean(raw.shared, true),
@@ -424,5 +446,6 @@ export function mapShareResultDto(dto: unknown): { shared: boolean; recipients: 
 }
 
 export function filtersToQuery(filters?: IamFilters) {
-  return filters as Record<string, string | number | boolean | null | undefined> | undefined;
+  return filters as
+    Record<string, string | number | boolean | null | undefined> | undefined;
 }

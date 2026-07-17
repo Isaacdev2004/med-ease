@@ -4,7 +4,9 @@ const CATEGORY_PATHS: Record<string, MedicationCategory> = {
   categories: 'pain_relief', // categories view, not a filter
 };
 
-export function getCategoryFromPath(pathname: string): MedicationCategory | 'all' | 'categories' {
+export function getCategoryFromPath(
+  pathname: string,
+): MedicationCategory | 'all' | 'categories' {
   const segment = pathname.split('/').filter(Boolean).pop() ?? '';
   if (segment === 'categories') return 'categories';
   if (segment === 'search') return 'all';

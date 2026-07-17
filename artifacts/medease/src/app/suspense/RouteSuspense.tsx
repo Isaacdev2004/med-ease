@@ -7,7 +7,10 @@ interface RouteSuspenseProps {
   label?: string;
 }
 
-export function RouteSuspense({ children, label = 'Loading' }: RouteSuspenseProps) {
+export function RouteSuspense({
+  children,
+  label = 'Loading',
+}: RouteSuspenseProps) {
   return (
     <Suspense
       fallback={

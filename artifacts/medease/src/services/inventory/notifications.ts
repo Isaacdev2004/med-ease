@@ -10,7 +10,10 @@ export type InventoryNotificationType =
   | 'cold_chain_failure'
   | 'asset_service_overdue';
 
-export function buildInventoryNotification(type: InventoryNotificationType, context: Record<string, string>) {
+export function buildInventoryNotification(
+  type: InventoryNotificationType,
+  context: Record<string, string>,
+) {
   const templates: Record<InventoryNotificationType, string> = {
     low_stock: `Low stock alert: ${context.itemName} (${context.quantity} remaining).`,
     out_of_stock: `Out of stock: ${context.itemName}.`,
@@ -23,5 +26,10 @@ export function buildInventoryNotification(type: InventoryNotificationType, cont
     cold_chain_failure: `Cold chain failure detected for ${context.itemName}.`,
     asset_service_overdue: `Asset ${context.assetName} overdue for service.`,
   };
-  return { type, message: templates[type], context, createdAt: new Date().toISOString() };
+  return {
+    type,
+    message: templates[type],
+    context,
+    createdAt: new Date().toISOString(),
+  };
 }

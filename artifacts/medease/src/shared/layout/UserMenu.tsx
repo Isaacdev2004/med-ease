@@ -34,11 +34,7 @@ interface UserMenuProps {
   organization?: string;
 }
 
-export function UserMenu({
-  userName,
-  roleName,
-  organization,
-}: UserMenuProps) {
+export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
   const { setTheme } = useTheme();
   const { organization: authOrg } = useAuth();
   const initials = userName

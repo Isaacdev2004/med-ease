@@ -6,14 +6,20 @@ export function exportToCsv<T extends Record<string, unknown>>(
 ) {
   if (rows.length === 0) return;
 
-  const header = columns.map((column) => escapeCsv(String(column.label))).join(',');
+  const header = columns
+    .map((column) => escapeCsv(String(column.label)))
+    .join(',');
   const body = rows
     .map((row) =>
-      columns.map((column) => escapeCsv(String(row[column.key] ?? ''))).join(','),
+      columns
+        .map((column) => escapeCsv(String(row[column.key] ?? '')))
+        .join(','),
     )
     .join('\n');
 
-  const blob = new Blob([`${header}\n${body}`], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob([`${header}\n${body}`], {
+    type: 'text/csv;charset=utf-8;',
+  });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;

@@ -1,8 +1,21 @@
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Badge } from '@/shared/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/ui/table';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/shared/ui/table';
 
 export default function Dashboard() {
   return (
@@ -30,7 +43,9 @@ export default function Dashboard() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Failed Logins (24h)</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Failed Logins (24h)
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">89</div>
@@ -39,11 +54,15 @@ export default function Dashboard() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Integrations</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Active Integrations
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">12/12</div>
-            <p className="text-xs text-green-600 font-medium">All systems operational</p>
+            <p className="text-xs text-green-600 font-medium">
+              All systems operational
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -52,7 +71,9 @@ export default function Dashboard() {
         <CardHeader className="flex flex-row justify-between items-center border-b pb-4">
           <div>
             <CardTitle>Recent User Provisioning</CardTitle>
-            <CardDescription>Latest accounts created across the platform.</CardDescription>
+            <CardDescription>
+              Latest accounts created across the platform.
+            </CardDescription>
           </div>
           <div className="flex items-center gap-2">
             <Input placeholder="Search users..." className="w-64 h-9" />
@@ -72,24 +93,66 @@ export default function Dashboard() {
             </TableHeader>
             <TableBody>
               {[
-                { name: 'Dr. Sarah Miller', email: 'smiller@hospital.org', role: 'Physician', facility: 'Mount Sinai', status: 'Active', date: '2 mins ago' },
-                { name: 'James Wilson', email: 'jwilson@medease.patient', role: 'Patient', facility: 'N/A', status: 'Pending Verification', date: '1 hour ago' },
-                { name: 'Unit B Dispatch', email: 'dispatch_b@emstransport.com', role: 'Transport', facility: 'City EMS', status: 'Active', date: '3 hours ago' },
-                { name: 'Elena Rodriguez', email: 'erodriguez@rx.com', role: 'Pharmacist', facility: 'Community Care Rx', status: 'Locked', date: '1 day ago' },
+                {
+                  name: 'Dr. Sarah Miller',
+                  email: 'smiller@hospital.org',
+                  role: 'Physician',
+                  facility: 'Mount Sinai',
+                  status: 'Active',
+                  date: '2 mins ago',
+                },
+                {
+                  name: 'James Wilson',
+                  email: 'jwilson@medease.patient',
+                  role: 'Patient',
+                  facility: 'N/A',
+                  status: 'Pending Verification',
+                  date: '1 hour ago',
+                },
+                {
+                  name: 'Unit B Dispatch',
+                  email: 'dispatch_b@emstransport.com',
+                  role: 'Transport',
+                  facility: 'City EMS',
+                  status: 'Active',
+                  date: '3 hours ago',
+                },
+                {
+                  name: 'Elena Rodriguez',
+                  email: 'erodriguez@rx.com',
+                  role: 'Pharmacist',
+                  facility: 'Community Care Rx',
+                  status: 'Locked',
+                  date: '1 day ago',
+                },
               ].map((user, i) => (
                 <TableRow key={i}>
                   <TableCell>
                     <div className="font-medium">{user.name}</div>
-                    <div className="text-xs text-muted-foreground">{user.email}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {user.email}
+                    </div>
                   </TableCell>
                   <TableCell>{user.role}</TableCell>
-                  <TableCell className="text-muted-foreground">{user.facility}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {user.facility}
+                  </TableCell>
                   <TableCell>
-                    <Badge variant={user.status === 'Active' ? 'success' : user.status === 'Locked' ? 'destructive' : 'secondary'}>
+                    <Badge
+                      variant={
+                        user.status === 'Active'
+                          ? 'success'
+                          : user.status === 'Locked'
+                            ? 'destructive'
+                            : 'secondary'
+                      }
+                    >
                       {user.status}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right text-muted-foreground">{user.date}</TableCell>
+                  <TableCell className="text-right text-muted-foreground">
+                    {user.date}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -34,7 +34,11 @@ interface BookingWizardProps {
   className?: string;
 }
 
-export function BookingWizard({ defaultPatientId, onSuccess, className }: BookingWizardProps) {
+export function BookingWizard({
+  defaultPatientId,
+  onSuccess,
+  className,
+}: BookingWizardProps) {
   const form = useZodForm(bookingSchema, {
     patientId: defaultPatientId ?? '',
     serviceType: '',
@@ -50,7 +54,11 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
   });
   const bookMutation = useBookAppointment();
   const watch = form.watch();
-  const slotsQuery = useAvailableSlots(watch.providerId, watch.facilityId, watch.date);
+  const slotsQuery = useAvailableSlots(
+    watch.providerId,
+    watch.facilityId,
+    watch.date,
+  );
 
   async function validateStep(stepIndex: number) {
     const fields = bookingStepFields[stepIndex];
@@ -82,11 +90,18 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
         return (
           <div className="space-y-2">
             <Label htmlFor="patientId">Patient</Label>
-            <Select value={watch.patientId} onValueChange={(v) => form.setValue('patientId', v)}>
-              <SelectTrigger id="patientId"><SelectValue placeholder="Select patient" /></SelectTrigger>
+            <Select
+              value={watch.patientId}
+              onValueChange={(v) => form.setValue('patientId', v)}
+            >
+              <SelectTrigger id="patientId">
+                <SelectValue placeholder="Select patient" />
+              </SelectTrigger>
               <SelectContent>
                 {DEMO_PATIENTS.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
+                  <SelectItem key={p.id} value={p.id}>
+                    {p.name}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -96,11 +111,24 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
         return (
           <div className="space-y-2">
             <Label htmlFor="serviceType">Service</Label>
-            <Select value={watch.serviceType} onValueChange={(v) => form.setValue('serviceType', v)}>
-              <SelectTrigger id="serviceType"><SelectValue placeholder="Select service" /></SelectTrigger>
+            <Select
+              value={watch.serviceType}
+              onValueChange={(v) => form.setValue('serviceType', v)}
+            >
+              <SelectTrigger id="serviceType">
+                <SelectValue placeholder="Select service" />
+              </SelectTrigger>
               <SelectContent>
-                {['Consultation', 'Follow-up', 'Procedure', 'Diagnostic', 'Therapy'].map((s) => (
-                  <SelectItem key={s} value={s}>{s}</SelectItem>
+                {[
+                  'Consultation',
+                  'Follow-up',
+                  'Procedure',
+                  'Diagnostic',
+                  'Therapy',
+                ].map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -111,13 +139,25 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="specialty">Specialty</Label>
-              <Select value={watch.specialty} onValueChange={(v) => {
-                form.setValue('specialty', v);
-                form.setValue('visitType', v === 'Telemedicine' ? 'telemedicine' : 'in_person');
-              }}>
-                <SelectTrigger id="specialty"><SelectValue placeholder="Specialty" /></SelectTrigger>
+              <Select
+                value={watch.specialty}
+                onValueChange={(v) => {
+                  form.setValue('specialty', v);
+                  form.setValue(
+                    'visitType',
+                    v === 'Telemedicine' ? 'telemedicine' : 'in_person',
+                  );
+                }}
+              >
+                <SelectTrigger id="specialty">
+                  <SelectValue placeholder="Specialty" />
+                </SelectTrigger>
                 <SelectContent>
-                  {SPECIALTIES.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                  {SPECIALTIES.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -131,11 +171,18 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
         return (
           <div className="space-y-2">
             <Label htmlFor="providerId">Provider</Label>
-            <Select value={watch.providerId} onValueChange={(v) => form.setValue('providerId', v)}>
-              <SelectTrigger id="providerId"><SelectValue placeholder="Select provider" /></SelectTrigger>
+            <Select
+              value={watch.providerId}
+              onValueChange={(v) => form.setValue('providerId', v)}
+            >
+              <SelectTrigger id="providerId">
+                <SelectValue placeholder="Select provider" />
+              </SelectTrigger>
               <SelectContent>
                 {PROVIDERS.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>{p.fullName} — {p.specialty}</SelectItem>
+                  <SelectItem key={p.id} value={p.id}>
+                    {p.fullName} — {p.specialty}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -145,11 +192,18 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
         return (
           <div className="space-y-2">
             <Label htmlFor="facilityId">Facility</Label>
-            <Select value={watch.facilityId} onValueChange={(v) => form.setValue('facilityId', v)}>
-              <SelectTrigger id="facilityId"><SelectValue placeholder="Select facility" /></SelectTrigger>
+            <Select
+              value={watch.facilityId}
+              onValueChange={(v) => form.setValue('facilityId', v)}
+            >
+              <SelectTrigger id="facilityId">
+                <SelectValue placeholder="Select facility" />
+              </SelectTrigger>
               <SelectContent>
                 {FACILITIES.map((f) => (
-                  <SelectItem key={f.id} value={f.id}>{f.name}</SelectItem>
+                  <SelectItem key={f.id} value={f.id}>
+                    {f.name}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -166,7 +220,11 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
         return (
           <div className="space-y-2">
             <Label>Available time slots</Label>
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4" role="listbox" aria-label="Time slots">
+            <div
+              className="grid grid-cols-3 gap-2 sm:grid-cols-4"
+              role="listbox"
+              aria-label="Time slots"
+            >
               {(slotsQuery.data ?? []).map((slot) => (
                 <button
                   key={slot.id}
@@ -175,7 +233,8 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
                   aria-selected={watch.scheduledAt === slot.start}
                   className={cn(
                     'rounded-md border px-2 py-2 text-sm hover:bg-muted',
-                    watch.scheduledAt === slot.start && 'border-primary bg-primary/10',
+                    watch.scheduledAt === slot.start &&
+                      'border-primary bg-primary/10',
                   )}
                   onClick={() => form.setValue('scheduledAt', slot.start)}
                 >
@@ -198,15 +257,29 @@ export function BookingWizard({ defaultPatientId, onSuccess, className }: Bookin
             </div>
             <Card>
               <CardContent className="pt-4 text-sm space-y-1">
-                <p><strong>Patient:</strong> {watch.patientId}</p>
-                <p><strong>Provider:</strong> {PROVIDERS.find((p) => p.id === watch.providerId)?.fullName}</p>
-                <p><strong>When:</strong> {watch.scheduledAt ? format(new Date(watch.scheduledAt), 'PPp') : '—'}</p>
+                <p>
+                  <strong>Patient:</strong> {watch.patientId}
+                </p>
+                <p>
+                  <strong>Provider:</strong>{' '}
+                  {PROVIDERS.find((p) => p.id === watch.providerId)?.fullName}
+                </p>
+                <p>
+                  <strong>When:</strong>{' '}
+                  {watch.scheduledAt
+                    ? format(new Date(watch.scheduledAt), 'PPp')
+                    : '—'}
+                </p>
               </CardContent>
             </Card>
           </div>
         );
       default:
-        return <p className="text-success font-medium">Appointment booked successfully!</p>;
+        return (
+          <p className="text-success font-medium">
+            Appointment booked successfully!
+          </p>
+        );
     }
   }
 
@@ -238,7 +311,11 @@ export function TimeSlotPicker({
 }) {
   const slotsQuery = useAvailableSlots(providerId, facilityId, date);
   return (
-    <div className="grid grid-cols-4 gap-2" role="listbox" aria-label="Available time slots">
+    <div
+      className="grid grid-cols-4 gap-2"
+      role="listbox"
+      aria-label="Available time slots"
+    >
       {(slotsQuery.data ?? []).map((slot) => (
         <button
           key={slot.id}

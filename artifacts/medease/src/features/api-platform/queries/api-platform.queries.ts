@@ -15,7 +15,9 @@ export const apiPlatformQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   apiKeys: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.apiKeys(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.apiKeys(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getApiKeys(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -26,7 +28,9 @@ export const apiPlatformQueries = {
     enabled: Boolean(keyId),
   }),
   oauthApps: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.oauthApps(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.oauthApps(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getOAuthApps(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -37,7 +41,9 @@ export const apiPlatformQueries = {
     enabled: Boolean(appId),
   }),
   webhooks: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.webhooks(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.webhooks(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getWebhooks(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -48,22 +54,30 @@ export const apiPlatformQueries = {
     enabled: Boolean(webhookId),
   }),
   webhookDeliveries: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.webhookDeliveries(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.webhookDeliveries(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getWebhookDeliveries(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   sdkPackages: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.sdkPackages(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.sdkPackages(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getSdkPackages(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   rateLimitPolicies: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.rateLimitPolicies(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.rateLimitPolicies(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getRateLimitPolicies(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   endpoints: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.endpoints(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.endpoints(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getEndpoints(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -84,7 +98,9 @@ export const apiPlatformQueries = {
     enabled: Boolean(specId),
   }),
   partners: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.partners(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.partners(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getPartners(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -95,12 +111,17 @@ export const apiPlatformQueries = {
     enabled: Boolean(partnerId),
   }),
   sandboxes: (filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.sandboxes(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.sandboxes(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.getSandboxes(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   search: (query: string, filters?: ApiPlatformFilters) => ({
-    queryKey: queryKeys.apiPlatform.search(query, filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.apiPlatform.search(
+      query,
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => apiPlatformService.search(query, filters),
     staleTime: CACHE_TIMES.patientList,
     enabled: query.length >= 2,

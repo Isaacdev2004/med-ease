@@ -1,7 +1,10 @@
 export { messagingService } from '@/services/messaging/messaging.service';
 export { messagingRepository } from '@/services/messaging/repository';
 export { messagingOfflineQueue } from '@/services/messaging/offline-sync';
-export { computeMessagingAnalytics, buildMessagingDashboard } from '@/services/messaging/analytics';
+export {
+  computeMessagingAnalytics,
+  buildMessagingDashboard,
+} from '@/services/messaging/analytics';
 export {
   MOCK_MESSAGES,
   MOCK_INBOX,

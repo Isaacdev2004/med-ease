@@ -19,7 +19,10 @@ export function nestedModuleTabHref(basePath: string, segment: string): string {
 }
 
 /** Resolve module base path (e.g. `/appointments`) from full or nested location. */
-export function resolveModuleBasePath(location: string, moduleSegment: string): string {
+export function resolveModuleBasePath(
+  location: string,
+  moduleSegment: string,
+): string {
   const marker = `/${moduleSegment}`;
   const idx = location.indexOf(marker);
   if (idx >= 0) {
@@ -29,7 +32,10 @@ export function resolveModuleBasePath(location: string, moduleSegment: string): 
 }
 
 /** Strip portal mount prefix so breadcrumb/tab links stay nested-safe. */
-export function toPortalRelativePath(location: string, portalBase?: string): string {
+export function toPortalRelativePath(
+  location: string,
+  portalBase?: string,
+): string {
   if (!portalBase || portalBase === '/') {
     return location || '/';
   }

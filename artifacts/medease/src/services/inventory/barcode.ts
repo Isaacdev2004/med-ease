@@ -12,7 +12,15 @@ export function generateGs1Code(inventoryId: string) {
 }
 
 export function scanBarcode(barcode: string): BarcodeScanResult {
-  const item = MOCK_INVENTORY.find((i) => i.barcode === barcode || i.gs1Code.includes(barcode));
+  const item = MOCK_INVENTORY.find(
+    (i) => i.barcode === barcode || i.gs1Code.includes(barcode),
+  );
   if (!item) return { barcode, found: false };
-  return { barcode, found: true, inventoryId: item.inventoryId, itemName: item.itemName, gs1Code: item.gs1Code };
+  return {
+    barcode,
+    found: true,
+    inventoryId: item.inventoryId,
+    itemName: item.itemName,
+    gs1Code: item.gs1Code,
+  };
 }

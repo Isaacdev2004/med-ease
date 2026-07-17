@@ -12,7 +12,12 @@ export async function bootstrapWorker() {
   const config = loadWorkerConfig();
   const logger = createWorkerLogger(config.nodeEnv);
   const metrics = new MetricsCollector(WORKER_SERVICE_NAME);
-  const registry = createQueueRegistry(config.redisUrl, logger, metrics, config.concurrency);
+  const registry = createQueueRegistry(
+    config.redisUrl,
+    logger,
+    metrics,
+    config.concurrency,
+  );
 
   registry.registerAll(allQueueDefinitions);
   await registry.seedBootstrapJobs();

@@ -5,7 +5,9 @@ import { patientRecordService } from '@/services/patient-records/patient-record.
 
 export const patientRecordQueries = {
   search: (filters?: PatientRecordFilters) => ({
-    queryKey: queryKeys.patientRecords.search(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.patientRecords.search(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => patientRecordService.search(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -21,7 +23,10 @@ export const patientRecordQueries = {
     staleTime: CACHE_TIMES.patientTimeline,
   }),
   timeline: (patientId: string, filters?: PatientRecordFilters) => ({
-    queryKey: queryKeys.patientRecords.timeline(patientId, filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.patientRecords.timeline(
+      patientId,
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => patientRecordService.getTimeline(patientId, filters),
     staleTime: CACHE_TIMES.patientTimeline,
   }),

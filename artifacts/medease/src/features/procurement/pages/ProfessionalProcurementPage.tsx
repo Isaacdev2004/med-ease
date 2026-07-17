@@ -18,5 +18,11 @@ export default function ProfessionalProcurementPage() {
     procurement: 'Department Procurement',
     requests: 'Purchase Requests',
   };
-  return <ProcurementShell basePath={basePath} variant="professional" title={titles[segment]} />;
+  return (
+    <ProcurementShell
+      basePath={basePath}
+      variant="professional"
+      title={titles[segment]}
+    />
+  );
 }

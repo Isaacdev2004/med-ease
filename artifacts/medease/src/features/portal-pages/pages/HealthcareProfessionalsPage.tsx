@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_PROFESSIONALS, type ProfessionalRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_PROFESSIONALS,
+  type ProfessionalRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -37,7 +40,12 @@ export default function HealthcareProfessionalsPage() {
     <PageShell
       title="Healthcare Professionals"
       subtitle="Manage credentialed staff across the organization."
-      primaryAction={<PortalActionButton label="Invite professional" successTitle="Invitation sent" />}
+      primaryAction={
+        <PortalActionButton
+          label="Invite professional"
+          successTitle="Invitation sent"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
@@ -62,7 +70,9 @@ export default function HealthcareProfessionalsPage() {
               onClick={() => {
                 setProfessionals((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'active' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'active' as const }
+                      : item,
                   ),
                 );
               }}

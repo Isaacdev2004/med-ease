@@ -72,16 +72,22 @@ export function DashboardSection({ filters }: SectionProps) {
   const defs = useWorkflowDefinitions(filters);
   const instances = useWorkflowInstances(filters);
   const { exportData } = useWorkflowMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading workflow dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={Workflow} title="No workflow data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading workflow dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Workflow} title="No workflow data" />;
   return (
     <div className="space-y-6">
       <WorkflowDashboardPanel dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(defs.data?.items ?? []).slice(0, 6).map((w) => <WorkflowCard key={w.workflowId} workflow={w} />)}
+        {(defs.data?.items ?? []).slice(0, 6).map((w) => (
+          <WorkflowCard key={w.workflowId} workflow={w} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(instances.data?.items ?? []).slice(0, 6).map((i) => <ProcessCard key={i.instanceId} instance={i} />)}
+        {(instances.data?.items ?? []).slice(0, 6).map((i) => (
+          <ProcessCard key={i.instanceId} instance={i} />
+        ))}
       </div>
       <EventTimeline events={dashboard.data.recentEvents} />
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
@@ -97,7 +103,16 @@ export function MyTasksSection({ filters }: SectionProps) {
     <div className="space-y-6">
       <KanbanBoard tasks={tasks.data?.items ?? []} />
       {(tasks.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => completeTask.mutate({ taskId: tasks.data!.items[0]!.taskId, completedBy: filters?.userId ?? 'current-user' })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            completeTask.mutate({
+              taskId: tasks.data!.items[0]!.taskId,
+              completedBy: filters?.userId ?? 'current-user',
+            })
+          }
+        >
           Complete first task (demo)
         </button>
       )}
@@ -113,12 +128,37 @@ export function ApprovalsSection({ filters }: SectionProps) {
     <div className="space-y-6">
       <ApprovalQueue approvals={approvals.data?.items ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(approvals.data?.items ?? []).slice(0, 6).map((a) => <ApprovalCard key={a.approvalId} approval={a} />)}
+        {(approvals.data?.items ?? []).slice(0, 6).map((a) => (
+          <ApprovalCard key={a.approvalId} approval={a} />
+        ))}
       </div>
       {(approvals.data?.items ?? [])[0] && (
         <div className="flex gap-4">
-          <button type="button" className="text-sm text-primary underline" onClick={() => approve.mutate({ approvalId: approvals.data!.items[0]!.approvalId, approverId: 'current-user' })}>Approve (demo)</button>
-          <button type="button" className="text-sm text-primary underline" onClick={() => reject.mutate({ approvalId: approvals.data!.items[0]!.approvalId, approverId: 'current-user', reason: 'Insufficient info' })}>Reject (demo)</button>
+          <button
+            type="button"
+            className="text-sm text-primary underline"
+            onClick={() =>
+              approve.mutate({
+                approvalId: approvals.data!.items[0]!.approvalId,
+                approverId: 'current-user',
+              })
+            }
+          >
+            Approve (demo)
+          </button>
+          <button
+            type="button"
+            className="text-sm text-primary underline"
+            onClick={() =>
+              reject.mutate({
+                approvalId: approvals.data!.items[0]!.approvalId,
+                approverId: 'current-user',
+                reason: 'Insufficient info',
+              })
+            }
+          >
+            Reject (demo)
+          </button>
         </div>
       )}
     </div>
@@ -133,10 +173,22 @@ export function ProcessesSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(instances.data?.items ?? []).slice(0, 9).map((i) => <ProcessCard key={i.instanceId} instance={i} />)}
+        {(instances.data?.items ?? []).slice(0, 9).map((i) => (
+          <ProcessCard key={i.instanceId} instance={i} />
+        ))}
       </div>
       {(defs.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => startWorkflow.mutate({ workflowId: defs.data!.items[0]!.workflowId, startedBy: 'current-user', facilityId: filters?.facilityId })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            startWorkflow.mutate({
+              workflowId: defs.data!.items[0]!.workflowId,
+              startedBy: 'current-user',
+              facilityId: filters?.facilityId,
+            })
+          }
+        >
           Start workflow (demo)
         </button>
       )}
@@ -157,7 +209,9 @@ export function SlaMonitorSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(slas.data?.items ?? []).map((s) => <SLAWidget key={s.slaId} sla={s} />)}
+        {(slas.data?.items ?? []).map((s) => (
+          <SLAWidget key={s.slaId} sla={s} />
+        ))}
       </div>
       <WorkflowMonitor instances={instances.data?.items ?? []} />
     </div>
@@ -171,7 +225,9 @@ export function AutomationSection({ filters }: SectionProps) {
     <div className="space-y-6">
       <JobQueue jobs={jobs.data?.items ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(jobs.data?.items ?? []).slice(0, 6).map((j) => <AutomationCard key={j.jobId} job={j} />)}
+        {(jobs.data?.items ?? []).slice(0, 6).map((j) => (
+          <AutomationCard key={j.jobId} job={j} />
+        ))}
       </div>
     </div>
   );
@@ -190,10 +246,14 @@ export function ProcessLibrarySection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(templates.data?.items ?? []).map((t) => <ProcessTemplateCard key={t.templateId} template={t} />)}
+        {(templates.data?.items ?? []).map((t) => (
+          <ProcessTemplateCard key={t.templateId} template={t} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(defs.data?.items ?? []).slice(0, 6).map((w) => <WorkflowCard key={w.workflowId} workflow={w} />)}
+        {(defs.data?.items ?? []).slice(0, 6).map((w) => (
+          <WorkflowCard key={w.workflowId} workflow={w} />
+        ))}
       </div>
     </div>
   );
@@ -206,7 +266,9 @@ export function InstancesSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(instances.data?.items ?? []).slice(0, 12).map((i) => <ProcessCard key={i.instanceId} instance={i} />)}
+        {(instances.data?.items ?? []).slice(0, 12).map((i) => (
+          <ProcessCard key={i.instanceId} instance={i} />
+        ))}
       </div>
       <EscalationPanel escalations={escalations.data?.items ?? []} />
     </div>
@@ -230,12 +292,17 @@ export function EventBusSection({ filters }: SectionProps) {
         {(queues.data ?? []).map((q) => (
           <div key={q.queueId} className="rounded-lg border p-4 text-sm">
             <p className="font-medium">{q.name}</p>
-            <p className="text-xs text-muted-foreground">{q.pendingCount} pending · {q.processedCount.toLocaleString()} processed</p>
+            <p className="text-xs text-muted-foreground">
+              {q.pendingCount} pending · {q.processedCount.toLocaleString()}{' '}
+              processed
+            </p>
           </div>
         ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(triggers.data?.items ?? []).slice(0, 6).map((t) => <TriggerCard key={t.triggerId} trigger={t} />)}
+        {(triggers.data?.items ?? []).slice(0, 6).map((t) => (
+          <TriggerCard key={t.triggerId} trigger={t} />
+        ))}
       </div>
       <EventTimeline events={events.data?.items ?? []} />
     </div>
@@ -251,7 +318,9 @@ export function SchedulersSection({ filters }: SectionProps) {
   if (schedules.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(schedules.data?.items ?? []).map((s) => <SchedulerCard key={s.scheduleId} schedule={s} />)}
+      {(schedules.data?.items ?? []).map((s) => (
+        <SchedulerCard key={s.scheduleId} schedule={s} />
+      ))}
     </div>
   );
 }
@@ -280,23 +349,46 @@ export function MonitorSection({ filters }: SectionProps) {
   );
 }
 
-export function WorkflowSectionContent({ section, filters }: { section: WorkflowSection; filters?: WorkflowFilters; variant?: 'professional' | 'facility' | 'admin' }) {
+export function WorkflowSectionContent({
+  section,
+  filters,
+}: {
+  section: WorkflowSection;
+  filters?: WorkflowFilters;
+  variant?: 'professional' | 'facility' | 'admin';
+}) {
   switch (section) {
-    case 'my-tasks': return <MyTasksSection filters={filters} />;
-    case 'approvals': return <ApprovalsSection filters={filters} />;
-    case 'processes': return <ProcessesSection filters={filters} />;
-    case 'work-queues': return <WorkQueuesSection filters={filters} />;
-    case 'sla-monitor': return <SlaMonitorSection filters={filters} />;
-    case 'automation': return <AutomationSection filters={filters} />;
-    case 'workflow-designer': return <DesignerSection filters={filters} />;
-    case 'process-library': return <ProcessLibrarySection filters={filters} />;
-    case 'workflow-instances': return <InstancesSection filters={filters} />;
-    case 'business-rules': return <RulesSection filters={filters} />;
-    case 'event-bus': return <EventBusSection filters={filters} />;
-    case 'background-jobs': return <JobsSection filters={filters} />;
-    case 'schedulers': return <SchedulersSection filters={filters} />;
-    case 'workflow-analytics': return <AnalyticsSection filters={filters} />;
-    case 'process-monitor': return <MonitorSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'my-tasks':
+      return <MyTasksSection filters={filters} />;
+    case 'approvals':
+      return <ApprovalsSection filters={filters} />;
+    case 'processes':
+      return <ProcessesSection filters={filters} />;
+    case 'work-queues':
+      return <WorkQueuesSection filters={filters} />;
+    case 'sla-monitor':
+      return <SlaMonitorSection filters={filters} />;
+    case 'automation':
+      return <AutomationSection filters={filters} />;
+    case 'workflow-designer':
+      return <DesignerSection filters={filters} />;
+    case 'process-library':
+      return <ProcessLibrarySection filters={filters} />;
+    case 'workflow-instances':
+      return <InstancesSection filters={filters} />;
+    case 'business-rules':
+      return <RulesSection filters={filters} />;
+    case 'event-bus':
+      return <EventBusSection filters={filters} />;
+    case 'background-jobs':
+      return <JobsSection filters={filters} />;
+    case 'schedulers':
+      return <SchedulersSection filters={filters} />;
+    case 'workflow-analytics':
+      return <AnalyticsSection filters={filters} />;
+    case 'process-monitor':
+      return <MonitorSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

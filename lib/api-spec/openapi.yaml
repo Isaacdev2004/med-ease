@@ -5,7 +5,7 @@ paths:
       operationId: HealthController_liveness
       parameters: []
       responses:
-        "200":
+        '200':
           description: API process is alive
       summary: Liveness probe
       tags: &a1
@@ -15,9 +15,9 @@ paths:
       operationId: HealthController_readiness
       parameters: []
       responses:
-        "200":
+        '200':
           description: All dependencies healthy
-        "503":
+        '503':
           description: One or more dependencies unhealthy
       summary: Readiness probe — verifies infrastructure dependencies
       tags: *a1
@@ -26,9 +26,9 @@ paths:
       operationId: IamController_dashboard
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: &a2
         - bearer: []
@@ -40,9 +40,9 @@ paths:
       operationId: IamController_analytics
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: IAM analytics metrics
@@ -52,9 +52,9 @@ paths:
       operationId: IamController_getUsers
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List IAM users
@@ -63,9 +63,9 @@ paths:
       operationId: IamController_createUser
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Create IAM user
@@ -79,9 +79,9 @@ paths:
           in: path
           schema: {}
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Get IAM user by id
@@ -91,9 +91,9 @@ paths:
       operationId: IamController_getTenants
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List tenants
@@ -103,9 +103,9 @@ paths:
       operationId: IamController_getOrganizations
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List organizations
@@ -115,9 +115,9 @@ paths:
       operationId: IamController_getRoles
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List IAM roles
@@ -127,9 +127,9 @@ paths:
       operationId: IamController_getPermissions
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List IAM permissions catalog
@@ -139,9 +139,9 @@ paths:
       operationId: IamController_getPolicies
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List IAM policies
@@ -150,9 +150,9 @@ paths:
       operationId: IamController_createPolicy
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Create IAM policy
@@ -162,9 +162,9 @@ paths:
       operationId: IamController_getSessions
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List user sessions
@@ -174,9 +174,9 @@ paths:
       operationId: IamController_getLoginHistory
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List login history
@@ -186,9 +186,9 @@ paths:
       operationId: IamController_getMfaDevices
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List MFA devices
@@ -198,9 +198,9 @@ paths:
       operationId: IamController_getTrustedDevices
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List trusted devices
@@ -210,9 +210,9 @@ paths:
       operationId: IamController_getOauthClients
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List OAuth clients
@@ -221,9 +221,9 @@ paths:
       operationId: IamController_createOAuthClient
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Create OAuth client
@@ -233,9 +233,9 @@ paths:
       operationId: IamController_getApiKeys
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List API keys
@@ -245,9 +245,9 @@ paths:
       operationId: IamController_getConsents
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List consent records
@@ -256,9 +256,9 @@ paths:
       operationId: IamController_grantConsent
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Grant consent
@@ -268,9 +268,9 @@ paths:
       operationId: IamController_getDelegations
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List delegations
@@ -279,9 +279,9 @@ paths:
       operationId: IamController_delegateAccess
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Delegate access
@@ -291,9 +291,9 @@ paths:
       operationId: IamController_getProxyAccess
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List proxy access records
@@ -303,9 +303,9 @@ paths:
       operationId: IamController_getBreakGlass
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List break-glass events
@@ -315,9 +315,9 @@ paths:
       operationId: IamController_getAuditEvents
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List IAM audit events
@@ -327,9 +327,9 @@ paths:
       operationId: IamController_getSecurityIncidents
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List security incidents
@@ -339,9 +339,9 @@ paths:
       operationId: IamController_getRiskScores
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List risk scores
@@ -351,9 +351,9 @@ paths:
       operationId: IamController_getSamlProviders
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List SAML providers
@@ -363,9 +363,9 @@ paths:
       operationId: IamController_getOidcProviders
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List OIDC providers
@@ -375,9 +375,9 @@ paths:
       operationId: IamController_inviteUser
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Invite IAM user
@@ -391,9 +391,9 @@ paths:
           in: path
           schema: {}
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Lock user account
@@ -407,9 +407,9 @@ paths:
           in: path
           schema: {}
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Unlock user account
@@ -419,9 +419,9 @@ paths:
       operationId: IamController_assignRole
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Assign role to user
@@ -431,9 +431,9 @@ paths:
       operationId: IamController_removeRole
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Remove role from user
@@ -443,9 +443,9 @@ paths:
       operationId: IamController_enableMfa
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Enable MFA for user
@@ -455,9 +455,9 @@ paths:
       operationId: IamController_disableMfa
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Disable MFA for user
@@ -471,9 +471,9 @@ paths:
           in: path
           schema: {}
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Revoke user session
@@ -483,9 +483,9 @@ paths:
       operationId: IamController_rotateApiKey
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Rotate API key
@@ -499,9 +499,9 @@ paths:
           in: path
           schema: {}
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Revoke consent
@@ -511,9 +511,9 @@ paths:
       operationId: IamController_startBreakGlass
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Start break-glass event
@@ -527,9 +527,9 @@ paths:
           in: path
           schema: {}
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: End break-glass event
@@ -539,9 +539,9 @@ paths:
       operationId: IamController_search
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Search IAM users and policies
@@ -551,9 +551,9 @@ paths:
       operationId: IamController_exportData
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Export IAM data
@@ -563,9 +563,9 @@ paths:
       operationId: IamController_favorite
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Favorite IAM entity
@@ -574,9 +574,9 @@ paths:
       operationId: IamController_getFavorites
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: List IAM favorites
@@ -586,9 +586,9 @@ paths:
       operationId: IamController_share
       parameters: []
       responses:
-        "401":
+        '401':
           description: Authentication required
-        "403":
+        '403':
           description: Insufficient permissions
       security: *a2
       summary: Share IAM entity
@@ -598,24 +598,24 @@ paths:
       operationId: PatientsController_listPatients
       parameters: []
       responses:
-        "200":
+        '200':
           description: Paginated patient list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedPatientsDto"
-        "400":
+                $ref: '#/components/schemas/PaginatedPatientsDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
@@ -629,24 +629,24 @@ paths:
       operationId: PatientsController_registerPatient
       parameters: []
       responses:
-        "201":
+        '201':
           description: Registered patient
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientDto"
-        "400":
+                $ref: '#/components/schemas/PatientDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
@@ -659,24 +659,24 @@ paths:
       operationId: PatientsController_searchPatients
       parameters: []
       responses:
-        "200":
+        '200':
           description: Paginated search results
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedPatientsDto"
-        "400":
+                $ref: '#/components/schemas/PaginatedPatientsDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
@@ -689,24 +689,24 @@ paths:
       operationId: PatientsController_exportPatients
       parameters: []
       responses:
-        "200":
+        '200':
           description: Export metadata
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ExportPatientsResultDto"
-        "400":
+                $ref: '#/components/schemas/ExportPatientsResultDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
@@ -719,34 +719,34 @@ paths:
       operationId: PatientsController_validateMerge
       parameters: []
       responses:
-        "200":
+        '200':
           description: Merge validation result
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientMergeValidationResultDto"
-        "400":
+                $ref: '#/components/schemas/PatientMergeValidationResultDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: Validate patient merge candidates (execution deferred)
       tags: *a5
@@ -761,28 +761,28 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Patient record
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientDto"
-        "401":
+                $ref: '#/components/schemas/PatientDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: Get patient by id
       tags: *a5
@@ -796,34 +796,34 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Updated patient
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientDto"
-        "400":
+                $ref: '#/components/schemas/PatientDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: Update patient demographics
       tags: *a5
@@ -837,34 +837,34 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Archived patient
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientDto"
-        "400":
+                $ref: '#/components/schemas/PatientDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: Archive (soft-delete) a patient
       tags: *a5
@@ -879,34 +879,34 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Restored patient
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientDto"
-        "400":
+                $ref: '#/components/schemas/PatientDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: Restore an archived patient
       tags: *a5
@@ -921,30 +921,30 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Patient identifiers
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PatientIdentifierDto"
-        "401":
+                  $ref: '#/components/schemas/PatientIdentifierDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: List patient identifiers
       tags: *a5
@@ -959,30 +959,30 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Patient contacts
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PatientContactDto"
-        "401":
+                  $ref: '#/components/schemas/PatientContactDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: List patient contacts
       tags: *a5
@@ -997,30 +997,30 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Patient addresses
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PatientAddressDto"
-        "401":
+                  $ref: '#/components/schemas/PatientAddressDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: List patient addresses
       tags: *a5
@@ -1035,30 +1035,30 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Emergency contacts
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PatientEmergencyContactDto"
-        "401":
+                  $ref: '#/components/schemas/PatientEmergencyContactDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: List patient emergency contacts
       tags: *a5
@@ -1073,30 +1073,30 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Patient allergies
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PatientAllergyDto"
-        "401":
+                  $ref: '#/components/schemas/PatientAllergyDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: List patient allergies
       tags: *a5
@@ -1110,34 +1110,34 @@ paths:
             format: uuid
             type: string
       responses:
-        "201":
+        '201':
           description: Created allergy
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientAllergyDto"
-        "400":
+                $ref: '#/components/schemas/PatientAllergyDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: Add a patient allergy
       tags: *a5
@@ -1152,28 +1152,28 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Patient preferences
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientPreferenceDto"
-        "401":
+                $ref: '#/components/schemas/PatientPreferenceDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: Get patient preferences
       tags: *a5
@@ -1187,34 +1187,34 @@ paths:
             format: uuid
             type: string
       responses:
-        "200":
+        '200':
           description: Patient preferences
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PatientPreferenceDto"
-        "400":
+                $ref: '#/components/schemas/PatientPreferenceDto'
+        '400':
           description: Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
-        "401":
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
           description: |-
             Authentication required
 
             Authentication required
-        "403":
+        '403':
           description: |-
             Insufficient permissions or ABAC policy denial
 
             Insufficient permissions
-        "404":
+        '404':
           description: Patient not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ApiErrorResponseDto"
+                $ref: '#/components/schemas/ApiErrorResponseDto'
       security: *a4
       summary: Create or update patient preferences
       tags: *a5
@@ -1308,7 +1308,7 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/PatientDto"
+            $ref: '#/components/schemas/PatientDto'
         total:
           type: number
         page:
@@ -1366,9 +1366,9 @@ components:
         valid:
           type: boolean
         sourcePatient:
-          $ref: "#/components/schemas/PatientDto"
+          $ref: '#/components/schemas/PatientDto'
         targetPatient:
-          $ref: "#/components/schemas/PatientDto"
+          $ref: '#/components/schemas/PatientDto'
       required:
         - valid
         - sourcePatient

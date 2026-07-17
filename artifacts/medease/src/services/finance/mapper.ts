@@ -1,4 +1,9 @@
-import type { ChartOfAccount, CustomerReceivable, JournalEntry, VendorBill } from '@/services/finance/types';
+import type {
+  ChartOfAccount,
+  CustomerReceivable,
+  JournalEntry,
+  VendorBill,
+} from '@/services/finance/types';
 
 export function toFhirAccount(account: ChartOfAccount) {
   return {
@@ -19,7 +24,9 @@ export function toFhirInvoice(bill: VendorBill | CustomerReceivable) {
     status: bill.status,
     totalNet: { value: isPayable ? bill.amount : bill.amount, currency: 'EUR' },
     date: isPayable ? bill.dueDate : bill.dueDate,
-    issuer: isPayable ? { display: bill.vendorName } : { display: bill.customerName },
+    issuer: isPayable
+      ? { display: bill.vendorName }
+      : { display: bill.customerName },
   };
 }
 

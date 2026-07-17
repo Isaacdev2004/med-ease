@@ -3,7 +3,11 @@ import { Link, useLocation } from 'wouter';
 import type { BillingSection } from '@/features/billing/components/BillingSections';
 import { cn } from '@/shared/lib/utils';
 
-const PATIENT_TABS: { segment: BillingSection | ''; label: string; path: string }[] = [
+const PATIENT_TABS: {
+  segment: BillingSection | '';
+  label: string;
+  path: string;
+}[] = [
   { segment: '', label: 'Dashboard', path: 'billing' },
   { segment: 'invoices', label: 'Invoices', path: 'invoices' },
   { segment: 'payments', label: 'Payments', path: 'payments' },
@@ -47,23 +51,51 @@ interface BillingTabsProps {
 }
 
 function portalRoot(basePath: string, variant: BillingTabsProps['variant']) {
-  if (variant === 'clinician') return basePath.replace(/\/(billing|claims|payments|revenue)$/, '');
-  if (variant === 'facility') return basePath.replace(/\/(billing|revenue|claims|payments)$/, '');
-  if (variant === 'pharmacy') return basePath.replace(/\/(billing|payments|claims)$/, '');
-  if (variant === 'admin') return basePath.replace(/\/(billing|revenue|financial-reports|claims|payments)$/, '');
+  if (variant === 'clinician')
+    return basePath.replace(/\/(billing|claims|payments|revenue)$/, '');
+  if (variant === 'facility')
+    return basePath.replace(/\/(billing|revenue|claims|payments)$/, '');
+  if (variant === 'pharmacy')
+    return basePath.replace(/\/(billing|payments|claims)$/, '');
+  if (variant === 'admin')
+    return basePath.replace(
+      /\/(billing|revenue|financial-reports|claims|payments)$/,
+      '',
+    );
   return basePath;
 }
 
-function PortalTabs({ basePath, variant, tabs }: { basePath: string; variant: 'clinician' | 'facility' | 'pharmacy' | 'admin'; tabs: PortalTab[] }) {
+function PortalTabs({
+  basePath,
+  variant,
+  tabs,
+}: {
+  basePath: string;
+  variant: 'clinician' | 'facility' | 'pharmacy' | 'admin';
+  tabs: PortalTab[];
+}) {
   const [location] = useLocation();
   const root = portalRoot(basePath, variant);
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Billing sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Billing sections"
+    >
       {tabs.map((tab) => {
         const href = `${root}/${tab.path}`;
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -72,20 +104,53 @@ function PortalTabs({ basePath, variant, tabs }: { basePath: string; variant: 'c
   );
 }
 
-export function BillingTabs({ basePath, variant = 'patient' }: BillingTabsProps) {
+export function BillingTabs({
+  basePath,
+  variant = 'patient',
+}: BillingTabsProps) {
   const [location] = useLocation();
-  if (variant === 'clinician') return <PortalTabs basePath={basePath} variant="clinician" tabs={CLINICIAN_TABS} />;
-  if (variant === 'facility') return <PortalTabs basePath={basePath} variant="facility" tabs={FACILITY_TABS} />;
-  if (variant === 'pharmacy') return <PortalTabs basePath={basePath} variant="pharmacy" tabs={PHARMACY_TABS} />;
-  if (variant === 'admin') return <PortalTabs basePath={basePath} variant="admin" tabs={ADMIN_TABS} />;
+  if (variant === 'clinician')
+    return (
+      <PortalTabs
+        basePath={basePath}
+        variant="clinician"
+        tabs={CLINICIAN_TABS}
+      />
+    );
+  if (variant === 'facility')
+    return (
+      <PortalTabs basePath={basePath} variant="facility" tabs={FACILITY_TABS} />
+    );
+  if (variant === 'pharmacy')
+    return (
+      <PortalTabs basePath={basePath} variant="pharmacy" tabs={PHARMACY_TABS} />
+    );
+  if (variant === 'admin')
+    return <PortalTabs basePath={basePath} variant="admin" tabs={ADMIN_TABS} />;
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Billing sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Billing sections"
+    >
       {PATIENT_TABS.map((tab) => {
         const href = `/${tab.path}`;
-        const active = tab.segment === '' ? location.endsWith('/billing') && !location.includes('/billing/') : location.includes(`/${tab.path.split('/').pop()}`);
+        const active =
+          tab.segment === ''
+            ? location.endsWith('/billing') && !location.includes('/billing/')
+            : location.includes(`/${tab.path.split('/').pop()}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );

@@ -61,7 +61,10 @@ export function DonutChartPanel({
             strokeWidth={2}
           >
             {data.map((entry, index) => (
-              <Cell key={entry.label} fill={entry.fill ?? COLORS[index % COLORS.length]} />
+              <Cell
+                key={entry.label}
+                fill={entry.fill ?? COLORS[index % COLORS.length]}
+              />
             ))}
           </Pie>
           <ChartLegend content={<ChartLegendContent nameKey="label" />} />

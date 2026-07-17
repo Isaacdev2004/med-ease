@@ -12,7 +12,8 @@ export function usePatientId(explicitId?: string) {
   const { user } = useAuth();
   return useQuery({
     queryKey: [...queryKeysPatientResolve(user?.id ?? '', explicitId)],
-    queryFn: () => patientRecordService.resolvePatientId(user?.id ?? '', explicitId),
+    queryFn: () =>
+      patientRecordService.resolvePatientId(user?.id ?? '', explicitId),
     enabled: Boolean(user?.id) || Boolean(explicitId),
   });
 }
@@ -35,7 +36,10 @@ export function usePatientSummary(patientId?: string) {
   return useWithPatientId(patientId, patientRecordQueries.summary);
 }
 
-export function usePatientTimeline(patientId?: string, filters?: PatientRecordFilters) {
+export function usePatientTimeline(
+  patientId?: string,
+  filters?: PatientRecordFilters,
+) {
   return useQuery({
     ...patientRecordQueries.timeline(patientId ?? '', filters),
     enabled: Boolean(patientId),

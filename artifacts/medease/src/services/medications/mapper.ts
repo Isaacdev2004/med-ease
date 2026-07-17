@@ -33,8 +33,12 @@ export function toFhirMedicationRequest(prescription: Prescription) {
     medicationCodeableConcept: { text: prescription.medication.name },
     subject: { reference: `Patient/${prescription.patientId}` },
     authoredOn: prescription.createdAt,
-    requester: { reference: `Practitioner/${prescription.prescribingPhysicianId}` },
-    dosageInstruction: [{ text: `${prescription.dose} ${prescription.frequency}` }],
+    requester: {
+      reference: `Practitioner/${prescription.prescribingPhysicianId}`,
+    },
+    dosageInstruction: [
+      { text: `${prescription.dose} ${prescription.frequency}` },
+    ],
   };
 }
 
@@ -56,11 +60,19 @@ export function toFhirMedicationDispense(prescription: Prescription) {
     status: 'completed' as const,
     medicationCodeableConcept: { text: prescription.medication.name },
     subject: { reference: `Patient/${prescription.patientId}` },
-    performer: [{ actor: { reference: `Organization/${prescription.dispensingPharmacyId}` } }],
+    performer: [
+      {
+        actor: {
+          reference: `Organization/${prescription.dispensingPharmacyId}`,
+        },
+      },
+    ],
   };
 }
 
-export function toFhirMedicationAdministration(record: MedicationAdministration) {
+export function toFhirMedicationAdministration(
+  record: MedicationAdministration,
+) {
   return {
     resourceType: 'MedicationAdministration' as const,
     id: record.id,
@@ -68,7 +80,9 @@ export function toFhirMedicationAdministration(record: MedicationAdministration)
     medicationCodeableConcept: { text: record.medicationName },
     subject: { reference: `Patient/${record.patientId}` },
     effectiveDateTime: record.administeredAt,
-    performer: [{ actor: { reference: `Practitioner/${record.administeredBy}` } }],
+    performer: [
+      { actor: { reference: `Practitioner/${record.administeredBy}` } },
+    ],
     dosage: { text: record.dose },
   };
 }

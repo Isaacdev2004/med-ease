@@ -14,11 +14,21 @@ function resolveSegment(location: string): PharmacySegment {
 export default function PharmacyProcurementPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  const basePath = resolveModuleBasePath(location, segment === 'procurement' ? 'procurement' : segment);
+  const basePath = resolveModuleBasePath(
+    location,
+    segment === 'procurement' ? 'procurement' : segment,
+  );
   const titles: Record<PharmacySegment, string> = {
     procurement: 'Pharmacy Procurement',
     'purchase-orders': 'Purchase Orders',
     suppliers: 'Drug Suppliers',
   };
-  return <ProcurementShell basePath={basePath} variant="pharmacy" title={titles[segment]} department="pharmacy" />;
+  return (
+    <ProcurementShell
+      basePath={basePath}
+      variant="pharmacy"
+      title={titles[segment]}
+      department="pharmacy"
+    />
+  );
 }

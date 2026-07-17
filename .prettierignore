@@ -3,3 +3,8 @@ node_modules
 pnpm-lock.yaml
 *.tsbuildinfo
 coverage
+ci-artifacts
+**/generated/**
+.local
+.agents
+attached_assets

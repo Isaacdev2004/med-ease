@@ -22,14 +22,30 @@ const FACILITY_TABS: Tab[] = [
 
 const ADMIN_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Workflows', path: 'workflows' },
-  { segment: 'workflow-designer', label: 'Designer', path: 'workflow-designer' },
-  { segment: 'process-library', label: 'Process Library', path: 'process-library' },
-  { segment: 'workflow-instances', label: 'Instances', path: 'workflow-instances' },
+  {
+    segment: 'workflow-designer',
+    label: 'Designer',
+    path: 'workflow-designer',
+  },
+  {
+    segment: 'process-library',
+    label: 'Process Library',
+    path: 'process-library',
+  },
+  {
+    segment: 'workflow-instances',
+    label: 'Instances',
+    path: 'workflow-instances',
+  },
   { segment: 'business-rules', label: 'Rules', path: 'business-rules' },
   { segment: 'event-bus', label: 'Event Bus', path: 'event-bus' },
   { segment: 'background-jobs', label: 'Jobs', path: 'background-jobs' },
   { segment: 'schedulers', label: 'Schedulers', path: 'schedulers' },
-  { segment: 'workflow-analytics', label: 'Analytics', path: 'workflow-analytics' },
+  {
+    segment: 'workflow-analytics',
+    label: 'Analytics',
+    path: 'workflow-analytics',
+  },
   { segment: 'process-monitor', label: 'Monitor', path: 'process-monitor' },
 ];
 
@@ -44,17 +60,33 @@ function getTabs(variant: WorkflowTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function WorkflowTabs({ basePath: _basePath, variant = 'professional' }: WorkflowTabsProps) {
+export function WorkflowTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: WorkflowTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Workflow sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Workflow sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.path} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.path}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );

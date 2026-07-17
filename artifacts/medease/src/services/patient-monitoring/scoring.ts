@@ -1,11 +1,18 @@
-import type { EarlyWarningScore, VitalSign } from '@/services/patient-monitoring/types';
+import type {
+  EarlyWarningScore,
+  VitalSign,
+} from '@/services/patient-monitoring/types';
 
-export function calculateNEWS2(patientId: string, vitals: Partial<Record<string, number>>): EarlyWarningScore {
+export function calculateNEWS2(
+  patientId: string,
+  vitals: Partial<Record<string, number>>,
+): EarlyWarningScore {
   let score = 0;
   const components: Record<string, number> = {};
 
   const rr = vitals.respiratory_rate ?? 16;
-  components.respiration = rr <= 8 ? 3 : rr <= 11 ? 1 : rr <= 20 ? 0 : rr <= 24 ? 2 : 3;
+  components.respiration =
+    rr <= 8 ? 3 : rr <= 11 ? 1 : rr <= 20 ? 0 : rr <= 24 ? 2 : 3;
   score += components.respiration;
 
   const spo2 = vitals.spo2 ?? 97;
@@ -16,15 +23,28 @@ export function calculateNEWS2(patientId: string, vitals: Partial<Record<string,
   score += components.supplementalO2;
 
   const temp = vitals.temperature ?? 36.8;
-  components.temperature = temp <= 35 ? 3 : temp <= 36 ? 1 : temp <= 38 ? 0 : temp <= 39 ? 1 : 2;
+  components.temperature =
+    temp <= 35 ? 3 : temp <= 36 ? 1 : temp <= 38 ? 0 : temp <= 39 ? 1 : 2;
   score += components.temperature;
 
   const sys = vitals.systolic ?? 120;
-  components.systolic = sys <= 90 ? 3 : sys <= 100 ? 2 : sys <= 110 ? 1 : sys <= 219 ? 0 : 3;
+  components.systolic =
+    sys <= 90 ? 3 : sys <= 100 ? 2 : sys <= 110 ? 1 : sys <= 219 ? 0 : 3;
   score += components.systolic;
 
   const hr = vitals.heart_rate ?? 72;
-  components.heartRate = hr <= 40 ? 3 : hr <= 50 ? 1 : hr <= 90 ? 0 : hr <= 110 ? 1 : hr <= 130 ? 2 : 3;
+  components.heartRate =
+    hr <= 40
+      ? 3
+      : hr <= 50
+        ? 1
+        : hr <= 90
+          ? 0
+          : hr <= 110
+            ? 1
+            : hr <= 130
+              ? 2
+              : 3;
   score += components.heartRate;
 
   components.consciousness = vitals.consciousness_altered ? 3 : 0;
@@ -35,31 +55,45 @@ export function calculateNEWS2(patientId: string, vitals: Partial<Record<string,
     patientId,
     type: 'NEWS2',
     score,
-    riskLevel: score >= 7 ? 'critical' : score >= 5 ? 'high' : score >= 3 ? 'medium' : 'low',
+    riskLevel:
+      score >= 7
+        ? 'critical'
+        : score >= 5
+          ? 'high'
+          : score >= 3
+            ? 'medium'
+            : 'low',
     components,
     calculatedAt: new Date().toISOString(),
     context: 'ward',
   };
 }
 
-export function calculateMEWS(patientId: string, vitals: Partial<Record<string, number>>): EarlyWarningScore {
+export function calculateMEWS(
+  patientId: string,
+  vitals: Partial<Record<string, number>>,
+): EarlyWarningScore {
   let score = 0;
   const components: Record<string, number> = {};
 
   const sys = vitals.systolic ?? 120;
-  components.systolic = sys < 70 ? 3 : sys < 80 ? 2 : sys < 100 ? 1 : sys < 199 ? 0 : 2;
+  components.systolic =
+    sys < 70 ? 3 : sys < 80 ? 2 : sys < 100 ? 1 : sys < 199 ? 0 : 2;
   score += components.systolic;
 
   const hr = vitals.heart_rate ?? 72;
-  components.heartRate = hr < 40 ? 2 : hr < 50 ? 1 : hr < 100 ? 0 : hr < 110 ? 1 : hr < 129 ? 2 : 3;
+  components.heartRate =
+    hr < 40 ? 2 : hr < 50 ? 1 : hr < 100 ? 0 : hr < 110 ? 1 : hr < 129 ? 2 : 3;
   score += components.heartRate;
 
   const rr = vitals.respiratory_rate ?? 16;
-  components.respiration = rr < 9 ? 2 : rr < 14 ? 0 : rr < 20 ? 1 : rr < 29 ? 2 : 3;
+  components.respiration =
+    rr < 9 ? 2 : rr < 14 ? 0 : rr < 20 ? 1 : rr < 29 ? 2 : 3;
   score += components.respiration;
 
   const temp = vitals.temperature ?? 36.8;
-  components.temperature = temp < 35 ? 2 : temp < 38.5 ? 0 : temp < 38.9 ? 1 : 2;
+  components.temperature =
+    temp < 35 ? 2 : temp < 38.5 ? 0 : temp < 38.9 ? 1 : 2;
   score += components.temperature;
 
   components.consciousness = vitals.consciousness_altered ? 3 : 0;
@@ -70,7 +104,14 @@ export function calculateMEWS(patientId: string, vitals: Partial<Record<string, 
     patientId,
     type: 'MEWS',
     score,
-    riskLevel: score >= 5 ? 'critical' : score >= 3 ? 'high' : score >= 2 ? 'medium' : 'low',
+    riskLevel:
+      score >= 5
+        ? 'critical'
+        : score >= 3
+          ? 'high'
+          : score >= 2
+            ? 'medium'
+            : 'low',
     components,
     calculatedAt: new Date().toISOString(),
     context: 'ward',
@@ -120,11 +161,15 @@ export function classifyGlucose(mgDl: number) {
   return 'normal';
 }
 
-export function vitalsToScoreInput(patientId: string, vitals: VitalSign[]): Partial<Record<string, number>> {
+export function vitalsToScoreInput(
+  patientId: string,
+  vitals: VitalSign[],
+): Partial<Record<string, number>> {
   const input: Partial<Record<string, number>> = {};
   for (const v of vitals) {
     if (typeof v.value !== 'number') {
-      if (v.type === 'blood_pressure' && v.systolic) input.systolic = v.systolic;
+      if (v.type === 'blood_pressure' && v.systolic)
+        input.systolic = v.systolic;
       continue;
     }
     input[v.type] = v.value;

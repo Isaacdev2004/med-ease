@@ -1,6 +1,9 @@
 import type { SdkPackage, SdkStatus } from '@/services/api-platform/types';
 
-export function nextSdkStatus(current: SdkStatus, action: 'publish' | 'deprecate' | 'beta'): SdkStatus {
+export function nextSdkStatus(
+  current: SdkStatus,
+  action: 'publish' | 'deprecate' | 'beta',
+): SdkStatus {
   if (action === 'publish') return 'published';
   if (action === 'deprecate') return 'deprecated';
   return 'beta';

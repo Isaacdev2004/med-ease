@@ -54,10 +54,7 @@ export function createOptimisticMutationOptions<
       if (ctx?.previous !== undefined) {
         queryClient.setQueryData(queryKey, ctx.previous);
       }
-      appToast.mutationError(
-        entityLabel,
-        getFriendlyQueryErrorMessage(error),
-      );
+      appToast.mutationError(entityLabel, getFriendlyQueryErrorMessage(error));
     },
     onSuccess: () => {
       appToast.mutationSuccess(entityLabel);

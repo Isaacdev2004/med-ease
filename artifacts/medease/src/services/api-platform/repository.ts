@@ -1,8 +1,20 @@
-import { computeApiPlatformAnalytics, buildApiDashboard } from '@/services/api-platform/analytics';
-import { generateClientId, generateClientSecret, nextOAuthAppStatus, canPublishOAuthApp } from '@/services/api-platform/oauth-engine';
+import {
+  computeApiPlatformAnalytics,
+  buildApiDashboard,
+} from '@/services/api-platform/analytics';
+import {
+  generateClientId,
+  generateClientSecret,
+  nextOAuthAppStatus,
+  canPublishOAuthApp,
+} from '@/services/api-platform/oauth-engine';
 import { generateOpenApiPreview } from '@/services/api-platform/openapi-engine';
 import { nextSdkStatus } from '@/services/api-platform/sdk-engine';
-import { buildWebhookSignature, canDeliverWebhook, nextDeliveryStatus } from '@/services/api-platform/webhook-engine';
+import {
+  buildWebhookSignature,
+  canDeliverWebhook,
+  nextDeliveryStatus,
+} from '@/services/api-platform/webhook-engine';
 import {
   MOCK_API_ENDPOINTS,
   MOCK_API_KEYS,
@@ -30,7 +42,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -49,69 +66,99 @@ class ApiPlatformRepository {
   private sdks = [...MOCK_SDK_PACKAGES];
   private nextId = 880000;
 
-  dashboard(partnerId?: string) { return buildApiDashboard(partnerId); }
-  analytics(partnerId?: string) { return computeApiPlatformAnalytics(partnerId); }
+  dashboard(partnerId?: string) {
+    return buildApiDashboard(partnerId);
+  }
+  analytics(partnerId?: string) {
+    return computeApiPlatformAnalytics(partnerId);
+  }
 
   getApiKeys(filters?: ApiPlatformFilters) {
     let items = this.apiKeys;
-    if (filters?.partnerId) items = items.filter((k) => k.partnerId === filters.partnerId);
-    if (filters?.status) items = items.filter((k) => k.status === filters.status);
-    if (filters?.q) items = items.filter((k) => matchQ(filters.q, k.name, k.prefix));
+    if (filters?.partnerId)
+      items = items.filter((k) => k.partnerId === filters.partnerId);
+    if (filters?.status)
+      items = items.filter((k) => k.status === filters.status);
+    if (filters?.q)
+      items = items.filter((k) => matchQ(filters.q, k.name, k.prefix));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getApiKey(keyId: string) { return this.apiKeys.find((k) => k.keyId === keyId) ?? null; }
+  getApiKey(keyId: string) {
+    return this.apiKeys.find((k) => k.keyId === keyId) ?? null;
+  }
 
   getOAuthApps(filters?: ApiPlatformFilters) {
     let items = this.oauthApps;
-    if (filters?.partnerId) items = items.filter((a) => a.partnerId === filters.partnerId);
-    if (filters?.status) items = items.filter((a) => a.status === filters.status);
-    if (filters?.q) items = items.filter((a) => matchQ(filters.q, a.name, a.clientId));
+    if (filters?.partnerId)
+      items = items.filter((a) => a.partnerId === filters.partnerId);
+    if (filters?.status)
+      items = items.filter((a) => a.status === filters.status);
+    if (filters?.q)
+      items = items.filter((a) => matchQ(filters.q, a.name, a.clientId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getOAuthApp(appId: string) { return this.oauthApps.find((a) => a.appId === appId) ?? null; }
+  getOAuthApp(appId: string) {
+    return this.oauthApps.find((a) => a.appId === appId) ?? null;
+  }
 
   getWebhooks(filters?: ApiPlatformFilters) {
     let items = this.webhooks;
-    if (filters?.partnerId) items = items.filter((w) => w.partnerId === filters.partnerId);
-    if (filters?.status) items = items.filter((w) => w.status === filters.status);
-    if (filters?.q) items = items.filter((w) => matchQ(filters.q, w.name, w.url));
+    if (filters?.partnerId)
+      items = items.filter((w) => w.partnerId === filters.partnerId);
+    if (filters?.status)
+      items = items.filter((w) => w.status === filters.status);
+    if (filters?.q)
+      items = items.filter((w) => matchQ(filters.q, w.name, w.url));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getWebhook(webhookId: string) { return this.webhooks.find((w) => w.webhookId === webhookId) ?? null; }
+  getWebhook(webhookId: string) {
+    return this.webhooks.find((w) => w.webhookId === webhookId) ?? null;
+  }
 
   getWebhookDeliveries(filters?: ApiPlatformFilters) {
     let items = this.deliveries;
-    if (filters?.status) items = items.filter((d) => d.status === filters.status);
+    if (filters?.status)
+      items = items.filter((d) => d.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getSdkPackages(filters?: ApiPlatformFilters) {
     let items = this.sdks;
-    if (filters?.status) items = items.filter((s) => s.status === filters.status);
-    if (filters?.q) items = items.filter((s) => matchQ(filters.q, s.name, s.language));
+    if (filters?.status)
+      items = items.filter((s) => s.status === filters.status);
+    if (filters?.q)
+      items = items.filter((s) => matchQ(filters.q, s.name, s.language));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getRateLimitPolicies(filters?: ApiPlatformFilters) {
     let items = this.rateLimits;
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.name, p.endpointPattern));
+    if (filters?.q)
+      items = items.filter((p) => matchQ(filters.q, p.name, p.endpointPattern));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getEndpoints(filters?: ApiPlatformFilters) {
     let items = MOCK_API_ENDPOINTS;
-    if (filters?.module) items = items.filter((e) => e.module === filters.module);
-    if (filters?.status) items = items.filter((e) => e.status === filters.status);
-    if (filters?.q) items = items.filter((e) => matchQ(filters.q, e.path, e.description));
+    if (filters?.module)
+      items = items.filter((e) => e.module === filters.module);
+    if (filters?.status)
+      items = items.filter((e) => e.status === filters.status);
+    if (filters?.q)
+      items = items.filter((e) => matchQ(filters.q, e.path, e.description));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getApiVersions() { return MOCK_API_VERSIONS; }
+  getApiVersions() {
+    return MOCK_API_VERSIONS;
+  }
 
-  getOpenApiSpecs() { return MOCK_OPENAPI_SPECS; }
+  getOpenApiSpecs() {
+    return MOCK_OPENAPI_SPECS;
+  }
 
   getOpenApiPreview(specId: string) {
     const spec = MOCK_OPENAPI_SPECS.find((s) => s.specId === specId);
@@ -121,17 +168,23 @@ class ApiPlatformRepository {
 
   getPartners(filters?: ApiPlatformFilters) {
     let items = MOCK_API_PARTNERS;
-    if (filters?.status) items = items.filter((p) => p.status === filters.status);
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.name, p.contactEmail));
+    if (filters?.status)
+      items = items.filter((p) => p.status === filters.status);
+    if (filters?.q)
+      items = items.filter((p) => matchQ(filters.q, p.name, p.contactEmail));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getPartner(partnerId: string) { return MOCK_API_PARTNERS.find((p) => p.partnerId === partnerId) ?? null; }
+  getPartner(partnerId: string) {
+    return MOCK_API_PARTNERS.find((p) => p.partnerId === partnerId) ?? null;
+  }
 
   getSandboxes(filters?: ApiPlatformFilters) {
     let items = this.sandboxes;
-    if (filters?.partnerId) items = items.filter((s) => s.partnerId === filters.partnerId);
-    if (filters?.status) items = items.filter((s) => s.status === filters.status);
+    if (filters?.partnerId)
+      items = items.filter((s) => s.partnerId === filters.partnerId);
+    if (filters?.status)
+      items = items.filter((s) => s.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -212,7 +265,10 @@ class ApiPlatformRepository {
     };
     this.deliveries.unshift(delivery);
     webhook.lastDeliveryAt = delivery.deliveredAt;
-    return { delivery, signature: buildWebhookSignature(webhook.secretPrefix, input.eventType) };
+    return {
+      delivery,
+      signature: buildWebhookSignature(webhook.secretPrefix, input.eventType),
+    };
   }
 
   createSandbox(input: CreateSandboxInput) {
@@ -249,12 +305,18 @@ class ApiPlatformRepository {
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.apiKeys.length + this.webhooks.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.apiKeys.length + this.webhooks.length,
+    };
   }
 
   search(query: string, filters?: ApiPlatformFilters) {
     const keys = this.apiKeys.filter((k) => matchQ(query, k.name, k.prefix));
-    const endpoints = MOCK_API_ENDPOINTS.filter((e) => matchQ(query, e.path, e.description));
+    const endpoints = MOCK_API_ENDPOINTS.filter((e) =>
+      matchQ(query, e.path, e.description),
+    );
     return {
       apiKeys: paginate(keys, filters?.page, filters?.pageSize),
       endpoints: paginate(endpoints, filters?.page, filters?.pageSize),

@@ -1,7 +1,10 @@
 export { platformAdminService } from '@/services/platform-admin/platform-admin.service';
 export { platformAdminRepository } from '@/services/platform-admin/repository';
 export { platformAdminOfflineQueue } from '@/services/platform-admin/offline-sync';
-export { computePlatformAnalytics, buildPlatformDashboard } from '@/services/platform-admin/analytics';
+export {
+  computePlatformAnalytics,
+  buildPlatformDashboard,
+} from '@/services/platform-admin/analytics';
 export {
   MOCK_TENANTS,
   MOCK_HOSPITALS,

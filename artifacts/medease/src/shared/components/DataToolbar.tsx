@@ -42,7 +42,9 @@ export function DataToolbar({
               disabled={refreshing}
               aria-label="Refresh data"
             >
-              <RefreshCw className={cn('mr-2 h-4 w-4', refreshing && 'animate-spin')} />
+              <RefreshCw
+                className={cn('mr-2 h-4 w-4', refreshing && 'animate-spin')}
+              />
               Refresh
             </Button>
           ) : null}

@@ -10,7 +10,10 @@ import {
   AuthenticationRequiredException,
   AuthorizationHttpException,
 } from './authorization.exceptions';
-import { IS_PUBLIC_KEY, PERMISSIONS_KEY } from './decorators/require-permission.decorator';
+import {
+  IS_PUBLIC_KEY,
+  PERMISSIONS_KEY,
+} from './decorators/require-permission.decorator';
 import { PermissionsGuard } from './guards/permissions.guard';
 import { PermissionService } from './permission.service';
 import { PolicyService } from './policy.service';
@@ -62,7 +65,11 @@ function physicianUser(): JwtAccessPayload {
 }
 
 describe('PermissionsGuard', () => {
-  const guard = new PermissionsGuard(new Reflector(), new PermissionService(), new PolicyService());
+  const guard = new PermissionsGuard(
+    new Reflector(),
+    new PermissionService(),
+    new PolicyService(),
+  );
 
   it('allows public routes without authentication', () => {
     const allowed = guard.canActivate(

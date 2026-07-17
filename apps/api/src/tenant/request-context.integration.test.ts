@@ -58,7 +58,8 @@ describe('Tenant request context integration', () => {
   });
 
   it('preserves correlation id when mapping to queue envelope fields', async () => {
-    const { envelopeFieldsFromRequestContext } = await import('@medease/observability');
+    const { envelopeFieldsFromRequestContext } =
+      await import('@medease/observability');
 
     runWithRequestContext(
       createBaseRequestContext({ requestId: 'req-3', correlationId: 'corr-3' }),

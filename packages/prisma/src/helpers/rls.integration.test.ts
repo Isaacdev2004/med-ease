@@ -25,8 +25,16 @@ describeIf('RLS tenant isolation', () => {
     await runInSystemTransaction(prisma, async (tx) => {
       await tx.tenant.createMany({
         data: [
-          { id: tenantA, name: 'Tenant A', slug: `tenant-a-${tenantA.slice(0, 8)}` },
-          { id: tenantB, name: 'Tenant B', slug: `tenant-b-${tenantB.slice(0, 8)}` },
+          {
+            id: tenantA,
+            name: 'Tenant A',
+            slug: `tenant-a-${tenantA.slice(0, 8)}`,
+          },
+          {
+            id: tenantB,
+            name: 'Tenant B',
+            slug: `tenant-b-${tenantB.slice(0, 8)}`,
+          },
         ],
       });
 

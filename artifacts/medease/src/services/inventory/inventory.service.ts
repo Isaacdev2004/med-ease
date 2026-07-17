@@ -11,7 +11,9 @@ import type {
 } from '@/services/inventory/types';
 
 const DELAY = 250;
-async function delay(ms = DELAY) { await new Promise((r) => setTimeout(r, ms)); }
+async function delay(ms = DELAY) {
+  await new Promise((r) => setTimeout(r, ms));
+}
 
 export const inventoryService = {
   async searchInventory(filters?: InventoryFilters) {
@@ -29,7 +31,10 @@ export const inventoryService = {
     return inventoryRepository.createInventoryItem(input);
   },
 
-  async updateInventory(inventoryId: string, updates: Parameters<typeof inventoryRepository.updateInventory>[1]) {
+  async updateInventory(
+    inventoryId: string,
+    updates: Parameters<typeof inventoryRepository.updateInventory>[1],
+  ) {
     await delay();
     return inventoryRepository.updateInventory(inventoryId, updates);
   },

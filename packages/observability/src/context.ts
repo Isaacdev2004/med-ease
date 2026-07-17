@@ -24,7 +24,10 @@ export type ObservabilityContext = Pick<
 
 const storage = new AsyncLocalStorage<RequestContext>();
 
-export function runWithRequestContext<T>(context: RequestContext, fn: () => T): T {
+export function runWithRequestContext<T>(
+  context: RequestContext,
+  fn: () => T,
+): T {
   return storage.run(context, fn);
 }
 
@@ -38,7 +41,9 @@ export function getRequestContext(): RequestContext | undefined {
 /** @deprecated Use getRequestContext */
 export const getContext = getRequestContext;
 
-export function mergeRequestContext(partial: Partial<RequestContext>): RequestContext | undefined {
+export function mergeRequestContext(
+  partial: Partial<RequestContext>,
+): RequestContext | undefined {
   const current = storage.getStore();
   if (!current) {
     return undefined;

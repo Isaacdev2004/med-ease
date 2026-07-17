@@ -1,7 +1,15 @@
-export type KpiCategory = 'clinical' | 'operational' | 'financial' | 'quality' | 'workforce' | 'population' | 'strategic';
+export type KpiCategory =
+  | 'clinical'
+  | 'operational'
+  | 'financial'
+  | 'quality'
+  | 'workforce'
+  | 'population'
+  | 'strategic';
 export type KpiTrend = 'up' | 'down' | 'stable';
 export type AlertSeverity = 'info' | 'warning' | 'critical';
-export type InitiativeStatus = 'planning' | 'active' | 'on_track' | 'at_risk' | 'completed';
+export type InitiativeStatus =
+  'planning' | 'active' | 'on_track' | 'at_risk' | 'completed';
 export type DashboardStatus = 'active' | 'archived' | 'draft';
 export type ForecastHorizon = '30d' | '90d' | '180d' | '365d';
 

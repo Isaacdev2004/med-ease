@@ -18,7 +18,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     context: ExecutionContext,
     status?: unknown,
   ): TUser {
-    const resolved = super.handleRequest(err, user, info, context, status) as TUser;
+    const resolved = super.handleRequest(
+      err,
+      user,
+      info,
+      context,
+      status,
+    ) as TUser;
 
     if (resolved && typeof resolved === 'object' && 'tenantId' in resolved) {
       this.tenantResolver.applyFromJwt(resolved as unknown as JwtAccessPayload);

@@ -3,7 +3,15 @@ import { useLocation } from 'wouter';
 import { FacilitiesShell } from '@/features/facilities/components/FacilitiesShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'facilities' | 'buildings' | 'facility-assets' | 'maintenance' | 'utilities' | 'environment' | 'housekeeping' | 'fleet';
+type Segment =
+  | 'facilities'
+  | 'buildings'
+  | 'facility-assets'
+  | 'maintenance'
+  | 'utilities'
+  | 'environment'
+  | 'housekeeping'
+  | 'fleet';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/buildings')) return 'buildings';
@@ -30,5 +38,12 @@ const TITLES: Record<Segment, string> = {
 export default function FacilityFacilitiesPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <FacilitiesShell basePath={resolveModuleBasePath(location, segment)} variant="facility" title={TITLES[segment]} facilityId="fac-001" />;
+  return (
+    <FacilitiesShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="facility"
+      title={TITLES[segment]}
+      facilityId="fac-001"
+    />
+  );
 }

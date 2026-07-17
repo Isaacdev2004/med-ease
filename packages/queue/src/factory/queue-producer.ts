@@ -3,7 +3,10 @@ import type { ConnectionOptions, JobsOptions, QueueOptions } from 'bullmq';
 
 import type { QueueName } from '../constants/queue-names';
 import { deadLetterQueueName } from '../constants/queue-names';
-import { createEnvelope, type QueueJobEnvelope } from '../envelope/queue-job.envelope';
+import {
+  createEnvelope,
+  type QueueJobEnvelope,
+} from '../envelope/queue-job.envelope';
 import { DEFAULT_JOB_OPTIONS, DLQ_JOB_OPTIONS } from '../policies/retry-policy';
 
 export interface QueueProducerPair {
@@ -22,10 +25,13 @@ export function createQueueProducer(
   };
 
   const queue = new Queue<QueueJobEnvelope>(name, queueOptions);
-  const deadLetterQueue = new Queue<QueueJobEnvelope>(deadLetterQueueName(name), {
-    connection,
-    defaultJobOptions: DLQ_JOB_OPTIONS,
-  });
+  const deadLetterQueue = new Queue<QueueJobEnvelope>(
+    deadLetterQueueName(name),
+    {
+      connection,
+      defaultJobOptions: DLQ_JOB_OPTIONS,
+    },
+  );
 
   return { queue, deadLetterQueue };
 }

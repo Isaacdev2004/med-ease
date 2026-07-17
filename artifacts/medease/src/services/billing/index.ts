@@ -3,7 +3,10 @@ export { billingRepository } from '@/services/billing/repository';
 export { billingOfflineQueue } from '@/services/billing/offline-sync';
 export { computeRevenueAnalytics } from '@/services/billing/analytics';
 export { getPaymentAdapter, processPayment } from '@/services/billing/payments';
-export { verifyEligibility, checkPreauthorization } from '@/services/billing/insurance';
+export {
+  verifyEligibility,
+  checkPreauthorization,
+} from '@/services/billing/insurance';
 export {
   toFhirClaim,
   toFhirCoverage,
@@ -40,4 +43,7 @@ export type {
   BillingPermissions,
   PaymentTimelineEntry,
 } from '@/services/billing/types';
-export { AUTH_USER_PATIENT_MAP, BILLING_PATIENT_IDS } from '@/services/billing/types';
+export {
+  AUTH_USER_PATIENT_MAP,
+  BILLING_PATIENT_IDS,
+} from '@/services/billing/types';

@@ -1,4 +1,8 @@
-import type { LabOrder, LabOrderFilters, LabOrderStatus } from '@/services/laboratory/types';
+import type {
+  LabOrder,
+  LabOrderFilters,
+  LabOrderStatus,
+} from '@/services/laboratory/types';
 
 export function categorizeOrders(orders: LabOrder[]) {
   return {
@@ -11,23 +15,36 @@ export function categorizeOrders(orders: LabOrder[]) {
 }
 
 export function sortOrdersByDate(orders: LabOrder[]): LabOrder[] {
-  return [...orders].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  return [...orders].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
 }
 
 export function isOrderEditable(status: LabOrderStatus): boolean {
   return ['draft', 'pending', 'scheduled'].includes(status);
 }
 
-export function matchesOrderFilters(order: LabOrder, filters: LabOrderFilters): boolean {
+export function matchesOrderFilters(
+  order: LabOrder,
+  filters: LabOrderFilters,
+): boolean {
   if (filters.patientId && order.patientId !== filters.patientId) return false;
   if (filters.status && order.status !== filters.status) return false;
   if (filters.priority && order.priority !== filters.priority) return false;
-  if (filters.facilityId && order.facilityId !== filters.facilityId) return false;
-  if (filters.laboratoryId && order.laboratoryId !== filters.laboratoryId) return false;
-  if (filters.carePlanId && order.carePlanId !== filters.carePlanId) return false;
+  if (filters.facilityId && order.facilityId !== filters.facilityId)
+    return false;
+  if (filters.laboratoryId && order.laboratoryId !== filters.laboratoryId)
+    return false;
+  if (filters.carePlanId && order.carePlanId !== filters.carePlanId)
+    return false;
   if (filters.q) {
     const q = filters.q.toLowerCase();
-    if (!`${order.orderNumber} ${order.patientName} ${order.testNames.join(' ')}`.toLowerCase().includes(q)) return false;
+    if (
+      !`${order.orderNumber} ${order.patientName} ${order.testNames.join(' ')}`
+        .toLowerCase()
+        .includes(q)
+    )
+      return false;
   }
   return true;
 }

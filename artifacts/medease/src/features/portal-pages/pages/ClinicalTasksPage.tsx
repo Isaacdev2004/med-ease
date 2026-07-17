@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_CLINICAL_TASKS, type ClinicalTaskRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_CLINICAL_TASKS,
+  type ClinicalTaskRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -21,7 +24,13 @@ const columns: DataTableColumn<ClinicalTaskRow>[] = [
     cell: (row) => (
       <PortalStatusBadge
         label={row.priority}
-        variant={row.priority === 'high' ? 'destructive' : row.priority === 'medium' ? 'secondary' : 'outline'}
+        variant={
+          row.priority === 'high'
+            ? 'destructive'
+            : row.priority === 'medium'
+              ? 'secondary'
+              : 'outline'
+        }
       />
     ),
   },
@@ -36,13 +45,17 @@ export default function ClinicalTasksPage() {
   const [tasks, setTasks] = useState(MOCK_CLINICAL_TASKS);
 
   const open = tasks.filter((row) => row.status !== 'done').length;
-  const highPriority = tasks.filter((row) => row.priority === 'high' && row.status !== 'done').length;
+  const highPriority = tasks.filter(
+    (row) => row.priority === 'high' && row.status !== 'done',
+  ).length;
 
   return (
     <PageShell
       title="Clinical Tasks"
       subtitle="Your assigned clinical workflows and follow-ups."
-      primaryAction={<PortalActionButton label="Add task" successTitle="Task created" />}
+      primaryAction={
+        <PortalActionButton label="Add task" successTitle="Task created" />
+      }
     >
       <PortalMetricsGrid
         columns={3}
@@ -66,7 +79,9 @@ export default function ClinicalTasksPage() {
               onClick={() => {
                 setTasks((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'done' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'done' as const }
+                      : item,
                   ),
                 );
               }}

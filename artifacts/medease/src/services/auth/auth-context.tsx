@@ -138,7 +138,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshSession = useCallback(async (): Promise<boolean> => {
     if (!session) return false;
 
-    setAuthState((s) => (s === 'authenticated' || s === 'offline' ? 'refreshing' : s));
+    setAuthState((s) =>
+      s === 'authenticated' || s === 'offline' ? 'refreshing' : s,
+    );
 
     try {
       const refreshed = await authService.refreshSession(session);
@@ -232,8 +234,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AuthContextValue>(
     () => ({
       authState,
-      isAuthenticated:
-        authState === 'authenticated' || authState === 'offline',
+      isAuthenticated: authState === 'authenticated' || authState === 'offline',
       isLoading:
         authState === 'authenticating' ||
         authState === 'refreshing' ||

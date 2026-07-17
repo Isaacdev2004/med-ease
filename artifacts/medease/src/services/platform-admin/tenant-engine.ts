@@ -4,7 +4,10 @@ export function canActivateTenant(tenant: Tenant): boolean {
   return tenant.status === 'suspended' || tenant.status === 'trial';
 }
 
-export function nextTenantStatus(current: TenantStatus, action: 'activate' | 'suspend' | 'archive'): TenantStatus {
+export function nextTenantStatus(
+  current: TenantStatus,
+  action: 'activate' | 'suspend' | 'archive',
+): TenantStatus {
   if (action === 'activate') return 'active';
   if (action === 'suspend') return 'suspended';
   return 'archived';

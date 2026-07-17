@@ -37,11 +37,15 @@ type UserWithRoles = Prisma.UserGetPayload<{
 }>;
 
 export function mapUser(user: UserWithRoles): IamUser {
-  const assignmentRoles = user.roleAssignments?.flatMap((assignment) => [
-    assignment.roleId,
-    assignment.role.name,
-  ]) ?? [];
-  const roles = [user.role, ...assignmentRoles.filter((role) => role !== user.role)];
+  const assignmentRoles =
+    user.roleAssignments?.flatMap((assignment) => [
+      assignment.roleId,
+      assignment.role.name,
+    ]) ?? [];
+  const roles = [
+    user.role,
+    ...assignmentRoles.filter((role) => role !== user.role),
+  ];
 
   return {
     userId: user.id,
@@ -58,7 +62,9 @@ export function mapUser(user: UserWithRoles): IamUser {
   };
 }
 
-export function mapSession(session: Prisma.UserSessionGetPayload<object>): IamSession {
+export function mapSession(
+  session: Prisma.UserSessionGetPayload<object>,
+): IamSession {
   return {
     sessionId: session.id,
     userId: session.userId,
@@ -131,7 +137,9 @@ export function mapPermission(name: string, index: number): IamPermission {
   };
 }
 
-export function mapPolicy(policy: Prisma.IamPolicyRecordGetPayload<object>): IamPolicy {
+export function mapPolicy(
+  policy: Prisma.IamPolicyRecordGetPayload<object>,
+): IamPolicy {
   const conditions = Array.isArray(policy.conditions)
     ? (policy.conditions as string[])
     : undefined;
@@ -149,7 +157,9 @@ export function mapPolicy(policy: Prisma.IamPolicyRecordGetPayload<object>): Iam
   };
 }
 
-export function mapLoginAttempt(attempt: Prisma.LoginAttemptGetPayload<object>): LoginAttempt {
+export function mapLoginAttempt(
+  attempt: Prisma.LoginAttemptGetPayload<object>,
+): LoginAttempt {
   return {
     attemptId: attempt.id,
     userId: attempt.userId ?? undefined,
@@ -161,7 +171,9 @@ export function mapLoginAttempt(attempt: Prisma.LoginAttemptGetPayload<object>):
   };
 }
 
-export function mapMfaDevice(device: Prisma.MfaDeviceGetPayload<object>): MfaDevice {
+export function mapMfaDevice(
+  device: Prisma.MfaDeviceGetPayload<object>,
+): MfaDevice {
   return {
     deviceId: device.id,
     userId: device.userId,
@@ -173,7 +185,9 @@ export function mapMfaDevice(device: Prisma.MfaDeviceGetPayload<object>): MfaDev
   };
 }
 
-export function mapTrustedDevice(device: Prisma.TrustedDeviceGetPayload<object>): TrustedDevice {
+export function mapTrustedDevice(
+  device: Prisma.TrustedDeviceGetPayload<object>,
+): TrustedDevice {
   return {
     deviceId: device.id,
     userId: device.userId,
@@ -185,7 +199,9 @@ export function mapTrustedDevice(device: Prisma.TrustedDeviceGetPayload<object>)
   };
 }
 
-export function mapOAuthClient(client: Prisma.OAuthClientGetPayload<object>): OAuthClient {
+export function mapOAuthClient(
+  client: Prisma.OAuthClientGetPayload<object>,
+): OAuthClient {
   return {
     clientId: client.id,
     name: client.name,
@@ -211,7 +227,9 @@ export function mapApiKey(key: Prisma.ApiKeyGetPayload<object>): ApiKey {
   };
 }
 
-export function mapConsent(consent: Prisma.ConsentRecordGetPayload<object>): ConsentRecord {
+export function mapConsent(
+  consent: Prisma.ConsentRecordGetPayload<object>,
+): ConsentRecord {
   return {
     consentId: consent.id,
     patientId: consent.patientId,
@@ -224,7 +242,9 @@ export function mapConsent(consent: Prisma.ConsentRecordGetPayload<object>): Con
   };
 }
 
-export function mapDelegation(delegation: Prisma.DelegationRecordGetPayload<object>): DelegationRecord {
+export function mapDelegation(
+  delegation: Prisma.DelegationRecordGetPayload<object>,
+): DelegationRecord {
   return {
     delegationId: delegation.id,
     delegatorId: delegation.delegatorId,
@@ -236,7 +256,9 @@ export function mapDelegation(delegation: Prisma.DelegationRecordGetPayload<obje
   };
 }
 
-export function mapProxyAccess(proxy: Prisma.ProxyAccessGetPayload<object>): ProxyAccess {
+export function mapProxyAccess(
+  proxy: Prisma.ProxyAccessGetPayload<object>,
+): ProxyAccess {
   return {
     proxyId: proxy.id,
     patientId: proxy.patientId,
@@ -247,7 +269,9 @@ export function mapProxyAccess(proxy: Prisma.ProxyAccessGetPayload<object>): Pro
   };
 }
 
-export function mapBreakGlass(event: Prisma.BreakGlassEventGetPayload<object>): BreakGlassEvent {
+export function mapBreakGlass(
+  event: Prisma.BreakGlassEventGetPayload<object>,
+): BreakGlassEvent {
   return {
     eventId: event.id,
     userId: event.userId,
@@ -260,7 +284,9 @@ export function mapBreakGlass(event: Prisma.BreakGlassEventGetPayload<object>): 
   };
 }
 
-export function mapAuditEvent(log: Prisma.IamAuditLogGetPayload<object>): IamAuditEvent {
+export function mapAuditEvent(
+  log: Prisma.IamAuditLogGetPayload<object>,
+): IamAuditEvent {
   return {
     auditId: log.id,
     action: log.action,
@@ -274,7 +300,9 @@ export function mapAuditEvent(log: Prisma.IamAuditLogGetPayload<object>): IamAud
   };
 }
 
-export function mapSecurityIncident(incident: Prisma.SecurityIncidentGetPayload<object>): SecurityIncident {
+export function mapSecurityIncident(
+  incident: Prisma.SecurityIncidentGetPayload<object>,
+): SecurityIncident {
   return {
     incidentId: incident.id,
     title: incident.title,
@@ -286,7 +314,9 @@ export function mapSecurityIncident(incident: Prisma.SecurityIncidentGetPayload<
   };
 }
 
-export function mapRiskScore(score: Prisma.RiskScoreGetPayload<object>): RiskScore {
+export function mapRiskScore(
+  score: Prisma.RiskScoreGetPayload<object>,
+): RiskScore {
   return {
     scoreId: score.id,
     userId: score.userId,
@@ -297,7 +327,9 @@ export function mapRiskScore(score: Prisma.RiskScoreGetPayload<object>): RiskSco
   };
 }
 
-export function mapSamlProvider(provider: Prisma.SamlProviderGetPayload<object>): SamlProvider {
+export function mapSamlProvider(
+  provider: Prisma.SamlProviderGetPayload<object>,
+): SamlProvider {
   return {
     providerId: provider.id,
     name: provider.name,
@@ -307,7 +339,9 @@ export function mapSamlProvider(provider: Prisma.SamlProviderGetPayload<object>)
   };
 }
 
-export function mapOidcProvider(provider: Prisma.OidcProviderGetPayload<object>): OidcProvider {
+export function mapOidcProvider(
+  provider: Prisma.OidcProviderGetPayload<object>,
+): OidcProvider {
   return {
     providerId: provider.id,
     name: provider.name,

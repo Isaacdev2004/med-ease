@@ -1,5 +1,7 @@
-export type DocumentStatus = 'active' | 'draft' | 'archived' | 'deleted' | 'legal_hold';
-export type DocumentType = 'pdf' | 'image' | 'docx' | 'xlsx' | 'dicom' | 'text' | 'other';
+export type DocumentStatus =
+  'active' | 'draft' | 'archived' | 'deleted' | 'legal_hold';
+export type DocumentType =
+  'pdf' | 'image' | 'docx' | 'xlsx' | 'dicom' | 'text' | 'other';
 export type SignatureStatus = 'pending' | 'signed' | 'declined' | 'expired';
 export type ScanStatus = 'queued' | 'processing' | 'completed' | 'failed';
 export type ArchiveStatus = 'pending' | 'running' | 'completed' | 'failed';

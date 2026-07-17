@@ -1,9 +1,13 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const patientPage = () => import('@/features/appointments/pages/PatientAppointmentsPage');
-const professionalPage = () => import('@/features/appointments/pages/ProfessionalAppointmentsPage');
-const facilityPage = () => import('@/features/appointments/pages/FacilitySchedulePage');
-const detailPage = () => import('@/features/appointments/pages/AppointmentDetailPage');
+const patientPage = () =>
+  import('@/features/appointments/pages/PatientAppointmentsPage');
+const professionalPage = () =>
+  import('@/features/appointments/pages/ProfessionalAppointmentsPage');
+const facilityPage = () =>
+  import('@/features/appointments/pages/FacilitySchedulePage');
+const detailPage = () =>
+  import('@/features/appointments/pages/AppointmentDetailPage');
 
 const PATIENT_SECTIONS = [
   'book',
@@ -65,15 +69,19 @@ export function createPatientAppointmentsRoutes(options: {
   ];
 }
 
-export function createProfessionalAppointmentsRoutes(analyticsPrefix: string): RouteDefinition[] {
-  const sectionRoutes: RouteDefinition[] = CLINICIAN_SECTIONS.map((section) => ({
-    path: section === 'schedule' ? '/schedule' : `/appointments/${section}`,
-    title: `Schedule — ${section}`,
-    breadcrumb: section.charAt(0).toUpperCase() + section.slice(1),
-    analyticsName: `${analyticsPrefix}_appointments_${section}`,
-    lazy: professionalPage,
-    permission: 'appointments.manage',
-  }));
+export function createProfessionalAppointmentsRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
+  const sectionRoutes: RouteDefinition[] = CLINICIAN_SECTIONS.map(
+    (section) => ({
+      path: section === 'schedule' ? '/schedule' : `/appointments/${section}`,
+      title: `Schedule — ${section}`,
+      breadcrumb: section.charAt(0).toUpperCase() + section.slice(1),
+      analyticsName: `${analyticsPrefix}_appointments_${section}`,
+      lazy: professionalPage,
+      permission: 'appointments.manage',
+    }),
+  );
 
   return [
     {
@@ -112,7 +120,9 @@ export function createProfessionalAppointmentsRoutes(analyticsPrefix: string): R
   ];
 }
 
-export function createFacilityScheduleRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createFacilityScheduleRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/schedule',
@@ -138,7 +148,9 @@ export function createFacilityScheduleRoutes(analyticsPrefix: string): RouteDefi
       lazy: facilityPage,
       permission: 'appointments.manage',
     },
-    ...FACILITY_SECTIONS.filter((s) => !['resources', 'calendar'].includes(s)).map((section) => ({
+    ...FACILITY_SECTIONS.filter(
+      (s) => !['resources', 'calendar'].includes(s),
+    ).map((section) => ({
       path: `/schedule/${section}`,
       title: `Schedule — ${section}`,
       breadcrumb: section,
@@ -149,7 +161,9 @@ export function createFacilityScheduleRoutes(analyticsPrefix: string): RouteDefi
   ];
 }
 
-export function createAdminSchedulingRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createAdminSchedulingRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/appointments',

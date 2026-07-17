@@ -3,7 +3,12 @@ import { useLocation } from 'wouter';
 import { WorkforceShell } from '@/features/workforce/components/WorkforceShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'workforce' | 'workforce-schedule' | 'attendance' | 'training' | 'performance';
+type Segment =
+  | 'workforce'
+  | 'workforce-schedule'
+  | 'attendance'
+  | 'training'
+  | 'performance';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/workforce-schedule')) return 'workforce-schedule';
@@ -24,5 +29,12 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalWorkforcePage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <WorkforceShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} employeeId="emp-00001" />;
+  return (
+    <WorkforceShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+      employeeId="emp-00001"
+    />
+  );
 }

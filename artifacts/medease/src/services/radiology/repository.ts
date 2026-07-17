@@ -33,11 +33,18 @@ class RadiologyRepository {
   private shares: ImageShare[] = [];
 
   listStudies(filters?: StudyFilters) {
-    const filtered = this.studies.filter((s) => matchesStudyFilters(s, filters ?? {}));
+    const filtered = this.studies.filter((s) =>
+      matchesStudyFilters(s, filters ?? {}),
+    );
     const page = filters?.page ?? 1;
     const pageSize = filters?.pageSize ?? 25;
     const start = (page - 1) * pageSize;
-    return { items: filtered.slice(start, start + pageSize), total: filtered.length, page, pageSize };
+    return {
+      items: filtered.slice(start, start + pageSize),
+      total: filtered.length,
+      page,
+      pageSize,
+    };
   }
 
   getAllStudies(filters?: StudyFilters) {
@@ -57,20 +64,28 @@ class RadiologyRepository {
   }
 
   getAllReports(patientId?: string) {
-    return patientId ? this.reports.filter((r) => r.patientId === patientId) : this.reports;
+    return patientId
+      ? this.reports.filter((r) => r.patientId === patientId)
+      : this.reports;
   }
 
   getPendingReports() {
-    return this.reports.filter((r) => r.status === 'draft' || r.status === 'preliminary');
+    return this.reports.filter(
+      (r) => r.status === 'draft' || r.status === 'preliminary',
+    );
   }
 
   getCriticalReports(patientId?: string) {
-    const reports = patientId ? this.reports.filter((r) => r.patientId === patientId) : this.reports;
+    const reports = patientId
+      ? this.reports.filter((r) => r.patientId === patientId)
+      : this.reports;
     return reports.filter((r) => r.isCritical);
   }
 
   getUnreadReports(patientId?: string) {
-    const reports = patientId ? this.reports.filter((r) => r.patientId === patientId) : this.reports;
+    const reports = patientId
+      ? this.reports.filter((r) => r.patientId === patientId)
+      : this.reports;
     return reports.filter((r) => r.isUnread);
   }
 
@@ -95,13 +110,20 @@ class RadiologyRepository {
   }
 
   getMeasurements(studyId: string) {
-    const fromReports = this.reports.flatMap((r) => r.measurements.filter((m) => m.studyId === studyId));
-    return [...fromReports, ...this.measurements.filter((m) => m.studyId === studyId)];
+    const fromReports = this.reports.flatMap((r) =>
+      r.measurements.filter((m) => m.studyId === studyId),
+    );
+    return [
+      ...fromReports,
+      ...this.measurements.filter((m) => m.studyId === studyId),
+    ];
   }
 
   getFavorites(patientId?: string) {
     const ids = [...this.favorites];
-    return this.studies.filter((s) => ids.includes(s.id) && (!patientId || s.patientId === patientId));
+    return this.studies.filter(
+      (s) => ids.includes(s.id) && (!patientId || s.patientId === patientId),
+    );
   }
 
   createOrder(input: CreateRadiologyOrderInput): RadiologyOrder {
@@ -154,7 +176,8 @@ class RadiologyRepository {
       ...this.reports[idx]!,
       findings: input.findings,
       impression: input.impression,
-      recommendations: input.recommendations ?? this.reports[idx]!.recommendations,
+      recommendations:
+        input.recommendations ?? this.reports[idx]!.recommendations,
       status: 'preliminary',
       updatedAt: new Date().toISOString(),
     };
@@ -173,9 +196,15 @@ class RadiologyRepository {
       isUnread: false,
       updatedAt: new Date().toISOString(),
     };
-    const sIdx = this.studies.findIndex((s) => s.id === this.reports[idx]!.studyId);
+    const sIdx = this.studies.findIndex(
+      (s) => s.id === this.reports[idx]!.studyId,
+    );
     if (sIdx >= 0) {
-      this.studies[sIdx] = { ...this.studies[sIdx]!, status: 'final', updatedAt: new Date().toISOString() };
+      this.studies[sIdx] = {
+        ...this.studies[sIdx]!,
+        status: 'final',
+        updatedAt: new Date().toISOString(),
+      };
     }
     return this.reports[idx]!;
   }
@@ -244,14 +273,22 @@ class RadiologyRepository {
   archiveStudy(id: string) {
     const idx = this.studies.findIndex((s) => s.id === id);
     if (idx < 0) return null;
-    this.studies[idx] = { ...this.studies[idx]!, status: 'cancelled', updatedAt: new Date().toISOString() };
+    this.studies[idx] = {
+      ...this.studies[idx]!,
+      status: 'cancelled',
+      updatedAt: new Date().toISOString(),
+    };
     return this.studies[idx]!;
   }
 
   search(query: string, patientId?: string) {
     const q = query.toLowerCase();
-    const studies = this.getAllStudies(patientId ? { patientId } : undefined).filter((s) =>
-      `${s.accessionNumber} ${s.reason} ${s.modality}`.toLowerCase().includes(q),
+    const studies = this.getAllStudies(
+      patientId ? { patientId } : undefined,
+    ).filter((s) =>
+      `${s.accessionNumber} ${s.reason} ${s.modality}`
+        .toLowerCase()
+        .includes(q),
     );
     const reports = this.getAllReports(patientId).filter((r) =>
       `${r.title} ${r.accessionNumber}`.toLowerCase().includes(q),

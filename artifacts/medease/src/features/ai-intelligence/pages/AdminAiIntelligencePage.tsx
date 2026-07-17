@@ -3,7 +3,14 @@ import { useLocation } from 'wouter';
 import { AiIntelligenceShell } from '@/features/ai-intelligence/components/AiIntelligenceShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'ai' | 'model-registry' | 'model-monitoring' | 'model-governance' | 'bias-monitoring' | 'ai-analytics' | 'ai-audit';
+type Segment =
+  | 'ai'
+  | 'model-registry'
+  | 'model-monitoring'
+  | 'model-governance'
+  | 'bias-monitoring'
+  | 'ai-analytics'
+  | 'ai-audit';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/model-registry')) return 'model-registry';
@@ -28,5 +35,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminAiIntelligencePage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <AiIntelligenceShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <AiIntelligenceShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

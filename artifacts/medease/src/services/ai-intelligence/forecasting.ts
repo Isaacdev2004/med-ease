@@ -1,6 +1,14 @@
-import type { ForecastType, OperationalForecast } from '@/services/ai-intelligence/types';
+import type {
+  ForecastType,
+  OperationalForecast,
+} from '@/services/ai-intelligence/types';
 
-export const FORECAST_TYPES: ForecastType[] = ['resource', 'bed_occupancy', 'operating_room', 'financial'];
+export const FORECAST_TYPES: ForecastType[] = [
+  'resource',
+  'bed_occupancy',
+  'operating_room',
+  'financial',
+];
 
 export const FORECAST_LABELS: Record<ForecastType, string> = {
   resource: 'Resource Utilization',
@@ -9,11 +17,16 @@ export const FORECAST_LABELS: Record<ForecastType, string> = {
   financial: 'Financial Forecast',
 };
 
-export function buildForecastTrend(baseValue: number, horizonDays: number): { label: string; value: number }[] {
+export function buildForecastTrend(
+  baseValue: number,
+  horizonDays: number,
+): { label: string; value: number }[] {
   const points = Math.min(horizonDays, 14);
   return Array.from({ length: points }, (_, i) => ({
     label: `D+${i + 1}`,
-    value: Math.round(baseValue * (1 + (i % 3 === 0 ? 0.05 : -0.02) * (i / points))),
+    value: Math.round(
+      baseValue * (1 + (i % 3 === 0 ? 0.05 : -0.02) * (i / points)),
+    ),
   }));
 }
 

@@ -28,7 +28,12 @@ export {
   DEFAULT_WORKER_CONCURRENCY,
   DLQ_JOB_OPTIONS,
 } from './policies/retry-policy';
-export { createQueueScheduler, QueueScheduler, type ScheduleOnceOptions, type ScheduleRepeatOptions } from './scheduler/queue-scheduler';
+export {
+  createQueueScheduler,
+  QueueScheduler,
+  type ScheduleOnceOptions,
+  type ScheduleRepeatOptions,
+} from './scheduler/queue-scheduler';
 export type {
   ProcessorContext,
   ProcessorLifecycleHooks,

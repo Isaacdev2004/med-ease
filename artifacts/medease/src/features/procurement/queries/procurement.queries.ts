@@ -10,7 +10,9 @@ export const procurementQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   requests: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.requests(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.requests(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.searchRequests(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -21,7 +23,9 @@ export const procurementQueries = {
     enabled: Boolean(requestId),
   }),
   purchaseOrders: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.purchaseOrders(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.purchaseOrders(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.searchOrders(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -32,12 +36,16 @@ export const procurementQueries = {
     enabled: Boolean(purchaseOrderId),
   }),
   rfqs: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.rfqs(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.rfqs(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.searchRFQs(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   suppliers: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.suppliers(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.suppliers(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.searchSuppliers(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -48,32 +56,44 @@ export const procurementQueries = {
     enabled: Boolean(supplierId),
   }),
   contracts: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.contracts(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.contracts(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.searchContracts(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   budgets: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.budgets(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.budgets(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.getBudgets(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   receiving: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.receiving(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.receiving(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.searchReceiving(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   deliveries: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.deliveries(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.deliveries(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.searchDeliveries(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   shipments: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.shipments(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.shipments(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.getShipments(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   invoices: (filters?: ProcurementFilters) => ({
-    queryKey: queryKeys.procurement.invoices(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.procurement.invoices(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => procurementService.searchInvoices(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

@@ -1,4 +1,9 @@
-import type { BiomedicalDevice, Building, FacilitySite, Room } from '@/services/facilities/types';
+import type {
+  BiomedicalDevice,
+  Building,
+  FacilitySite,
+  Room,
+} from '@/services/facilities/types';
 
 export function toFhirDevice(equipment: BiomedicalDevice) {
   return {
@@ -19,7 +24,9 @@ export function toFhirLocation(room: Room, building?: Building) {
     status: room.status === 'available' ? 'active' : 'inactive',
     name: room.name,
     description: `${room.type} room ${room.number}`,
-    partOf: building ? { reference: `Location/${building.buildingId}` } : undefined,
+    partOf: building
+      ? { reference: `Location/${building.buildingId}` }
+      : undefined,
   };
 }
 

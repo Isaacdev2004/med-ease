@@ -1,16 +1,36 @@
 export type TrialPhase = 'I' | 'II' | 'III' | 'IV' | 'observational';
-export type TrialStatus = 'planning' | 'recruiting' | 'active' | 'completed' | 'suspended' | 'terminated';
-export type ParticipantStatus = 'screening' | 'enrolled' | 'active' | 'completed' | 'withdrawn' | 'screen_failed';
-export type VisitStatus = 'scheduled' | 'completed' | 'missed' | 'cancelled' | 'in_progress';
+export type TrialStatus =
+  | 'planning'
+  | 'recruiting'
+  | 'active'
+  | 'completed'
+  | 'suspended'
+  | 'terminated';
+export type ParticipantStatus =
+  | 'screening'
+  | 'enrolled'
+  | 'active'
+  | 'completed'
+  | 'withdrawn'
+  | 'screen_failed';
+export type VisitStatus =
+  'scheduled' | 'completed' | 'missed' | 'cancelled' | 'in_progress';
 export type ConsentStatus = 'pending' | 'signed' | 'withdrawn' | 'expired';
 export type DeviationStatus = 'open' | 'under_review' | 'closed';
-export type AdverseEventSeverity = 'mild' | 'moderate' | 'severe' | 'life_threatening' | 'fatal';
-export type AdverseEventStatus = 'reported' | 'under_review' | 'submitted' | 'closed';
-export type BiospecimenStatus = 'collected' | 'processed' | 'stored' | 'shipped' | 'analyzed' | 'disposed';
-export type PublicationStatus = 'draft' | 'submitted' | 'under_review' | 'accepted' | 'published';
-export type InnovationStatus = 'ideation' | 'pilot' | 'scaling' | 'deployed' | 'archived';
-export type GrantStatus = 'draft' | 'submitted' | 'under_review' | 'awarded' | 'rejected';
-export type RegulatoryStatus = 'draft' | 'submitted' | 'approved' | 'rejected' | 'amended';
+export type AdverseEventSeverity =
+  'mild' | 'moderate' | 'severe' | 'life_threatening' | 'fatal';
+export type AdverseEventStatus =
+  'reported' | 'under_review' | 'submitted' | 'closed';
+export type BiospecimenStatus =
+  'collected' | 'processed' | 'stored' | 'shipped' | 'analyzed' | 'disposed';
+export type PublicationStatus =
+  'draft' | 'submitted' | 'under_review' | 'accepted' | 'published';
+export type InnovationStatus =
+  'ideation' | 'pilot' | 'scaling' | 'deployed' | 'archived';
+export type GrantStatus =
+  'draft' | 'submitted' | 'under_review' | 'awarded' | 'rejected';
+export type RegulatoryStatus =
+  'draft' | 'submitted' | 'approved' | 'rejected' | 'amended';
 
 export interface ResearchFilters {
   q?: string;

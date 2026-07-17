@@ -1,6 +1,14 @@
-import type { CareGap, CareGapType, PopulationMember, RiskTier } from '@/services/population-health/types';
+import type {
+  CareGap,
+  CareGapType,
+  PopulationMember,
+  RiskTier,
+} from '@/services/population-health/types';
 
-const GAP_RULES: Record<CareGapType, { title: string; monthsInterval: number }> = {
+const GAP_RULES: Record<
+  CareGapType,
+  { title: string; monthsInterval: number }
+> = {
   annual_checkup: { title: 'Annual wellness visit', monthsInterval: 12 },
   vaccination: { title: 'Recommended vaccination', monthsInterval: 12 },
   colonoscopy: { title: 'Colonoscopy screening', monthsInterval: 120 },
@@ -13,9 +21,16 @@ const GAP_RULES: Record<CareGapType, { title: string; monthsInterval: number }> 
   follow_up: { title: 'Follow-up appointment', monthsInterval: 3 },
 };
 
-export function detectCareGap(member: PopulationMember, type: CareGapType): boolean {
+export function detectCareGap(
+  member: PopulationMember,
+  type: CareGapType,
+): boolean {
   if (!member.lastVisit && type !== 'vaccination') return true;
-  if (member.primaryCondition === 'Diabetes' && ['eye_exam', 'hba1c'].includes(type)) return member.openGaps > 0;
+  if (
+    member.primaryCondition === 'Diabetes' &&
+    ['eye_exam', 'hba1c'].includes(type)
+  )
+    return member.openGaps > 0;
   if (member.age >= 50 && type === 'colonoscopy') return member.openGaps > 1;
   return member.openGaps > 0 && type === 'annual_checkup';
 }

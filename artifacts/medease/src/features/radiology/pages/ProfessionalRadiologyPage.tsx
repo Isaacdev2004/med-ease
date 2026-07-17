@@ -23,21 +23,45 @@ export default function ProfessionalRadiologyPage() {
   }
 
   const patientId = getPatientId(location);
-  if (location.includes('/patient/') && patientId && location.includes('/radiology')) {
+  if (
+    location.includes('/patient/') &&
+    patientId &&
+    location.includes('/radiology')
+  ) {
     const basePath = resolveModuleBasePath(location, 'radiology');
-    return <RadiologyShell basePath={basePath} variant="clinician" title="Patient Imaging" patientId={patientId} />;
+    return (
+      <RadiologyShell
+        basePath={basePath}
+        variant="clinician"
+        title="Patient Imaging"
+        patientId={patientId}
+      />
+    );
   }
 
-  const segment = location.includes('/worklist') ? 'worklist'
-    : location.includes('/compare') ? 'compare'
-      : location.includes('/reports') ? 'reports'
-        : location.includes('/critical') ? 'radiology/critical'
+  const segment = location.includes('/worklist')
+    ? 'worklist'
+    : location.includes('/compare')
+      ? 'compare'
+      : location.includes('/reports')
+        ? 'reports'
+        : location.includes('/critical')
+          ? 'radiology/critical'
           : 'radiology';
-  const basePath = resolveModuleBasePath(location, segment.includes('/') ? segment : segment);
-  const title = location.includes('/worklist') ? 'Radiologist Worklist'
-    : location.includes('/compare') ? 'Study Comparison'
-      : location.includes('/reports') ? 'Reports'
-        : location.includes('/critical') ? 'Critical Results'
+  const basePath = resolveModuleBasePath(
+    location,
+    segment.includes('/') ? segment : segment,
+  );
+  const title = location.includes('/worklist')
+    ? 'Radiologist Worklist'
+    : location.includes('/compare')
+      ? 'Study Comparison'
+      : location.includes('/reports')
+        ? 'Reports'
+        : location.includes('/critical')
+          ? 'Critical Results'
           : 'Radiology';
-  return <RadiologyShell basePath={basePath} variant="clinician" title={title} />;
+  return (
+    <RadiologyShell basePath={basePath} variant="clinician" title={title} />
+  );
 }

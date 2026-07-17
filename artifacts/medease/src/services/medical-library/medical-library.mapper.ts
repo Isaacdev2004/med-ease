@@ -10,7 +10,9 @@ function baseMedication(partial: MedicationInput): MedicationRecord {
   return {
     ...partial,
     available: partial.available ?? true,
-    references: partial.references ?? ['BDPM — Base de Données Publique des Médicaments (mock)'],
+    references: partial.references ?? [
+      'BDPM — Base de Données Publique des Médicaments (mock)',
+    ],
     relatedMedicationIds: partial.relatedMedicationIds ?? [],
     searchCount: partial.searchCount ?? 100,
     updatedAt: partial.updatedAt ?? new Date().toISOString(),
@@ -38,23 +40,56 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: true,
     geriatricApproved: true,
     searchCount: 980,
-    description: 'Paracetamol is an analgesic and antipyretic used for mild to moderate pain and fever.',
+    description:
+      'Paracetamol is an analgesic and antipyretic used for mild to moderate pain and fever.',
     activeIngredients: ['Paracetamol 500 mg'],
-    indications: ['Headache', 'Fever', 'Mild to moderate pain', 'Post-vaccination fever'],
-    contraindications: ['Severe hepatic impairment', 'Known hypersensitivity to paracetamol'],
-    warnings: ['Risk of hepatotoxicity with overdose', 'Avoid alcohol during treatment'],
-    precautions: ['Monitor liver function in chronic use', 'Check total daily dose from all sources'],
+    indications: [
+      'Headache',
+      'Fever',
+      'Mild to moderate pain',
+      'Post-vaccination fever',
+    ],
+    contraindications: [
+      'Severe hepatic impairment',
+      'Known hypersensitivity to paracetamol',
+    ],
+    warnings: [
+      'Risk of hepatotoxicity with overdose',
+      'Avoid alcohol during treatment',
+    ],
+    precautions: [
+      'Monitor liver function in chronic use',
+      'Check total daily dose from all sources',
+    ],
     sideEffects: ['Rare: skin reactions', 'Overdose: liver damage'],
     administration: ['Take with water', 'Do not exceed recommended daily dose'],
     storage: 'Store below 25°C, protect from moisture.',
-    patientInformation: 'Do not exceed 3 g per day in adults without medical advice.',
-    professionalInformation: 'Maximum 4 g/day in adults; adjust in hepatic impairment.',
+    patientInformation:
+      'Do not exceed 3 g per day in adults without medical advice.',
+    professionalInformation:
+      'Maximum 4 g/day in adults; adjust in hepatic impairment.',
     dosages: [
-      { population: 'adult', indication: 'Pain/fever', dose: '500–1000 mg', frequency: 'Every 4–6 hours', maxDose: '3 g/day' },
-      { population: 'pediatric', indication: 'Fever', dose: '15 mg/kg', frequency: 'Every 6 hours', maxDose: '60 mg/kg/day' },
+      {
+        population: 'adult',
+        indication: 'Pain/fever',
+        dose: '500–1000 mg',
+        frequency: 'Every 4–6 hours',
+        maxDose: '3 g/day',
+      },
+      {
+        population: 'pediatric',
+        indication: 'Fever',
+        dose: '15 mg/kg',
+        frequency: 'Every 6 hours',
+        maxDose: '60 mg/kg/day',
+      },
     ],
     interactions: [
-      { drugName: 'Warfarin', severity: 'moderate', description: 'May enhance anticoagulant effect with prolonged use.' },
+      {
+        drugName: 'Warfarin',
+        severity: 'moderate',
+        description: 'May enhance anticoagulant effect with prolonged use.',
+      },
     ],
     relatedMedicationIds: ['med-ibuprofen', 'med-aspirin'],
     updatedAt: new Date().toISOString(),
@@ -79,10 +114,15 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: true,
     geriatricApproved: true,
     searchCount: 720,
-    description: 'Ibuprofen is a nonsteroidal anti-inflammatory drug (NSAID) for pain and inflammation.',
+    description:
+      'Ibuprofen is a nonsteroidal anti-inflammatory drug (NSAID) for pain and inflammation.',
     activeIngredients: ['Ibuprofen 400 mg'],
     indications: ['Pain', 'Inflammation', 'Fever', 'Dysmenorrhea'],
-    contraindications: ['Active peptic ulcer', 'Third trimester pregnancy', 'Severe heart failure'],
+    contraindications: [
+      'Active peptic ulcer',
+      'Third trimester pregnancy',
+      'Severe heart failure',
+    ],
     warnings: ['GI bleeding risk', 'Cardiovascular risk with long-term use'],
     precautions: ['Take with food', 'Avoid in renal impairment'],
     sideEffects: ['Dyspepsia', 'Nausea', 'Headache', 'Edema'],
@@ -91,11 +131,25 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     patientInformation: 'Shortest effective duration recommended.',
     professionalInformation: 'Consider gastroprotection in at-risk patients.',
     dosages: [
-      { population: 'adult', indication: 'Pain', dose: '400 mg', frequency: 'Every 6–8 hours', maxDose: '1200 mg/day OTC' },
+      {
+        population: 'adult',
+        indication: 'Pain',
+        dose: '400 mg',
+        frequency: 'Every 6–8 hours',
+        maxDose: '1200 mg/day OTC',
+      },
     ],
     interactions: [
-      { drugName: 'Aspirin', severity: 'moderate', description: 'May reduce cardioprotective effect of aspirin.' },
-      { drugName: 'ACE inhibitors', severity: 'moderate', description: 'May reduce antihypertensive efficacy.' },
+      {
+        drugName: 'Aspirin',
+        severity: 'moderate',
+        description: 'May reduce cardioprotective effect of aspirin.',
+      },
+      {
+        drugName: 'ACE inhibitors',
+        severity: 'moderate',
+        description: 'May reduce antihypertensive efficacy.',
+      },
     ],
     relatedMedicationIds: ['med-paracetamol'],
     updatedAt: new Date(Date.now() - 86400000).toISOString(),
@@ -122,21 +176,46 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     searchCount: 650,
     description: 'Amoxicillin is a broad-spectrum aminopenicillin antibiotic.',
     activeIngredients: ['Amoxicillin trihydrate'],
-    indications: ['Respiratory tract infections', 'Otitis media', 'Urinary tract infections'],
-    contraindications: ['Penicillin allergy', 'History of amoxicillin-associated cholestatic jaundice'],
-    warnings: ['Complete full course', 'Risk of Clostridioides difficile infection'],
+    indications: [
+      'Respiratory tract infections',
+      'Otitis media',
+      'Urinary tract infections',
+    ],
+    contraindications: [
+      'Penicillin allergy',
+      'History of amoxicillin-associated cholestatic jaundice',
+    ],
+    warnings: [
+      'Complete full course',
+      'Risk of Clostridioides difficile infection',
+    ],
     precautions: ['Adjust dose in renal impairment', 'Assess allergy history'],
     sideEffects: ['Diarrhea', 'Nausea', 'Skin rash', 'Candidiasis'],
     administration: ['Shake suspension well', 'Can take with or without food'],
     storage: 'Refrigerate suspension after reconstitution; use within 7 days.',
     patientInformation: 'Finish all prescribed doses even if feeling better.',
-    professionalInformation: 'First-line for many community-acquired infections per local guidelines.',
+    professionalInformation:
+      'First-line for many community-acquired infections per local guidelines.',
     dosages: [
-      { population: 'adult', indication: 'Infection', dose: '500 mg', frequency: 'Every 8 hours' },
-      { population: 'pediatric', indication: 'Otitis media', dose: '25 mg/kg', frequency: 'Every 12 hours' },
+      {
+        population: 'adult',
+        indication: 'Infection',
+        dose: '500 mg',
+        frequency: 'Every 8 hours',
+      },
+      {
+        population: 'pediatric',
+        indication: 'Otitis media',
+        dose: '25 mg/kg',
+        frequency: 'Every 12 hours',
+      },
     ],
     interactions: [
-      { drugName: 'Methotrexate', severity: 'major', description: 'May increase methotrexate toxicity.' },
+      {
+        drugName: 'Methotrexate',
+        severity: 'major',
+        description: 'May increase methotrexate toxicity.',
+      },
     ],
     relatedMedicationIds: [],
     updatedAt: new Date(Date.now() - 172800000).toISOString(),
@@ -161,23 +240,55 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: true,
     geriatricApproved: true,
     searchCount: 890,
-    description: 'Metformin is a first-line oral antidiabetic for type 2 diabetes mellitus.',
+    description:
+      'Metformin is a first-line oral antidiabetic for type 2 diabetes mellitus.',
     activeIngredients: ['Metformin hydrochloride 850 mg'],
-    indications: ['Type 2 diabetes mellitus', 'Polycystic ovary syndrome (off-label)'],
-    contraindications: ['eGFR < 30', 'Acute metabolic acidosis', 'Severe dehydration'],
-    warnings: ['Lactic acidosis risk', 'Withhold before iodinated contrast procedures'],
-    precautions: ['Monitor renal function', 'B12 deficiency with long-term use'],
+    indications: [
+      'Type 2 diabetes mellitus',
+      'Polycystic ovary syndrome (off-label)',
+    ],
+    contraindications: [
+      'eGFR < 30',
+      'Acute metabolic acidosis',
+      'Severe dehydration',
+    ],
+    warnings: [
+      'Lactic acidosis risk',
+      'Withhold before iodinated contrast procedures',
+    ],
+    precautions: [
+      'Monitor renal function',
+      'B12 deficiency with long-term use',
+    ],
     sideEffects: ['GI upset', 'Diarrhea', 'Metallic taste', 'B12 deficiency'],
     administration: ['Take with meals to reduce GI effects'],
     storage: 'Store below 25°C.',
-    patientInformation: 'Report muscle pain, breathing difficulty, or unusual fatigue.',
-    professionalInformation: 'Start low and titrate; consider extended-release formulation if GI intolerance.',
+    patientInformation:
+      'Report muscle pain, breathing difficulty, or unusual fatigue.',
+    professionalInformation:
+      'Start low and titrate; consider extended-release formulation if GI intolerance.',
     dosages: [
-      { population: 'adult', indication: 'Type 2 diabetes', dose: '850 mg', frequency: 'Twice daily', maxDose: '2550 mg/day' },
-      { population: 'geriatric', indication: 'Type 2 diabetes', dose: '500 mg', frequency: 'Once daily', notes: 'Titrate cautiously' },
+      {
+        population: 'adult',
+        indication: 'Type 2 diabetes',
+        dose: '850 mg',
+        frequency: 'Twice daily',
+        maxDose: '2550 mg/day',
+      },
+      {
+        population: 'geriatric',
+        indication: 'Type 2 diabetes',
+        dose: '500 mg',
+        frequency: 'Once daily',
+        notes: 'Titrate cautiously',
+      },
     ],
     interactions: [
-      { drugName: 'Iodinated contrast media', severity: 'major', description: 'Withhold metformin around contrast administration.' },
+      {
+        drugName: 'Iodinated contrast media',
+        severity: 'major',
+        description: 'Withhold metformin around contrast administration.',
+      },
     ],
     relatedMedicationIds: ['med-insulin'],
     updatedAt: new Date(Date.now() - 259200000).toISOString(),
@@ -207,17 +318,39 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     indications: ['Type 1 diabetes', 'Type 2 diabetes requiring basal insulin'],
     contraindications: ['Hypoglycemia', 'Hypersensitivity to insulin glargine'],
     warnings: ['Never share pens', 'Rotate injection sites'],
-    precautions: ['Monitor blood glucose', 'Adjust dose with illness or exercise changes'],
-    sideEffects: ['Hypoglycemia', 'Injection site reactions', 'Weight gain', 'Lipodystrophy'],
-    administration: ['Subcutaneous once daily at same time', 'Do not mix with other insulins in same syringe'],
+    precautions: [
+      'Monitor blood glucose',
+      'Adjust dose with illness or exercise changes',
+    ],
+    sideEffects: [
+      'Hypoglycemia',
+      'Injection site reactions',
+      'Weight gain',
+      'Lipodystrophy',
+    ],
+    administration: [
+      'Subcutaneous once daily at same time',
+      'Do not mix with other insulins in same syringe',
+    ],
     storage: 'Unopened: refrigerate. In use: room temperature up to 28 days.',
-    patientInformation: 'Recognize hypoglycemia symptoms and keep fast-acting sugar available.',
-    professionalInformation: 'Individualize dose; consider 20% reduction when converting from NPH.',
+    patientInformation:
+      'Recognize hypoglycemia symptoms and keep fast-acting sugar available.',
+    professionalInformation:
+      'Individualize dose; consider 20% reduction when converting from NPH.',
     dosages: [
-      { population: 'adult', indication: 'Basal insulin', dose: '0.1–0.2 units/kg', frequency: 'Once daily' },
+      {
+        population: 'adult',
+        indication: 'Basal insulin',
+        dose: '0.1–0.2 units/kg',
+        frequency: 'Once daily',
+      },
     ],
     interactions: [
-      { drugName: 'Beta-blockers', severity: 'moderate', description: 'May mask hypoglycemia symptoms.' },
+      {
+        drugName: 'Beta-blockers',
+        severity: 'moderate',
+        description: 'May mask hypoglycemia symptoms.',
+      },
     ],
     relatedMedicationIds: ['med-metformin'],
     updatedAt: new Date(Date.now() - 345600000).toISOString(),
@@ -242,20 +375,51 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: true,
     geriatricApproved: true,
     searchCount: 610,
-    description: 'Salbutamol is a short-acting bronchodilator for asthma and COPD relief.',
+    description:
+      'Salbutamol is a short-acting bronchodilator for asthma and COPD relief.',
     activeIngredients: ['Salbutamol sulfate 100 mcg per actuation'],
-    indications: ['Asthma relief', 'COPD bronchospasm', 'Exercise-induced bronchospasm'],
+    indications: [
+      'Asthma relief',
+      'COPD bronchospasm',
+      'Exercise-induced bronchospasm',
+    ],
     contraindications: ['Hypersensitivity to salbutamol'],
-    warnings: ['Paradoxical bronchospasm', 'Not for regular control monotherapy in asthma'],
-    precautions: ['Monitor heart rate', 'Use spacer in children if appropriate'],
-    sideEffects: ['Tremor', 'Tachycardia', 'Headache', 'Hypokalemia at high doses'],
-    administration: ['Shake inhaler', 'Rinse mouth after use if corticosteroid co-therapy'],
+    warnings: [
+      'Paradoxical bronchospasm',
+      'Not for regular control monotherapy in asthma',
+    ],
+    precautions: [
+      'Monitor heart rate',
+      'Use spacer in children if appropriate',
+    ],
+    sideEffects: [
+      'Tremor',
+      'Tachycardia',
+      'Headache',
+      'Hypokalemia at high doses',
+    ],
+    administration: [
+      'Shake inhaler',
+      'Rinse mouth after use if corticosteroid co-therapy',
+    ],
     storage: 'Store below 25°C; do not puncture canister.',
-    patientInformation: 'Seek help if rescue inhaler needed more than twice weekly.',
+    patientInformation:
+      'Seek help if rescue inhaler needed more than twice weekly.',
     professionalInformation: 'Assess inhaler technique at each visit.',
     dosages: [
-      { population: 'adult', indication: 'Acute bronchospasm', dose: '1–2 puffs', frequency: 'As needed', maxDose: '8 puffs/day typical' },
-      { population: 'pediatric', indication: 'Asthma relief', dose: '1 puff', frequency: 'As needed' },
+      {
+        population: 'adult',
+        indication: 'Acute bronchospasm',
+        dose: '1–2 puffs',
+        frequency: 'As needed',
+        maxDose: '8 puffs/day typical',
+      },
+      {
+        population: 'pediatric',
+        indication: 'Asthma relief',
+        dose: '1 puff',
+        frequency: 'As needed',
+      },
     ],
     interactions: [],
     relatedMedicationIds: [],
@@ -281,23 +445,49 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: true,
     geriatricApproved: true,
     searchCount: 780,
-    description: 'Levothyroxine is synthetic T4 for hypothyroidism and thyroid hormone replacement.',
+    description:
+      'Levothyroxine is synthetic T4 for hypothyroidism and thyroid hormone replacement.',
     activeIngredients: ['Levothyroxine sodium 100 mcg'],
-    indications: ['Hypothyroidism', 'Thyroid suppression therapy', 'Congenital hypothyroidism'],
-    contraindications: ['Untreated adrenal insufficiency', 'Acute myocardial infarction with uncorrected hypothyroidism'],
+    indications: [
+      'Hypothyroidism',
+      'Thyroid suppression therapy',
+      'Congenital hypothyroidism',
+    ],
+    contraindications: [
+      'Untreated adrenal insufficiency',
+      'Acute myocardial infarction with uncorrected hypothyroidism',
+    ],
     warnings: ['Do not use for weight loss', 'Tachycardia with overdose'],
-    precautions: ['Take on empty stomach', 'Separate from calcium/iron by 4 hours'],
+    precautions: [
+      'Take on empty stomach',
+      'Separate from calcium/iron by 4 hours',
+    ],
     sideEffects: ['Palpitations', 'Weight loss', 'Insomnia if over-replaced'],
     administration: ['Take 30–60 minutes before breakfast with water'],
     storage: 'Store below 25°C, protect from light.',
     patientInformation: 'Take consistently at the same time daily.',
     professionalInformation: 'Recheck TSH 6–8 weeks after dose change.',
     dosages: [
-      { population: 'adult', indication: 'Hypothyroidism', dose: '1.6 mcg/kg', frequency: 'Once daily' },
-      { population: 'geriatric', indication: 'Hypothyroidism', dose: '12.5–25 mcg', frequency: 'Once daily', notes: 'Start low' },
+      {
+        population: 'adult',
+        indication: 'Hypothyroidism',
+        dose: '1.6 mcg/kg',
+        frequency: 'Once daily',
+      },
+      {
+        population: 'geriatric',
+        indication: 'Hypothyroidism',
+        dose: '12.5–25 mcg',
+        frequency: 'Once daily',
+        notes: 'Start low',
+      },
     ],
     interactions: [
-      { drugName: 'Calcium supplements', severity: 'moderate', description: 'Reduce absorption; separate administration.' },
+      {
+        drugName: 'Calcium supplements',
+        severity: 'moderate',
+        description: 'Reduce absorption; separate administration.',
+      },
     ],
     relatedMedicationIds: [],
     updatedAt: new Date(Date.now() - 518400000).toISOString(),
@@ -322,22 +512,48 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: true,
     geriatricApproved: true,
     searchCount: 670,
-    description: 'Omeprazole reduces gastric acid secretion for GERD and peptic ulcer disease.',
+    description:
+      'Omeprazole reduces gastric acid secretion for GERD and peptic ulcer disease.',
     activeIngredients: ['Omeprazole 20 mg'],
-    indications: ['GERD', 'Peptic ulcer', 'H. pylori eradication (combination)', 'NSAID gastroprotection'],
+    indications: [
+      'GERD',
+      'Peptic ulcer',
+      'H. pylori eradication (combination)',
+      'NSAID gastroprotection',
+    ],
     contraindications: ['Hypersensitivity to omeprazole or benzimidazoles'],
-    warnings: ['Long-term use: monitor magnesium, B12', 'Increased fracture risk'],
-    precautions: ['Review need for long-term therapy', 'May mask gastric cancer symptoms'],
+    warnings: [
+      'Long-term use: monitor magnesium, B12',
+      'Increased fracture risk',
+    ],
+    precautions: [
+      'Review need for long-term therapy',
+      'May mask gastric cancer symptoms',
+    ],
     sideEffects: ['Headache', 'Diarrhea', 'Abdominal pain', 'Nausea'],
-    administration: ['Swallow whole before breakfast', 'Do not crush gastro-resistant capsules'],
+    administration: [
+      'Swallow whole before breakfast',
+      'Do not crush gastro-resistant capsules',
+    ],
     storage: 'Store below 25°C.',
     patientInformation: 'Report persistent GI symptoms to clinician.',
-    professionalInformation: 'Consider step-down after healing phase when appropriate.',
+    professionalInformation:
+      'Consider step-down after healing phase when appropriate.',
     dosages: [
-      { population: 'adult', indication: 'GERD', dose: '20 mg', frequency: 'Once daily', maxDose: '40 mg/day' },
+      {
+        population: 'adult',
+        indication: 'GERD',
+        dose: '20 mg',
+        frequency: 'Once daily',
+        maxDose: '40 mg/day',
+      },
     ],
     interactions: [
-      { drugName: 'Clopidogrel', severity: 'moderate', description: 'May reduce antiplatelet effect of clopidogrel.' },
+      {
+        drugName: 'Clopidogrel',
+        severity: 'moderate',
+        description: 'May reduce antiplatelet effect of clopidogrel.',
+      },
     ],
     relatedMedicationIds: [],
     updatedAt: new Date(Date.now() - 604800000).toISOString(),
@@ -362,23 +578,54 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: false,
     geriatricApproved: true,
     searchCount: 560,
-    description: 'Amlodipine is a long-acting calcium channel blocker for hypertension and angina.',
+    description:
+      'Amlodipine is a long-acting calcium channel blocker for hypertension and angina.',
     activeIngredients: ['Amlodipine besylate 5 mg'],
-    indications: ['Hypertension', 'Chronic stable angina', 'Vasospastic angina'],
-    contraindications: ['Severe hypotension', 'Shock', 'Unstable angina (except Prinzmetal)'],
-    warnings: ['Peripheral edema', 'Worsening angina on initiation in rare cases'],
-    precautions: ['Use cautiously in severe aortic stenosis', 'Hepatic impairment dose adjustment'],
+    indications: [
+      'Hypertension',
+      'Chronic stable angina',
+      'Vasospastic angina',
+    ],
+    contraindications: [
+      'Severe hypotension',
+      'Shock',
+      'Unstable angina (except Prinzmetal)',
+    ],
+    warnings: [
+      'Peripheral edema',
+      'Worsening angina on initiation in rare cases',
+    ],
+    precautions: [
+      'Use cautiously in severe aortic stenosis',
+      'Hepatic impairment dose adjustment',
+    ],
     sideEffects: ['Edema', 'Flushing', 'Palpitations', 'Dizziness'],
     administration: ['Once daily, with or without food'],
     storage: 'Store below 30°C.',
     patientInformation: 'Rise slowly from sitting to reduce dizziness.',
-    professionalInformation: 'Combine with ACE inhibitor in most hypertensive patients per guidelines.',
+    professionalInformation:
+      'Combine with ACE inhibitor in most hypertensive patients per guidelines.',
     dosages: [
-      { population: 'adult', indication: 'Hypertension', dose: '5 mg', frequency: 'Once daily', maxDose: '10 mg/day' },
-      { population: 'geriatric', indication: 'Hypertension', dose: '2.5 mg', frequency: 'Once daily' },
+      {
+        population: 'adult',
+        indication: 'Hypertension',
+        dose: '5 mg',
+        frequency: 'Once daily',
+        maxDose: '10 mg/day',
+      },
+      {
+        population: 'geriatric',
+        indication: 'Hypertension',
+        dose: '2.5 mg',
+        frequency: 'Once daily',
+      },
     ],
     interactions: [
-      { drugName: 'Simvastatin', severity: 'moderate', description: 'Limit simvastatin dose to 20 mg with amlodipine.' },
+      {
+        drugName: 'Simvastatin',
+        severity: 'moderate',
+        description: 'Limit simvastatin dose to 20 mg with amlodipine.',
+      },
     ],
     relatedMedicationIds: ['med-atorvastatin'],
     updatedAt: new Date(Date.now() - 691200000).toISOString(),
@@ -403,22 +650,42 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: true,
     geriatricApproved: true,
     searchCount: 820,
-    description: 'Atorvastatin lowers LDL cholesterol and reduces cardiovascular risk.',
+    description:
+      'Atorvastatin lowers LDL cholesterol and reduces cardiovascular risk.',
     activeIngredients: ['Atorvastatin calcium 20 mg'],
-    indications: ['Hyperlipidemia', 'Primary prevention of CV events', 'Secondary prevention post-MI'],
+    indications: [
+      'Hyperlipidemia',
+      'Primary prevention of CV events',
+      'Secondary prevention post-MI',
+    ],
     contraindications: ['Active liver disease', 'Pregnancy', 'Breastfeeding'],
     warnings: ['Myopathy/rhabdomyolysis risk', 'Monitor LFTs'],
-    precautions: ['Avoid grapefruit juice in large quantities', 'Counsel on muscle pain reporting'],
+    precautions: [
+      'Avoid grapefruit juice in large quantities',
+      'Counsel on muscle pain reporting',
+    ],
     sideEffects: ['Myalgia', 'Headache', 'Elevated transaminases', 'GI upset'],
     administration: ['Once daily, any time of day'],
     storage: 'Store below 25°C.',
-    patientInformation: 'Report unexplained muscle pain, tenderness, or weakness.',
-    professionalInformation: 'Check lipid panel 4–12 weeks after initiation or dose change.',
+    patientInformation:
+      'Report unexplained muscle pain, tenderness, or weakness.',
+    professionalInformation:
+      'Check lipid panel 4–12 weeks after initiation or dose change.',
     dosages: [
-      { population: 'adult', indication: 'Hyperlipidemia', dose: '10–20 mg', frequency: 'Once daily', maxDose: '80 mg/day' },
+      {
+        population: 'adult',
+        indication: 'Hyperlipidemia',
+        dose: '10–20 mg',
+        frequency: 'Once daily',
+        maxDose: '80 mg/day',
+      },
     ],
     interactions: [
-      { drugName: 'Clarithromycin', severity: 'major', description: 'Increased statin exposure; myopathy risk.' },
+      {
+        drugName: 'Clarithromycin',
+        severity: 'major',
+        description: 'Increased statin exposure; myopathy risk.',
+      },
     ],
     relatedMedicationIds: ['med-amlodipine', 'med-clopidogrel'],
     updatedAt: new Date(Date.now() - 777600000).toISOString(),
@@ -443,24 +710,60 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: false,
     geriatricApproved: true,
     searchCount: 700,
-    description: 'Aspirin is an analgesic, antipyretic, and antiplatelet agent at low doses.',
+    description:
+      'Aspirin is an analgesic, antipyretic, and antiplatelet agent at low doses.',
     activeIngredients: ['Acetylsalicylic acid'],
-    indications: ['Pain', 'Fever', 'Secondary prevention of cardiovascular events (low dose)'],
-    contraindications: ['Children with viral illness (Reye syndrome)', 'Active bleeding', 'Peptic ulcer'],
+    indications: [
+      'Pain',
+      'Fever',
+      'Secondary prevention of cardiovascular events (low dose)',
+    ],
+    contraindications: [
+      'Children with viral illness (Reye syndrome)',
+      'Active bleeding',
+      'Peptic ulcer',
+    ],
     warnings: ['Bleeding risk', 'Avoid in last trimester of pregnancy'],
-    precautions: ['Discontinue before elective surgery', 'Asthma sensitivity in some patients'],
+    precautions: [
+      'Discontinue before elective surgery',
+      'Asthma sensitivity in some patients',
+    ],
     sideEffects: ['GI irritation', 'Bleeding', 'Tinnitus at high doses'],
-    administration: ['Dissolve sachet in water', 'Low-dose forms used for antiplatelet therapy'],
+    administration: [
+      'Dissolve sachet in water',
+      'Low-dose forms used for antiplatelet therapy',
+    ],
     storage: 'Store in dry place below 25°C.',
-    patientInformation: 'Low-dose aspirin for heart protection requires medical supervision.',
-    professionalInformation: 'Balance bleeding vs thrombotic risk for primary prevention.',
+    patientInformation:
+      'Low-dose aspirin for heart protection requires medical supervision.',
+    professionalInformation:
+      'Balance bleeding vs thrombotic risk for primary prevention.',
     dosages: [
-      { population: 'adult', indication: 'Pain', dose: '500–1000 mg', frequency: 'Every 4–6 hours' },
-      { population: 'adult', indication: 'Antiplatelet', dose: '75–100 mg', frequency: 'Once daily' },
+      {
+        population: 'adult',
+        indication: 'Pain',
+        dose: '500–1000 mg',
+        frequency: 'Every 4–6 hours',
+      },
+      {
+        population: 'adult',
+        indication: 'Antiplatelet',
+        dose: '75–100 mg',
+        frequency: 'Once daily',
+      },
     ],
     interactions: [
-      { drugName: 'Ibuprofen', severity: 'moderate', description: 'Ibuprofen may interfere with aspirin antiplatelet effect.' },
-      { drugName: 'Warfarin', severity: 'major', description: 'Increased bleeding risk.' },
+      {
+        drugName: 'Ibuprofen',
+        severity: 'moderate',
+        description:
+          'Ibuprofen may interfere with aspirin antiplatelet effect.',
+      },
+      {
+        drugName: 'Warfarin',
+        severity: 'major',
+        description: 'Increased bleeding risk.',
+      },
     ],
     relatedMedicationIds: ['med-clopidogrel', 'med-ibuprofen'],
     updatedAt: new Date(Date.now() - 864000000).toISOString(),
@@ -485,23 +788,49 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     pediatricApproved: false,
     geriatricApproved: true,
     searchCount: 590,
-    description: 'Clopidogrel inhibits platelet aggregation for ACS and post-stent therapy.',
+    description:
+      'Clopidogrel inhibits platelet aggregation for ACS and post-stent therapy.',
     activeIngredients: ['Clopidogrel bisulfate 75 mg'],
-    indications: ['Acute coronary syndrome', 'Recent MI, stroke, or PAD', 'Post-coronary stent'],
-    contraindications: ['Active pathological bleeding', 'Severe hepatic impairment'],
+    indications: [
+      'Acute coronary syndrome',
+      'Recent MI, stroke, or PAD',
+      'Post-coronary stent',
+    ],
+    contraindications: [
+      'Active pathological bleeding',
+      'Severe hepatic impairment',
+    ],
     warnings: ['Bleeding risk', 'TTP reported rarely'],
-    precautions: ['Stop 5 days before major surgery if feasible', 'CYP2C19 poor metabolizers may have reduced effect'],
+    precautions: [
+      'Stop 5 days before major surgery if feasible',
+      'CYP2C19 poor metabolizers may have reduced effect',
+    ],
     sideEffects: ['Bleeding', 'Diarrhea', 'Dyspepsia', 'Rash'],
     administration: ['Once daily with or without food'],
     storage: 'Store below 30°C.',
     patientInformation: 'Report blood in stool, urine, or unusual bruising.',
-    professionalInformation: 'Consider prasugrel or ticagrelor per ACS guidelines when indicated.',
+    professionalInformation:
+      'Consider prasugrel or ticagrelor per ACS guidelines when indicated.',
     dosages: [
-      { population: 'adult', indication: 'Maintenance antiplatelet', dose: '75 mg', frequency: 'Once daily' },
+      {
+        population: 'adult',
+        indication: 'Maintenance antiplatelet',
+        dose: '75 mg',
+        frequency: 'Once daily',
+      },
     ],
     interactions: [
-      { drugName: 'Omeprazole', severity: 'moderate', description: 'May reduce antiplatelet effect via CYP2C19.' },
-      { drugName: 'Aspirin', severity: 'moderate', description: 'Dual therapy increases bleeding risk but often indicated post-ACS.' },
+      {
+        drugName: 'Omeprazole',
+        severity: 'moderate',
+        description: 'May reduce antiplatelet effect via CYP2C19.',
+      },
+      {
+        drugName: 'Aspirin',
+        severity: 'moderate',
+        description:
+          'Dual therapy increases bleeding risk but often indicated post-ACS.',
+      },
     ],
     relatedMedicationIds: ['med-aspirin', 'med-atorvastatin'],
     updatedAt: new Date(Date.now() - 950400000).toISOString(),
@@ -529,17 +858,43 @@ export const MOCK_MEDICATIONS: MedicationRecord[] = [
     description: 'mRNA vaccine for active immunization against SARS-CoV-2.',
     activeIngredients: ['Nucleoside-modified mRNA encoding spike protein'],
     indications: ['Prevention of COVID-19'],
-    contraindications: ['Severe allergic reaction to previous dose or component'],
-    warnings: ['Observe 15 minutes post-vaccination', 'Myocarditis/pericarditis rare risk in young males'],
+    contraindications: [
+      'Severe allergic reaction to previous dose or component',
+    ],
+    warnings: [
+      'Observe 15 minutes post-vaccination',
+      'Myocarditis/pericarditis rare risk in young males',
+    ],
     precautions: ['Immunocompromised may have reduced response'],
-    sideEffects: ['Injection site pain', 'Fatigue', 'Headache', 'Myalgia', 'Fever'],
-    administration: ['Intramuscular deltoid', 'Follow national immunization schedule'],
-    storage: 'Ultra-cold chain until thaw; use within approved window after preparation.',
+    sideEffects: [
+      'Injection site pain',
+      'Fatigue',
+      'Headache',
+      'Myalgia',
+      'Fever',
+    ],
+    administration: [
+      'Intramuscular deltoid',
+      'Follow national immunization schedule',
+    ],
+    storage:
+      'Ultra-cold chain until thaw; use within approved window after preparation.',
     patientInformation: 'Common side effects resolve within a few days.',
-    professionalInformation: 'Document lot number and administration site per pharmacovigilance requirements.',
+    professionalInformation:
+      'Document lot number and administration site per pharmacovigilance requirements.',
     dosages: [
-      { population: 'adult', indication: 'Primary series/booster', dose: '0.5 ml', frequency: 'Per national schedule' },
-      { population: 'pediatric', indication: 'Pediatric dose', dose: '0.25 ml', frequency: 'Per national schedule' },
+      {
+        population: 'adult',
+        indication: 'Primary series/booster',
+        dose: '0.5 ml',
+        frequency: 'Per national schedule',
+      },
+      {
+        population: 'pediatric',
+        indication: 'Pediatric dose',
+        dose: '0.25 ml',
+        frequency: 'Per national schedule',
+      },
     ],
     interactions: [],
     relatedMedicationIds: [],
@@ -556,7 +911,8 @@ export const POPULAR_MEDICATIONS = [
   'Omeprazole',
 ];
 
-export const RECENT_MEDICATION_SEARCHES_KEY = 'medease:medical-library:recent-searches';
+export const RECENT_MEDICATION_SEARCHES_KEY =
+  'medease:medical-library:recent-searches';
 
 export function getCategoryCounts(): Record<MedicationCategory, number> {
   const counts = {} as Record<MedicationCategory, number>;

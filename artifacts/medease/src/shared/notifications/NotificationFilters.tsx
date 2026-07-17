@@ -32,7 +32,10 @@ export function NotificationFilters({
     <div className={cn('grid gap-4 sm:grid-cols-3', className)}>
       <div className="space-y-2">
         <Label htmlFor="notification-category">Category</Label>
-        <Select value={category || 'all'} onValueChange={(v) => onCategoryChange(v === 'all' ? '' : v)}>
+        <Select
+          value={category || 'all'}
+          onValueChange={(v) => onCategoryChange(v === 'all' ? '' : v)}
+        >
           <SelectTrigger id="notification-category">
             <SelectValue placeholder="All categories" />
           </SelectTrigger>
@@ -49,7 +52,10 @@ export function NotificationFilters({
       </div>
       <div className="space-y-2">
         <Label htmlFor="notification-priority">Priority</Label>
-        <Select value={priority || 'all'} onValueChange={(v) => onPriorityChange(v === 'all' ? '' : v)}>
+        <Select
+          value={priority || 'all'}
+          onValueChange={(v) => onPriorityChange(v === 'all' ? '' : v)}
+        >
           <SelectTrigger id="notification-priority">
             <SelectValue placeholder="All priorities" />
           </SelectTrigger>

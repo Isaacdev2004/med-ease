@@ -5,7 +5,9 @@ import { directoryService } from '@/services/directory/directory.service';
 
 export const directoryQueries = {
   search: (filters?: DirectoryFilters) => ({
-    queryKey: queryKeys.directory.search(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.directory.search(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => directoryService.search(filters),
     staleTime: CACHE_TIMES.reference,
   }),

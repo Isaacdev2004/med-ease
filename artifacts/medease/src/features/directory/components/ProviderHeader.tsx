@@ -14,7 +14,11 @@ interface ProviderHeaderProps {
   actions?: ReactNode;
 }
 
-export function ProviderHeader({ provider, backHref, actions }: ProviderHeaderProps) {
+export function ProviderHeader({
+  provider,
+  backHref,
+  actions,
+}: ProviderHeaderProps) {
   const initials = provider.name
     .split(' ')
     .map((part) => part[0])
@@ -47,7 +51,8 @@ export function ProviderHeader({ provider, backHref, actions }: ProviderHeaderPr
             <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <MapPin className="h-4 w-4" aria-hidden="true" />
-                {provider.address.street}, {provider.address.postalCode} {provider.address.city}
+                {provider.address.street}, {provider.address.postalCode}{' '}
+                {provider.address.city}
               </span>
               {provider.phone ? (
                 <span className="flex items-center gap-1">

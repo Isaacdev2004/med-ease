@@ -15,5 +15,7 @@ export default function PatientRadiologyPage() {
     );
   }
   const basePath = resolveModuleBasePath(location, 'radiology');
-  return <RadiologyShell basePath={basePath} variant="patient" title="My Imaging" />;
+  return (
+    <RadiologyShell basePath={basePath} variant="patient" title="My Imaging" />
+  );
 }

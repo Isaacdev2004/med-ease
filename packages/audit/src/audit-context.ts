@@ -1,8 +1,16 @@
-import { envelopeFieldsFromRequestContext, getRequestContext, type RequestContext } from '@medease/observability';
+import {
+  envelopeFieldsFromRequestContext,
+  getRequestContext,
+  type RequestContext,
+} from '@medease/observability';
 import { PLATFORM_TENANT_ID, type CreateEnvelopeInput } from '@medease/queue';
 import { newId } from '@medease/uuid';
 
-import type { AuditContext, AuditDomainEvent, AuditRecordPayload } from './audit-types';
+import type {
+  AuditContext,
+  AuditDomainEvent,
+  AuditRecordPayload,
+} from './audit-types';
 
 export const SYSTEM_ACTOR_ID = '00000000-0000-7000-8000-000000000099';
 
@@ -10,7 +18,9 @@ export function auditContextFromRequest(
   partial?: Partial<AuditContext>,
 ): AuditContext {
   const request = getRequestContext();
-  const base = request ? requestContextToAuditContext(request) : fallbackAuditContext();
+  const base = request
+    ? requestContextToAuditContext(request)
+    : fallbackAuditContext();
 
   return {
     ...base,

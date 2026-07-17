@@ -3,7 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { inventoryQueries } from '@/features/inventory/queries/inventory.queries';
 import type { InventoryFilters } from '@/services/inventory/types';
 
-export function useInventoryDashboard(department?: string, warehouseId?: string) {
+export function useInventoryDashboard(
+  department?: string,
+  warehouseId?: string,
+) {
   return useQuery(inventoryQueries.dashboard(department, warehouseId));
 }
 

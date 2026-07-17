@@ -53,14 +53,23 @@ export default function MedicationProfilePage() {
   }
 
   return (
-    <PageShell title={medicationQuery.data.name} subtitle="Medication reference profile">
+    <PageShell
+      title={medicationQuery.data.name}
+      subtitle="Medication reference profile"
+    >
       <MedicationHeader
         medication={medicationQuery.data}
         backHref={backHref}
         actions={
           <>
-            <FavoriteButton medicationId={medicationId} isFavorite={isFavorite} size="sm" />
-            <Button size="sm" onClick={() => setCompareOpen(true)}>Compare</Button>
+            <FavoriteButton
+              medicationId={medicationId}
+              isFavorite={isFavorite}
+              size="sm"
+            />
+            <Button size="sm" onClick={() => setCompareOpen(true)}>
+              Compare
+            </Button>
           </>
         }
       />

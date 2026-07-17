@@ -1,11 +1,17 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const patientPage = () => import('@/features/medications/pages/PatientMedicationsPage');
-const detailPage = () => import('@/features/medications/pages/MedicationDetailPage');
-const professionalPage = () => import('@/features/medications/pages/ProfessionalPrescriptionsPage');
-const pharmacyPage = () => import('@/features/medications/pages/PharmacyPrescriptionsPage');
-const facilityPage = () => import('@/features/medications/pages/FacilityMedicationBoardPage');
-const adminPage = () => import('@/features/medications/pages/AdminMedicationAnalyticsPage');
+const patientPage = () =>
+  import('@/features/medications/pages/PatientMedicationsPage');
+const detailPage = () =>
+  import('@/features/medications/pages/MedicationDetailPage');
+const professionalPage = () =>
+  import('@/features/medications/pages/ProfessionalPrescriptionsPage');
+const pharmacyPage = () =>
+  import('@/features/medications/pages/PharmacyPrescriptionsPage');
+const facilityPage = () =>
+  import('@/features/medications/pages/FacilityMedicationBoardPage');
+const adminPage = () =>
+  import('@/features/medications/pages/AdminMedicationAnalyticsPage');
 
 export function createPatientMedicationsRoutes(options: {
   analyticsPrefix: string;
@@ -58,7 +64,9 @@ export function createPatientMedicationsRoutes(options: {
   ];
 }
 
-export function createProfessionalMedicationRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createProfessionalMedicationRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/medications',
@@ -176,7 +184,9 @@ export function createPharmacyMedicationRoutes(
   ];
 }
 
-export function createFacilityMedicationRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createFacilityMedicationRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/medications',
@@ -205,7 +215,9 @@ export function createFacilityMedicationRoutes(analyticsPrefix: string): RouteDe
   ];
 }
 
-export function createAdminMedicationRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createAdminMedicationRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/medications',

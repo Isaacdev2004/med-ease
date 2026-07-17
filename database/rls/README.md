@@ -13,21 +13,21 @@ Policies use `platform.tenant_matches(tenant_id)` or `platform.tenant_row_matche
 
 ## Policy layout
 
-| Schema | Table | Isolation |
-|--------|-------|-----------|
-| `core` | `tenants` | `id = current_tenant_id()` |
-| `core` | `organizations` | `tenant_id` |
-| `identity` | `users` | `tenant_id` |
-| `identity` | `user_sessions` | `tenant_id` |
-| `identity` | `login_attempts` | system requests only |
-| `audit` | `security_events` | `tenant_id` or system |
-| `clinical` | `patients` | `tenant_id` |
-| `clinical` | `patient_identifiers` | `tenant_id` |
-| `clinical` | `patient_contacts` | `tenant_id` |
-| `clinical` | `patient_addresses` | `tenant_id` |
-| `clinical` | `patient_emergency_contacts` | `tenant_id` |
-| `clinical` | `patient_allergies` | `tenant_id` |
-| `clinical` | `patient_preferences` | `tenant_id` |
+| Schema     | Table                        | Isolation                  |
+| ---------- | ---------------------------- | -------------------------- |
+| `core`     | `tenants`                    | `id = current_tenant_id()` |
+| `core`     | `organizations`              | `tenant_id`                |
+| `identity` | `users`                      | `tenant_id`                |
+| `identity` | `user_sessions`              | `tenant_id`                |
+| `identity` | `login_attempts`             | system requests only       |
+| `audit`    | `security_events`            | `tenant_id` or system      |
+| `clinical` | `patients`                   | `tenant_id`                |
+| `clinical` | `patient_identifiers`        | `tenant_id`                |
+| `clinical` | `patient_contacts`           | `tenant_id`                |
+| `clinical` | `patient_addresses`          | `tenant_id`                |
+| `clinical` | `patient_emergency_contacts` | `tenant_id`                |
+| `clinical` | `patient_allergies`          | `tenant_id`                |
+| `clinical` | `patient_preferences`        | `tenant_id`                |
 
 ## Adding policies for new tables
 

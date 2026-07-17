@@ -1,4 +1,8 @@
-import { createEnvelope, PLATFORM_TENANT_ID, QUEUE_NAMES } from '@medease/queue';
+import {
+  createEnvelope,
+  PLATFORM_TENANT_ID,
+  QUEUE_NAMES,
+} from '@medease/queue';
 import type { Logger } from '@medease/logger';
 
 import type { QueueRegistry } from '../framework/queue-registry.js';
@@ -7,7 +11,10 @@ import type { QueueRegistry } from '../framework/queue-registry.js';
  * Registers platform maintenance schedules (stubs — no domain cron yet).
  * Pattern: Scheduler → Queue → Processor
  */
-export async function registerPlatformSchedules(registry: QueueRegistry, logger: Logger) {
+export async function registerPlatformSchedules(
+  registry: QueueRegistry,
+  logger: Logger,
+) {
   const scheduler = registry.getScheduler();
 
   const maintenanceEnvelope = createEnvelope({
@@ -23,5 +30,8 @@ export async function registerPlatformSchedules(registry: QueueRegistry, logger:
     tz: 'UTC',
   });
 
-  logger.info({ cron: '0 3 * * *', queue: QUEUE_NAMES.SCHEDULED }, 'Platform scheduler registered');
+  logger.info(
+    { cron: '0 3 * * *', queue: QUEUE_NAMES.SCHEDULED },
+    'Platform scheduler registered',
+  );
 }

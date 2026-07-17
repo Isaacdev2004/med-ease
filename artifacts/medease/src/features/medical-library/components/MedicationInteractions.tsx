@@ -12,9 +12,15 @@ const SEVERITY_VARIANT = {
   major: 'destructive',
 } as const;
 
-export function MedicationInteractions({ medication }: MedicationInteractionsProps) {
+export function MedicationInteractions({
+  medication,
+}: MedicationInteractionsProps) {
   if (!medication.interactions.length) {
-    return <p className="text-sm text-muted-foreground">No known interactions listed in mock data.</p>;
+    return (
+      <p className="text-sm text-muted-foreground">
+        No known interactions listed in mock data.
+      </p>
+    );
   }
 
   return (
@@ -23,11 +29,17 @@ export function MedicationInteractions({ medication }: MedicationInteractionsPro
         <Card key={`${interaction.drugName}-${interaction.severity}`}>
           <CardHeader className="pb-2">
             <div className="flex items-center gap-2">
-              <CardTitle className="text-base">{interaction.drugName}</CardTitle>
-              <Badge variant={SEVERITY_VARIANT[interaction.severity]}>{interaction.severity}</Badge>
+              <CardTitle className="text-base">
+                {interaction.drugName}
+              </CardTitle>
+              <Badge variant={SEVERITY_VARIANT[interaction.severity]}>
+                {interaction.severity}
+              </Badge>
             </div>
           </CardHeader>
-          <CardContent className="text-sm text-muted-foreground">{interaction.description}</CardContent>
+          <CardContent className="text-sm text-muted-foreground">
+            {interaction.description}
+          </CardContent>
         </Card>
       ))}
     </div>

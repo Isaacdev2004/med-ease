@@ -40,7 +40,7 @@ export function FormContainer({
       onSubmit={onSubmit}
       noValidate={noValidate}
     >
-      {(title || description || autosave || headerExtra) ? (
+      {title || description || autosave || headerExtra ? (
         <header className="space-y-2">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="space-y-1">
@@ -59,7 +59,7 @@ export function FormContainer({
 
       <div className="space-y-6">{children}</div>
 
-      {(primaryAction || secondaryAction) ? (
+      {primaryAction || secondaryAction ? (
         <footer className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between border-t pt-6">
           <div>{secondaryAction}</div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">

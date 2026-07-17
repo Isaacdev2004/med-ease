@@ -3,7 +3,10 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
+import {
+  ATTR_SERVICE_NAME,
+  ATTR_SERVICE_VERSION,
+} from '@opentelemetry/semantic-conventions';
 
 export interface TelemetryInitOptions {
   serviceName: string;
@@ -42,7 +45,8 @@ export function initTelemetry(options: TelemetryInitOptions): void {
     resource: resourceFromAttributes({
       [ATTR_SERVICE_NAME]: options.serviceName,
       [ATTR_SERVICE_VERSION]: serviceVersion,
-      'deployment.environment': options.environment ?? process.env.NODE_ENV ?? 'development',
+      'deployment.environment':
+        options.environment ?? process.env.NODE_ENV ?? 'development',
     }),
     traceExporter: new OTLPTraceExporter({
       url: `${endpoint.replace(/\/$/, '')}/v1/traces`,

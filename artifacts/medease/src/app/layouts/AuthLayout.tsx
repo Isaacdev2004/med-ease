@@ -20,9 +20,14 @@ export function AuthLayout({
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="hidden lg:flex flex-col justify-between bg-primary text-primary-foreground p-12">
-        <Link href={ROUTES.home} className="flex items-center gap-2 font-semibold">
+        <Link
+          href={ROUTES.home}
+          className="flex items-center gap-2 font-semibold"
+        >
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-foreground/10">
-            <span className="font-serif italic text-xl font-bold leading-none">M</span>
+            <span className="font-serif italic text-xl font-bold leading-none">
+              M
+            </span>
           </div>
           <span className="text-2xl">{APP_NAME}</span>
         </Link>
@@ -43,7 +48,10 @@ export function AuthLayout({
 
         <p className="text-sm text-primary-foreground/60">
           Need help?{' '}
-          <a href="#" className="underline underline-offset-4 hover:text-primary-foreground">
+          <a
+            href="#"
+            className="underline underline-offset-4 hover:text-primary-foreground"
+          >
             Contact support
           </a>
         </p>
@@ -52,7 +60,9 @@ export function AuthLayout({
       <div className="flex min-h-screen flex-col items-center justify-center bg-muted/30 p-4 sm:p-8">
         <div className="mb-8 flex lg:hidden items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <span className="font-serif italic text-xl font-bold leading-none">M</span>
+            <span className="font-serif italic text-xl font-bold leading-none">
+              M
+            </span>
           </div>
           <span className="text-xl font-semibold">{APP_NAME}</span>
         </div>

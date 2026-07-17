@@ -17,7 +17,10 @@ import type {
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    platformAdminOfflineQueue.enqueue({ label, execute: () => execute().then(() => undefined) });
+    platformAdminOfflineQueue.enqueue({
+      label,
+      execute: () => execute().then(() => undefined),
+    });
     appToast.offline('Platform update queued until you are back online.');
     return Promise.resolve(null);
   }
@@ -32,63 +35,133 @@ export function usePlatformAdminMutations() {
   const client = useQueryClient();
 
   const createTenant = useMutation({
-    mutationFn: (input: CreateTenantInput) => runOrQueue('Create tenant', () => platformAdminService.createTenant(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Tenant created.' }); },
+    mutationFn: (input: CreateTenantInput) =>
+      runOrQueue('Create tenant', () =>
+        platformAdminService.createTenant(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Tenant created.' });
+    },
   });
 
   const activateTenant = useMutation({
-    mutationFn: (tenantId: string) => runOrQueue('Activate tenant', () => platformAdminService.activateTenant(tenantId)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Tenant activated.' }); },
+    mutationFn: (tenantId: string) =>
+      runOrQueue('Activate tenant', () =>
+        platformAdminService.activateTenant(tenantId),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Tenant activated.' });
+    },
   });
 
   const suspendTenant = useMutation({
-    mutationFn: (tenantId: string) => runOrQueue('Suspend tenant', () => platformAdminService.suspendTenant(tenantId)),
-    onSuccess: () => { invalidateAll(client); appToast.warning({ title: 'Tenant suspended.' }); },
+    mutationFn: (tenantId: string) =>
+      runOrQueue('Suspend tenant', () =>
+        platformAdminService.suspendTenant(tenantId),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.warning({ title: 'Tenant suspended.' });
+    },
   });
 
   const updateHospital = useMutation({
-    mutationFn: (input: UpdateHospitalInput) => runOrQueue('Update hospital', () => platformAdminService.updateHospital(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Hospital updated.' }); },
+    mutationFn: (input: UpdateHospitalInput) =>
+      runOrQueue('Update hospital', () =>
+        platformAdminService.updateHospital(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Hospital updated.' });
+    },
   });
 
   const updateFacility = useMutation({
-    mutationFn: (input: UpdateFacilityInput) => runOrQueue('Update facility', () => platformAdminService.updateFacility(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Facility updated.' }); },
+    mutationFn: (input: UpdateFacilityInput) =>
+      runOrQueue('Update facility', () =>
+        platformAdminService.updateFacility(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Facility updated.' });
+    },
   });
 
   const updateLocalization = useMutation({
-    mutationFn: (input: UpdateLocalizationInput) => runOrQueue('Update localization', () => platformAdminService.updateLocalization(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Localization updated.' }); },
+    mutationFn: (input: UpdateLocalizationInput) =>
+      runOrQueue('Update localization', () =>
+        platformAdminService.updateLocalization(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Localization updated.' });
+    },
   });
 
   const updateBranding = useMutation({
-    mutationFn: (input: UpdateBrandingInput) => runOrQueue('Update branding', () => platformAdminService.updateBranding(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Branding updated.' }); },
+    mutationFn: (input: UpdateBrandingInput) =>
+      runOrQueue('Update branding', () =>
+        platformAdminService.updateBranding(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Branding updated.' });
+    },
   });
 
   const toggleFeatureFlag = useMutation({
-    mutationFn: (input: ToggleFeatureFlagInput) => runOrQueue('Toggle feature flag', () => platformAdminService.toggleFeatureFlag(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Feature flag updated.' }); },
+    mutationFn: (input: ToggleFeatureFlagInput) =>
+      runOrQueue('Toggle feature flag', () =>
+        platformAdminService.toggleFeatureFlag(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Feature flag updated.' });
+    },
   });
 
   const retryJob = useMutation({
-    mutationFn: (jobId: string) => runOrQueue('Retry job', () => platformAdminService.retryJob(jobId)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Job retry queued.' }); },
+    mutationFn: (jobId: string) =>
+      runOrQueue('Retry job', () => platformAdminService.retryJob(jobId)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Job retry queued.' });
+    },
   });
 
   const scheduleMaintenance = useMutation({
-    mutationFn: (input: ScheduleMaintenanceInput) => runOrQueue('Schedule maintenance', () => platformAdminService.scheduleMaintenance(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Maintenance scheduled.' }); },
+    mutationFn: (input: ScheduleMaintenanceInput) =>
+      runOrQueue('Schedule maintenance', () =>
+        platformAdminService.scheduleMaintenance(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Maintenance scheduled.' });
+    },
   });
 
   const triggerBackup = useMutation({
-    mutationFn: (input: TriggerBackupInput) => runOrQueue('Trigger backup', () => platformAdminService.triggerBackup(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Backup started.' }); },
+    mutationFn: (input: TriggerBackupInput) =>
+      runOrQueue('Trigger backup', () =>
+        platformAdminService.triggerBackup(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Backup started.' });
+    },
   });
 
   const exportData = useMutation({
-    mutationFn: (format: 'csv' | 'pdf' | 'xlsx') => runOrQueue('Export platform data', () => platformAdminService.exportData(format)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Export complete.' }); },
+    mutationFn: (format: 'csv' | 'pdf' | 'xlsx') =>
+      runOrQueue('Export platform data', () =>
+        platformAdminService.exportData(format),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Export complete.' });
+    },
   });
 
   return {

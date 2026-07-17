@@ -4,18 +4,18 @@ Patients is the **canonical clinical reference module** for Med-Ease. Platform c
 
 ## Certification checklist
 
-| Phase | Layer | Location | Status |
-|-------|-------|----------|--------|
-| P1 | Prisma models + RLS | `database/prisma/clinical.prisma`, `database/rls/clinical/patients.sql` | ✅ |
-| P2 | Repository contract | `packages/patients-contract/` | ✅ |
-| P2 | Backend repository | `apps/api/src/patients/patients.repository.ts` | ✅ |
-| P3 | Service + domain events | `apps/api/src/patients/patients.service.ts`, `packages/events/src/events/patient.events.ts` | ✅ |
-| P4 | Controller + permissions | `apps/api/src/patients/patients.controller.ts` | ✅ |
-| P5 | OpenAPI + Orval | `lib/api-spec/openapi.yaml`, generated clients | ✅ |
-| P6 | Frontend HTTP adapter | `artifacts/medease/src/services/patients/repository.ts` | ✅ |
-| P6 | Frontend mock adapter | `artifacts/medease/src/services/patients/repository.mock.ts` | ✅ |
-| P7 | Contract tests | `artifacts/medease/src/services/patients/__contract__/` | ✅ |
-| P8 | E2E certification | `scripts/ci/e2e-patients.mjs` | ✅ |
+| Phase | Layer                    | Location                                                                                    | Status |
+| ----- | ------------------------ | ------------------------------------------------------------------------------------------- | ------ |
+| P1    | Prisma models + RLS      | `database/prisma/clinical.prisma`, `database/rls/clinical/patients.sql`                     | ✅     |
+| P2    | Repository contract      | `packages/patients-contract/`                                                               | ✅     |
+| P2    | Backend repository       | `apps/api/src/patients/patients.repository.ts`                                              | ✅     |
+| P3    | Service + domain events  | `apps/api/src/patients/patients.service.ts`, `packages/events/src/events/patient.events.ts` | ✅     |
+| P4    | Controller + permissions | `apps/api/src/patients/patients.controller.ts`                                              | ✅     |
+| P5    | OpenAPI + Orval          | `lib/api-spec/openapi.yaml`, generated clients                                              | ✅     |
+| P6    | Frontend HTTP adapter    | `artifacts/medease/src/services/patients/repository.ts`                                     | ✅     |
+| P6    | Frontend mock adapter    | `artifacts/medease/src/services/patients/repository.mock.ts`                                | ✅     |
+| P7    | Contract tests           | `artifacts/medease/src/services/patients/__contract__/`                                     | ✅     |
+| P8    | E2E certification        | `scripts/ci/e2e-patients.mjs`                                                               | ✅     |
 
 ## Implementation pipeline (repeat for each clinical module)
 
@@ -64,20 +64,20 @@ Professional portal consumes patients via `patientsService` through `professiona
 
 ## CI gates
 
-| Stage | Command |
-|-------|---------|
-| Mock contract | `pnpm --filter @workspace/medease run test:contract:mock` |
-| OpenAPI drift | `node scripts/ci/verify-openapi-regen.mjs` |
-| Platform + Patients E2E | `node scripts/ci/run-smoke-ci.mjs` (smoke CI job) |
-| HTTP contract | Runs inside smoke job with `CONTRACT_TEST_API_URL` |
+| Stage                   | Command                                                   |
+| ----------------------- | --------------------------------------------------------- |
+| Mock contract           | `pnpm --filter @workspace/medease run test:contract:mock` |
+| OpenAPI drift           | `node scripts/ci/verify-openapi-regen.mjs`                |
+| Platform + Patients E2E | `node scripts/ci/run-smoke-ci.mjs` (smoke CI job)         |
+| HTTP contract           | Runs inside smoke job with `CONTRACT_TEST_API_URL`        |
 
 ## Demo credentials
 
-| Email | Role | Password |
-|-------|------|----------|
-| `admin@medease.health` | platform_admin | `demo` |
-| `doctor@medease.health` | physician | `demo` |
-| `patient@medease.health` | patient | `demo` |
+| Email                    | Role           | Password |
+| ------------------------ | -------------- | -------- |
+| `admin@medease.health`   | platform_admin | `demo`   |
+| `doctor@medease.health`  | physician      | `demo`   |
+| `patient@medease.health` | patient        | `demo`   |
 
 **Demo tenant:** `01930000-0000-7000-8000-000000000001`  
 **Seeded patient (Sarah Jenkins):** `01930000-0000-7000-8000-000000000301` / MRN-10293

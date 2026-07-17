@@ -1,4 +1,9 @@
-import type { Contract, PurchaseOrder, PurchaseRequest, Supplier } from '@/services/procurement/types';
+import type {
+  Contract,
+  PurchaseOrder,
+  PurchaseRequest,
+  Supplier,
+} from '@/services/procurement/types';
 
 /** FHIR R5 SupplyRequest stub */
 export function toFhirSupplyRequest(request: PurchaseRequest) {
@@ -23,12 +28,20 @@ export function toFhirSupplyDelivery(po: PurchaseOrder) {
     status: po.status === 'received' ? 'completed' : 'in-progress',
     supplier: { display: po.supplierName },
     type: { text: po.department },
-    suppliedItem: po.items.map((i) => ({ itemCodeableConcept: { text: i.description }, quantity: { value: i.quantity } })),
+    suppliedItem: po.items.map((i) => ({
+      itemCodeableConcept: { text: i.description },
+      quantity: { value: i.quantity },
+    })),
   };
 }
 
 /** FHIR Invoice stub */
-export function toFhirInvoice(invoice: { invoiceId: string; invoiceNumber: string; total: number; status: string }) {
+export function toFhirInvoice(invoice: {
+  invoiceId: string;
+  invoiceNumber: string;
+  total: number;
+  status: string;
+}) {
   return {
     resourceType: 'Invoice',
     id: invoice.invoiceId,
@@ -45,7 +58,10 @@ export function toFhirOrganization(supplier: Supplier) {
     id: supplier.supplierId,
     name: supplier.name,
     type: [{ coding: [{ code: supplier.category }] }],
-    telecom: [{ system: 'email', value: supplier.contactEmail }, { system: 'phone', value: supplier.contactPhone }],
+    telecom: [
+      { system: 'email', value: supplier.contactEmail },
+      { system: 'phone', value: supplier.contactPhone },
+    ],
     address: [{ text: supplier.address, country: supplier.country }],
   };
 }

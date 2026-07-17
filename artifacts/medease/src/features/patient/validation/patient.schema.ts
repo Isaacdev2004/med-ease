@@ -31,4 +31,6 @@ export const patientRegistrationSchema = patientProfileSchema.extend({
   }),
 });
 
-export type PatientRegistrationFormValues = z.infer<typeof patientRegistrationSchema>;
+export type PatientRegistrationFormValues = z.infer<
+  typeof patientRegistrationSchema
+>;

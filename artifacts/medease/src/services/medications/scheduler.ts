@@ -1,4 +1,11 @@
-import { addDays, eachDayOfInterval, endOfMonth, format, isSameDay, startOfMonth } from 'date-fns';
+import {
+  addDays,
+  eachDayOfInterval,
+  endOfMonth,
+  format,
+  isSameDay,
+  startOfMonth,
+} from 'date-fns';
 
 import type { ScheduledDose } from '@/services/medications/types';
 
@@ -20,14 +27,28 @@ export function buildMedicationCalendar(
   }));
 }
 
-export function getTodayDoses(schedule: ScheduledDose[], patientId?: string): ScheduledDose[] {
+export function getTodayDoses(
+  schedule: ScheduledDose[],
+  patientId?: string,
+): ScheduledDose[] {
   const today = new Date();
   return schedule
-    .filter((d) => (!patientId || d.patientId === patientId) && isSameDay(new Date(d.scheduledAt), today))
-    .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
+    .filter(
+      (d) =>
+        (!patientId || d.patientId === patientId) &&
+        isSameDay(new Date(d.scheduledAt), today),
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime(),
+    );
 }
 
-export function getUpcomingDoses(schedule: ScheduledDose[], patientId?: string, days = 7): ScheduledDose[] {
+export function getUpcomingDoses(
+  schedule: ScheduledDose[],
+  patientId?: string,
+  days = 7,
+): ScheduledDose[] {
   const now = new Date();
   const end = addDays(now, days);
   return schedule
@@ -35,7 +56,10 @@ export function getUpcomingDoses(schedule: ScheduledDose[], patientId?: string, 
       const t = new Date(d.scheduledAt);
       return (!patientId || d.patientId === patientId) && t >= now && t <= end;
     })
-    .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
+    .sort(
+      (a, b) =>
+        new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime(),
+    );
 }
 
 export function formatScheduleSlot(slot: ScheduledDose['slot']): string {

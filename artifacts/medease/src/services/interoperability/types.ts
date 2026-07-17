@@ -1,13 +1,24 @@
 export type EndpointStatus = 'active' | 'inactive' | 'error' | 'maintenance';
-export type EndpointProtocol = 'fhir' | 'hl7' | 'dicom' | 'cda' | 'rest' | 'graphql' | 'webhook';
+export type EndpointProtocol =
+  'fhir' | 'hl7' | 'dicom' | 'cda' | 'rest' | 'graphql' | 'webhook';
 export type FhirVersion = 'R4' | 'R4B' | 'R5';
-export type Hl7MessageType = 'ADT' | 'ORM' | 'ORU' | 'SIU' | 'DFT' | 'BAR' | 'RDE' | 'VXU' | 'MDM';
-export type Hl7MessageStatus = 'received' | 'processed' | 'failed' | 'acknowledged' | 'queued';
-export type JobStatus = 'pending' | 'running' | 'completed' | 'failed' | 'retrying' | 'dead_letter';
+export type Hl7MessageType =
+  'ADT' | 'ORM' | 'ORU' | 'SIU' | 'DFT' | 'BAR' | 'RDE' | 'VXU' | 'MDM';
+export type Hl7MessageStatus =
+  'received' | 'processed' | 'failed' | 'acknowledged' | 'queued';
+export type JobStatus =
+  'pending' | 'running' | 'completed' | 'failed' | 'retrying' | 'dead_letter';
 export type SyncState = 'idle' | 'syncing' | 'success' | 'conflict' | 'error';
 export type ValidationStatus = 'valid' | 'invalid' | 'warning';
-export type IheProfile = 'XDS' | 'XCA' | 'PIX' | 'PDQ' | 'XCPD' | 'ATNA' | 'BPPC';
-export type MappingDirection = 'internal_to_fhir' | 'internal_to_hl7' | 'internal_to_cda' | 'internal_to_dicom' | 'internal_to_json' | 'internal_to_csv';
+export type IheProfile =
+  'XDS' | 'XCA' | 'PIX' | 'PDQ' | 'XCPD' | 'ATNA' | 'BPPC';
+export type MappingDirection =
+  | 'internal_to_fhir'
+  | 'internal_to_hl7'
+  | 'internal_to_cda'
+  | 'internal_to_dicom'
+  | 'internal_to_json'
+  | 'internal_to_csv';
 
 export interface InteropFilters {
   q?: string;
@@ -91,7 +102,8 @@ export interface FhirBundle {
 export interface FhirTransaction {
   transactionId: string;
   serverId: string;
-  operation: 'create' | 'update' | 'delete' | 'search' | 'bulk_export' | 'bulk_import';
+  operation:
+    'create' | 'update' | 'delete' | 'search' | 'bulk_export' | 'bulk_import';
   resourceCount: number;
   status: JobStatus;
   timestamp: string;

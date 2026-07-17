@@ -13,7 +13,13 @@ export function rankSuppliers(category?: string): SupplierScorecard[] {
 }
 
 export function scoreSupplier(supplier: Supplier): SupplierScorecard {
-  const overall = (supplier.qualityScore + supplier.onTimeDeliveryRate + supplier.priceScore + supplier.complianceScore - supplier.riskScore) / 4;
+  const overall =
+    (supplier.qualityScore +
+      supplier.onTimeDeliveryRate +
+      supplier.priceScore +
+      supplier.complianceScore -
+      supplier.riskScore) /
+    4;
   return {
     supplierId: supplier.supplierId,
     supplierName: supplier.name,
@@ -23,13 +29,16 @@ export function scoreSupplier(supplier: Supplier): SupplierScorecard {
     price: supplier.priceScore,
     compliance: supplier.complianceScore,
     risk: supplier.riskScore,
-    trend: supplier.rating >= 4 ? 'up' : supplier.rating <= 3 ? 'down' : 'stable',
+    trend:
+      supplier.rating >= 4 ? 'up' : supplier.rating <= 3 ? 'down' : 'stable',
     rank: 0,
   };
 }
 
 export function getPreferredSupplier(category: string): Supplier | null {
-  const preferred = MOCK_SUPPLIERS.find((s) => s.category === category && s.isPreferred && s.status === 'active');
+  const preferred = MOCK_SUPPLIERS.find(
+    (s) => s.category === category && s.isPreferred && s.status === 'active',
+  );
   if (preferred) return preferred;
   const ranked = rankSuppliers(category);
   const top = ranked[0];
@@ -37,7 +46,10 @@ export function getPreferredSupplier(category: string): Supplier | null {
   return MOCK_SUPPLIERS.find((s) => s.supplierId === top.supplierId) ?? null;
 }
 
-export function assessSupplierRisk(supplierId: string): { risk: 'low' | 'medium' | 'high'; factors: string[] } {
+export function assessSupplierRisk(supplierId: string): {
+  risk: 'low' | 'medium' | 'high';
+  factors: string[];
+} {
   const s = MOCK_SUPPLIERS.find((x) => x.supplierId === supplierId);
   if (!s) return { risk: 'high', factors: ['Unknown supplier'] };
   const factors: string[] = [];
@@ -45,6 +57,11 @@ export function assessSupplierRisk(supplierId: string): { risk: 'low' | 'medium'
   if (s.onTimeDeliveryRate < 75) factors.push('Poor delivery performance');
   if (s.complianceScore < 70) factors.push('Compliance gaps');
   if (s.isInternational) factors.push('International supply chain');
-  const risk = s.riskScore > 35 || factors.length >= 3 ? 'high' : s.riskScore > 20 ? 'medium' : 'low';
+  const risk =
+    s.riskScore > 35 || factors.length >= 3
+      ? 'high'
+      : s.riskScore > 20
+        ? 'medium'
+        : 'low';
   return { risk, factors };
 }

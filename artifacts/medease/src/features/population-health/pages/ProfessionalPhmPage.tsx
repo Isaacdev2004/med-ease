@@ -3,7 +3,8 @@ import { useLocation } from 'wouter';
 import { PhmShell } from '@/features/population-health/components/PhmShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'phm' | 'care-gaps' | 'registries' | 'high-risk-patients' | 'outreach';
+type Segment =
+  'phm' | 'care-gaps' | 'registries' | 'high-risk-patients' | 'outreach';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/care-gaps')) return 'care-gaps';
@@ -24,5 +25,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalPhmPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <PhmShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <PhmShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

@@ -10,12 +10,17 @@ export const patientMonitoringQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   vitals: (filters?: MonitoringFilters) => ({
-    queryKey: queryKeys.monitoring.vitals(filters?.patientId ?? 'all', filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.monitoring.vitals(
+      filters?.patientId ?? 'all',
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => patientMonitoringService.getVitalSigns(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   observations: (filters?: MonitoringFilters) => ({
-    queryKey: queryKeys.monitoring.observations(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.monitoring.observations(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => patientMonitoringService.getObservations(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -32,7 +37,10 @@ export const patientMonitoringQueries = {
     enabled: Boolean(patientId),
   }),
   alerts: (filters?: MonitoringFilters) => ({
-    queryKey: queryKeys.monitoring.alerts(filters?.patientId, filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.monitoring.alerts(
+      filters?.patientId,
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => patientMonitoringService.getAlerts(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

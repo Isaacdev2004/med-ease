@@ -14,8 +14,13 @@ export default function Forbidden() {
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <div className="mb-4 flex items-center gap-2">
-            <ShieldAlert className="h-8 w-8 text-destructive" aria-hidden="true" />
-            <h1 className="text-2xl font-bold tracking-tight">403 — Access Denied</h1>
+            <ShieldAlert
+              className="h-8 w-8 text-destructive"
+              aria-hidden="true"
+            />
+            <h1 className="text-2xl font-bold tracking-tight">
+              403 — Access Denied
+            </h1>
           </div>
           <p className="text-sm text-muted-foreground">
             You do not have permission to view this page. Contact your

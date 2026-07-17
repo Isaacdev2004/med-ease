@@ -18,10 +18,16 @@ export interface ProcessorContext {
 
 export interface ProcessorLifecycleHooks {
   beforeProcess?(context: ProcessorContext): Promise<void> | void;
-  afterSuccess?(context: ProcessorContext, result: unknown): Promise<void> | void;
+  afterSuccess?(
+    context: ProcessorContext,
+    result: unknown,
+  ): Promise<void> | void;
   afterFailure?(context: ProcessorContext, error: Error): Promise<void> | void;
   afterRetry?(context: ProcessorContext, error: Error): Promise<void> | void;
-  afterDeadLetter?(context: ProcessorContext, error: Error): Promise<void> | void;
+  afterDeadLetter?(
+    context: ProcessorContext,
+    error: Error,
+  ): Promise<void> | void;
 }
 
 export interface QueueProcessorResult {

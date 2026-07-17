@@ -27,7 +27,8 @@ export type LabOrderStatus =
 
 export type LabOrderPriority = 'routine' | 'urgent' | 'stat';
 
-export type CollectionMethod = 'in_clinic' | 'home_collection' | 'external_lab' | 'referral';
+export type CollectionMethod =
+  'in_clinic' | 'home_collection' | 'external_lab' | 'referral';
 
 export type LabResultStatus =
   | 'pending'
@@ -40,12 +41,7 @@ export type LabResultStatus =
   | 'rejected';
 
 export type ResultFlag =
-  | 'normal'
-  | 'high'
-  | 'low'
-  | 'critical_high'
-  | 'critical_low'
-  | 'abnormal';
+  'normal' | 'high' | 'low' | 'critical_high' | 'critical_low' | 'abnormal';
 
 export type SpecimenStatus =
   | 'pending'

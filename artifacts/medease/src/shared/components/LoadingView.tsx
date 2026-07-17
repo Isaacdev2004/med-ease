@@ -20,7 +20,11 @@ export function LoadingView({
 }: LoadingViewProps) {
   if (children) {
     return (
-      <div className={cn('relative', className)} aria-busy="true" aria-live="polite">
+      <div
+        className={cn('relative', className)}
+        aria-busy="true"
+        aria-live="polite"
+      >
         <div className="opacity-50 pointer-events-none">{children}</div>
         <div className="absolute inset-0 flex items-center justify-center">
           <Spinner className="h-6 w-6" />
@@ -32,7 +36,10 @@ export function LoadingView({
   if (variant === 'spinner') {
     return (
       <div
-        className={cn('flex flex-col items-center justify-center gap-3 py-12', className)}
+        className={cn(
+          'flex flex-col items-center justify-center gap-3 py-12',
+          className,
+        )}
         role="status"
         aria-live="polite"
         aria-busy="true"
@@ -45,7 +52,11 @@ export function LoadingView({
 
   if (variant === 'skeleton-table') {
     return (
-      <div className={cn('space-y-2', className)} aria-busy="true" aria-live="polite">
+      <div
+        className={cn('space-y-2', className)}
+        aria-busy="true"
+        aria-live="polite"
+      >
         <Skeleton className="h-10 w-full" />
         <Skeleton className="h-10 w-full" />
         <Skeleton className="h-10 w-full" />
@@ -55,7 +66,11 @@ export function LoadingView({
   }
 
   return (
-    <div className={cn('space-y-3', className)} aria-busy="true" aria-live="polite">
+    <div
+      className={cn('space-y-3', className)}
+      aria-busy="true"
+      aria-live="polite"
+    >
       <span className="sr-only">{label}</span>
       <Skeleton className="h-8 w-1/3" />
       <Skeleton className="h-32 w-full" />

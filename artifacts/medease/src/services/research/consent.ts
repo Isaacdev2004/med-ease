@@ -1,6 +1,9 @@
 import type { ConsentRecord, ConsentStatus } from '@/services/research/types';
 
-export function validateConsentVersion(current: string, required: string): boolean {
+export function validateConsentVersion(
+  current: string,
+  required: string,
+): boolean {
   return current === required;
 }
 

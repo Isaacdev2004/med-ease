@@ -9,7 +9,11 @@ import {
   type QueueProcessorFn,
   type QueueProcessorResult,
 } from '@medease/queue';
-import { requestContextFromJobEnvelope, runWithRequestContext, runWithSpan } from '@medease/observability';
+import {
+  requestContextFromJobEnvelope,
+  runWithRequestContext,
+  runWithSpan,
+} from '@medease/observability';
 import type { Logger } from '@medease/logger';
 
 import type { MetricsCollector } from '../metrics/metrics-collector.js';
@@ -23,7 +27,11 @@ export interface MiddlewarePipelineOptions {
   metrics: MetricsCollector;
 }
 
-function buildContext(queue: QueueName, job: Job<QueueJobEnvelope>, envelope: QueueJobEnvelope): ProcessorContext {
+function buildContext(
+  queue: QueueName,
+  job: Job<QueueJobEnvelope>,
+  envelope: QueueJobEnvelope,
+): ProcessorContext {
   return {
     queue,
     job,
@@ -86,7 +94,8 @@ export async function runQueueMiddlewarePipeline(
           await hooks?.afterSuccess?.(context, result);
           return result;
         } catch (error) {
-          const failure = error instanceof Error ? error : new Error(String(error));
+          const failure =
+            error instanceof Error ? error : new Error(String(error));
           metrics.recordFailed(queue);
 
           if (context.attempt < context.maxAttempts) {

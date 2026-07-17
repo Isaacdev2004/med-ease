@@ -39,7 +39,10 @@ describe('QueueJobEnvelope', () => {
 
   it('rejects invalid envelope payloads', () => {
     assert.throws(() => validateEnvelope(null), QueueEnvelopeValidationError);
-    assert.throws(() => validateEnvelope({ id: 'x' }), QueueEnvelopeValidationError);
+    assert.throws(
+      () => validateEnvelope({ id: 'x' }),
+      QueueEnvelopeValidationError,
+    );
   });
 
   it('creates bootstrap envelopes for platform jobs', () => {

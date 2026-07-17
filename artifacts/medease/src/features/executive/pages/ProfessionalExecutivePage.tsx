@@ -18,5 +18,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalExecutivePage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <CommandCenterShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <CommandCenterShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

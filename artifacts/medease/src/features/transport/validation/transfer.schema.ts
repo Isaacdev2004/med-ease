@@ -27,7 +27,11 @@ export type TransferRequestFormValues = z.infer<typeof transferRequestSchema>;
 
 export const transferWizardSteps = [
   { id: 'patient', title: 'Patient', description: 'Identify the patient' },
-  { id: 'facilities', title: 'Facilities', description: 'Origin and destination' },
+  {
+    id: 'facilities',
+    title: 'Facilities',
+    description: 'Origin and destination',
+  },
   { id: 'clinical', title: 'Clinical', description: 'Summary and urgency' },
   { id: 'review', title: 'Review', description: 'Confirm and submit' },
 ] as const;

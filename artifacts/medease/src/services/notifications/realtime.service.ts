@@ -10,7 +10,10 @@ import {
   createDemoNotification,
   notificationService,
 } from '@/services/notifications/notification.service';
-import type { MedNotification, RealtimeEvent } from '@/services/notifications/notification.types';
+import type {
+  MedNotification,
+  RealtimeEvent,
+} from '@/services/notifications/notification.types';
 
 export interface RealtimeServiceOptions {
   queryClient: QueryClient;
@@ -36,14 +39,16 @@ export function startNotificationRealtime({
     channel,
     queryClient,
     queryKey: queryKeys.notifications.list(userId),
-    merge: (current, event) => mergeListItem(current, event as unknown as MedNotification),
+    merge: (current, event) =>
+      mergeListItem(current, event as unknown as MedNotification),
   });
 
   const countSubscription = subscribeToRealtimeChannel<number>({
     channel: `${channel}:count`,
     queryClient,
     queryKey: queryKeys.notifications.unreadCount(userId),
-    merge: (current, event) => mergeCounter(current, event as unknown as number),
+    merge: (current, event) =>
+      mergeCounter(current, event as unknown as number),
   });
 
   let demoTimer: number | undefined;
@@ -55,7 +60,8 @@ export function startNotificationRealtime({
         timestamp: new Date().toISOString(),
         payload: createDemoNotification({
           title: 'Live sync update',
-          message: 'Demo realtime event merged into cache without page refresh.',
+          message:
+            'Demo realtime event merged into cache without page refresh.',
           type: 'realtime_update',
           priority: 'informational',
         }),

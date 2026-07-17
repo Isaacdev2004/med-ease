@@ -122,7 +122,10 @@ export default function Register() {
         </div>
         <p className="text-sm text-center text-muted-foreground">
           Already have an account?{' '}
-          <Link href={ROUTES.login} className="text-primary font-medium hover:underline">
+          <Link
+            href={ROUTES.login}
+            className="text-primary font-medium hover:underline"
+          >
             Sign in instead
           </Link>
         </p>

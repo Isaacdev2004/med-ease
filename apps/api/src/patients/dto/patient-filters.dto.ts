@@ -12,10 +12,15 @@ import {
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import type { PatientFilters, PatientSearchFilters } from '@medease/patients-contract';
+import type {
+  PatientFilters,
+  PatientSearchFilters,
+} from '@medease/patients-contract';
 
 export class PatientFiltersDto implements PatientFilters {
-  @ApiPropertyOptional({ description: 'Free-text search across name, MRN, identifiers, contacts' })
+  @ApiPropertyOptional({
+    description: 'Free-text search across name, MRN, identifiers, contacts',
+  })
   @IsOptional()
   @IsString()
   q?: string;

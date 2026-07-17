@@ -16,8 +16,9 @@ export function RoleSwitcher({ className }: RoleSwitcherProps) {
     return null;
   }
 
-  const currentPortal =
-    location.split('/')[1] ? `/${location.split('/')[1]}` : PORTAL_PATHS.patient;
+  const currentPortal = location.split('/')[1]
+    ? `/${location.split('/')[1]}`
+    : PORTAL_PATHS.patient;
 
   async function handleChange(nextPortal: string) {
     const portalId = nextPortal.replace(/^\//, '') as PortalId;

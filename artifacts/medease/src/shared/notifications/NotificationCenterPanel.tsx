@@ -9,7 +9,10 @@ import {
   useUnreadNotificationCount,
 } from '@/features/notifications/hooks/use-notifications';
 import { NotificationBadge } from '@/shared/notifications/NotificationBadge';
-import { NotificationEmpty, NotificationSkeleton } from '@/shared/notifications/NotificationEmpty';
+import {
+  NotificationEmpty,
+  NotificationSkeleton,
+} from '@/shared/notifications/NotificationEmpty';
 import { NotificationGroup } from '@/shared/notifications/NotificationGroup';
 import { RealtimeStatus } from '@/shared/notifications/RealtimeStatus';
 import { Button } from '@/shared/ui/button';
@@ -41,11 +44,14 @@ export function NotificationCenterPanel({
   const pinned = items.filter((item) => item.pinned);
   const unread = items.filter((item) => !item.read && !item.pinned);
   const read = items.filter((item) => item.read && !item.pinned);
-  const unreadCount = unreadQuery.data ?? items.filter((item) => !item.read).length;
+  const unreadCount =
+    unreadQuery.data ?? items.filter((item) => !item.read).length;
 
   const viewAllPath =
     notificationsPath ??
-    (user ? `${PORTAL_PATHS[getPortalForRole(user.role)]}/notifications` : '/patient/notifications');
+    (user
+      ? `${PORTAL_PATHS[getPortalForRole(user.role)]}/notifications`
+      : '/patient/notifications');
 
   return (
     <DropdownMenu>
@@ -59,22 +65,35 @@ export function NotificationCenterPanel({
           <Bell className="h-4 w-4" />
           {unreadCount > 0 ? (
             <span className="absolute -top-0.5 -right-0.5">
-              <NotificationBadge count={unreadCount} className="h-5 min-w-5 text-[10px]" />
+              <NotificationBadge
+                count={unreadCount}
+                className="h-5 min-w-5 text-[10px]"
+              />
             </span>
           ) : null}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[min(100vw-2rem,24rem)] p-0">
+      <DropdownMenuContent
+        align="end"
+        className="w-[min(100vw-2rem,24rem)] p-0"
+      >
         <div className="flex items-center justify-between border-b px-4 py-3">
-          <DropdownMenuLabel className="p-0 text-base">Notifications</DropdownMenuLabel>
-          <RealtimeStatus connected={!notificationsQuery.isFetching} offline={isOffline} />
+          <DropdownMenuLabel className="p-0 text-base">
+            Notifications
+          </DropdownMenuLabel>
+          <RealtimeStatus
+            connected={!notificationsQuery.isFetching}
+            offline={isOffline}
+          />
         </div>
         <DropdownMenuSeparator className="m-0" />
         {notificationsQuery.isLoading ? (
           <NotificationSkeleton />
         ) : items.length === 0 ? (
           <div className="p-2">
-            <NotificationEmpty onRefresh={() => void notificationsQuery.refetch()} />
+            <NotificationEmpty
+              onRefresh={() => void notificationsQuery.refetch()}
+            />
           </div>
         ) : (
           <ScrollArea className="max-h-[min(60vh,24rem)]">

@@ -1,10 +1,32 @@
-export { configureApiClient, getApiBaseUrl } from '@/services/api/configure-api-client';
-export { CACHE_TIMES, REFETCH_INTERVALS, SEARCH_DEBOUNCE_MS, DEFAULT_PAGE_SIZE } from '@/services/api/cache-config';
-export { createOptimisticMutationOptions, invalidateQueries } from '@/services/api/mutation-utils';
+export {
+  configureApiClient,
+  getApiBaseUrl,
+} from '@/services/api/configure-api-client';
+export {
+  CACHE_TIMES,
+  REFETCH_INTERVALS,
+  SEARCH_DEBOUNCE_MS,
+  DEFAULT_PAGE_SIZE,
+} from '@/services/api/cache-config';
+export {
+  createOptimisticMutationOptions,
+  invalidateQueries,
+} from '@/services/api/mutation-utils';
 export { offlineMutationQueue } from '@/services/api/offline-queue';
-export { prefetchPatientDetailBundle, prefetchQuery } from '@/services/api/prefetch';
+export {
+  prefetchPatientDetailBundle,
+  prefetchQuery,
+} from '@/services/api/prefetch';
 export { queryClient } from '@/services/api/query-client';
-export { classifyQueryError, getFriendlyQueryErrorMessage, shouldRetryQuery } from '@/services/api/query-errors';
+export {
+  classifyQueryError,
+  getFriendlyQueryErrorMessage,
+  shouldRetryQuery,
+} from '@/services/api/query-errors';
 export { queryKeys } from '@/services/api/query-keys';
-export { mergeCounter, mergeListItem, subscribeToRealtimeChannel } from '@/services/api/realtime';
+export {
+  mergeCounter,
+  mergeListItem,
+  subscribeToRealtimeChannel,
+} from '@/services/api/realtime';
 export { appToast } from '@/services/api/toast';

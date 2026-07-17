@@ -1,15 +1,42 @@
-export type FacilityType = 'hospital' | 'clinic' | 'pharmacy' | 'laboratory' | 'radiology' | 'theatre';
-export type RoomType = 'patient' | 'operating' | 'icu' | 'isolation' | 'consultation' | 'utility' | 'storage' | 'office';
-export type BedStatus = 'available' | 'occupied' | 'reserved' | 'maintenance' | 'blocked';
-export type EquipmentStatus = 'operational' | 'maintenance' | 'calibration_due' | 'out_of_service' | 'decommissioned';
-export type WorkOrderStatus = 'draft' | 'open' | 'assigned' | 'in_progress' | 'on_hold' | 'completed' | 'cancelled';
-export type WorkOrderPriority = 'low' | 'medium' | 'high' | 'critical' | 'emergency';
-export type MaintenanceType = 'preventive' | 'corrective' | 'predictive' | 'emergency';
-export type CalibrationStatus = 'valid' | 'due' | 'overdue' | 'failed' | 'pending';
-export type InspectionStatus = 'scheduled' | 'in_progress' | 'passed' | 'failed' | 'overdue';
+export type FacilityType =
+  'hospital' | 'clinic' | 'pharmacy' | 'laboratory' | 'radiology' | 'theatre';
+export type RoomType =
+  | 'patient'
+  | 'operating'
+  | 'icu'
+  | 'isolation'
+  | 'consultation'
+  | 'utility'
+  | 'storage'
+  | 'office';
+export type BedStatus =
+  'available' | 'occupied' | 'reserved' | 'maintenance' | 'blocked';
+export type EquipmentStatus =
+  | 'operational'
+  | 'maintenance'
+  | 'calibration_due'
+  | 'out_of_service'
+  | 'decommissioned';
+export type WorkOrderStatus =
+  | 'draft'
+  | 'open'
+  | 'assigned'
+  | 'in_progress'
+  | 'on_hold'
+  | 'completed'
+  | 'cancelled';
+export type WorkOrderPriority =
+  'low' | 'medium' | 'high' | 'critical' | 'emergency';
+export type MaintenanceType =
+  'preventive' | 'corrective' | 'predictive' | 'emergency';
+export type CalibrationStatus =
+  'valid' | 'due' | 'overdue' | 'failed' | 'pending';
+export type InspectionStatus =
+  'scheduled' | 'in_progress' | 'passed' | 'failed' | 'overdue';
 export type UtilityStatus = 'normal' | 'warning' | 'critical' | 'offline';
 export type IncidentSeverity = 'low' | 'medium' | 'high' | 'critical';
-export type ContractStatus = 'active' | 'expiring' | 'expired' | 'pending' | 'terminated';
+export type ContractStatus =
+  'active' | 'expiring' | 'expired' | 'pending' | 'terminated';
 
 export interface FacilitiesFilters {
   q?: string;
@@ -228,7 +255,15 @@ export interface Vendor {
 export interface UtilitySystem {
   utilityId: string;
   name: string;
-  type: 'electrical' | 'hvac' | 'water' | 'medical_gas' | 'generator' | 'ups' | 'fire_safety' | 'security';
+  type:
+    | 'electrical'
+    | 'hvac'
+    | 'water'
+    | 'medical_gas'
+    | 'generator'
+    | 'ups'
+    | 'fire_safety'
+    | 'security';
   facilityId: string;
   facilityName: string;
   status: UtilityStatus;

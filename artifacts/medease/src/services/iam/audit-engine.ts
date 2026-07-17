@@ -14,7 +14,9 @@ export function toFhirAuditEvent(event: IamAuditEvent) {
     recorded: event.timestamp,
     outcome: event.outcome,
     agent: [{ who: { reference: `Practitioner/${event.actorId}` } }],
-    entity: [{ what: { reference: `${event.resourceType}/${event.resourceId}` } }],
+    entity: [
+      { what: { reference: `${event.resourceType}/${event.resourceId}` } },
+    ],
   };
 }
 

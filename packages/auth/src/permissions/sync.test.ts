@@ -45,16 +45,29 @@ function extractRolePermissions(source: string, role: IdentityRole): string[] {
 describe('Frontend permission synchronization', () => {
   it('keeps ALL_PERMISSIONS aligned with the frozen frontend catalog', () => {
     const frontendSource = readFileSync(frontendPermissionsPath, 'utf8');
-    const frontendPermissions = new Set(extractQuotedPermissions(frontendSource));
+    const frontendPermissions = new Set(
+      extractQuotedPermissions(frontendSource),
+    );
     const backendPermissions = new Set(ALL_PERMISSIONS);
 
     const missingInBackend = [...frontendPermissions].filter(
-      (permission) => !backendPermissions.has(permission as (typeof ALL_PERMISSIONS)[number]),
+      (permission) =>
+        !backendPermissions.has(permission as (typeof ALL_PERMISSIONS)[number]),
     );
-    const extraInBackend = [...backendPermissions].filter((permission) => !frontendPermissions.has(permission));
+    const extraInBackend = [...backendPermissions].filter(
+      (permission) => !frontendPermissions.has(permission),
+    );
 
-    assert.deepEqual(missingInBackend, [], `Missing in backend: ${missingInBackend.join(', ')}`);
-    assert.deepEqual(extraInBackend, [], `Extra in backend: ${extraInBackend.join(', ')}`);
+    assert.deepEqual(
+      missingInBackend,
+      [],
+      `Missing in backend: ${missingInBackend.join(', ')}`,
+    );
+    assert.deepEqual(
+      extraInBackend,
+      [],
+      `Extra in backend: ${extraInBackend.join(', ')}`,
+    );
   });
 
   it('keeps ROLE_PERMISSIONS aligned with the frozen frontend matrix', () => {

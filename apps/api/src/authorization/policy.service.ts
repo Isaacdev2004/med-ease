@@ -118,16 +118,22 @@ export class PolicyService {
     return { allowed: true };
   }
 
-  extractResourceFromRequest(request: Request): AuthorizationResource | undefined {
+  extractResourceFromRequest(
+    request: Request,
+  ): AuthorizationResource | undefined {
     const params = request.params ?? {};
     const body = (request.body ?? {}) as Record<string, unknown>;
     const query = (request.query ?? {}) as Record<string, unknown>;
 
     const resource: AuthorizationResource = {
       tenantId: asString(params.tenantId ?? body.tenantId ?? query.tenantId),
-      facilityId: asString(params.facilityId ?? body.facilityId ?? query.facilityId),
+      facilityId: asString(
+        params.facilityId ?? body.facilityId ?? query.facilityId,
+      ),
       assignedPhysicianId: asString(
-        params.assignedPhysicianId ?? body.assignedPhysicianId ?? query.assignedPhysicianId,
+        params.assignedPhysicianId ??
+          body.assignedPhysicianId ??
+          query.assignedPhysicianId,
       ),
       ownerUserId: asString(params.userId ?? body.userId ?? query.userId),
     };

@@ -1,6 +1,10 @@
 import type { VideoParticipant } from '@/services/telemedicine/types';
 
-export function inviteParticipant(sessionId: string, name: string, role: VideoParticipant['role']): VideoParticipant {
+export function inviteParticipant(
+  sessionId: string,
+  name: string,
+  role: VideoParticipant['role'],
+): VideoParticipant {
   return {
     id: `part-inv-${Date.now()}`,
     sessionId,
@@ -17,6 +21,12 @@ export function inviteParticipant(sessionId: string, name: string, role: VideoPa
   };
 }
 
-export function removeParticipant(participant: VideoParticipant): VideoParticipant {
-  return { ...participant, leftAt: new Date().toISOString(), connectionQuality: 'disconnected' };
+export function removeParticipant(
+  participant: VideoParticipant,
+): VideoParticipant {
+  return {
+    ...participant,
+    leftAt: new Date().toISOString(),
+    connectionQuality: 'disconnected',
+  };
 }

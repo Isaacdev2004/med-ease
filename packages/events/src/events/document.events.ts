@@ -1,4 +1,8 @@
-import { createDomainEvent, type DomainEvent, type DomainEventContext } from '../domain-event';
+import {
+  createDomainEvent,
+  type DomainEvent,
+  type DomainEventContext,
+} from '../domain-event';
 
 export const DocumentEventType = {
   DocumentDownloaded: 'DocumentDownloaded',

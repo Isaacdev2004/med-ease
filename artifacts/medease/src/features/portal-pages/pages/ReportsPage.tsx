@@ -15,9 +15,27 @@ interface ReportRow {
 }
 
 const reports: ReportRow[] = [
-  { id: 'r1', name: 'Dispensing summary', category: 'Operations', format: 'PDF', schedule: 'Daily' },
-  { id: 'r2', name: 'Inventory expiry', category: 'Inventory', format: 'Excel', schedule: 'Weekly' },
-  { id: 'r3', name: 'Controlled substance log', category: 'Compliance', format: 'PDF', schedule: 'Monthly' },
+  {
+    id: 'r1',
+    name: 'Dispensing summary',
+    category: 'Operations',
+    format: 'PDF',
+    schedule: 'Daily',
+  },
+  {
+    id: 'r2',
+    name: 'Inventory expiry',
+    category: 'Inventory',
+    format: 'Excel',
+    schedule: 'Weekly',
+  },
+  {
+    id: 'r3',
+    name: 'Controlled substance log',
+    category: 'Compliance',
+    format: 'PDF',
+    schedule: 'Monthly',
+  },
 ];
 
 const columns: DataTableColumn<ReportRow>[] = [
@@ -32,8 +50,19 @@ export default function ReportsPage() {
     <PageShell
       title="Reports"
       subtitle="Operational and compliance reports for pharmacy operations."
-      primaryAction={<PortalActionButton label="Generate report" successTitle="Report queued" />}
-      secondaryActions={<PortalActionButton label="Schedule export" variant="outline" successTitle="Schedule saved" />}
+      primaryAction={
+        <PortalActionButton
+          label="Generate report"
+          successTitle="Report queued"
+        />
+      }
+      secondaryActions={
+        <PortalActionButton
+          label="Schedule export"
+          variant="outline"
+          successTitle="Schedule saved"
+        />
+      }
     >
       <PortalMetricsGrid
         metrics={[
@@ -48,7 +77,11 @@ export default function ReportsPage() {
         data={reports}
         getRowId={(row) => row.id}
         rowActions={() => (
-          <PortalActionButton label="Run" variant="outline" successTitle="Report generated" />
+          <PortalActionButton
+            label="Run"
+            variant="outline"
+            successTitle="Report generated"
+          />
         )}
       />
     </PageShell>

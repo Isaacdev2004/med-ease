@@ -1,7 +1,10 @@
 export { cdssService } from '@/services/cdss/cdss.service';
 export { cdssRepository } from '@/services/cdss/repository';
 export { cdssOfflineQueue } from '@/services/cdss/offline-sync';
-export { computeCdssAnalytics, buildCdssDashboard } from '@/services/cdss/analytics';
+export {
+  computeCdssAnalytics,
+  buildCdssDashboard,
+} from '@/services/cdss/analytics';
 export {
   MOCK_ALERTS,
   MOCK_ALLERGY_ALERTS,

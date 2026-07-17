@@ -31,7 +31,9 @@ export function ErrorView({
       <AlertCircle className="h-10 w-10 text-destructive" aria-hidden="true" />
       <div>
         <h3 className="text-lg font-semibold">{title}</h3>
-        <p className="text-sm text-muted-foreground mt-1 max-w-md">{description}</p>
+        <p className="text-sm text-muted-foreground mt-1 max-w-md">
+          {description}
+        </p>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-2">
         {onRetry ? (

@@ -1,4 +1,7 @@
-import type { MedicationAdherence, PatientMedication } from '@/services/medications/types';
+import type {
+  MedicationAdherence,
+  PatientMedication,
+} from '@/services/medications/types';
 import type { DoseLog, ScheduledDose } from '@/services/medications/types';
 
 export function computeAdherence(
@@ -31,9 +34,11 @@ export function computeAdherence(
     skippedDoses: missed,
     completedDoses: taken,
     medicationScore: Math.round((daily + avgMed) / 2),
-    trend: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label, i) => ({
-      label,
-      value: Math.max(50, daily - 10 + i * 3),
-    })),
+    trend: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(
+      (label, i) => ({
+        label,
+        value: Math.max(50, daily - 10 + i * 3),
+      }),
+    ),
   };
 }

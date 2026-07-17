@@ -1,4 +1,8 @@
-import type { AiPrediction, PredictionType, RiskAssessment } from '@/services/ai-intelligence/types';
+import type {
+  AiPrediction,
+  PredictionType,
+  RiskAssessment,
+} from '@/services/ai-intelligence/types';
 
 export const PREDICTION_TYPES: PredictionType[] = [
   'deterioration',
@@ -29,7 +33,10 @@ export function scoreToRiskLevel(score: number): AiPrediction['riskLevel'] {
   return 'low';
 }
 
-export function computePredictionScore(type: PredictionType, seed: number): number {
+export function computePredictionScore(
+  type: PredictionType,
+  seed: number,
+): number {
   const base = (seed % 100) / 100;
   const modifiers: Record<PredictionType, number> = {
     deterioration: 0.72,
@@ -41,19 +48,24 @@ export function computePredictionScore(type: PredictionType, seed: number): numb
     medication_adherence: 0.38,
     no_show: 0.32,
   };
-  return Math.min(0.99, Math.round((base * modifiers[type]) * 100) / 100);
+  return Math.min(0.99, Math.round(base * modifiers[type] * 100) / 100);
 }
 
 export function buildRiskFactors(category: string, score: number): string[] {
   const common = ['Age', 'Comorbidities', 'Recent vitals trend'];
   if (score > 0.7) return [...common, 'Prior admissions', 'Lab abnormalities'];
-  if (category.includes('Sepsis')) return [...common, 'Elevated lactate', 'Hypotension'];
+  if (category.includes('Sepsis'))
+    return [...common, 'Elevated lactate', 'Hypotension'];
   return common;
 }
 
 export function aggregateRiskScore(assessments: RiskAssessment[]): number {
   if (assessments.length === 0) return 0;
-  return Math.round((assessments.reduce((s, a) => s + a.score, 0) / assessments.length) * 100) / 100;
+  return (
+    Math.round(
+      (assessments.reduce((s, a) => s + a.score, 0) / assessments.length) * 100,
+    ) / 100
+  );
 }
 
 export function toFhirRiskAssessment(assessment: RiskAssessment) {
@@ -63,6 +75,11 @@ export function toFhirRiskAssessment(assessment: RiskAssessment) {
     status: 'final',
     subject: { reference: `Patient/${assessment.patientId}` },
     occurrenceDateTime: assessment.assessedAt,
-    prediction: [{ outcome: { text: assessment.category }, probabilityDecimal: assessment.score }],
+    prediction: [
+      {
+        outcome: { text: assessment.category },
+        probabilityDecimal: assessment.score,
+      },
+    ],
   };
 }

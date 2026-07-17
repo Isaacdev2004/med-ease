@@ -2,8 +2,15 @@ export { telemedicineService } from '@/services/telemedicine/telemedicine.servic
 export { telemedicineRepository } from '@/services/telemedicine/repository';
 export { telemedicineOfflineQueue } from '@/services/telemedicine/offline-sync';
 export { computeTelemedicineAnalytics } from '@/services/telemedicine/analytics';
-export { getVideoAdapter, startVideo, stopVideo } from '@/services/telemedicine/video';
-export { runDeviceCheck, measureBandwidth } from '@/services/telemedicine/bandwidth';
+export {
+  getVideoAdapter,
+  startVideo,
+  stopVideo,
+} from '@/services/telemedicine/video';
+export {
+  runDeviceCheck,
+  measureBandwidth,
+} from '@/services/telemedicine/bandwidth';
 export {
   toFhirEncounter,
   toFhirCommunication,
@@ -43,4 +50,7 @@ export type {
   SaveClinicalNoteInput,
   UploadFileInput,
 } from '@/services/telemedicine/types';
-export { AUTH_USER_PATIENT_MAP, TELEMEDICINE_PATIENT_IDS } from '@/services/telemedicine/types';
+export {
+  AUTH_USER_PATIENT_MAP,
+  TELEMEDICINE_PATIENT_IDS,
+} from '@/services/telemedicine/types';

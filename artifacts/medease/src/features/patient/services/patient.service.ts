@@ -40,9 +40,15 @@ export const patientService = {
   },
 
   async getAppointments(patientId: string): Promise<Appointment[]> {
-    const { appointmentService } = await import('@/services/appointments/appointment.service');
-    const phrId = await appointmentService.resolvePatientId(patientId, undefined);
-    const list = await appointmentService.getUpcoming({ patientId: phrId ?? 'phr-001' });
+    const { appointmentService } =
+      await import('@/services/appointments/appointment.service');
+    const phrId = await appointmentService.resolvePatientId(
+      patientId,
+      undefined,
+    );
+    const list = await appointmentService.getUpcoming({
+      patientId: phrId ?? 'phr-001',
+    });
     return list.map((a) => ({
       id: a.id,
       patientId: a.patient.id,
@@ -50,7 +56,12 @@ export const patientService = {
       specialty: a.specialty,
       scheduledAt: a.scheduledAt,
       location: `${a.facility.name}, ${a.room}`,
-      status: a.status === 'completed' ? 'completed' : a.status === 'cancelled' ? 'cancelled' : 'scheduled',
+      status:
+        a.status === 'completed'
+          ? 'completed'
+          : a.status === 'cancelled'
+            ? 'cancelled'
+            : 'scheduled',
     }));
   },
 
@@ -59,7 +70,10 @@ export const patientService = {
     scheduledAt: string,
   ): Promise<Appointment> {
     const dashboard = await this.getDashboard('user-patient');
-    if (!dashboard.nextAppointment || dashboard.nextAppointment.id !== appointmentId) {
+    if (
+      !dashboard.nextAppointment ||
+      dashboard.nextAppointment.id !== appointmentId
+    ) {
       throw new Error('Appointment not found');
     }
 

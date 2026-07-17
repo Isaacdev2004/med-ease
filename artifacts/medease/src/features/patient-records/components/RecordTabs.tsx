@@ -51,18 +51,27 @@ interface RecordTabsProps {
 export function RecordTabs({ basePath, medicationsOnly }: RecordTabsProps) {
   const [location] = useLocation();
   const tabs = medicationsOnly
-    ? PATIENT_TABS.filter((t) => t.segment === '' || t.segment === 'medications')
+    ? PATIENT_TABS.filter(
+        (t) => t.segment === '' || t.segment === 'medications',
+      )
     : PATIENT_TABS;
 
   function isActive(segment: RecordSection | '') {
     if (segment === '') {
-      return location === basePath || location.endsWith('/records') || location.match(/\/patient\/[^/]+$/);
+      return (
+        location === basePath ||
+        location.endsWith('/records') ||
+        location.match(/\/patient\/[^/]+$/)
+      );
     }
     return location.endsWith(`/${segment}`);
   }
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Health record sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Health record sections"
+    >
       {tabs.map((tab) => {
         const href = tab.segment ? `${basePath}/${tab.segment}` : basePath;
         return (
@@ -88,9 +97,25 @@ export function RecordTabs({ basePath, medicationsOnly }: RecordTabsProps) {
 export function getSectionFromPath(pathname: string): RecordSection {
   const segment = pathname.split('/').filter(Boolean).pop() ?? '';
   const valid: RecordSection[] = [
-    'profile', 'summary', 'vitals', 'laboratory', 'medications', 'allergies',
-    'immunizations', 'procedures', 'radiology', 'timeline', 'documents', 'emergency',
-    'notes', 'care-plans', 'family-history', 'lifestyle', 'social-history',
+    'profile',
+    'summary',
+    'vitals',
+    'laboratory',
+    'medications',
+    'allergies',
+    'immunizations',
+    'procedures',
+    'radiology',
+    'timeline',
+    'documents',
+    'emergency',
+    'notes',
+    'care-plans',
+    'family-history',
+    'lifestyle',
+    'social-history',
   ];
-  return valid.includes(segment as RecordSection) ? (segment as RecordSection) : 'dashboard';
+  return valid.includes(segment as RecordSection)
+    ? (segment as RecordSection)
+    : 'dashboard';
 }

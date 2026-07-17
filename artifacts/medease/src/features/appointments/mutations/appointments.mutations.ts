@@ -13,7 +13,10 @@ import type {
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (!navigator.onLine) {
-    appointmentOfflineQueue.enqueue({ label, execute: () => execute().then(() => undefined) });
+    appointmentOfflineQueue.enqueue({
+      label,
+      execute: () => execute().then(() => undefined),
+    });
     appToast.offline('Appointment update queued until you are back online.');
     return Promise.resolve(null);
   }
@@ -32,7 +35,10 @@ export function useAppointmentMutations() {
       runOrQueue('Book appointment', () => appointmentService.book(input)),
     onSuccess: () => {
       invalidateAll(client);
-      appToast.success({ title: 'Appointment booked', description: 'Your appointment has been scheduled.' });
+      appToast.success({
+        title: 'Appointment booked',
+        description: 'Your appointment has been scheduled.',
+      });
     },
     onError: (err: Error) => {
       appToast.error({ title: 'Booking failed', description: err.message });
@@ -50,7 +56,9 @@ export function useAppointmentMutations() {
 
   const reschedule = useMutation({
     mutationFn: (input: RescheduleAppointmentInput) =>
-      runOrQueue('Reschedule appointment', () => appointmentService.reschedule(input)),
+      runOrQueue('Reschedule appointment', () =>
+        appointmentService.reschedule(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Appointment rescheduled' });

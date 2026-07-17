@@ -21,10 +21,20 @@ export function MedicationStats({ stats, loading }: MedicationStatsProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <StatCard label="Total Medications" value={stats.total} icon={BookOpen} />
-      <MetricCard title="Prescription" value={stats.prescription} status="warning" />
-      <StatCard label="Over-the-counter" value={stats.overTheCounter} icon={Pill} />
+      <MetricCard
+        title="Prescription"
+        value={stats.prescription}
+        status="warning"
+      />
+      <StatCard
+        label="Over-the-counter"
+        value={stats.overTheCounter}
+        icon={Pill}
+      />
       <StatCard label="Your Favorites" value={stats.favorites} icon={Heart} />
-      <div className="hidden"><Shield /></div>
+      <div className="hidden">
+        <Shield />
+      </div>
     </div>
   );
 }

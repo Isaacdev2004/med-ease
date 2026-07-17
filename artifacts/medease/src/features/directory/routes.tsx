@@ -1,7 +1,8 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
 const directoryPage = () => import('@/features/directory/pages/DirectoryPage');
-const profilePage = () => import('@/features/directory/pages/ProviderProfilePage');
+const profilePage = () =>
+  import('@/features/directory/pages/ProviderProfilePage');
 
 /** Shared directory routes for any portal. Register category routes before the :providerId route. */
 export function createDirectoryRoutes(options: {

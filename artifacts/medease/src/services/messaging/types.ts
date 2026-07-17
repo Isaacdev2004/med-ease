@@ -1,6 +1,9 @@
-export type MessageChannel = 'sms' | 'email' | 'push' | 'whatsapp' | 'teams' | 'slack' | 'in_app';
-export type MessageStatus = 'draft' | 'queued' | 'sent' | 'delivered' | 'read' | 'failed' | 'bounced';
-export type CampaignStatus = 'draft' | 'scheduled' | 'running' | 'completed' | 'cancelled';
+export type MessageChannel =
+  'sms' | 'email' | 'push' | 'whatsapp' | 'teams' | 'slack' | 'in_app';
+export type MessageStatus =
+  'draft' | 'queued' | 'sent' | 'delivered' | 'read' | 'failed' | 'bounced';
+export type CampaignStatus =
+  'draft' | 'scheduled' | 'running' | 'completed' | 'cancelled';
 export type BroadcastStatus = 'draft' | 'scheduled' | 'sent' | 'cancelled';
 export type ChannelHealth = 'healthy' | 'degraded' | 'offline';
 

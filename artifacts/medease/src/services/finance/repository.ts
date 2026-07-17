@@ -1,10 +1,20 @@
 import { computeFinanceAnalytics } from '@/services/finance/analytics';
-import { calculateAPAging, threeWayMatch } from '@/services/finance/accounts-payable';
+import {
+  calculateAPAging,
+  threeWayMatch,
+} from '@/services/finance/accounts-payable';
 import { calculateARAging } from '@/services/finance/accounts-receivable';
-import { cashForecast, reconcileVariance } from '@/services/finance/cash-management';
+import {
+  cashForecast,
+  reconcileVariance,
+} from '@/services/finance/cash-management';
 import { budgetVarianceSummary } from '@/services/finance/budgeting';
 import { disposeAsset } from '@/services/finance/fixed-assets';
-import { buildBalanceSheet, buildCashFlowStatement, buildProfitAndLoss } from '@/services/finance/financial-reports';
+import {
+  buildBalanceSheet,
+  buildCashFlowStatement,
+  buildProfitAndLoss,
+} from '@/services/finance/financial-reports';
 import {
   buildFinanceDashboard,
   buildTrialBalance,
@@ -39,7 +49,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -60,19 +75,32 @@ class FinanceRepository {
 
   getChartOfAccounts(filters?: FinanceFilters) {
     let items = MOCK_CHART_OF_ACCOUNTS;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
-    if (filters?.accountType) items = items.filter((a) => a.type === filters.accountType);
-    if (filters?.q) items = items.filter((a) => matchQ(filters.q, a.code, a.name));
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.accountType)
+      items = items.filter((a) => a.type === filters.accountType);
+    if (filters?.q)
+      items = items.filter((a) => matchQ(filters.q, a.code, a.name));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getJournalEntries(filters?: FinanceFilters) {
     let items = this.journals;
-    if (filters?.facilityId) items = items.filter((j) => j.facilityId === filters.facilityId);
-    if (filters?.fiscalPeriodId) items = items.filter((j) => j.fiscalPeriodId === filters.fiscalPeriodId);
-    if (filters?.status) items = items.filter((j) => j.status === filters.status);
-    if (filters?.q) items = items.filter((j) => matchQ(filters.q, j.entryNumber, j.description));
-    return paginate([...items].sort((a, b) => b.entryDate.localeCompare(a.entryDate)), filters?.page, filters?.pageSize);
+    if (filters?.facilityId)
+      items = items.filter((j) => j.facilityId === filters.facilityId);
+    if (filters?.fiscalPeriodId)
+      items = items.filter((j) => j.fiscalPeriodId === filters.fiscalPeriodId);
+    if (filters?.status)
+      items = items.filter((j) => j.status === filters.status);
+    if (filters?.q)
+      items = items.filter((j) =>
+        matchQ(filters.q, j.entryNumber, j.description),
+      );
+    return paginate(
+      [...items].sort((a, b) => b.entryDate.localeCompare(a.entryDate)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getJournal(journalId: string) {
@@ -82,8 +110,10 @@ class FinanceRepository {
   getLedger(filters?: FinanceFilters) {
     const posted = this.journals.filter((j) => j.status === 'posted');
     let items = posted;
-    if (filters?.facilityId) items = items.filter((j) => j.facilityId === filters.facilityId);
-    if (filters?.fiscalPeriodId) items = items.filter((j) => j.fiscalPeriodId === filters.fiscalPeriodId);
+    if (filters?.facilityId)
+      items = items.filter((j) => j.facilityId === filters.facilityId);
+    if (filters?.fiscalPeriodId)
+      items = items.filter((j) => j.fiscalPeriodId === filters.fiscalPeriodId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -97,57 +127,78 @@ class FinanceRepository {
 
   getAccountsPayable(filters?: FinanceFilters) {
     let items = this.vendorBills;
-    if (filters?.facilityId) items = items.filter((b) => b.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((b) => b.status === filters.status);
-    if (filters?.q) items = items.filter((b) => matchQ(filters.q, b.billNumber, b.vendorName));
+    if (filters?.facilityId)
+      items = items.filter((b) => b.facilityId === filters.facilityId);
+    if (filters?.status)
+      items = items.filter((b) => b.status === filters.status);
+    if (filters?.q)
+      items = items.filter((b) =>
+        matchQ(filters.q, b.billNumber, b.vendorName),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getAccountsReceivable(filters?: FinanceFilters) {
     let items = this.receivables;
-    if (filters?.facilityId) items = items.filter((r) => r.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((r) => r.status === filters.status);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.customerName, r.invoiceId));
+    if (filters?.facilityId)
+      items = items.filter((r) => r.facilityId === filters.facilityId);
+    if (filters?.status)
+      items = items.filter((r) => r.status === filters.status);
+    if (filters?.q)
+      items = items.filter((r) =>
+        matchQ(filters.q, r.customerName, r.invoiceId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getCashAccounts(filters?: FinanceFilters) {
     let items = MOCK_CASH_ACCOUNTS;
-    if (filters?.facilityId) items = items.filter((c) => c.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((c) => c.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getBankAccounts(filters?: FinanceFilters) {
     let items = this.bankAccounts;
-    if (filters?.facilityId) items = items.filter((b) => b.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((b) => b.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getBudgets(filters?: FinanceFilters) {
     let items = this.budgets;
-    if (filters?.facilityId) items = items.filter((b) => b.facilityId === filters.facilityId);
-    if (filters?.departmentId) items = items.filter((b) => b.departmentId === filters.departmentId);
-    if (filters?.status) items = items.filter((b) => b.status === filters.status);
+    if (filters?.facilityId)
+      items = items.filter((b) => b.facilityId === filters.facilityId);
+    if (filters?.departmentId)
+      items = items.filter((b) => b.departmentId === filters.departmentId);
+    if (filters?.status)
+      items = items.filter((b) => b.status === filters.status);
     if (filters?.q) items = items.filter((b) => matchQ(filters.q, b.name));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getBudgetVariance(facilityId?: string) {
-    const items = facilityId ? this.budgets.filter((b) => b.facilityId === facilityId) : this.budgets;
+    const items = facilityId
+      ? this.budgets.filter((b) => b.facilityId === facilityId)
+      : this.budgets;
     return budgetVarianceSummary(items);
   }
 
   getFixedAssets(filters?: FinanceFilters) {
     let items = this.assets;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((a) => a.status === filters.status);
-    if (filters?.q) items = items.filter((a) => matchQ(filters.q, a.name, a.assetTag));
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.status)
+      items = items.filter((a) => a.status === filters.status);
+    if (filters?.q)
+      items = items.filter((a) => matchQ(filters.q, a.name, a.assetTag));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getDepreciation(filters?: FinanceFilters) {
     let items = MOCK_DEPRECIATION;
-    if (filters?.fiscalPeriodId) items = items.filter((d) => d.periodId === filters.fiscalPeriodId);
+    if (filters?.fiscalPeriodId)
+      items = items.filter((d) => d.periodId === filters.fiscalPeriodId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -164,14 +215,23 @@ class FinanceRepository {
         title: 'Trial Balance',
         asOfDate: date,
         facilityId,
-        lines: trialBalance.map((l) => ({ label: `${l.accountCode} ${l.accountName}`, amount: l.balance, category: l.accountType })),
-        totals: { debit: trialBalance.reduce((s, l) => s + l.debit, 0), credit: trialBalance.reduce((s, l) => s + l.credit, 0) },
+        lines: trialBalance.map((l) => ({
+          label: `${l.accountCode} ${l.accountName}`,
+          amount: l.balance,
+          category: l.accountType,
+        })),
+        totals: {
+          debit: trialBalance.reduce((s, l) => s + l.debit, 0),
+          credit: trialBalance.reduce((s, l) => s + l.credit, 0),
+        },
       },
     };
   }
 
   createJournal(input: CreateJournalInput) {
-    const validation = validateDoubleEntry(input.lines.map((l, i) => ({ ...l, lineId: `jl-new-${i}` })));
+    const validation = validateDoubleEntry(
+      input.lines.map((l, i) => ({ ...l, lineId: `jl-new-${i}` })),
+    );
     if (!validation.valid) throw new Error(validation.error);
     const journal: JournalEntry = {
       journalId: `je-${String(++this.nextId)}`,
@@ -180,7 +240,10 @@ class FinanceRepository {
       entryDate: input.entryDate,
       fiscalPeriodId: input.fiscalPeriodId,
       status: 'draft',
-      lines: input.lines.map((l, i) => ({ ...l, lineId: `jl-${this.nextId}-${i}` })),
+      lines: input.lines.map((l, i) => ({
+        ...l,
+        lineId: `jl-${this.nextId}-${i}`,
+      })),
       totalDebit: validation.totalDebit,
       totalCredit: validation.totalCredit,
       facilityId: input.facilityId,
@@ -273,35 +336,57 @@ class FinanceRepository {
         const bill = this.vendorBills[idx]!;
         bill.status = input.amount >= bill.totalAmount ? 'paid' : 'partial';
         this.vendorBills[idx] = bill;
-        return { type: 'ap' as const, record: bill, paymentId: `pay-${++this.nextId}` };
+        return {
+          type: 'ap' as const,
+          record: bill,
+          paymentId: `pay-${++this.nextId}`,
+        };
       }
     }
     if (input.receivableId) {
-      const idx = this.receivables.findIndex((r) => r.receivableId === input.receivableId);
+      const idx = this.receivables.findIndex(
+        (r) => r.receivableId === input.receivableId,
+      );
       if (idx >= 0) {
         const rec = this.receivables[idx]!;
         rec.outstanding = Math.max(0, rec.outstanding - input.amount);
         rec.status = rec.outstanding === 0 ? 'paid' : 'partial';
         this.receivables[idx] = rec;
-        return { type: 'ar' as const, record: rec, paymentId: `pay-${++this.nextId}` };
+        return {
+          type: 'ar' as const,
+          record: rec,
+          paymentId: `pay-${++this.nextId}`,
+        };
       }
     }
     return null;
   }
 
   reconcileBank(input: ReconcileBankInput) {
-    const idx = this.bankAccounts.findIndex((b) => b.bankAccountId === input.bankAccountId);
+    const idx = this.bankAccounts.findIndex(
+      (b) => b.bankAccountId === input.bankAccountId,
+    );
     if (idx < 0) return null;
     const account = this.bankAccounts[idx]!;
     const variance = reconcileVariance(input.statementBalance, account.balance);
     account.lastReconciled = input.statementDate;
-    account.reconciliationStatus = Math.abs(variance) < 1 ? 'reconciled' : 'discrepancy';
+    account.reconciliationStatus =
+      Math.abs(variance) < 1 ? 'reconciled' : 'discrepancy';
     account.balance = input.statementBalance;
     this.bankAccounts[idx] = account;
-    return { account, variance, matchedCount: input.matchedTransactionIds.length };
+    return {
+      account,
+      variance,
+      matchedCount: input.matchedTransactionIds.length,
+    };
   }
 
-  createAsset(input: Omit<FixedAsset, 'assetId' | 'accumulatedDepreciation' | 'netBookValue' | 'status'>) {
+  createAsset(
+    input: Omit<
+      FixedAsset,
+      'assetId' | 'accumulatedDepreciation' | 'netBookValue' | 'status'
+    >,
+  ) {
     const asset: FixedAsset = {
       ...input,
       assetId: `fa-${String(++this.nextId)}`,
@@ -334,26 +419,40 @@ class FinanceRepository {
 
   revenueAnalytics(facilityId?: string) {
     const analytics = computeFinanceAnalytics(facilityId);
-    return { revenue: analytics.revenue, trend: analytics.revenueTrend, byDepartment: analytics.departmentProfitability };
+    return {
+      revenue: analytics.revenue,
+      trend: analytics.revenueTrend,
+      byDepartment: analytics.departmentProfitability,
+    };
   }
 
   expenseAnalytics(facilityId?: string) {
     const analytics = computeFinanceAnalytics(facilityId);
-    return { expenses: analytics.expenses, trend: analytics.expenseTrend, byCostCenter: analytics.costCenterExpenses };
+    return {
+      expenses: analytics.expenses,
+      trend: analytics.expenseTrend,
+      byCostCenter: analytics.costCenterExpenses,
+    };
   }
 
   apAging(facilityId?: string) {
-    const bills = facilityId ? this.vendorBills.filter((b) => b.facilityId === facilityId) : this.vendorBills;
+    const bills = facilityId
+      ? this.vendorBills.filter((b) => b.facilityId === facilityId)
+      : this.vendorBills;
     return calculateAPAging(bills);
   }
 
   arAging(facilityId?: string) {
-    const items = facilityId ? this.receivables.filter((r) => r.facilityId === facilityId) : this.receivables;
+    const items = facilityId
+      ? this.receivables.filter((r) => r.facilityId === facilityId)
+      : this.receivables;
     return calculateARAging(items);
   }
 
   cashForecast(facilityId?: string) {
-    const cash = facilityId ? MOCK_CASH_ACCOUNTS.filter((c) => c.facilityId === facilityId) : MOCK_CASH_ACCOUNTS;
+    const cash = facilityId
+      ? MOCK_CASH_ACCOUNTS.filter((c) => c.facilityId === facilityId)
+      : MOCK_CASH_ACCOUNTS;
     return cashForecast(cash);
   }
 
@@ -365,23 +464,59 @@ class FinanceRepository {
 
   search(query: string, facilityId?: string) {
     const q = query.toLowerCase();
-    const filter = <T extends { facilityId?: string }>(items: T[], ...fields: (string | undefined)[]) =>
-      items.filter((item) => (!facilityId || item.facilityId === facilityId) && fields.some((f) => f?.toLowerCase().includes(q))).slice(0, 15);
+    const filter = <T extends { facilityId?: string }>(
+      items: T[],
+      ...fields: (string | undefined)[]
+    ) =>
+      items
+        .filter(
+          (item) =>
+            (!facilityId || item.facilityId === facilityId) &&
+            fields.some((f) => f?.toLowerCase().includes(q)),
+        )
+        .slice(0, 15);
 
     return {
-      accounts: filter(MOCK_CHART_OF_ACCOUNTS, ...MOCK_CHART_OF_ACCOUNTS.slice(0, 50).flatMap((a) => [a.code, a.name])),
-      journals: filter(this.journals, ...this.journals.slice(0, 100).flatMap((j) => [j.entryNumber, j.description])),
-      bills: filter(this.vendorBills, ...this.vendorBills.slice(0, 100).flatMap((b) => [b.billNumber, b.vendorName])),
-      receivables: filter(this.receivables, ...this.receivables.slice(0, 100).map((r) => r.customerName)),
-      assets: filter(this.assets, ...this.assets.slice(0, 100).flatMap((a) => [a.name, a.assetTag])),
+      accounts: filter(
+        MOCK_CHART_OF_ACCOUNTS,
+        ...MOCK_CHART_OF_ACCOUNTS.slice(0, 50).flatMap((a) => [a.code, a.name]),
+      ),
+      journals: filter(
+        this.journals,
+        ...this.journals
+          .slice(0, 100)
+          .flatMap((j) => [j.entryNumber, j.description]),
+      ),
+      bills: filter(
+        this.vendorBills,
+        ...this.vendorBills
+          .slice(0, 100)
+          .flatMap((b) => [b.billNumber, b.vendorName]),
+      ),
+      receivables: filter(
+        this.receivables,
+        ...this.receivables.slice(0, 100).map((r) => r.customerName),
+      ),
+      assets: filter(
+        this.assets,
+        ...this.assets.slice(0, 100).flatMap((a) => [a.name, a.assetTag]),
+      ),
     };
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.journals.length + this.vendorBills.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.journals.length + this.vendorBills.length,
+    };
   }
 
-  favorite(userId: string, entityType: FinanceFavorite['entityType'], entityId: string) {
+  favorite(
+    userId: string,
+    entityType: FinanceFavorite['entityType'],
+    entityId: string,
+  ) {
     const fav: FinanceFavorite = {
       favoriteId: `fav-${String(++this.nextId)}`,
       userId,

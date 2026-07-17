@@ -3,7 +3,17 @@ import { useLocation } from 'wouter';
 import { InteroperabilityShell } from '@/features/interoperability/components/InteroperabilityShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'interoperability' | 'fhir-servers' | 'interop-hl7' | 'interop-dicom-admin' | 'interop-cda' | 'smart-apps' | 'api-gateway' | 'terminology' | 'integration-audit' | 'interoperability-analytics';
+type Segment =
+  | 'interoperability'
+  | 'fhir-servers'
+  | 'interop-hl7'
+  | 'interop-dicom-admin'
+  | 'interop-cda'
+  | 'smart-apps'
+  | 'api-gateway'
+  | 'terminology'
+  | 'integration-audit'
+  | 'interoperability-analytics';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/fhir-servers')) return 'fhir-servers';
@@ -14,7 +24,8 @@ function resolveSegment(location: string): Segment {
   if (location.includes('/api-gateway')) return 'api-gateway';
   if (location.includes('/terminology')) return 'terminology';
   if (location.includes('/integration-audit')) return 'integration-audit';
-  if (location.includes('/interoperability-analytics')) return 'interoperability-analytics';
+  if (location.includes('/interoperability-analytics'))
+    return 'interoperability-analytics';
   return 'interoperability';
 }
 
@@ -34,5 +45,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminInteroperabilityPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <InteroperabilityShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <InteroperabilityShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

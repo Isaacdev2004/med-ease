@@ -40,5 +40,11 @@ export default function ProfessionalMonitoringPage() {
     devices: 'Device Management',
     analytics: 'Monitoring Analytics',
   };
-  return <MonitoringShell basePath={basePath} variant="clinician" title={titles[segment]} />;
+  return (
+    <MonitoringShell
+      basePath={basePath}
+      variant="clinician"
+      title={titles[segment]}
+    />
+  );
 }

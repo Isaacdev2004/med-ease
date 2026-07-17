@@ -1,10 +1,19 @@
-import type { LabDiagnosticReport, LabObservation, LabOrder } from '@/services/laboratory/types';
+import type {
+  LabDiagnosticReport,
+  LabObservation,
+  LabOrder,
+} from '@/services/laboratory/types';
 
 export function toFhirServiceRequest(order: LabOrder) {
   return {
     resourceType: 'ServiceRequest',
     id: order.id,
-    status: order.status === 'cancelled' ? 'revoked' : order.status === 'completed' ? 'completed' : 'active',
+    status:
+      order.status === 'cancelled'
+        ? 'revoked'
+        : order.status === 'completed'
+          ? 'completed'
+          : 'active',
     intent: 'order',
     priority: order.priority,
     code: { text: order.testNames.join(', ') },
@@ -24,7 +33,9 @@ export function toFhirDiagnosticReport(report: LabDiagnosticReport) {
     code: { text: report.title },
     subject: { reference: `Patient/${report.patientId}` },
     effectiveDateTime: report.releasedAt ?? report.createdAt,
-    result: report.observationIds.map((id) => ({ reference: `Observation/${id}` })),
+    result: report.observationIds.map((id) => ({
+      reference: `Observation/${id}`,
+    })),
     performer: report.verifiedBy ? [{ display: report.verifiedBy }] : undefined,
   };
 }
@@ -34,10 +45,21 @@ export function toFhirObservation(obs: LabObservation) {
     resourceType: 'Observation',
     id: obs.id,
     status: 'final',
-    code: { coding: [{ system: 'http://loinc.org', code: obs.loincCode, display: obs.testName }] },
+    code: {
+      coding: [
+        {
+          system: 'http://loinc.org',
+          code: obs.loincCode,
+          display: obs.testName,
+        },
+      ],
+    },
     subject: { reference: `Patient/${obs.patientId}` },
     effectiveDateTime: obs.resultedAt ?? obs.collectedAt,
-    valueQuantity: obs.numericValue != null ? { value: obs.numericValue, unit: obs.unit } : undefined,
+    valueQuantity:
+      obs.numericValue != null
+        ? { value: obs.numericValue, unit: obs.unit }
+        : undefined,
     valueString: obs.numericValue == null ? obs.value : undefined,
     referenceRange: [{ text: obs.referenceRange }],
     interpretation: [{ text: obs.flag }],

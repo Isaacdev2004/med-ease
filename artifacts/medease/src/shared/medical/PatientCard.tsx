@@ -32,7 +32,12 @@ export function PatientCard({
     .slice(0, 2);
 
   return (
-    <Card className={cn('overflow-hidden hover-elevate transition-all duration-200', className)}>
+    <Card
+      className={cn(
+        'overflow-hidden hover-elevate transition-all duration-200',
+        className,
+      )}
+    >
       <CardContent className="p-4 flex gap-4">
         <Avatar className="h-12 w-12">
           <AvatarFallback>{initials}</AvatarFallback>
@@ -43,7 +48,9 @@ export function PatientCard({
             <StatusBadge status={status} />
           </div>
           <p className="text-sm text-muted-foreground">
-            {[mrn && `MRN ${mrn}`, age && `${age}y`, gender].filter(Boolean).join(' • ')}
+            {[mrn && `MRN ${mrn}`, age && `${age}y`, gender]
+              .filter(Boolean)
+              .join(' • ')}
           </p>
           {subtitle ? (
             <p className="text-xs text-muted-foreground mt-2 flex items-center gap-1">

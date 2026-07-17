@@ -48,25 +48,39 @@ export interface IamRepositoryContract {
   getUsers(filters?: IamFilters): Promise<PaginatedResult<IamUser>>;
   getUser(userId: string): Promise<IamUser>;
   getTenants(filters?: IamFilters): Promise<PaginatedResult<IamTenant>>;
-  getOrganizations(filters?: IamFilters): Promise<PaginatedResult<IamOrganization>>;
+  getOrganizations(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<IamOrganization>>;
   getRoles(filters?: IamFilters): Promise<PaginatedResult<IamRole>>;
   getPermissions(filters?: IamFilters): Promise<PaginatedResult<IamPermission>>;
   getPolicies(filters?: IamFilters): Promise<PaginatedResult<IamPolicy>>;
   getSessions(filters?: IamFilters): Promise<PaginatedResult<IamSession>>;
   getLoginHistory(filters?: IamFilters): Promise<PaginatedResult<LoginAttempt>>;
   getMfaDevices(filters?: IamFilters): Promise<PaginatedResult<MfaDevice>>;
-  getTrustedDevices(filters?: IamFilters): Promise<PaginatedResult<TrustedDevice>>;
+  getTrustedDevices(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<TrustedDevice>>;
   getOauthClients(filters?: IamFilters): Promise<PaginatedResult<OAuthClient>>;
   getApiKeys(filters?: IamFilters): Promise<PaginatedResult<ApiKey>>;
   getConsents(filters?: IamFilters): Promise<PaginatedResult<ConsentRecord>>;
-  getDelegations(filters?: IamFilters): Promise<PaginatedResult<DelegationRecord>>;
+  getDelegations(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<DelegationRecord>>;
   getProxyAccess(filters?: IamFilters): Promise<PaginatedResult<ProxyAccess>>;
-  getBreakGlass(filters?: IamFilters): Promise<PaginatedResult<BreakGlassEvent>>;
+  getBreakGlass(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<BreakGlassEvent>>;
   getAuditEvents(filters?: IamFilters): Promise<PaginatedResult<IamAuditEvent>>;
-  getSecurityIncidents(filters?: IamFilters): Promise<PaginatedResult<SecurityIncident>>;
+  getSecurityIncidents(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<SecurityIncident>>;
   getRiskScores(filters?: IamFilters): Promise<PaginatedResult<RiskScore>>;
-  getSamlProviders(filters?: IamFilters): Promise<PaginatedResult<SamlProvider>>;
-  getOidcProviders(filters?: IamFilters): Promise<PaginatedResult<OidcProvider>>;
+  getSamlProviders(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<SamlProvider>>;
+  getOidcProviders(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<OidcProvider>>;
 
   createUser(input: CreateUserInput): Promise<IamUser>;
   inviteUser(input: InviteUserInput): Promise<IamUser>;
@@ -86,9 +100,20 @@ export interface IamRepositoryContract {
   startBreakGlass(input: StartBreakGlassInput): Promise<BreakGlassEvent>;
   endBreakGlass(input: EndBreakGlassInput): Promise<BreakGlassEvent>;
 
-  search(query: string, tenantId?: string): Promise<{ users: IamUser[]; policies: IamPolicy[] }>;
-  exportData(format: 'csv' | 'pdf' | 'xlsx'): Promise<{ format: 'csv' | 'pdf' | 'xlsx'; exportedAt: string; recordCount: number }>;
-  favorite(userId: string, entityType: IamFavorite['entityType'], entityId: string): Promise<IamFavorite>;
+  search(
+    query: string,
+    tenantId?: string,
+  ): Promise<{ users: IamUser[]; policies: IamPolicy[] }>;
+  exportData(format: 'csv' | 'pdf' | 'xlsx'): Promise<{
+    format: 'csv' | 'pdf' | 'xlsx';
+    exportedAt: string;
+    recordCount: number;
+  }>;
+  favorite(
+    userId: string,
+    entityType: IamFavorite['entityType'],
+    entityId: string,
+  ): Promise<IamFavorite>;
   getFavorites(userId: string): Promise<IamFavorite[]>;
   share(input: ShareIamInput): Promise<{ shared: boolean; recipients: number }>;
 }

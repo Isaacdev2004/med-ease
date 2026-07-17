@@ -1,15 +1,24 @@
-import type { ChatMessage, SendMessageInput } from '@/services/telemedicine/types';
+import type {
+  ChatMessage,
+  SendMessageInput,
+} from '@/services/telemedicine/types';
 
 const typingSessions = new Set<string>();
 
-export function setTyping(sessionId: string, userId: string, isTyping: boolean) {
+export function setTyping(
+  sessionId: string,
+  userId: string,
+  isTyping: boolean,
+) {
   const key = `${sessionId}:${userId}`;
   if (isTyping) typingSessions.add(key);
   else typingSessions.delete(key);
 }
 
 export function getTypingUsers(sessionId: string): string[] {
-  return [...typingSessions].filter((k) => k.startsWith(`${sessionId}:`)).map((k) => k.split(':')[1]!);
+  return [...typingSessions]
+    .filter((k) => k.startsWith(`${sessionId}:`))
+    .map((k) => k.split(':')[1]!);
 }
 
 export function buildMessage(input: SendMessageInput): ChatMessage {
@@ -31,5 +40,7 @@ export function searchMessages(messages: ChatMessage[], query: string) {
 }
 
 export function exportMessages(messages: ChatMessage[]) {
-  return messages.map((m) => `[${m.sentAt}] ${m.senderName}: ${m.content}`).join('\n');
+  return messages
+    .map((m) => `[${m.sentAt}] ${m.senderName}: ${m.content}`)
+    .join('\n');
 }

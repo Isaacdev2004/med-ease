@@ -23,14 +23,38 @@ const FACILITY_TABS: Tab[] = [
 const ADMIN_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Documents', path: 'documents' },
   { segment: 'document-library', label: 'Library', path: 'document-library' },
-  { segment: 'document-templates', label: 'Templates', path: 'document-templates' },
-  { segment: 'document-categories', label: 'Categories', path: 'document-categories' },
-  { segment: 'records-management', label: 'Records', path: 'records-management' },
-  { segment: 'retention-policies', label: 'Retention', path: 'retention-policies' },
+  {
+    segment: 'document-templates',
+    label: 'Templates',
+    path: 'document-templates',
+  },
+  {
+    segment: 'document-categories',
+    label: 'Categories',
+    path: 'document-categories',
+  },
+  {
+    segment: 'records-management',
+    label: 'Records',
+    path: 'records-management',
+  },
+  {
+    segment: 'retention-policies',
+    label: 'Retention',
+    path: 'retention-policies',
+  },
   { segment: 'legal-holds', label: 'Legal Holds', path: 'legal-holds' },
   { segment: 'document-search', label: 'Search', path: 'document-search' },
-  { segment: 'document-analytics', label: 'Analytics', path: 'document-analytics' },
-  { segment: 'signature-center', label: 'Signatures', path: 'signature-center' },
+  {
+    segment: 'document-analytics',
+    label: 'Analytics',
+    path: 'document-analytics',
+  },
+  {
+    segment: 'signature-center',
+    label: 'Signatures',
+    path: 'signature-center',
+  },
 ];
 
 interface DocumentTabsProps {
@@ -44,17 +68,33 @@ function getTabs(variant: DocumentTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function DocumentTabs({ basePath: _basePath, variant = 'professional' }: DocumentTabsProps) {
+export function DocumentTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: DocumentTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Document sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Document sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.path} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.path}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );

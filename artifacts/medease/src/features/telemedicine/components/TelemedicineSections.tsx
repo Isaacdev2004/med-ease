@@ -33,34 +33,62 @@ import { LoadingView } from '@/shared/components';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { Video } from 'lucide-react';
 
-export function DashboardSection({ filters }: { filters?: TelemedicineFilters }) {
-  const dashboard = useTelemedicineDashboard(filters?.patientId, filters?.clinicianId);
+export function DashboardSection({
+  filters,
+}: {
+  filters?: TelemedicineFilters;
+}) {
+  const dashboard = useTelemedicineDashboard(
+    filters?.patientId,
+    filters?.clinicianId,
+  );
   if (dashboard.isLoading) return <LoadingView label="Loading telemedicine…" />;
-  if (!dashboard.data) return <EmptyState icon={Video} title="No telemedicine data" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Video} title="No telemedicine data" />;
   return (
     <div className="space-y-6">
       <TelemedicineMetrics dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {dashboard.data.recentSessions.map((s) => <SessionCard key={s.sessionId} session={s} />)}
+        {dashboard.data.recentSessions.map((s) => (
+          <SessionCard key={s.sessionId} session={s} />
+        ))}
       </div>
     </div>
   );
 }
 
-export function UpcomingSection({ filters }: { filters?: TelemedicineFilters }) {
+export function UpcomingSection({
+  filters,
+}: {
+  filters?: TelemedicineFilters;
+}) {
   const query = useSessions({ ...filters, status: 'scheduled' });
   if (query.isLoading) return <LoadingView />;
   const items = query.data?.items ?? [];
-  if (!items.length) return <EmptyState icon={Video} title="No upcoming visits" />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{items.slice(0, 12).map((s) => <SessionCard key={s.sessionId} session={s} />)}</div>;
+  if (!items.length)
+    return <EmptyState icon={Video} title="No upcoming visits" />;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {items.slice(0, 12).map((s) => (
+        <SessionCard key={s.sessionId} session={s} />
+      ))}
+    </div>
+  );
 }
 
 export function HistorySection({ filters }: { filters?: TelemedicineFilters }) {
   const query = useSessions({ ...filters, status: 'completed' });
   if (query.isLoading) return <LoadingView />;
   const items = query.data?.items ?? [];
-  if (!items.length) return <EmptyState icon={Video} title="No visit history" />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{items.slice(0, 12).map((s) => <SessionCard key={s.sessionId} session={s} />)}</div>;
+  if (!items.length)
+    return <EmptyState icon={Video} title="No visit history" />;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {items.slice(0, 12).map((s) => (
+        <SessionCard key={s.sessionId} session={s} />
+      ))}
+    </div>
+  );
 }
 
 export function SessionDetailSection({ sessionId }: { sessionId: string }) {
@@ -78,11 +106,27 @@ export function SessionDetailSection({ sessionId }: { sessionId: string }) {
       <VideoWindow session={s} />
       <ParticipantGrid participants={participants.data ?? []} />
       <div className="flex gap-2">
-        <button type="button" className="text-sm underline" onClick={() => void joinSession.mutateAsync({ sessionId, participantId: 'self' })}>Join</button>
-        <button type="button" className="text-sm underline" onClick={() => void leaveSession.mutateAsync(sessionId)}>Leave</button>
+        <button
+          type="button"
+          className="text-sm underline"
+          onClick={() =>
+            void joinSession.mutateAsync({ sessionId, participantId: 'self' })
+          }
+        >
+          Join
+        </button>
+        <button
+          type="button"
+          className="text-sm underline"
+          onClick={() => void leaveSession.mutateAsync(sessionId)}
+        >
+          Leave
+        </button>
       </div>
       <ChatPanel messages={messages.data ?? []} />
-      {(notes.data ?? []).map((n) => <ClinicalNotesPanel key={n.id} note={n} />)}
+      {(notes.data ?? []).map((n) => (
+        <ClinicalNotesPanel key={n.id} note={n} />
+      ))}
       <SessionTimeline entries={timeline.data ?? []} />
       <VisitSummaryCard session={s} />
     </div>
@@ -94,7 +138,8 @@ export function WaitingRoomSection() {
   const { admitWaitingRoom, rejectWaitingRoom } = useTelemedicineMutations();
   if (query.isLoading) return <LoadingView />;
   const entries = query.data ?? [];
-  if (!entries.length) return <EmptyState icon={Video} title="Waiting room empty" />;
+  if (!entries.length)
+    return <EmptyState icon={Video} title="Waiting room empty" />;
   return (
     <VirtualWaitingRoom
       entries={entries}
@@ -107,7 +152,8 @@ export function WaitingRoomSection() {
 export function DeviceCheckSection({ sessionId }: { sessionId?: string }) {
   const query = useDeviceCheck(sessionId);
   if (query.isLoading) return <LoadingView />;
-  if (!query.data) return <EmptyState icon={Video} title="Device check unavailable" />;
+  if (!query.data)
+    return <EmptyState icon={Video} title="Device check unavailable" />;
   return <DeviceCheckCard result={query.data} />;
 }
 
@@ -129,20 +175,47 @@ export function RecordingsSection({ sessionId }: { sessionId?: string }) {
   if (query.isLoading) return <LoadingView />;
   const recs = query.data ?? [];
   if (!recs.length) return <EmptyState icon={Video} title="No recordings" />;
-  return <div className="grid gap-4 sm:grid-cols-2">{recs.slice(0, 8).map((r) => <RecordingPanel key={r.id} recording={r} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      {recs.slice(0, 8).map((r) => (
+        <RecordingPanel key={r.id} recording={r} />
+      ))}
+    </div>
+  );
 }
 
-export function SessionsSection({ filters }: { filters?: TelemedicineFilters }) {
+export function SessionsSection({
+  filters,
+}: {
+  filters?: TelemedicineFilters;
+}) {
   const query = useSessions(filters);
   if (query.isLoading) return <LoadingView />;
   const items = query.data?.items ?? [];
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{items.slice(0, 15).map((s) => <SessionCard key={s.sessionId} session={s} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {items.slice(0, 15).map((s) => (
+        <SessionCard key={s.sessionId} session={s} />
+      ))}
+    </div>
+  );
 }
 
 export type TelemedicineSection =
-  | 'dashboard' | 'upcoming' | 'history' | 'session' | 'device-check'
-  | 'waiting-room' | 'current-session' | 'availability' | 'sessions'
-  | 'providers' | 'analytics' | 'platform-health' | 'recordings' | 'chat';
+  | 'dashboard'
+  | 'upcoming'
+  | 'history'
+  | 'session'
+  | 'device-check'
+  | 'waiting-room'
+  | 'current-session'
+  | 'availability'
+  | 'sessions'
+  | 'providers'
+  | 'analytics'
+  | 'platform-health'
+  | 'recordings'
+  | 'chat';
 
 export function TelemedicineSectionContent({
   section,
@@ -154,16 +227,35 @@ export function TelemedicineSectionContent({
   sessionId?: string;
 }) {
   switch (section) {
-    case 'upcoming': return <UpcomingSection filters={filters} />;
-    case 'history': return <HistorySection filters={filters} />;
-    case 'session': return sessionId ? <SessionDetailSection sessionId={sessionId} /> : <DashboardSection filters={filters} />;
-    case 'device-check': return <DeviceCheckSection />;
-    case 'waiting-room': return <WaitingRoomSection />;
-    case 'current-session': return <SessionsSection filters={{ ...filters, status: 'in_progress' }} />;
-    case 'availability': case 'providers': return <AvailabilitySection />;
-    case 'analytics': case 'platform-health': return <AnalyticsSection />;
-    case 'sessions': return <SessionsSection filters={filters} />;
-    case 'recordings': return <RecordingsSection sessionId={sessionId} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'upcoming':
+      return <UpcomingSection filters={filters} />;
+    case 'history':
+      return <HistorySection filters={filters} />;
+    case 'session':
+      return sessionId ? (
+        <SessionDetailSection sessionId={sessionId} />
+      ) : (
+        <DashboardSection filters={filters} />
+      );
+    case 'device-check':
+      return <DeviceCheckSection />;
+    case 'waiting-room':
+      return <WaitingRoomSection />;
+    case 'current-session':
+      return (
+        <SessionsSection filters={{ ...filters, status: 'in_progress' }} />
+      );
+    case 'availability':
+    case 'providers':
+      return <AvailabilitySection />;
+    case 'analytics':
+    case 'platform-health':
+      return <AnalyticsSection />;
+    case 'sessions':
+      return <SessionsSection filters={filters} />;
+    case 'recordings':
+      return <RecordingsSection sessionId={sessionId} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

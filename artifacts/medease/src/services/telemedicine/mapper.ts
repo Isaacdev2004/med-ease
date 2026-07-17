@@ -1,4 +1,9 @@
-import type { ChatMessage, ClinicalNote, SessionAttachment, TelemedicineSession } from '@/services/telemedicine/types';
+import type {
+  ChatMessage,
+  ClinicalNote,
+  SessionAttachment,
+  TelemedicineSession,
+} from '@/services/telemedicine/types';
 
 export function toFhirEncounter(session: TelemedicineSession) {
   return {
@@ -7,8 +12,13 @@ export function toFhirEncounter(session: TelemedicineSession) {
     status: session.status === 'completed' ? 'finished' : 'in-progress',
     class: { code: 'VR', display: 'virtual' },
     subject: { reference: `Patient/${session.patientId}` },
-    participant: [{ individual: { reference: `Practitioner/${session.clinicianId}` } }],
-    period: { start: session.actualStart ?? session.scheduledStart, end: session.actualEnd },
+    participant: [
+      { individual: { reference: `Practitioner/${session.clinicianId}` } },
+    ],
+    period: {
+      start: session.actualStart ?? session.scheduledStart,
+      end: session.actualEnd,
+    },
   };
 }
 
@@ -33,7 +43,11 @@ export function toFhirCommunicationRequest(session: TelemedicineSession) {
   };
 }
 
-export function toFhirMedia(recording: { id: string; sessionId: string; storageUrl?: string }) {
+export function toFhirMedia(recording: {
+  id: string;
+  sessionId: string;
+  storageUrl?: string;
+}) {
   return {
     resourceType: 'Media' as const,
     id: recording.id,

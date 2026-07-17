@@ -37,7 +37,12 @@ export function mapPatientRepositoryError(error: unknown): never {
 }
 
 export function assertValidPagination(page: number, pageSize: number): void {
-  if (!Number.isFinite(page) || page < 1 || !Number.isFinite(pageSize) || pageSize < 1) {
+  if (
+    !Number.isFinite(page) ||
+    page < 1 ||
+    !Number.isFinite(pageSize) ||
+    pageSize < 1
+  ) {
     throw new ValidationError('Invalid pagination parameters');
   }
 }

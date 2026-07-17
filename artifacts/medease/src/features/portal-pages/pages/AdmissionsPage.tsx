@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_ADMISSIONS, type AdmissionRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_ADMISSIONS,
+  type AdmissionRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -20,7 +23,10 @@ const columns: DataTableColumn<AdmissionRow>[] = [
     id: 'priority',
     header: 'Priority',
     cell: (row) => (
-      <PortalStatusBadge label={row.priority} variant={row.priority === 'urgent' ? 'destructive' : 'secondary'} />
+      <PortalStatusBadge
+        label={row.priority}
+        variant={row.priority === 'urgent' ? 'destructive' : 'secondary'}
+      />
     ),
   },
   {
@@ -40,13 +46,22 @@ export default function AdmissionsPage() {
     <PageShell
       title="Admissions"
       subtitle="Manage inpatient admissions and bed assignments."
-      primaryAction={<PortalActionButton label="New admission" successTitle="Admission created" />}
+      primaryAction={
+        <PortalActionButton
+          label="New admission"
+          successTitle="Admission created"
+        />
+      }
     >
       <PortalMetricsGrid
         metrics={[
           { title: 'Pending', value: pending, status: 'observation' },
           { title: 'Admitted today', value: admitted, status: 'stable' },
-          { title: 'Avg. wait time', value: '38 min', description: 'Emergency to ward' },
+          {
+            title: 'Avg. wait time',
+            value: '38 min',
+            description: 'Emergency to ward',
+          },
           { title: 'Capacity', value: '87%', status: 'observation' },
         ]}
       />
@@ -64,7 +79,9 @@ export default function AdmissionsPage() {
               onClick={() => {
                 setAdmissions((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'admitted' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'admitted' as const }
+                      : item,
                   ),
                 );
               }}

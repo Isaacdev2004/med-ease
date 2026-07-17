@@ -42,11 +42,17 @@ function resolveAuditAction(payload: AuditRecordPayload): AuditActionName {
     return normalized;
   }
 
-  if (payload.action === 'start_break_glass' || payload.action === 'end_break_glass') {
+  if (
+    payload.action === 'start_break_glass' ||
+    payload.action === 'end_break_glass'
+  ) {
     return 'BREAK_GLASS';
   }
 
-  if (payload.eventType === 'login_success' || payload.eventType === 'login_failure') {
+  if (
+    payload.eventType === 'login_success' ||
+    payload.eventType === 'login_failure'
+  ) {
     return 'LOGIN';
   }
 
@@ -74,7 +80,8 @@ export async function persistAuditRecord(
       await tx.securityEvent.create({
         data: {
           id: newId(),
-          tenantId: tenantId === envelope.tenantId ? tenantId : payload.tenantId,
+          tenantId:
+            tenantId === envelope.tenantId ? tenantId : payload.tenantId,
           userId: payload.userId ?? envelope.actorId,
           sessionId: payload.sessionId ?? envelope.sessionId,
           eventType: payload.eventType,
@@ -88,7 +95,9 @@ export async function persistAuditRecord(
 
     case 'iam_audit_log': {
       if (!payload.action || !payload.resourceType || !payload.resourceId) {
-        throw new Error('iam_audit_log payload requires action, resourceType, and resourceId');
+        throw new Error(
+          'iam_audit_log payload requires action, resourceType, and resourceId',
+        );
       }
 
       await tx.iamAuditLog.create({
@@ -132,7 +141,9 @@ export async function persistAuditRecord(
     }
 
     default:
-      throw new Error(`Unknown audit record kind: ${(payload as AuditRecordPayload).kind}`);
+      throw new Error(
+        `Unknown audit record kind: ${(payload as AuditRecordPayload).kind}`,
+      );
   }
 }
 

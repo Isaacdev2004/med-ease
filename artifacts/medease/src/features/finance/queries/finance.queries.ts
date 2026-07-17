@@ -10,17 +10,23 @@ export const financeQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   accounts: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.accounts(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.accounts(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getChartOfAccounts(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   journals: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.journals(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.journals(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getJournalEntries(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   ledger: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.ledger(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.ledger(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getLedger(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -30,27 +36,37 @@ export const financeQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   accountsPayable: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.accountsPayable(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.accountsPayable(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getAccountsPayable(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   accountsReceivable: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.accountsReceivable(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.accountsReceivable(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getAccountsReceivable(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   cash: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.cash(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.cash(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getCashAccounts(filters),
     staleTime: CACHE_TIMES.dashboard,
   }),
   banks: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.banks(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.banks(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getBankAccounts(filters),
     staleTime: CACHE_TIMES.dashboard,
   }),
   budgets: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.budgets(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.budgets(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getBudgets(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -60,12 +76,16 @@ export const financeQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   assets: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.assets(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.assets(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getFixedAssets(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   depreciation: (filters?: FinanceFilters) => ({
-    queryKey: queryKeys.finance.depreciation(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.finance.depreciation(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => financeService.getDepreciation(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

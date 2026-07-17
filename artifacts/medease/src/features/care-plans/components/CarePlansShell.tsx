@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { CarePlanSectionContent } from '@/features/care-plans/components/CarePlanSections';
-import { CarePlanTabs, getCarePlanSectionFromPath } from '@/features/care-plans/components/CarePlanTabs';
+import {
+  CarePlanTabs,
+  getCarePlanSectionFromPath,
+} from '@/features/care-plans/components/CarePlanTabs';
 import { useCarePlanPermissions } from '@/features/care-plans/hooks/use-care-plan-permissions';
 import { usePatientCarePlanContext } from '@/features/care-plans/hooks/use-care-plans';
 import type { CarePlanFilters } from '@/services/care-plans/types';
@@ -28,14 +31,19 @@ export function CarePlansShell({
   const section = getCarePlanSectionFromPath(location);
 
   const scopedFilters = useMemo((): CarePlanFilters => {
-    const patientId = explicitPatientId ?? (variant === 'patient' ? patientResolve.data ?? undefined : undefined);
+    const patientId =
+      explicitPatientId ??
+      (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
     return patientId ? { patientId } : {};
   }, [explicitPatientId, patientResolve.data, variant]);
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view care plans." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view care plans."
+        />
       </PageShell>
     );
   }

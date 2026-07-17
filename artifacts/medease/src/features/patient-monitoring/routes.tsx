@@ -1,10 +1,15 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const patientPage = () => import('@/features/patient-monitoring/pages/PatientMonitoringPage');
-const detailPage = () => import('@/features/patient-monitoring/pages/MonitoringDetailPage');
-const professionalPage = () => import('@/features/patient-monitoring/pages/ProfessionalMonitoringPage');
-const facilityPage = () => import('@/features/patient-monitoring/pages/FacilityMonitoringPage');
-const adminPage = () => import('@/features/patient-monitoring/pages/AdminMonitoringPage');
+const patientPage = () =>
+  import('@/features/patient-monitoring/pages/PatientMonitoringPage');
+const detailPage = () =>
+  import('@/features/patient-monitoring/pages/MonitoringDetailPage');
+const professionalPage = () =>
+  import('@/features/patient-monitoring/pages/ProfessionalMonitoringPage');
+const facilityPage = () =>
+  import('@/features/patient-monitoring/pages/FacilityMonitoringPage');
+const adminPage = () =>
+  import('@/features/patient-monitoring/pages/AdminMonitoringPage');
 
 export function createPatientMonitoringRoutes(options: {
   analyticsPrefix: string;
@@ -61,7 +66,9 @@ export function createPatientMonitoringRoutes(options: {
   ];
 }
 
-export function createProfessionalMonitoringRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createProfessionalMonitoringRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/monitoring',
@@ -111,7 +118,9 @@ export function createProfessionalMonitoringRoutes(analyticsPrefix: string): Rou
   ];
 }
 
-export function createFacilityMonitoringRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createFacilityMonitoringRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/monitoring',
@@ -152,7 +161,9 @@ export function createFacilityMonitoringRoutes(analyticsPrefix: string): RouteDe
   ];
 }
 
-export function createAdminMonitoringRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createAdminMonitoringRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/monitoring',

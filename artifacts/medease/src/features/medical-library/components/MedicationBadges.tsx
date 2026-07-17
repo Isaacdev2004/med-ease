@@ -15,9 +15,15 @@ export function MedicationBadges({ medication }: MedicationBadgesProps) {
       ) : (
         <Badge variant="success">OTC</Badge>
       )}
-      {medication.controlledSubstance ? <Badge variant="destructive">Controlled</Badge> : null}
-      {medication.pediatricApproved ? <Badge variant="outline">Pediatric</Badge> : null}
-      {medication.bdpmId ? <Badge variant="outline">BDPM {medication.bdpmId}</Badge> : null}
+      {medication.controlledSubstance ? (
+        <Badge variant="destructive">Controlled</Badge>
+      ) : null}
+      {medication.pediatricApproved ? (
+        <Badge variant="outline">Pediatric</Badge>
+      ) : null}
+      {medication.bdpmId ? (
+        <Badge variant="outline">BDPM {medication.bdpmId}</Badge>
+      ) : null}
     </div>
   );
 }

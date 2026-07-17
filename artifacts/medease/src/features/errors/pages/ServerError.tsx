@@ -14,8 +14,13 @@ export default function ServerError() {
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <div className="mb-4 flex items-center gap-2">
-            <ServerCrash className="h-8 w-8 text-destructive" aria-hidden="true" />
-            <h1 className="text-2xl font-bold tracking-tight">500 — Server Error</h1>
+            <ServerCrash
+              className="h-8 w-8 text-destructive"
+              aria-hidden="true"
+            />
+            <h1 className="text-2xl font-bold tracking-tight">
+              500 — Server Error
+            </h1>
           </div>
           <p className="text-sm text-muted-foreground">
             Something went wrong on our end. Please try again later.

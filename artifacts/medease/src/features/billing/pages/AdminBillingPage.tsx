@@ -3,7 +3,8 @@ import { useLocation } from 'wouter';
 import { BillingShell } from '@/features/billing/components/BillingShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type AdminSegment = 'billing' | 'revenue' | 'financial-reports' | 'claims' | 'payments';
+type AdminSegment =
+  'billing' | 'revenue' | 'financial-reports' | 'claims' | 'payments';
 
 function resolveSegment(location: string): AdminSegment {
   if (location.includes('/financial-reports')) return 'financial-reports';
@@ -14,7 +15,8 @@ function resolveSegment(location: string): AdminSegment {
 }
 
 function resolveBasePath(location: string, segment: AdminSegment) {
-  if (segment === 'financial-reports') return resolveModuleBasePath(location, 'financial-reports');
+  if (segment === 'financial-reports')
+    return resolveModuleBasePath(location, 'financial-reports');
   return resolveModuleBasePath(location, segment);
 }
 
@@ -29,5 +31,7 @@ export default function AdminBillingPage() {
     claims: 'Claims',
     payments: 'Payments',
   };
-  return <BillingShell basePath={basePath} variant="admin" title={titles[segment]} />;
+  return (
+    <BillingShell basePath={basePath} variant="admin" title={titles[segment]} />
+  );
 }

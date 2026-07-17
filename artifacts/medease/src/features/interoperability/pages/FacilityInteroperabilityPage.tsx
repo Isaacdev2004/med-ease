@@ -3,7 +3,12 @@ import { useLocation } from 'wouter';
 import { InteroperabilityShell } from '@/features/interoperability/components/InteroperabilityShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'interoperability' | 'interface-engine' | 'integration-queue' | 'webhooks' | 'api-clients';
+type Segment =
+  | 'interoperability'
+  | 'interface-engine'
+  | 'integration-queue'
+  | 'webhooks'
+  | 'api-clients';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/interface-engine')) return 'interface-engine';
@@ -24,5 +29,11 @@ const TITLES: Record<Segment, string> = {
 export default function FacilityInteroperabilityPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <InteroperabilityShell basePath={resolveModuleBasePath(location, segment)} variant="facility" title={TITLES[segment]} />;
+  return (
+    <InteroperabilityShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="facility"
+      title={TITLES[segment]}
+    />
+  );
 }

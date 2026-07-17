@@ -35,7 +35,10 @@ export function iamRepositoryContract(ctx: IamRepositoryContractContext): void {
         pageSize: fixtures.pageSize,
       });
 
-      expectPagination(result, { page: fixtures.page, pageSize: fixtures.pageSize });
+      expectPagination(result, {
+        page: fixtures.page,
+        pageSize: fixtures.pageSize,
+      });
       assert.ok(result.items.length > 0);
       assert.ok(result.items[0]?.userId);
       assert.ok(result.items[0]?.email);
@@ -48,7 +51,9 @@ export function iamRepositoryContract(ctx: IamRepositoryContractContext): void {
         pageSize: 25,
       });
 
-      assert.ok(result.items.every((user) => user.tenantId === fixtures.tenantId));
+      assert.ok(
+        result.items.every((user) => user.tenantId === fixtures.tenantId),
+      );
     });
 
     it('supports search', async () => {
@@ -62,7 +67,10 @@ export function iamRepositoryContract(ctx: IamRepositoryContractContext): void {
 
       assert.ok(
         result.items.every((user) =>
-          expectSearchMatch(user.email, fixtures.searchQuery, [user.email, user.displayName]),
+          expectSearchMatch(user.email, fixtures.searchQuery, [
+            user.email,
+            user.displayName,
+          ]),
         ),
       );
     });
@@ -94,14 +102,20 @@ export function iamRepositoryContract(ctx: IamRepositoryContractContext): void {
 
     it('lists roles and permissions', async () => {
       const roles = await ctx.repository.getRoles({ page: 1, pageSize: 10 });
-      const permissions = await ctx.repository.getPermissions({ page: 1, pageSize: 10 });
+      const permissions = await ctx.repository.getPermissions({
+        page: 1,
+        pageSize: 10,
+      });
       expectPagination(roles, { page: 1, pageSize: 10 });
       expectPagination(permissions, { page: 1, pageSize: 10 });
     });
 
     if (capabilities.search) {
       it('searches users and policies', async () => {
-        const result = await ctx.repository.search(fixtures.searchQuery, fixtures.tenantId);
+        const result = await ctx.repository.search(
+          fixtures.searchQuery,
+          fixtures.tenantId,
+        );
         assert.ok(Array.isArray(result.users));
         assert.ok(Array.isArray(result.policies));
       });
@@ -116,8 +130,12 @@ export function iamRepositoryContract(ctx: IamRepositoryContractContext): void {
         );
         assert.equal(favorite.entityId, fixtures.existingUserId);
 
-        const favorites = await ctx.repository.getFavorites(fixtures.existingUserId);
-        assert.ok(favorites.some((item) => item.entityId === fixtures.existingUserId));
+        const favorites = await ctx.repository.getFavorites(
+          fixtures.existingUserId,
+        );
+        assert.ok(
+          favorites.some((item) => item.entityId === fixtures.existingUserId),
+        );
       });
     }
 

@@ -5,10 +5,15 @@ export function formatExecutiveAlertNotification(alert: EnterpriseAlert) {
 }
 
 export function shouldNotifyExecutive(alert: EnterpriseAlert): boolean {
-  return !alert.acknowledged && (alert.severity === 'critical' || alert.severity === 'warning');
+  return (
+    !alert.acknowledged &&
+    (alert.severity === 'critical' || alert.severity === 'warning')
+  );
 }
 
-export function groupAlertsByModule(alerts: EnterpriseAlert[]): Record<string, EnterpriseAlert[]> {
+export function groupAlertsByModule(
+  alerts: EnterpriseAlert[],
+): Record<string, EnterpriseAlert[]> {
   return alerts.reduce<Record<string, EnterpriseAlert[]>>((acc, alert) => {
     acc[alert.sourceModule] = acc[alert.sourceModule] ?? [];
     acc[alert.sourceModule]!.push(alert);

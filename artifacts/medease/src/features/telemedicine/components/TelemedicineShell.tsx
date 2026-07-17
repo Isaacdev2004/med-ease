@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { TelemedicineSectionContent } from '@/features/telemedicine/components/TelemedicineSections';
-import { TelemedicineTabs, getTelemedicineSectionFromPath } from '@/features/telemedicine/components/TelemedicineTabs';
+import {
+  TelemedicineTabs,
+  getTelemedicineSectionFromPath,
+} from '@/features/telemedicine/components/TelemedicineTabs';
 import { useTelemedicineContext } from '@/features/telemedicine/hooks/use-telemedicine';
 import { useTelemedicinePermissions } from '@/features/telemedicine/hooks/use-telemedicine-permissions';
 import type { TelemedicineFilters } from '@/services/telemedicine/types';
@@ -38,15 +41,24 @@ export function TelemedicineShell({
   const sessionId = explicitSessionId ?? extractSessionId(location);
 
   const scopedFilters = useMemo((): TelemedicineFilters => {
-    const patientId = explicitPatientId ?? (variant === 'patient' ? patientResolve.data ?? undefined : undefined);
-    const clinicianId = explicitClinicianId ?? (variant === 'clinician' ? 'prov-001' : undefined);
-    return { ...(patientId ? { patientId } : {}), ...(clinicianId ? { clinicianId } : {}) };
+    const patientId =
+      explicitPatientId ??
+      (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
+    const clinicianId =
+      explicitClinicianId ?? (variant === 'clinician' ? 'prov-001' : undefined);
+    return {
+      ...(patientId ? { patientId } : {}),
+      ...(clinicianId ? { clinicianId } : {}),
+    };
   }, [explicitPatientId, explicitClinicianId, patientResolve.data, variant]);
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view telemedicine." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view telemedicine."
+        />
       </PageShell>
     );
   }
@@ -66,7 +78,11 @@ export function TelemedicineShell({
     >
       <div className="space-y-6">
         <TelemedicineTabs basePath={basePath} variant={variant} />
-        <TelemedicineSectionContent section={section} filters={scopedFilters} sessionId={sessionId} />
+        <TelemedicineSectionContent
+          section={section}
+          filters={scopedFilters}
+          sessionId={sessionId}
+        />
       </div>
     </PageShell>
   );

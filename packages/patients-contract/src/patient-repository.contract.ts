@@ -22,7 +22,9 @@ import type {
  */
 export interface PatientsRepositoryContract {
   listPatients(filters?: PatientFilters): Promise<PaginatedResult<Patient>>;
-  searchPatients(filters: PatientSearchFilters): Promise<PaginatedResult<Patient>>;
+  searchPatients(
+    filters: PatientSearchFilters,
+  ): Promise<PaginatedResult<Patient>>;
   getPatient(patientId: string): Promise<Patient>;
   createPatient(input: CreatePatientInput): Promise<Patient>;
   updatePatient(patientId: string, input: UpdatePatientInput): Promise<Patient>;

@@ -16,7 +16,9 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@workspace/repository-transport/errors": ["../../lib/repository-transport/dist/errors"]
+      "@workspace/repository-transport/errors": [
+        "../../lib/repository-transport/dist/errors"
+      ]
     }
   },
   "include": ["src/**/*.ts"]

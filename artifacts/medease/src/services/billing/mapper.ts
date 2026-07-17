@@ -1,4 +1,8 @@
-import type { InsuranceClaim, PatientInvoice, Payment } from '@/services/billing/types';
+import type {
+  InsuranceClaim,
+  PatientInvoice,
+  Payment,
+} from '@/services/billing/types';
 
 /** FHIR R4 adapter stubs — swap repository layer for production. */
 export function toFhirClaim(claim: InsuranceClaim) {
@@ -14,8 +18,17 @@ export function toFhirClaim(claim: InsuranceClaim) {
   };
 }
 
-export function toFhirCoverage(policyId: string, patientId: string, payer: string) {
-  return { resourceType: 'Coverage', id: policyId, beneficiary: { reference: `Patient/${patientId}` }, payor: [{ display: payer }] };
+export function toFhirCoverage(
+  policyId: string,
+  patientId: string,
+  payer: string,
+) {
+  return {
+    resourceType: 'Coverage',
+    id: policyId,
+    beneficiary: { reference: `Patient/${patientId}` },
+    payor: [{ display: payer }],
+  };
 }
 
 export function toFhirInvoice(invoice: PatientInvoice) {
@@ -40,7 +53,11 @@ export function toFhirPaymentNotice(payment: Payment) {
 }
 
 export function toFhirPaymentReconciliation(paymentId: string, amount: number) {
-  return { resourceType: 'PaymentReconciliation', paymentIdentifier: paymentId, paymentAmount: { value: amount } };
+  return {
+    resourceType: 'PaymentReconciliation',
+    paymentIdentifier: paymentId,
+    paymentAmount: { value: amount },
+  };
 }
 
 export function toFhirExplanationOfBenefit(claim: InsuranceClaim) {
@@ -48,6 +65,8 @@ export function toFhirExplanationOfBenefit(claim: InsuranceClaim) {
     resourceType: 'ExplanationOfBenefit',
     id: `eob-${claim.claimId}`,
     claim: [{ reference: `Claim/${claim.claimId}` }],
-    total: [{ amount: { value: claim.approvedAmount, currency: claim.currency } }],
+    total: [
+      { amount: { value: claim.approvedAmount, currency: claim.currency } },
+    ],
   };
 }

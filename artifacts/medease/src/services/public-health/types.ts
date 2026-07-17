@@ -1,10 +1,22 @@
-export type CaseStatus = 'suspected' | 'confirmed' | 'probable' | 'ruled_out' | 'closed';
-export type OutbreakStatus = 'monitoring' | 'investigation' | 'containment' | 'resolved';
-export type ContactStatus = 'identified' | 'notified' | 'monitoring' | 'quarantined' | 'cleared';
-export type ImmunizationStatus = 'scheduled' | 'administered' | 'overdue' | 'declined';
+export type CaseStatus =
+  'suspected' | 'confirmed' | 'probable' | 'ruled_out' | 'closed';
+export type OutbreakStatus =
+  'monitoring' | 'investigation' | 'containment' | 'resolved';
+export type ContactStatus =
+  'identified' | 'notified' | 'monitoring' | 'quarantined' | 'cleared';
+export type ImmunizationStatus =
+  'scheduled' | 'administered' | 'overdue' | 'declined';
 export type ProgramStatus = 'planning' | 'active' | 'completed' | 'paused';
-export type InspectionStatus = 'scheduled' | 'passed' | 'failed' | 'follow_up_required';
-export type SdohDomain = 'housing' | 'food' | 'transportation' | 'employment' | 'education' | 'social_support' | 'safety';
+export type InspectionStatus =
+  'scheduled' | 'passed' | 'failed' | 'follow_up_required';
+export type SdohDomain =
+  | 'housing'
+  | 'food'
+  | 'transportation'
+  | 'employment'
+  | 'education'
+  | 'social_support'
+  | 'safety';
 
 export interface PublicHealthFilters {
   q?: string;

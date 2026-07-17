@@ -1,1 +1,4 @@
-export { computeReportAnalytics, buildReportDashboard } from '@/services/reporting/mock-data';
+export {
+  computeReportAnalytics,
+  buildReportDashboard,
+} from '@/services/reporting/mock-data';

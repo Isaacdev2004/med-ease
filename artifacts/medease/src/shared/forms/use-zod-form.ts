@@ -1,5 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, type DefaultValues, type FieldValues, type UseFormReturn } from 'react-hook-form';
+import {
+  useForm,
+  type DefaultValues,
+  type FieldValues,
+  type UseFormReturn,
+} from 'react-hook-form';
 import type { ZodType } from 'zod';
 
 /** Creates a React Hook Form instance with Zod validation — standard for all Med-ease forms. */

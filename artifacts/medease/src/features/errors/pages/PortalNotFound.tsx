@@ -21,8 +21,13 @@ export default function PortalNotFound({
       <Card className="w-full max-w-lg">
         <CardContent className="pt-6">
           <div className="mb-4 flex items-center gap-2">
-            <AlertCircle className="h-7 w-7 text-destructive" aria-hidden="true" />
-            <h1 className="text-2xl font-bold tracking-tight">Page not found</h1>
+            <AlertCircle
+              className="h-7 w-7 text-destructive"
+              aria-hidden="true"
+            />
+            <h1 className="text-2xl font-bold tracking-tight">
+              Page not found
+            </h1>
           </div>
           <p className="text-sm text-muted-foreground">
             This {portalLabel.toLowerCase()} portal page is not available. Check

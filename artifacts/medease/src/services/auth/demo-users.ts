@@ -121,9 +121,7 @@ export function getDemoAccountById(userId: string) {
   return accountById.get(userId) ?? null;
 }
 
-export function buildDemoUser(
-  account: DemoAccount,
-): AuthUser {
+export function buildDemoUser(account: DemoAccount): AuthUser {
   return {
     ...account.user,
     permissions: getPermissionsForRole(account.user.role),

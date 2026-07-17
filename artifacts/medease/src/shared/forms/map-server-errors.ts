@@ -15,8 +15,15 @@ export function mapServerErrors<T extends FieldValues>(
 }
 
 /** Converts unknown API errors into user-friendly messages. */
-export function toFriendlyErrorMessage(error: unknown, fallback: string): string {
-  if (error instanceof Error && error.message && !error.message.includes('fetch')) {
+export function toFriendlyErrorMessage(
+  error: unknown,
+  fallback: string,
+): string {
+  if (
+    error instanceof Error &&
+    error.message &&
+    !error.message.includes('fetch')
+  ) {
     return error.message;
   }
   return fallback;

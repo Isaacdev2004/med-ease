@@ -26,7 +26,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -35,7 +40,12 @@ function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
   return fields.some((f) => f?.toLowerCase().includes(lower));
 }
 
-function audit(action: string, resourceType: string, resourceId: string, facilityId?: string) {
+function audit(
+  action: string,
+  resourceType: string,
+  resourceId: string,
+  facilityId?: string,
+) {
   MOCK_EXEC_AUDIT.unshift({
     auditId: `exaudit-${Date.now()}`,
     action,
@@ -56,47 +66,71 @@ class ExecutiveRepository {
   private favorites: ExecutiveFavorite[] = [];
   private nextId = 950000;
 
-  dashboard(facilityId?: string) { return buildExecutiveCommandCenter(facilityId); }
-  analytics(facilityId?: string) { return computeExecutiveAnalytics(facilityId); }
+  dashboard(facilityId?: string) {
+    return buildExecutiveCommandCenter(facilityId);
+  }
+  analytics(facilityId?: string) {
+    return computeExecutiveAnalytics(facilityId);
+  }
 
   getEnterpriseKpis(filters?: ExecutiveFilters) {
     let items = this.kpis;
-    if (filters?.facilityId) items = items.filter((k) => k.facilityId === filters.facilityId);
-    if (filters?.departmentId) items = items.filter((k) => k.departmentId === filters.departmentId);
-    if (filters?.category) items = items.filter((k) => k.category === filters.category);
-    if (filters?.q) items = items.filter((k) => matchQ(filters.q, k.name, k.kpiId));
+    if (filters?.facilityId)
+      items = items.filter((k) => k.facilityId === filters.facilityId);
+    if (filters?.departmentId)
+      items = items.filter((k) => k.departmentId === filters.departmentId);
+    if (filters?.category)
+      items = items.filter((k) => k.category === filters.category);
+    if (filters?.q)
+      items = items.filter((k) => matchQ(filters.q, k.name, k.kpiId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getOperationalMetrics(filters?: ExecutiveFilters) {
     let items = MOCK_OPERATIONAL_METRICS;
-    if (filters?.facilityId) items = items.filter((m) => m.facilityId === filters.facilityId);
-    if (filters?.departmentId) items = items.filter((m) => m.departmentId === filters.departmentId);
-    if (filters?.q) items = items.filter((m) => matchQ(filters.q, m.name, m.metricId));
+    if (filters?.facilityId)
+      items = items.filter((m) => m.facilityId === filters.facilityId);
+    if (filters?.departmentId)
+      items = items.filter((m) => m.departmentId === filters.departmentId);
+    if (filters?.q)
+      items = items.filter((m) => matchQ(filters.q, m.name, m.metricId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getDepartmentScorecards(filters?: ExecutiveFilters) {
     let items = MOCK_DEPARTMENT_SCORECARDS;
-    if (filters?.facilityId) items = items.filter((s) => s.facilityId === filters.facilityId);
-    if (filters?.departmentId) items = items.filter((s) => s.departmentId === filters.departmentId);
-    if (filters?.q) items = items.filter((s) => matchQ(filters.q, s.departmentName, s.scorecardId));
+    if (filters?.facilityId)
+      items = items.filter((s) => s.facilityId === filters.facilityId);
+    if (filters?.departmentId)
+      items = items.filter((s) => s.departmentId === filters.departmentId);
+    if (filters?.q)
+      items = items.filter((s) =>
+        matchQ(filters.q, s.departmentName, s.scorecardId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getHospitalOperations(facilityId = 'fac-001') {
-    const metrics = MOCK_OPERATIONAL_METRICS.filter((m) => m.facilityId === facilityId);
+    const metrics = MOCK_OPERATIONAL_METRICS.filter(
+      (m) => m.facilityId === facilityId,
+    );
     return buildHospitalOperations(facilityId, metrics);
   }
 
   getCapacityAnalytics(filters?: ExecutiveFilters) {
     let items = MOCK_CAPACITY_SNAPSHOTS;
-    if (filters?.facilityId) items = items.filter((c) => c.facilityId === filters.facilityId);
-    return { snapshots: paginate(items, filters?.page, filters?.pageSize), aggregateOccupancy: aggregateOccupancy(items) };
+    if (filters?.facilityId)
+      items = items.filter((c) => c.facilityId === filters.facilityId);
+    return {
+      snapshots: paginate(items, filters?.page, filters?.pageSize),
+      aggregateOccupancy: aggregateOccupancy(items),
+    };
   }
 
   getPatientFlow(facilityId = 'fac-001') {
-    const metrics = MOCK_OPERATIONAL_METRICS.filter((m) => m.facilityId === facilityId);
+    const metrics = MOCK_OPERATIONAL_METRICS.filter(
+      (m) => m.facilityId === facilityId,
+    );
     return {
       facilityId,
       arrivalsToday: 120 + metrics.length,
@@ -104,15 +138,19 @@ class ExecutiveRepository {
       transfersToday: 12 + (metrics.length % 8),
       avgLengthOfStay: 4.2 + (metrics.length % 10) * 0.1,
       readmissionRate: 8.5 + (metrics.length % 5) * 0.2,
-      flowTrend: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label, i) => ({
-        label,
-        value: 80 + i * 5 + (metrics.length % 15),
-      })),
+      flowTrend: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(
+        (label, i) => ({
+          label,
+          value: 80 + i * 5 + (metrics.length % 15),
+        }),
+      ),
     };
   }
 
   getRevenueDashboard(facilityId = 'fac-001') {
-    const financial = this.kpis.filter((k) => k.category === 'financial' && k.facilityId === facilityId);
+    const financial = this.kpis.filter(
+      (k) => k.category === 'financial' && k.facilityId === facilityId,
+    );
     return {
       facilityId,
       revenueMtd: (financial[0]?.value ?? 12.5) * 1000000,
@@ -120,12 +158,17 @@ class ExecutiveRepository {
       collectionRate: financial[1]?.value ?? 94,
       denialRate: 100 - (financial[2]?.value ?? 92),
       netMargin: financial[3]?.value ?? 8.5,
-      revenueTrend: ['Q1', 'Q2', 'Q3', 'Q4'].map((label, i) => ({ label, value: 10 + i * 2 + (financial.length % 5) })),
+      revenueTrend: ['Q1', 'Q2', 'Q3', 'Q4'].map((label, i) => ({
+        label,
+        value: 10 + i * 2 + (financial.length % 5),
+      })),
     };
   }
 
   getQualityDashboard(facilityId = 'fac-001') {
-    const quality = this.kpis.filter((k) => k.category === 'quality' && k.facilityId === facilityId);
+    const quality = this.kpis.filter(
+      (k) => k.category === 'quality' && k.facilityId === facilityId,
+    );
     return {
       facilityId,
       overallScore: quality[0]?.value ?? 82,
@@ -133,12 +176,16 @@ class ExecutiveRepository {
       infectionRate: 100 - (quality[2]?.value ?? 95),
       mortalityIndex: quality[3]?.value ?? 0.92,
       complianceRate: quality[2]?.value ?? 96,
-      qualityTrend: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map((label, i) => ({ label, value: 78 + i + (quality.length % 5) })),
+      qualityTrend: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'].map(
+        (label, i) => ({ label, value: 78 + i + (quality.length % 5) }),
+      ),
     };
   }
 
   getWorkforceDashboard(facilityId = 'fac-001') {
-    const workforce = this.kpis.filter((k) => k.category === 'workforce' && k.facilityId === facilityId);
+    const workforce = this.kpis.filter(
+      (k) => k.category === 'workforce' && k.facilityId === facilityId,
+    );
     return {
       facilityId,
       totalStaff: 1200 + workforce.length * 2,
@@ -146,12 +193,17 @@ class ExecutiveRepository {
       overtimeHours: workforce[1]?.value ?? 420,
       turnoverRate: workforce[2]?.value ?? 12,
       satisfactionScore: 100 - (workforce[3]?.value ?? 15),
-      staffingTrend: ['Q1', 'Q2', 'Q3', 'Q4'].map((label, i) => ({ label, value: 90 + i * 2 })),
+      staffingTrend: ['Q1', 'Q2', 'Q3', 'Q4'].map((label, i) => ({
+        label,
+        value: 90 + i * 2,
+      })),
     };
   }
 
   getPopulationDashboard(facilityId = 'fac-001') {
-    const population = this.kpis.filter((k) => k.category === 'population' && k.facilityId === facilityId);
+    const population = this.kpis.filter(
+      (k) => k.category === 'population' && k.facilityId === facilityId,
+    );
     return {
       facilityId,
       attributedLives: 45000 + population.length * 100,
@@ -159,50 +211,70 @@ class ExecutiveRepository {
       gapClosureRate: population[1]?.value ?? 74,
       preventiveCareRate: population[2]?.value ?? 68,
       chronicDiseaseRate: population[3]?.value ?? 28,
-      populationTrend: ['Q1', 'Q2', 'Q3', 'Q4'].map((label, i) => ({ label, value: 60 + i * 3 })),
+      populationTrend: ['Q1', 'Q2', 'Q3', 'Q4'].map((label, i) => ({
+        label,
+        value: 60 + i * 3,
+      })),
     };
   }
 
   getExecutiveForecasts(filters?: ExecutiveFilters) {
     let items = MOCK_EXECUTIVE_FORECASTS;
-    if (filters?.facilityId) items = items.filter((f) => f.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((f) => matchQ(filters.q, f.metric, f.forecastId));
+    if (filters?.facilityId)
+      items = items.filter((f) => f.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((f) => matchQ(filters.q, f.metric, f.forecastId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getStrategicInitiatives(filters?: ExecutiveFilters) {
     let items = this.initiatives;
-    if (filters?.facilityId) items = items.filter((i) => !i.facilityId || i.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((i) => i.status === filters.status);
-    if (filters?.q) items = items.filter((i) => matchQ(filters.q, i.name, i.initiativeId));
+    if (filters?.facilityId)
+      items = items.filter(
+        (i) => !i.facilityId || i.facilityId === filters.facilityId,
+      );
+    if (filters?.status)
+      items = items.filter((i) => i.status === filters.status);
+    if (filters?.q)
+      items = items.filter((i) => matchQ(filters.q, i.name, i.initiativeId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getExecutiveAlerts(filters?: ExecutiveFilters) {
     let items = this.alerts;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((a) => matchQ(filters.q, a.title, a.alertId));
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((a) => matchQ(filters.q, a.title, a.alertId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getBenchmarkReports(filters?: ExecutiveFilters) {
     let items = MOCK_BENCHMARK_REPORTS;
-    if (filters?.facilityId) items = items.filter((b) => b.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((b) => matchQ(filters.q, b.metric, b.reportId));
+    if (filters?.facilityId)
+      items = items.filter((b) => b.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((b) => matchQ(filters.q, b.metric, b.reportId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getDashboards(filters?: ExecutiveFilters) {
     let items = this.dashboards;
-    if (filters?.facilityId) items = items.filter((d) => !d.facilityId || d.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((d) => d.status === filters.status);
-    if (filters?.q) items = items.filter((d) => matchQ(filters.q, d.name, d.dashboardId));
+    if (filters?.facilityId)
+      items = items.filter(
+        (d) => !d.facilityId || d.facilityId === filters.facilityId,
+      );
+    if (filters?.status)
+      items = items.filter((d) => d.status === filters.status);
+    if (filters?.q)
+      items = items.filter((d) => matchQ(filters.q, d.name, d.dashboardId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getAudit(filters?: ExecutiveFilters) {
     let items = MOCK_EXEC_AUDIT;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -220,7 +292,12 @@ class ExecutiveRepository {
       description: input.description,
     };
     this.initiatives.unshift(initiative);
-    audit('create_initiative', 'initiative', initiative.initiativeId, input.facilityId);
+    audit(
+      'create_initiative',
+      'initiative',
+      initiative.initiativeId,
+      input.facilityId,
+    );
     return initiative;
   }
 
@@ -241,26 +318,48 @@ class ExecutiveRepository {
   }
 
   archiveDashboard(input: ArchiveDashboardInput) {
-    const dashboard = this.dashboards.find((d) => d.dashboardId === input.dashboardId);
+    const dashboard = this.dashboards.find(
+      (d) => d.dashboardId === input.dashboardId,
+    );
     if (!dashboard) throw new Error('Dashboard not found');
     dashboard.status = 'archived';
-    audit('archive_dashboard', 'dashboard', dashboard.dashboardId, dashboard.facilityId);
+    audit(
+      'archive_dashboard',
+      'dashboard',
+      dashboard.dashboardId,
+      dashboard.facilityId,
+    );
     return dashboard;
   }
 
   search(query: string, facilityId?: string) {
     const q = query.toLowerCase();
-    const kpis = this.kpis.filter((k) => (!facilityId || k.facilityId === facilityId) && matchQ(q, k.name));
+    const kpis = this.kpis.filter(
+      (k) => (!facilityId || k.facilityId === facilityId) && matchQ(q, k.name),
+    );
     const initiatives = this.initiatives.filter((i) => matchQ(q, i.name));
     return { kpis: kpis.slice(0, 10), initiatives: initiatives.slice(0, 10) };
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.kpis.length + this.initiatives.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.kpis.length + this.initiatives.length,
+    };
   }
 
-  favorite(userId: string, entityType: ExecutiveFavorite['entityType'], entityId: string) {
-    const fav = { userId, entityType, entityId, createdAt: new Date().toISOString() };
+  favorite(
+    userId: string,
+    entityType: ExecutiveFavorite['entityType'],
+    entityId: string,
+  ) {
+    const fav = {
+      userId,
+      entityType,
+      entityId,
+      createdAt: new Date().toISOString(),
+    };
     this.favorites.push(fav);
     return fav;
   }

@@ -1,6 +1,12 @@
-import type { ValidationResult, ValidationStatus } from '@/services/interoperability/types';
+import type {
+  ValidationResult,
+  ValidationStatus,
+} from '@/services/interoperability/types';
 
-export function validateResource(format: 'fhir' | 'hl7' | 'cda' | 'dicom' | 'json', issueCount: number): ValidationStatus {
+export function validateResource(
+  format: 'fhir' | 'hl7' | 'cda' | 'dicom' | 'json',
+  issueCount: number,
+): ValidationStatus {
   if (issueCount === 0) return 'valid';
   if (issueCount <= 2) return 'warning';
   return 'invalid';

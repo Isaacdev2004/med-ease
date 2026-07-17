@@ -72,7 +72,9 @@ export class QueueScheduler {
 
     return enqueueEnvelope(scheduledProducer, envelope.eventType, envelope, {
       repeat,
-      jobId: payload.cron ? `scheduler:${payload.targetQueue}:${payload.cron}` : undefined,
+      jobId: payload.cron
+        ? `scheduler:${payload.targetQueue}:${payload.cron}`
+        : undefined,
     });
   }
 
@@ -85,7 +87,9 @@ export class QueueScheduler {
   }
 }
 
-export function createQueueScheduler(producers: Map<QueueName, QueueProducerPair>) {
+export function createQueueScheduler(
+  producers: Map<QueueName, QueueProducerPair>,
+) {
   return new QueueScheduler(producers);
 }
 

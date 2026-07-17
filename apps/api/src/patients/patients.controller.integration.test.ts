@@ -3,7 +3,12 @@ import { after, before, describe, it } from 'node:test';
 
 import 'reflect-metadata';
 
-import { CanActivate, ExecutionContext, Injectable, Module } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Module,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import type { INestApplication } from '@nestjs/common';
@@ -61,7 +66,11 @@ const patientsServiceMock = {
   }),
   getPatient: async () => samplePatient,
   registerPatient: async () => samplePatient,
-  updatePatient: async () => ({ ...samplePatient, fullName: 'Sarah J.', version: 2 }),
+  updatePatient: async () => ({
+    ...samplePatient,
+    fullName: 'Sarah J.',
+    version: 2,
+  }),
   archivePatient: async () => ({
     ...samplePatient,
     status: 'inactive',
@@ -71,7 +80,10 @@ const patientsServiceMock = {
   validateMerge: async () => ({
     valid: true as const,
     sourcePatient: samplePatient,
-    targetPatient: { ...samplePatient, patientId: '01930000-0000-7000-8000-000000000302' },
+    targetPatient: {
+      ...samplePatient,
+      patientId: '01930000-0000-7000-8000-000000000302',
+    },
   }),
   exportPatients: async () => ({
     format: 'csv' as const,
@@ -118,7 +130,9 @@ class PatientsControllerTestModule {}
 @Injectable()
 class TestAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest<{ user?: JwtAccessPayload }>();
+    const request = context
+      .switchToHttp()
+      .getRequest<{ user?: JwtAccessPayload }>();
     request.user = testUser;
     return true;
   }
@@ -131,7 +145,9 @@ class RejectAuthGuard implements CanActivate {
   }
 }
 
-async function createTestApp(authenticated: boolean): Promise<INestApplication> {
+async function createTestApp(
+  authenticated: boolean,
+): Promise<INestApplication> {
   const moduleRef = await Test.createTestingModule({
     imports: [PatientsControllerTestModule],
   })
@@ -173,7 +189,9 @@ describe('PatientsController integration', () => {
   });
 
   it('GET /api/patients returns paginated patients when authorized', async () => {
-    const response = await request(app.getHttpServer()).get('/api/patients').expect(200);
+    const response = await request(app.getHttpServer())
+      .get('/api/patients')
+      .expect(200);
 
     assert.equal(response.body.total, 1);
     assert.equal(response.body.items[0].patientId, samplePatient.patientId);
@@ -260,7 +278,9 @@ describe('PatientsController integration', () => {
     const unauthenticatedApp = await createTestApp(false);
 
     try {
-      await request(unauthenticatedApp.getHttpServer()).get('/api/patients').expect(401);
+      await request(unauthenticatedApp.getHttpServer())
+        .get('/api/patients')
+        .expect(401);
     } finally {
       await unauthenticatedApp.close();
     }

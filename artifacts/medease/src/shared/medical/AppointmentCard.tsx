@@ -39,7 +39,10 @@ export function AppointmentCard({
           <StatusBadge status={status} />
         </div>
         <p className="text-sm flex items-center gap-2">
-          <Calendar className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+          <Calendar
+            className="h-4 w-4 text-muted-foreground"
+            aria-hidden="true"
+          />
           {scheduledAt}
         </p>
         <p className="text-sm text-muted-foreground flex items-center gap-2">
@@ -47,7 +50,9 @@ export function AppointmentCard({
           {location}
         </p>
       </CardContent>
-      {actions ? <CardFooter className="border-t py-3">{actions}</CardFooter> : null}
+      {actions ? (
+        <CardFooter className="border-t py-3">{actions}</CardFooter>
+      ) : null}
     </Card>
   );
 }

@@ -1,11 +1,22 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const patientPage = () => import('@/features/care-plans/pages/PatientCarePlanPage');
-const professionalPage = () => import('@/features/care-plans/pages/ProfessionalCarePlansPage');
-const facilityPage = () => import('@/features/care-plans/pages/FacilityCarePlansPage');
-const adminPage = () => import('@/features/care-plans/pages/AdminCareAnalyticsPage');
+const patientPage = () =>
+  import('@/features/care-plans/pages/PatientCarePlanPage');
+const professionalPage = () =>
+  import('@/features/care-plans/pages/ProfessionalCarePlansPage');
+const facilityPage = () =>
+  import('@/features/care-plans/pages/FacilityCarePlansPage');
+const adminPage = () =>
+  import('@/features/care-plans/pages/AdminCareAnalyticsPage');
 
-const PATIENT_SECTIONS = ['goals', 'tasks', 'timeline', 'team', 'progress', 'education'] as const;
+const PATIENT_SECTIONS = [
+  'goals',
+  'tasks',
+  'timeline',
+  'team',
+  'progress',
+  'education',
+] as const;
 
 export function createPatientCarePlanRoutes(options: {
   analyticsPrefix: string;

@@ -1,6 +1,12 @@
 import type { MfaMethod } from '@/services/iam/types';
 
-export const MFA_METHODS: MfaMethod[] = ['totp', 'sms', 'email', 'hardware_key', 'push'];
+export const MFA_METHODS: MfaMethod[] = [
+  'totp',
+  'sms',
+  'email',
+  'hardware_key',
+  'push',
+];
 
 export function mfaRequiredForRole(roleName: string): boolean {
   return ['platform_admin', 'facility_admin', 'physician'].includes(roleName);

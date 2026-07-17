@@ -38,7 +38,9 @@ export function EnterprisePageHeader({
             <p className="text-muted-foreground max-w-3xl">{subtitle}</p>
           ) : null}
           {lastUpdated ? (
-            <p className="text-xs text-muted-foreground">Last updated {lastUpdated}</p>
+            <p className="text-xs text-muted-foreground">
+              Last updated {lastUpdated}
+            </p>
           ) : null}
         </div>
         {(primaryAction || secondaryActions) && (

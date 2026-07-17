@@ -3,7 +3,14 @@ import { useLocation } from 'wouter';
 import { CdssShell } from '@/features/cdss/components/CdssShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'cdss' | 'knowledge-base' | 'rules-engine' | 'cdss-order-sets' | 'cdss-guidelines' | 'cdss-analytics' | 'cdss-audit';
+type Segment =
+  | 'cdss'
+  | 'knowledge-base'
+  | 'rules-engine'
+  | 'cdss-order-sets'
+  | 'cdss-guidelines'
+  | 'cdss-analytics'
+  | 'cdss-audit';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/knowledge-base')) return 'knowledge-base';
@@ -28,5 +35,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminCdssPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <CdssShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <CdssShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

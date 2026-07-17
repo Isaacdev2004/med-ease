@@ -1,7 +1,10 @@
-import type { CopilotMessage, CopilotSession } from '@/services/ai-intelligence/types';
+import type {
+  CopilotMessage,
+  CopilotSession,
+} from '@/services/ai-intelligence/types';
 
 export const COPILOT_PROMPTS = [
-  'Summarize this patient\'s recent lab trends',
+  "Summarize this patient's recent lab trends",
   'What are the key contraindications for this medication?',
   'Draft a discharge summary for this encounter',
   'Identify potential drug interactions',
@@ -38,7 +41,8 @@ export function sessionTitleFromPrompt(prompt?: string): string {
 
 export function activeSessionCount(sessions: CopilotSession[]): number {
   const cutoff = Date.now() - 24 * 60 * 60 * 1000;
-  return sessions.filter((s) => new Date(s.lastMessageAt).getTime() > cutoff).length;
+  return sessions.filter((s) => new Date(s.lastMessageAt).getTime() > cutoff)
+    .length;
 }
 
 export function toFhirGuidanceResponse(session: CopilotSession) {
@@ -46,7 +50,12 @@ export function toFhirGuidanceResponse(session: CopilotSession) {
     resourceType: 'GuidanceResponse',
     id: session.sessionId,
     status: 'success',
-    subject: session.patientId ? { reference: `Patient/${session.patientId}` } : undefined,
-    outputParameters: session.messages.map((m) => ({ name: m.role, valueString: m.content })),
+    subject: session.patientId
+      ? { reference: `Patient/${session.patientId}` }
+      : undefined,
+    outputParameters: session.messages.map((m) => ({
+      name: m.role,
+      valueString: m.content,
+    })),
   };
 }

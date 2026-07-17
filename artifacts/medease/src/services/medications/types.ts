@@ -1,10 +1,16 @@
-export type MedicationStatus = 'active' | 'completed' | 'paused' | 'cancelled' | 'future';
-export type PrescriptionStatus = 'draft' | 'active' | 'expired' | 'cancelled' | 'renewed' | 'pending';
-export type DoseLogStatus = 'taken' | 'skipped' | 'late' | 'partial' | 'vomited' | 'rescheduled';
+export type MedicationStatus =
+  'active' | 'completed' | 'paused' | 'cancelled' | 'future';
+export type PrescriptionStatus =
+  'draft' | 'active' | 'expired' | 'cancelled' | 'renewed' | 'pending';
+export type DoseLogStatus =
+  'taken' | 'skipped' | 'late' | 'partial' | 'vomited' | 'rescheduled';
 export type InteractionSeverity = 'critical' | 'high' | 'moderate' | 'low';
-export type RefillStatus = 'pending' | 'approved' | 'rejected' | 'dispensed' | 'partial';
-export type ScheduleSlot = 'morning' | 'afternoon' | 'evening' | 'night' | 'custom' | 'prn';
-export type MedicationRoute = 'oral' | 'topical' | 'injection' | 'inhalation' | 'sublingual' | 'other';
+export type RefillStatus =
+  'pending' | 'approved' | 'rejected' | 'dispensed' | 'partial';
+export type ScheduleSlot =
+  'morning' | 'afternoon' | 'evening' | 'night' | 'custom' | 'prn';
+export type MedicationRoute =
+  'oral' | 'topical' | 'injection' | 'inhalation' | 'sublingual' | 'other';
 
 export interface MedicationIdentity {
   id: string;
@@ -141,7 +147,14 @@ export interface RefillRequest {
 export interface DrugInteraction {
   id: string;
   patientId: string;
-  type: 'medication' | 'allergy' | 'diagnosis' | 'pregnancy' | 'food' | 'alcohol' | 'supplement';
+  type:
+    | 'medication'
+    | 'allergy'
+    | 'diagnosis'
+    | 'pregnancy'
+    | 'food'
+    | 'alcohol'
+    | 'supplement';
   source: string;
   target: string;
   severity: InteractionSeverity;

@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_TRANSFERS, type TransferRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_TRANSFERS,
+  type TransferRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -26,13 +29,20 @@ const columns: DataTableColumn<TransferRow>[] = [
 export default function TransfersPage() {
   const [transfers, setTransfers] = useState(MOCK_TRANSFERS);
 
-  const active = transfers.filter((row) => row.status === 'requested' || row.status === 'in-transit').length;
+  const active = transfers.filter(
+    (row) => row.status === 'requested' || row.status === 'in-transit',
+  ).length;
 
   return (
     <PageShell
       title="Transfers"
       subtitle="Coordinate inter-ward and inter-facility patient transfers."
-      primaryAction={<PortalActionButton label="Request transfer" successTitle="Transfer requested" />}
+      primaryAction={
+        <PortalActionButton
+          label="Request transfer"
+          successTitle="Transfer requested"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
@@ -56,7 +66,9 @@ export default function TransfersPage() {
               onClick={() => {
                 setTransfers((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'completed' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'completed' as const }
+                      : item,
                   ),
                 );
               }}

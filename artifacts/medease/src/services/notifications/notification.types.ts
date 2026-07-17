@@ -16,11 +16,7 @@ export type NotificationType =
   | 'realtime_update';
 
 export type NotificationPriority =
-  | 'critical'
-  | 'high'
-  | 'medium'
-  | 'low'
-  | 'informational';
+  'critical' | 'high' | 'medium' | 'low' | 'informational';
 
 export type NotificationCategory =
   | 'clinical'
@@ -107,7 +103,13 @@ export interface ReminderItem {
   title: string;
   description?: string;
   dueAt: string;
-  type: 'medication' | 'appointment' | 'transfer' | 'follow_up' | 'vaccination' | 'review';
+  type:
+    | 'medication'
+    | 'appointment'
+    | 'transfer'
+    | 'follow_up'
+    | 'vaccination'
+    | 'review';
   priority: NotificationPriority;
 }
 

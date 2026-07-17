@@ -10,7 +10,11 @@ import {
   startOfWeek,
 } from 'date-fns';
 
-import type { Appointment, CalendarEvent, CalendarViewMode } from '@/services/appointments/types';
+import type {
+  Appointment,
+  CalendarEvent,
+  CalendarViewMode,
+} from '@/services/appointments/types';
 import { mapAppointmentsToCalendarEvents } from '@/services/appointments/mapper';
 
 export interface CalendarDayCell {
@@ -20,7 +24,9 @@ export interface CalendarDayCell {
   events: CalendarEvent[];
 }
 
-export function groupEventsByDate(events: CalendarEvent[]): Map<string, CalendarEvent[]> {
+export function groupEventsByDate(
+  events: CalendarEvent[],
+): Map<string, CalendarEvent[]> {
   const map = new Map<string, CalendarEvent[]>();
   for (const event of events) {
     const key = format(new Date(event.start), 'yyyy-MM-dd');
@@ -31,7 +37,10 @@ export function groupEventsByDate(events: CalendarEvent[]): Map<string, Calendar
   return map;
 }
 
-export function buildMonthGrid(referenceDate: Date, events: CalendarEvent[]): CalendarDayCell[] {
+export function buildMonthGrid(
+  referenceDate: Date,
+  events: CalendarEvent[],
+): CalendarDayCell[] {
   const monthStart = startOfMonth(referenceDate);
   const monthEnd = endOfMonth(referenceDate);
   const gridStart = startOfWeek(monthStart, { weekStartsOn: 1 });
@@ -51,7 +60,10 @@ export function buildMonthGrid(referenceDate: Date, events: CalendarEvent[]): Ca
   });
 }
 
-export function buildWeekDays(referenceDate: Date, events: CalendarEvent[]): CalendarDayCell[] {
+export function buildWeekDays(
+  referenceDate: Date,
+  events: CalendarEvent[],
+): CalendarDayCell[] {
   const weekStart = startOfWeek(referenceDate, { weekStartsOn: 1 });
   const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
   const byDate = groupEventsByDate(events);
@@ -65,11 +77,17 @@ export function buildWeekDays(referenceDate: Date, events: CalendarEvent[]): Cal
   }));
 }
 
-export function buildDayEvents(referenceDate: Date, events: CalendarEvent[]): CalendarEvent[] {
+export function buildDayEvents(
+  referenceDate: Date,
+  events: CalendarEvent[],
+): CalendarEvent[] {
   return events.filter((e) => isSameDay(new Date(e.start), referenceDate));
 }
 
-export function buildAgendaEvents(events: CalendarEvent[], days = 14): CalendarEvent[] {
+export function buildAgendaEvents(
+  events: CalendarEvent[],
+  days = 14,
+): CalendarEvent[] {
   const now = new Date();
   const end = addDays(now, days);
   return events
@@ -80,11 +98,16 @@ export function buildAgendaEvents(events: CalendarEvent[], days = 14): CalendarE
     .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime());
 }
 
-export function appointmentsToEvents(appointments: Appointment[]): CalendarEvent[] {
+export function appointmentsToEvents(
+  appointments: Appointment[],
+): CalendarEvent[] {
   return mapAppointmentsToCalendarEvents(appointments);
 }
 
-export function getCalendarLabel(mode: CalendarViewMode, referenceDate: Date): string {
+export function getCalendarLabel(
+  mode: CalendarViewMode,
+  referenceDate: Date,
+): string {
   if (mode === 'month') return format(referenceDate, 'MMMM yyyy');
   if (mode === 'week') {
     const start = startOfWeek(referenceDate, { weekStartsOn: 1 });
@@ -97,6 +120,6 @@ export function getCalendarLabel(mode: CalendarViewMode, referenceDate: Date): s
 /** Holiday / blocked schedule placeholders for future Google/Outlook sync. */
 export const BLOCKED_HOLIDAYS = [
   { date: '2026-12-25', label: 'Christmas Day' },
-  { date: '2026-01-01', label: 'New Year\'s Day' },
+  { date: '2026-01-01', label: "New Year's Day" },
   { date: '2026-07-14', label: 'Bastille Day' },
 ];

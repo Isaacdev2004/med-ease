@@ -1,4 +1,8 @@
-import { approvePurchaseOrder, createPurchaseOrder, receivePurchaseOrder } from '@/services/inventory/procurement';
+import {
+  approvePurchaseOrder,
+  createPurchaseOrder,
+  receivePurchaseOrder,
+} from '@/services/inventory/procurement';
 import { generateBarcode, scanBarcode } from '@/services/inventory/barcode';
 import { forecastDemand } from '@/services/inventory/forecasting';
 import {
@@ -13,8 +17,15 @@ import {
   MOCK_TRANSFERS,
   MOCK_WAREHOUSES,
 } from '@/services/inventory/mock-data';
-import { adjustStock, issueStock, receiveStock } from '@/services/inventory/stock';
-import { completeTransfer, createTransfer } from '@/services/inventory/transfers';
+import {
+  adjustStock,
+  issueStock,
+  receiveStock,
+} from '@/services/inventory/stock';
+import {
+  completeTransfer,
+  createTransfer,
+} from '@/services/inventory/transfers';
 import type {
   AdjustInventoryInput,
   CreateInventoryInput,
@@ -30,23 +41,41 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = (page - 1) * pageSize;
-  return { items: items.slice(start, start + pageSize), total: items.length, page, pageSize };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page,
+    pageSize,
+  };
 }
 
 function matchItem(item: InventoryItem, filters: InventoryFilters) {
-  if (filters.department && item.department !== filters.department) return false;
+  if (filters.department && item.department !== filters.department)
+    return false;
   if (filters.category && item.category !== filters.category) return false;
-  if (filters.warehouseId && item.warehouseLocation !== filters.warehouseId) return false;
-  if (filters.supplierId && item.supplierId !== filters.supplierId) return false;
+  if (filters.warehouseId && item.warehouseLocation !== filters.warehouseId)
+    return false;
+  if (filters.supplierId && item.supplierId !== filters.supplierId)
+    return false;
   if (filters.status && item.status !== filters.status) return false;
-  if (filters.lowStock && item.status !== 'low_stock' && item.status !== 'out_of_stock') return false;
+  if (
+    filters.lowStock &&
+    item.status !== 'low_stock' &&
+    item.status !== 'out_of_stock'
+  )
+    return false;
   if (filters.expiringSoon && item.expiryDate) {
     const days = (new Date(item.expiryDate).getTime() - Date.now()) / 86400000;
     if (days > 90) return false;
   }
   if (filters.q) {
     const q = filters.q.toLowerCase();
-    if (!item.itemName.toLowerCase().includes(q) && !item.sku.toLowerCase().includes(q) && !item.barcode.includes(q)) return false;
+    if (
+      !item.itemName.toLowerCase().includes(q) &&
+      !item.sku.toLowerCase().includes(q) &&
+      !item.barcode.includes(q)
+    )
+      return false;
   }
   return true;
 }
@@ -108,7 +137,11 @@ class InventoryRepository {
   updateInventory(inventoryId: string, updates: Partial<InventoryItem>) {
     const idx = this.items.findIndex((i) => i.inventoryId === inventoryId);
     if (idx < 0) return null;
-    this.items[idx] = { ...this.items[idx]!, ...updates, updatedAt: new Date().toISOString() };
+    this.items[idx] = {
+      ...this.items[idx]!,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
     return this.items[idx]!;
   }
 
@@ -123,7 +156,9 @@ class InventoryRepository {
     const item = this.getInventoryItem(input.inventoryId);
     if (!item) return null;
     const updated = receiveStock(item, input);
-    const idx = this.items.findIndex((i) => i.inventoryId === input.inventoryId);
+    const idx = this.items.findIndex(
+      (i) => i.inventoryId === input.inventoryId,
+    );
     this.items[idx] = updated;
     this.movements.unshift({
       movementId: `mov-${++this.nextId}`,
@@ -143,7 +178,9 @@ class InventoryRepository {
     const item = this.getInventoryItem(input.inventoryId);
     if (!item) return null;
     const updated = issueStock(item, input);
-    const idx = this.items.findIndex((i) => i.inventoryId === input.inventoryId);
+    const idx = this.items.findIndex(
+      (i) => i.inventoryId === input.inventoryId,
+    );
     this.items[idx] = updated;
     this.movements.unshift({
       movementId: `mov-${++this.nextId}`,
@@ -162,18 +199,31 @@ class InventoryRepository {
   transferStock(input: TransferStockInput) {
     const item = this.getInventoryItem(input.inventoryId);
     if (!item) return null;
-    const fromWh = MOCK_WAREHOUSES.find((w) => w.warehouseId === input.fromWarehouseId);
-    const toWh = MOCK_WAREHOUSES.find((w) => w.warehouseId === input.toWarehouseId);
+    const fromWh = MOCK_WAREHOUSES.find(
+      (w) => w.warehouseId === input.fromWarehouseId,
+    );
+    const toWh = MOCK_WAREHOUSES.find(
+      (w) => w.warehouseId === input.toWarehouseId,
+    );
     const transfer = createTransfer(
       input.fromWarehouseId,
       input.toWarehouseId,
       fromWh?.name ?? input.fromWarehouseId,
       toWh?.name ?? input.toWarehouseId,
-      [{ inventoryId: input.inventoryId, itemName: item.itemName, quantity: input.quantity }],
+      [
+        {
+          inventoryId: input.inventoryId,
+          itemName: item.itemName,
+          quantity: input.quantity,
+        },
+      ],
       `trf-${++this.nextId}`,
     );
     this.transfers.unshift(transfer);
-    issueStock(item, { inventoryId: input.inventoryId, quantity: input.quantity });
+    issueStock(item, {
+      inventoryId: input.inventoryId,
+      quantity: input.quantity,
+    });
     return completeTransfer(transfer);
   }
 
@@ -181,7 +231,9 @@ class InventoryRepository {
     const item = this.getInventoryItem(input.inventoryId);
     if (!item) return null;
     const updated = adjustStock(item, input.quantity);
-    const idx = this.items.findIndex((i) => i.inventoryId === input.inventoryId);
+    const idx = this.items.findIndex(
+      (i) => i.inventoryId === input.inventoryId,
+    );
     this.items[idx] = updated;
     this.movements.unshift({
       movementId: `mov-${++this.nextId}`,
@@ -199,16 +251,29 @@ class InventoryRepository {
   getStockMovements(filters?: InventoryFilters) {
     let items = [...this.movements];
     if (filters?.department) {
-      const ids = new Set(this.items.filter((i) => i.department === filters.department).map((i) => i.inventoryId));
+      const ids = new Set(
+        this.items
+          .filter((i) => i.department === filters.department)
+          .map((i) => i.inventoryId),
+      );
       items = items.filter((m) => ids.has(m.inventoryId));
     }
-    return paginate(items.sort((a, b) => b.createdAt.localeCompare(a.createdAt)), filters?.page, filters?.pageSize);
+    return paginate(
+      items.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getPurchaseOrders(filters?: InventoryFilters) {
     let items = [...this.orders];
-    if (filters?.department) items = items.filter((p) => p.department === filters.department);
-    return paginate(items.sort((a, b) => b.createdAt.localeCompare(a.createdAt)), filters?.page, filters?.pageSize);
+    if (filters?.department)
+      items = items.filter((p) => p.department === filters.department);
+    return paginate(
+      items.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   createPurchaseOrder(input: CreatePurchaseOrderInput) {
@@ -219,14 +284,18 @@ class InventoryRepository {
   }
 
   approvePurchaseOrder(purchaseOrderId: string) {
-    const idx = this.orders.findIndex((p) => p.purchaseOrderId === purchaseOrderId);
+    const idx = this.orders.findIndex(
+      (p) => p.purchaseOrderId === purchaseOrderId,
+    );
     if (idx < 0) return null;
     this.orders[idx] = approvePurchaseOrder(this.orders[idx]!, 'current-user');
     return this.orders[idx]!;
   }
 
   receivePurchaseOrder(purchaseOrderId: string) {
-    const idx = this.orders.findIndex((p) => p.purchaseOrderId === purchaseOrderId);
+    const idx = this.orders.findIndex(
+      (p) => p.purchaseOrderId === purchaseOrderId,
+    );
     if (idx < 0) return null;
     this.orders[idx] = receivePurchaseOrder(this.orders[idx]!);
     return this.orders[idx]!;
@@ -242,16 +311,25 @@ class InventoryRepository {
 
   getAssets(filters?: InventoryFilters) {
     let items = [...MOCK_ASSETS];
-    if (filters?.department) items = items.filter((a) => a.department === filters.department);
+    if (filters?.department)
+      items = items.filter((a) => a.department === filters.department);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getTransfers(filters?: InventoryFilters) {
-    return paginate([...this.transfers].sort((a, b) => b.createdAt.localeCompare(a.createdAt)), filters?.page, filters?.pageSize);
+    return paginate(
+      [...this.transfers].sort((a, b) =>
+        b.createdAt.localeCompare(a.createdAt),
+      ),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getExpiryAlerts(department?: string) {
-    return department ? MOCK_EXPIRY_ALERTS.filter((a) => a.department === department) : MOCK_EXPIRY_ALERTS;
+    return department
+      ? MOCK_EXPIRY_ALERTS.filter((a) => a.department === department)
+      : MOCK_EXPIRY_ALERTS;
   }
 
   getCycleCounts() {
@@ -275,8 +353,16 @@ class InventoryRepository {
   }
 
   favoriteItem(inventoryId: string, userId: string) {
-    if (!this.favorites.some((f) => f.inventoryId === inventoryId && f.userId === userId)) {
-      this.favorites.push({ inventoryId, userId, createdAt: new Date().toISOString() });
+    if (
+      !this.favorites.some(
+        (f) => f.inventoryId === inventoryId && f.userId === userId,
+      )
+    ) {
+      this.favorites.push({
+        inventoryId,
+        userId,
+        createdAt: new Date().toISOString(),
+      });
     }
     return this.favorites.filter((f) => f.userId === userId);
   }
@@ -293,9 +379,16 @@ class InventoryRepository {
   search(query: string, department?: string) {
     const q = query.toLowerCase();
     const items = this.items
-      .filter((i) => (!department || i.department === department) && (i.itemName.toLowerCase().includes(q) || i.sku.toLowerCase().includes(q)))
+      .filter(
+        (i) =>
+          (!department || i.department === department) &&
+          (i.itemName.toLowerCase().includes(q) ||
+            i.sku.toLowerCase().includes(q)),
+      )
       .slice(0, 15);
-    const suppliers = MOCK_SUPPLIERS.filter((s) => s.name.toLowerCase().includes(q)).slice(0, 5);
+    const suppliers = MOCK_SUPPLIERS.filter((s) =>
+      s.name.toLowerCase().includes(q),
+    ).slice(0, 5);
     return { items, suppliers };
   }
 }

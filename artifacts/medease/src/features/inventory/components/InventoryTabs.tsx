@@ -14,7 +14,11 @@ const PHARMACY_TABS: Tab[] = [
 const LAB_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Inventory', path: 'laboratory/inventory' },
   { segment: 'reagents', label: 'Reagents', path: 'laboratory/reagents' },
-  { segment: 'consumables', label: 'Consumables', path: 'laboratory/consumables' },
+  {
+    segment: 'consumables',
+    label: 'Consumables',
+    path: 'laboratory/consumables',
+  },
 ];
 
 const RAD_TABS: Tab[] = [
@@ -51,21 +55,42 @@ function portalRoot(basePath: string, variant: InventoryTabsProps['variant']) {
   const tabs = getTabs(variant);
   const patterns = tabs.map((t) => t.path.split('/').pop()!).join('|');
   const regex = new RegExp(`/(${patterns.replace(/\//g, '|')})$`);
-  return basePath.replace(regex, '').replace(/\/(laboratory\/inventory|laboratory\/reagents|laboratory\/consumables|radiology\/inventory|radiology\/equipment)$/, (m) => m.slice(0, m.lastIndexOf('/')));
+  return basePath
+    .replace(regex, '')
+    .replace(
+      /\/(laboratory\/inventory|laboratory\/reagents|laboratory\/consumables|radiology\/inventory|radiology\/equipment)$/,
+      (m) => m.slice(0, m.lastIndexOf('/')),
+    );
 }
 
-export function InventoryTabs({ basePath, variant = 'pharmacy' }: InventoryTabsProps) {
+export function InventoryTabs({
+  basePath,
+  variant = 'pharmacy',
+}: InventoryTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
   const root = portalRoot(basePath, variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Inventory sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Inventory sections"
+    >
       {tabs.map((tab) => {
         const href = `${root}/${tab.path}`;
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -74,7 +99,9 @@ export function InventoryTabs({ basePath, variant = 'pharmacy' }: InventoryTabsP
   );
 }
 
-export function getInventorySectionFromPath(pathname: string): InventorySection {
+export function getInventorySectionFromPath(
+  pathname: string,
+): InventorySection {
   if (pathname.includes('/stock')) return 'stock';
   if (pathname.includes('/expiry')) return 'expiry';
   if (pathname.includes('/purchase-orders')) return 'purchase-orders';

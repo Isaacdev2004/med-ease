@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { InteropSectionContent } from '@/features/interoperability/components/InteropSections';
-import { InteropTabs, getInteropSectionFromPath } from '@/features/interoperability/components/InteropTabs';
+import {
+  InteropTabs,
+  getInteropSectionFromPath,
+} from '@/features/interoperability/components/InteropTabs';
 import { useInteropPermissions } from '@/features/interoperability/hooks/use-interoperability-permissions';
 import type { InteropFilters } from '@/services/interoperability/types';
 import { PageShell } from '@/shared/components';
@@ -25,18 +28,27 @@ export function InteroperabilityShell({
   const perms = useInteropPermissions();
   const section = getInteropSectionFromPath(location, variant);
 
-  const scopedFilters = useMemo((): InteropFilters => ({ facilityId }), [facilityId]);
+  const scopedFilters = useMemo(
+    (): InteropFilters => ({ facilityId }),
+    [facilityId],
+  );
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view interoperability data." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view interoperability data."
+        />
       </PageShell>
     );
   }
 
   return (
-    <PageShell title={title} subtitle="Enterprise interoperability — FHIR, HL7, DICOM, CDA, IHE profiles, API gateway, and health information exchange.">
+    <PageShell
+      title={title}
+      subtitle="Enterprise interoperability — FHIR, HL7, DICOM, CDA, IHE profiles, API gateway, and health information exchange."
+    >
       <div className="space-y-6">
         <InteropTabs basePath={basePath} variant={variant} />
         <InteropSectionContent section={section} filters={scopedFilters} />

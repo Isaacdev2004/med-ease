@@ -1,6 +1,14 @@
-import type { MonitoringAlert, MonitoringDevice, Observation, VitalSign } from '@/services/patient-monitoring/types';
+import type {
+  MonitoringAlert,
+  MonitoringDevice,
+  Observation,
+  VitalSign,
+} from '@/services/patient-monitoring/types';
 
-export function detectThresholdAlert(vital: VitalSign, patientName: string): MonitoringAlert | null {
+export function detectThresholdAlert(
+  vital: VitalSign,
+  patientName: string,
+): MonitoringAlert | null {
   if (vital.status === 'normal') return null;
   return {
     id: `alert-threshold-${vital.id}`,
@@ -18,7 +26,11 @@ export function detectThresholdAlert(vital: VitalSign, patientName: string): Mon
   };
 }
 
-export function detectMissedReadingAlert(patientId: string, patientName: string, hoursSinceLastReading: number): MonitoringAlert | null {
+export function detectMissedReadingAlert(
+  patientId: string,
+  patientName: string,
+  hoursSinceLastReading: number,
+): MonitoringAlert | null {
   if (hoursSinceLastReading < 24) return null;
   return {
     id: `alert-missed-${patientId}-${Date.now()}`,
@@ -33,7 +45,11 @@ export function detectMissedReadingAlert(patientId: string, patientName: string,
   };
 }
 
-export function detectDeviceOfflineAlert(device: MonitoringDevice, patientId: string, patientName: string): MonitoringAlert | null {
+export function detectDeviceOfflineAlert(
+  device: MonitoringDevice,
+  patientId: string,
+  patientName: string,
+): MonitoringAlert | null {
   if (device.status !== 'offline' && device.status !== 'error') return null;
   return {
     id: `alert-device-${device.id}`,
@@ -49,7 +65,11 @@ export function detectDeviceOfflineAlert(device: MonitoringDevice, patientId: st
   };
 }
 
-export function detectBatteryAlert(device: MonitoringDevice, patientId: string, patientName: string): MonitoringAlert | null {
+export function detectBatteryAlert(
+  device: MonitoringDevice,
+  patientId: string,
+  patientName: string,
+): MonitoringAlert | null {
   if (device.battery !== 'low' && device.battery !== 'critical') return null;
   return {
     id: `alert-battery-${device.id}`,
@@ -89,14 +109,22 @@ export function scoreAlertRisk(alerts: MonitoringAlert[]): number {
   return alerts.reduce((s, a) => s + (weights[a.severity] ?? 1), 0);
 }
 
-export function evaluateObservationAlerts(observation: Observation, patientName: string): MonitoringAlert | null {
-  if (observation.interpretation !== 'critical' && observation.interpretation !== 'abnormal') return null;
+export function evaluateObservationAlerts(
+  observation: Observation,
+  patientName: string,
+): MonitoringAlert | null {
+  if (
+    observation.interpretation !== 'critical' &&
+    observation.interpretation !== 'abnormal'
+  )
+    return null;
   return {
     id: `alert-obs-${observation.id}`,
     patientId: observation.patientId,
     patientName,
     type: 'clinical',
-    severity: observation.interpretation === 'critical' ? 'critical' : 'warning',
+    severity:
+      observation.interpretation === 'critical' ? 'critical' : 'warning',
     status: 'active',
     title: `Abnormal ${observation.display}`,
     message: `${observation.value} ${observation.unit}`,

@@ -3,7 +3,8 @@ import { useLocation } from 'wouter';
 import { MedicationsShell } from '@/features/medications/components/MedicationsShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type AdminSegment = 'medications' | 'medication-analytics' | 'formulary' | 'prescriptions';
+type AdminSegment =
+  'medications' | 'medication-analytics' | 'formulary' | 'prescriptions';
 
 function resolveAdminSegment(location: string): AdminSegment {
   if (location.includes('/formulary')) return 'formulary';

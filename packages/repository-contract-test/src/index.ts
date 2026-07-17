@@ -16,7 +16,9 @@ export function expectPagination<T>(
     throw new Error(`Expected page ${expected.page}, got ${result.page}`);
   }
   if (result.pageSize !== expected.pageSize) {
-    throw new Error(`Expected pageSize ${expected.pageSize}, got ${result.pageSize}`);
+    throw new Error(
+      `Expected pageSize ${expected.pageSize}, got ${result.pageSize}`,
+    );
   }
   if (typeof result.total !== 'number') {
     throw new Error('Expected paginated result.total to be a number');
@@ -46,7 +48,10 @@ export async function expectRejectsWithErrorName(
     if (error instanceof Error && error.name === errorName) {
       return;
     }
-    if (error instanceof Error && error.message.startsWith('Expected promise to reject')) {
+    if (
+      error instanceof Error &&
+      error.message.startsWith('Expected promise to reject')
+    ) {
       throw error;
     }
     throw new Error(

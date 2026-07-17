@@ -10,5 +10,11 @@ export default function FacilitySchedulePage() {
     : location.includes('/calendar')
       ? resolveModuleBasePath(location, 'calendar')
       : resolveModuleBasePath(location, 'schedule');
-  return <AppointmentsShell basePath={basePath} variant="facility" title="Facility Schedule" />;
+  return (
+    <AppointmentsShell
+      basePath={basePath}
+      variant="facility"
+      title="Facility Schedule"
+    />
+  );
 }

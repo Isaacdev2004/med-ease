@@ -4,7 +4,11 @@ import { Link, useLocation } from 'wouter';
 import { DetailSection } from '@/features/appointments/components/AppointmentSections';
 import { AppointmentHeader } from '@/features/appointments/components/AppointmentComponents';
 import { useAppointment } from '@/features/appointments/hooks/use-appointments';
-import { useCancelAppointment, useCheckIn, useRescheduleAppointment } from '@/features/appointments/mutations/appointments.mutations';
+import {
+  useCancelAppointment,
+  useCheckIn,
+  useRescheduleAppointment,
+} from '@/features/appointments/mutations/appointments.mutations';
 import { LoadingView, PageShell } from '@/shared/components';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 import { Button } from '@/shared/ui/button';
@@ -15,7 +19,8 @@ function getAppointmentId(pathname: string): string | undefined {
   const idx = segments.indexOf('appointments');
   if (idx === -1) return undefined;
   const candidate = segments[idx + 1];
-  if (!candidate || candidate === 'book' || candidate === 'calendar') return undefined;
+  if (!candidate || candidate === 'book' || candidate === 'calendar')
+    return undefined;
   return candidate;
 }
 
@@ -39,7 +44,10 @@ export default function AppointmentDetailPage() {
   if (!query.data) {
     return (
       <PageShell title="Appointment Details">
-        <EmptyState title="Appointment not found" description="Unable to load appointment details." />
+        <EmptyState
+          title="Appointment not found"
+          description="Unable to load appointment details."
+        />
       </PageShell>
     );
   }
@@ -60,7 +68,9 @@ export default function AppointmentDetailPage() {
           {appointment.checkInStatus === 'not_checked_in' ? (
             <Button
               variant="outline"
-              onClick={() => void checkIn.mutateAsync({ appointmentId: appointment.id })}
+              onClick={() =>
+                void checkIn.mutateAsync({ appointmentId: appointment.id })
+              }
             >
               Check In
             </Button>
@@ -70,14 +80,19 @@ export default function AppointmentDetailPage() {
             onClick={() => {
               const next = new Date(appointment.scheduledAt);
               next.setDate(next.getDate() + 7);
-              void reschedule.mutateAsync({ appointmentId: appointment.id, scheduledAt: next.toISOString() });
+              void reschedule.mutateAsync({
+                appointmentId: appointment.id,
+                scheduledAt: next.toISOString(),
+              });
             }}
           >
             Reschedule +7d
           </Button>
           <Button
             variant="destructive"
-            onClick={() => void cancel.mutateAsync({ appointmentId: appointment.id })}
+            onClick={() =>
+              void cancel.mutateAsync({ appointmentId: appointment.id })
+            }
           >
             Cancel
           </Button>

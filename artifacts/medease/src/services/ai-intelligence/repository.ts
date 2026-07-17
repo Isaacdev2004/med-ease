@@ -1,5 +1,9 @@
 import { computeAiAnalytics } from '@/services/ai-intelligence/analytics';
-import { generateCopilotResponse, createAssistantMessage, sessionTitleFromPrompt } from '@/services/ai-intelligence/clinical-copilot';
+import {
+  generateCopilotResponse,
+  createAssistantMessage,
+  sessionTitleFromPrompt,
+} from '@/services/ai-intelligence/clinical-copilot';
 import {
   MOCK_AI_ALERTS,
   MOCK_AI_AUDIT,
@@ -15,7 +19,10 @@ import {
   MOCK_RISK_ASSESSMENTS,
   buildAiDashboard,
 } from '@/services/ai-intelligence/mock-data';
-import { computePredictionScore, scoreToRiskLevel } from '@/services/ai-intelligence/predictive-models';
+import {
+  computePredictionScore,
+  scoreToRiskLevel,
+} from '@/services/ai-intelligence/predictive-models';
 import { generateSummary } from '@/services/ai-intelligence/summarization';
 import { applyRating } from '@/services/ai-intelligence/recommendation-engine';
 import type {
@@ -32,7 +39,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -41,7 +53,12 @@ function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
   return fields.some((f) => f?.toLowerCase().includes(lower));
 }
 
-function audit(action: string, resourceType: string, resourceId: string, facilityId?: string) {
+function audit(
+  action: string,
+  resourceType: string,
+  resourceId: string,
+  facilityId?: string,
+) {
   MOCK_AI_AUDIT.unshift({
     auditId: `aiaudit-${Date.now()}`,
     action,
@@ -65,46 +82,74 @@ class AiIntelligenceRepository {
   private favorites: AiFavorite[] = [];
   private nextId = 900000;
 
-  dashboard(facilityId?: string) { return buildAiDashboard(facilityId); }
-  analytics(facilityId?: string) { return computeAiAnalytics(facilityId); }
+  dashboard(facilityId?: string) {
+    return buildAiDashboard(facilityId);
+  }
+  analytics(facilityId?: string) {
+    return computeAiAnalytics(facilityId);
+  }
 
   getPredictions(filters?: AiIntelligenceFilters) {
     let items = this.predictions;
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((p) => p.patientId === filters.patientId);
-    if (filters?.predictionType) items = items.filter((p) => p.type === filters.predictionType);
-    if (filters?.status) items = items.filter((p) => p.riskLevel === filters.status);
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.predictionId, p.patientId, p.type));
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((p) => p.patientId === filters.patientId);
+    if (filters?.predictionType)
+      items = items.filter((p) => p.type === filters.predictionType);
+    if (filters?.status)
+      items = items.filter((p) => p.riskLevel === filters.status);
+    if (filters?.q)
+      items = items.filter((p) =>
+        matchQ(filters.q, p.predictionId, p.patientId, p.type),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getPrediction(predictionId: string) {
-    return this.predictions.find((p) => p.predictionId === predictionId) ?? null;
+    return (
+      this.predictions.find((p) => p.predictionId === predictionId) ?? null
+    );
   }
 
   getRiskScores(filters?: AiIntelligenceFilters) {
     let items = this.riskAssessments;
-    if (filters?.facilityId) items = items.filter((r) => r.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((r) => r.patientId === filters.patientId);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.assessmentId, r.category, r.patientId));
+    if (filters?.facilityId)
+      items = items.filter((r) => r.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((r) => r.patientId === filters.patientId);
+    if (filters?.q)
+      items = items.filter((r) =>
+        matchQ(filters.q, r.assessmentId, r.category, r.patientId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getRecommendations(filters?: AiIntelligenceFilters) {
     let items = this.recommendations;
-    if (filters?.facilityId) items = items.filter((r) => r.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((r) => r.patientId === filters.patientId);
-    if (filters?.status) items = items.filter((r) => r.status === filters.status);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.title, r.category, r.recommendationId));
+    if (filters?.facilityId)
+      items = items.filter((r) => r.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((r) => r.patientId === filters.patientId);
+    if (filters?.status)
+      items = items.filter((r) => r.status === filters.status);
+    if (filters?.q)
+      items = items.filter((r) =>
+        matchQ(filters.q, r.title, r.category, r.recommendationId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getCopilotSessions(filters?: AiIntelligenceFilters) {
     let items = this.copilotSessions;
-    if (filters?.facilityId) items = items.filter((s) => s.facilityId === filters.facilityId);
-    if (filters?.providerId) items = items.filter((s) => s.providerId === filters.providerId);
-    if (filters?.patientId) items = items.filter((s) => s.patientId === filters.patientId);
-    if (filters?.q) items = items.filter((s) => matchQ(filters.q, s.title, s.sessionId));
+    if (filters?.facilityId)
+      items = items.filter((s) => s.facilityId === filters.facilityId);
+    if (filters?.providerId)
+      items = items.filter((s) => s.providerId === filters.providerId);
+    if (filters?.patientId)
+      items = items.filter((s) => s.patientId === filters.patientId);
+    if (filters?.q)
+      items = items.filter((s) => matchQ(filters.q, s.title, s.sessionId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -114,26 +159,40 @@ class AiIntelligenceRepository {
 
   getClinicalSummaries(filters?: AiIntelligenceFilters) {
     let items = this.summaries;
-    if (filters?.facilityId) items = items.filter((s) => s.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((s) => s.patientId === filters.patientId);
-    if (filters?.q) items = items.filter((s) => matchQ(filters.q, s.summaryId, s.sourceId));
+    if (filters?.facilityId)
+      items = items.filter((s) => s.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((s) => s.patientId === filters.patientId);
+    if (filters?.q)
+      items = items.filter((s) => matchQ(filters.q, s.summaryId, s.sourceId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getForecasts(filters?: AiIntelligenceFilters) {
     let items = this.forecasts;
-    if (filters?.facilityId) items = items.filter((f) => f.facilityId === filters.facilityId);
-    if (filters?.forecastType) items = items.filter((f) => f.type === filters.forecastType);
-    if (filters?.q) items = items.filter((f) => matchQ(filters.q, f.metric, f.forecastId));
+    if (filters?.facilityId)
+      items = items.filter((f) => f.facilityId === filters.facilityId);
+    if (filters?.forecastType)
+      items = items.filter((f) => f.type === filters.forecastType);
+    if (filters?.q)
+      items = items.filter((f) => matchQ(filters.q, f.metric, f.forecastId));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getModelRegistry(filters?: AiIntelligenceFilters) {
     let items = this.models;
-    if (filters?.facilityId) items = items.filter((m) => !m.facilityId || m.facilityId === filters.facilityId);
-    if (filters?.status) items = items.filter((m) => m.status === filters.status);
-    if (filters?.modelId) items = items.filter((m) => m.modelId === filters.modelId);
-    if (filters?.q) items = items.filter((m) => matchQ(filters.q, m.name, m.modelId, m.version));
+    if (filters?.facilityId)
+      items = items.filter(
+        (m) => !m.facilityId || m.facilityId === filters.facilityId,
+      );
+    if (filters?.status)
+      items = items.filter((m) => m.status === filters.status);
+    if (filters?.modelId)
+      items = items.filter((m) => m.modelId === filters.modelId);
+    if (filters?.q)
+      items = items.filter((m) =>
+        matchQ(filters.q, m.name, m.modelId, m.version),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -150,15 +209,21 @@ class AiIntelligenceRepository {
 
   getBiasMonitoring(filters?: AiIntelligenceFilters) {
     let items = MOCK_BIAS_METRICS;
-    if (filters?.modelId) items = items.filter((b) => b.modelId === filters.modelId);
+    if (filters?.modelId)
+      items = items.filter((b) => b.modelId === filters.modelId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getExplainability(filters?: AiIntelligenceFilters) {
     let items = MOCK_EXPLAINABILITY;
-    if (filters?.facilityId) items = items.filter((e) => e.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((e) => e.patientId === filters.patientId);
-    if (filters?.q) items = items.filter((e) => matchQ(filters.q, e.reportId, e.predictionId));
+    if (filters?.facilityId)
+      items = items.filter((e) => e.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((e) => e.patientId === filters.patientId);
+    if (filters?.q)
+      items = items.filter((e) =>
+        matchQ(filters.q, e.reportId, e.predictionId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -168,13 +233,15 @@ class AiIntelligenceRepository {
 
   getAlerts(filters?: AiIntelligenceFilters) {
     let items = MOCK_AI_ALERTS;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getAudit(filters?: AiIntelligenceFilters) {
     let items = MOCK_AI_AUDIT;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -193,7 +260,12 @@ class AiIntelligenceRepository {
       providerId: input.providerId,
     };
     this.predictions.unshift(prediction);
-    audit('generate_prediction', 'prediction', prediction.predictionId, input.facilityId);
+    audit(
+      'generate_prediction',
+      'prediction',
+      prediction.predictionId,
+      input.facilityId,
+    );
     return prediction;
   }
 
@@ -223,7 +295,9 @@ class AiIntelligenceRepository {
         content: input.initialPrompt,
         timestamp: new Date().toISOString(),
       });
-      messages.push(createAssistantMessage(generateCopilotResponse(input.initialPrompt)));
+      messages.push(
+        createAssistantMessage(generateCopilotResponse(input.initialPrompt)),
+      );
     }
     const session = {
       sessionId: `cop-${++this.nextId}`,
@@ -241,11 +315,18 @@ class AiIntelligenceRepository {
   }
 
   rateRecommendation(input: RateRecommendationInput) {
-    const rec = this.recommendations.find((r) => r.recommendationId === input.recommendationId);
+    const rec = this.recommendations.find(
+      (r) => r.recommendationId === input.recommendationId,
+    );
     if (!rec) throw new Error('Recommendation not found');
     rec.rating = input.rating;
     rec.status = applyRating(rec.status, input.rating);
-    audit('rate_recommendation', 'recommendation', rec.recommendationId, rec.facilityId);
+    audit(
+      'rate_recommendation',
+      'recommendation',
+      rec.recommendationId,
+      rec.facilityId,
+    );
     return rec;
   }
 
@@ -268,21 +349,40 @@ class AiIntelligenceRepository {
 
   search(query: string, facilityId?: string) {
     const q = query.toLowerCase();
-    const predictions = this.predictions.filter((p) => (!facilityId || p.facilityId === facilityId) && matchQ(q, p.predictionId, p.type));
+    const predictions = this.predictions.filter(
+      (p) =>
+        (!facilityId || p.facilityId === facilityId) &&
+        matchQ(q, p.predictionId, p.type),
+    );
     const models = this.models.filter((m) => matchQ(q, m.name, m.modelId));
-    return { predictions: predictions.slice(0, 10), models: models.slice(0, 10) };
+    return {
+      predictions: predictions.slice(0, 10),
+      models: models.slice(0, 10),
+    };
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
     return {
       format,
       exportedAt: new Date().toISOString(),
-      recordCount: this.predictions.length + this.recommendations.length + this.summaries.length,
+      recordCount:
+        this.predictions.length +
+        this.recommendations.length +
+        this.summaries.length,
     };
   }
 
-  favorite(userId: string, entityType: AiFavorite['entityType'], entityId: string) {
-    const fav = { userId, entityType, entityId, createdAt: new Date().toISOString() };
+  favorite(
+    userId: string,
+    entityType: AiFavorite['entityType'],
+    entityId: string,
+  ) {
+    const fav = {
+      userId,
+      entityType,
+      entityId,
+      createdAt: new Date().toISOString(),
+    };
     this.favorites.push(fav);
     return fav;
   }

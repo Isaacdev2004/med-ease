@@ -15,7 +15,9 @@ export const researchQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   trials: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.trials(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.trials(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getTrials(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -26,32 +28,44 @@ export const researchQueries = {
     enabled: Boolean(trialId),
   }),
   participants: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.participants(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.participants(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getParticipants(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   visits: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.visits(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.visits(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getVisits(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   investigators: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.investigators(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.investigators(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getInvestigators(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   sites: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.sites(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.sites(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getSites(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   consent: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.consent(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.consent(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getConsents(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   protocol: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.protocol(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.protocol(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: async () => ({
       deviations: await researchService.getDeviations(filters),
       regulatory: await researchService.getRegulatory(filters),
@@ -60,32 +74,44 @@ export const researchQueries = {
     staleTime: CACHE_TIMES.patientList,
   }),
   adverseEvents: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.adverseEvents(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.adverseEvents(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getAdverseEvents(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   safetyBoard: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.safetyBoard(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.safetyBoard(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getSafetyBoard(filters),
     staleTime: CACHE_TIMES.default,
   }),
   biospecimens: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.biospecimens(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.biospecimens(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getBiospecimens(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   publications: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.publications(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.publications(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getPublications(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   innovation: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.innovation(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.innovation(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getInnovation(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   audit: (filters?: ResearchFilters) => ({
-    queryKey: queryKeys.research.audit(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.research.audit(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => researchService.getAudit(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

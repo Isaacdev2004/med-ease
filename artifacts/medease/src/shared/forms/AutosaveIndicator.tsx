@@ -16,7 +16,10 @@ const LABELS: Record<AutosaveStatus, string> = {
 };
 
 /** Displays autosave status for long forms. */
-export function AutosaveIndicator({ status, className }: AutosaveIndicatorProps) {
+export function AutosaveIndicator({
+  status,
+  className,
+}: AutosaveIndicatorProps) {
   if (status === 'idle') return null;
 
   return (

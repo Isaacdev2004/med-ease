@@ -57,27 +57,29 @@ export function TransferRequestWizardDemo() {
     onSaveDraft: saveDraft,
   });
 
-  const { submitting, handleSubmit } = useFormSubmit<TransferRequestFormValues>({
-    successMessage: 'Transfer request submitted successfully.',
-    errorMessage: 'Unable to submit transfer request.',
-    onSubmit: async (values) => {
-      const submit = async () => {
-        await new Promise((resolve) => setTimeout(resolve, 900));
-        console.info('[transfer-demo] submitted', values);
-      };
+  const { submitting, handleSubmit } = useFormSubmit<TransferRequestFormValues>(
+    {
+      successMessage: 'Transfer request submitted successfully.',
+      errorMessage: 'Unable to submit transfer request.',
+      onSubmit: async (values) => {
+        const submit = async () => {
+          await new Promise((resolve) => setTimeout(resolve, 900));
+          console.info('[transfer-demo] submitted', values);
+        };
 
-      if (!navigator.onLine) {
-        offlineMutationQueue.enqueue({
-          label: 'Transfer request',
-          execute: submit,
-        });
-        return;
-      }
+        if (!navigator.onLine) {
+          offlineMutationQueue.enqueue({
+            label: 'Transfer request',
+            execute: submit,
+          });
+          return;
+        }
 
-      await submit();
-      clearDraft();
+        await submit();
+        clearDraft();
+      },
     },
-  });
+  );
 
   async function validateStep(stepIndex: number) {
     const fields = transferStepFields[stepIndex];
@@ -89,19 +91,45 @@ export function TransferRequestWizardDemo() {
     switch (stepIndex) {
       case 0:
         return (
-          <FormSection title="Patient Information" description="Identify the patient being transferred.">
+          <FormSection
+            title="Patient Information"
+            description="Identify the patient being transferred."
+          >
             <FormFieldGroup columns={2}>
-              <TextField control={form.control} name="patientName" label="Patient Name" required />
-              <TextField control={form.control} name="patientId" label="Patient ID" required />
+              <TextField
+                control={form.control}
+                name="patientName"
+                label="Patient Name"
+                required
+              />
+              <TextField
+                control={form.control}
+                name="patientId"
+                label="Patient ID"
+                required
+              />
             </FormFieldGroup>
-            <TextField control={form.control} name="contactPhone" label="Contact Phone" required />
+            <TextField
+              control={form.control}
+              name="contactPhone"
+              label="Contact Phone"
+              required
+            />
           </FormSection>
         );
       case 1:
         return (
-          <FormSection title="Facilities" description="Select origin and destination facilities.">
+          <FormSection
+            title="Facilities"
+            description="Select origin and destination facilities."
+          >
             <FormFieldGroup columns={2}>
-              <TextField control={form.control} name="originFacility" label="Origin Facility" required />
+              <TextField
+                control={form.control}
+                name="originFacility"
+                label="Origin Facility"
+                required
+              />
               <TextField
                 control={form.control}
                 name="destinationFacility"
@@ -109,12 +137,20 @@ export function TransferRequestWizardDemo() {
                 required
               />
             </FormFieldGroup>
-            <DateField control={form.control} name="requestedDate" label="Requested Transfer Date" required />
+            <DateField
+              control={form.control}
+              name="requestedDate"
+              label="Requested Transfer Date"
+              required
+            />
           </FormSection>
         );
       case 2:
         return (
-          <FormSection title="Clinical Details" description="Provide clinical context for the transfer team.">
+          <FormSection
+            title="Clinical Details"
+            description="Provide clinical context for the transfer team."
+          >
             <SelectField
               control={form.control}
               name="urgency"
@@ -141,16 +177,40 @@ export function TransferRequestWizardDemo() {
       default: {
         const values = form.getValues();
         return (
-          <FormSection title="Review" description="Confirm details before submitting.">
+          <FormSection
+            title="Review"
+            description="Confirm details before submitting."
+          >
             <dl className="grid gap-3 text-sm sm:grid-cols-2">
-              <div><dt className="text-muted-foreground">Patient</dt><dd className="font-medium">{values.patientName}</dd></div>
-              <div><dt className="text-muted-foreground">Patient ID</dt><dd className="font-medium">{values.patientId}</dd></div>
-              <div><dt className="text-muted-foreground">Origin</dt><dd className="font-medium">{values.originFacility}</dd></div>
-              <div><dt className="text-muted-foreground">Destination</dt><dd className="font-medium">{values.destinationFacility}</dd></div>
-              <div><dt className="text-muted-foreground">Urgency</dt><dd className="font-medium capitalize">{values.urgency}</dd></div>
-              <div><dt className="text-muted-foreground">Phone</dt><dd className="font-medium">{values.contactPhone}</dd></div>
+              <div>
+                <dt className="text-muted-foreground">Patient</dt>
+                <dd className="font-medium">{values.patientName}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Patient ID</dt>
+                <dd className="font-medium">{values.patientId}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Origin</dt>
+                <dd className="font-medium">{values.originFacility}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Destination</dt>
+                <dd className="font-medium">{values.destinationFacility}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Urgency</dt>
+                <dd className="font-medium capitalize">{values.urgency}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Phone</dt>
+                <dd className="font-medium">{values.contactPhone}</dd>
+              </div>
             </dl>
-            <p className="text-sm mt-4"><span className="text-muted-foreground">Summary: </span>{values.clinicalSummary}</p>
+            <p className="text-sm mt-4">
+              <span className="text-muted-foreground">Summary: </span>
+              {values.clinicalSummary}
+            </p>
           </FormSection>
         );
       }
@@ -161,7 +221,8 @@ export function TransferRequestWizardDemo() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          Multi-step wizard with autosave, draft recovery, and offline queue support.
+          Multi-step wizard with autosave, draft recovery, and offline queue
+          support.
         </p>
         <AutosaveIndicator status={status} />
       </div>

@@ -1,4 +1,9 @@
-import type { ApprovalWorkflow, ApprovalStep, CreateRequisitionInput, PurchaseOrder } from '@/services/procurement/types';
+import type {
+  ApprovalWorkflow,
+  ApprovalStep,
+  CreateRequisitionInput,
+  PurchaseOrder,
+} from '@/services/procurement/types';
 
 const THRESHOLDS = { department: 1000, finance: 5000, ceo: 50000 };
 
@@ -8,13 +13,28 @@ export function buildApprovalWorkflow(
   totalAmount: number,
 ): ApprovalWorkflow {
   const steps: ApprovalStep[] = [
-    { stepId: 'dept', role: 'Department Head', status: 'pending', threshold: THRESHOLDS.department },
+    {
+      stepId: 'dept',
+      role: 'Department Head',
+      status: 'pending',
+      threshold: THRESHOLDS.department,
+    },
   ];
   if (totalAmount >= THRESHOLDS.finance) {
-    steps.push({ stepId: 'finance', role: 'Finance', status: 'pending', threshold: THRESHOLDS.finance });
+    steps.push({
+      stepId: 'finance',
+      role: 'Finance',
+      status: 'pending',
+      threshold: THRESHOLDS.finance,
+    });
   }
   if (totalAmount >= THRESHOLDS.ceo) {
-    steps.push({ stepId: 'ceo', role: 'CEO', status: 'pending', threshold: THRESHOLDS.ceo });
+    steps.push({
+      stepId: 'ceo',
+      role: 'CEO',
+      status: 'pending',
+      threshold: THRESHOLDS.ceo,
+    });
   }
   return {
     workflowId: `wf-${Date.now()}`,
@@ -28,7 +48,12 @@ export function buildApprovalWorkflow(
   };
 }
 
-export function approveStep(workflow: ApprovalWorkflow, approverId: string, approverName: string, comments?: string): ApprovalWorkflow {
+export function approveStep(
+  workflow: ApprovalWorkflow,
+  approverId: string,
+  approverName: string,
+  comments?: string,
+): ApprovalWorkflow {
   const step = workflow.steps[workflow.currentStep];
   if (!step) return workflow;
   step.status = 'approved';
@@ -46,7 +71,12 @@ export function approveStep(workflow: ApprovalWorkflow, approverId: string, appr
   };
 }
 
-export function rejectStep(workflow: ApprovalWorkflow, approverId: string, approverName: string, comments?: string): ApprovalWorkflow {
+export function rejectStep(
+  workflow: ApprovalWorkflow,
+  approverId: string,
+  approverName: string,
+  comments?: string,
+): ApprovalWorkflow {
   const step = workflow.steps[workflow.currentStep];
   if (step) {
     step.status = 'rejected';
@@ -54,31 +84,55 @@ export function rejectStep(workflow: ApprovalWorkflow, approverId: string, appro
     step.approverName = approverName;
     step.comments = comments;
   }
-  return { ...workflow, status: 'rejected', updatedAt: new Date().toISOString() };
+  return {
+    ...workflow,
+    status: 'rejected',
+    updatedAt: new Date().toISOString(),
+  };
 }
 
-export function delegateStep(workflow: ApprovalWorkflow, delegateToId: string, delegateToName: string): ApprovalWorkflow {
+export function delegateStep(
+  workflow: ApprovalWorkflow,
+  delegateToId: string,
+  delegateToName: string,
+): ApprovalWorkflow {
   const step = workflow.steps[workflow.currentStep];
   if (step) {
     step.status = 'delegated';
     step.approverId = delegateToId;
     step.approverName = delegateToName;
   }
-  return { ...workflow, status: 'delegated', updatedAt: new Date().toISOString() };
+  return {
+    ...workflow,
+    status: 'delegated',
+    updatedAt: new Date().toISOString(),
+  };
 }
 
 export function escalateStep(workflow: ApprovalWorkflow): ApprovalWorkflow {
   const step = workflow.steps[workflow.currentStep];
   if (step) step.status = 'escalated';
   const next = Math.min(workflow.currentStep + 1, workflow.steps.length - 1);
-  return { ...workflow, currentStep: next, status: 'escalated', updatedAt: new Date().toISOString() };
+  return {
+    ...workflow,
+    currentStep: next,
+    status: 'escalated',
+    updatedAt: new Date().toISOString(),
+  };
 }
 
-export function requiresBudgetApproval(amount: number, budgetRemaining: number): boolean {
+export function requiresBudgetApproval(
+  amount: number,
+  budgetRemaining: number,
+): boolean {
   return amount > budgetRemaining * 0.8;
 }
 
-export function buildRequisitionFromInput(input: CreateRequisitionInput, requestId: string, requisitionNumber: string) {
+export function buildRequisitionFromInput(
+  input: CreateRequisitionInput,
+  requestId: string,
+  requisitionNumber: string,
+) {
   const lineItems = input.lineItems.map((l, i) => ({
     ...l,
     lineId: `${requestId}-line-${i}`,

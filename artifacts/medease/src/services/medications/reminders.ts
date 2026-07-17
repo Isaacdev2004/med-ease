@@ -1,8 +1,16 @@
-import type { MedicationReminder, PatientMedication } from '@/services/medications/types';
+import type {
+  MedicationReminder,
+  PatientMedication,
+} from '@/services/medications/types';
 
-export function buildDoseReminders(medication: PatientMedication): MedicationReminder[] {
+export function buildDoseReminders(
+  medication: PatientMedication,
+): MedicationReminder[] {
   const slots = medication.frequency.includes('Twice')
-    ? [{ hour: 8, label: 'Morning' }, { hour: 20, label: 'Evening' }]
+    ? [
+        { hour: 8, label: 'Morning' },
+        { hour: 20, label: 'Evening' },
+      ]
     : [{ hour: 8, label: 'Morning' }];
 
   return slots.map((slot, i) => {
@@ -22,8 +30,13 @@ export function buildDoseReminders(medication: PatientMedication): MedicationRem
   });
 }
 
-export function buildRefillReminder(medication: PatientMedication): MedicationReminder | null {
-  if ((medication.refillsRemaining ?? 0) <= 1 && medication.status === 'active') {
+export function buildRefillReminder(
+  medication: PatientMedication,
+): MedicationReminder | null {
+  if (
+    (medication.refillsRemaining ?? 0) <= 1 &&
+    medication.status === 'active'
+  ) {
     return {
       id: `rem-refill-${medication.id}`,
       medicationId: medication.id,

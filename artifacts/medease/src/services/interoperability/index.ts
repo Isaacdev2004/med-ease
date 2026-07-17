@@ -1,7 +1,10 @@
 export { interoperabilityService } from '@/services/interoperability/interoperability.service';
 export { interoperabilityRepository } from '@/services/interoperability/repository';
 export { interoperabilityOfflineQueue } from '@/services/interoperability/offline-sync';
-export { computeInteropAnalytics, buildInteropDashboard } from '@/services/interoperability/analytics';
+export {
+  computeInteropAnalytics,
+  buildInteropDashboard,
+} from '@/services/interoperability/analytics';
 export {
   MOCK_AUDIT,
   MOCK_CDA_DOCUMENTS,

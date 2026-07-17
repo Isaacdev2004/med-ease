@@ -1,6 +1,14 @@
-import type { Payment, Refund, RefundPaymentInput } from '@/services/billing/types';
+import type {
+  Payment,
+  Refund,
+  RefundPaymentInput,
+} from '@/services/billing/types';
 
-export function processRefund(input: RefundPaymentInput, payment: Payment, refundId: string): Refund {
+export function processRefund(
+  input: RefundPaymentInput,
+  payment: Payment,
+  refundId: string,
+): Refund {
   const now = new Date().toISOString();
   return {
     refundId,

@@ -1,4 +1,8 @@
-import type { IncidentReport, PolicyDocument, Risk } from '@/services/quality/types';
+import type {
+  IncidentReport,
+  PolicyDocument,
+  Risk,
+} from '@/services/quality/types';
 
 export function toFhirAdverseEvent(incident: IncidentReport) {
   return {

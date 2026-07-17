@@ -1,7 +1,10 @@
 export { publicHealthService } from '@/services/public-health/public-health.service';
 export { publicHealthRepository } from '@/services/public-health/repository';
 export { publicHealthOfflineQueue } from '@/services/public-health/offline-sync';
-export { computePublicHealthAnalytics, buildPublicHealthDashboard } from '@/services/public-health/analytics';
+export {
+  computePublicHealthAnalytics,
+  buildPublicHealthDashboard,
+} from '@/services/public-health/analytics';
 export {
   MOCK_COMMUNITY_MEMBERS,
   MOCK_DISEASE_CASES,

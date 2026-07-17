@@ -10,7 +10,7 @@ export const FINESS_MOCK_RECORDS: FinessRecord[] = [
     department: 'Paris',
     city: 'Paris',
     postalCode: '75013',
-    street: '47-83 Boulevard de l\'Hôpital',
+    street: "47-83 Boulevard de l'Hôpital",
     phone: '+33 1 42 16 00 00',
   },
   {
@@ -21,7 +21,7 @@ export const FINESS_MOCK_RECORDS: FinessRecord[] = [
     department: 'Rhône',
     city: 'Lyon',
     postalCode: '69003',
-    street: '5 Place d\'Arsonval',
+    street: "5 Place d'Arsonval",
     phone: '+33 4 72 11 73 33',
   },
   {
@@ -48,7 +48,7 @@ export const FINESS_MOCK_RECORDS: FinessRecord[] = [
   {
     finessNumber: '750000005',
     legalName: 'Pharmacie Centrale du Marais',
-    category: 'Pharmacie d\'officine',
+    category: "Pharmacie d'officine",
     department: 'Paris',
     city: 'Paris',
     postalCode: '75004',
@@ -58,7 +58,7 @@ export const FINESS_MOCK_RECORDS: FinessRecord[] = [
   {
     finessNumber: '690000006',
     legalName: 'Pharmacie Bellecour',
-    category: 'Pharmacie d\'officine',
+    category: "Pharmacie d'officine",
     department: 'Rhône',
     city: 'Lyon',
     postalCode: '69002',

@@ -1,6 +1,14 @@
-export const NLP_ENTITY_TYPES = ['medication', 'condition', 'procedure', 'lab', 'symptom'] as const;
+export const NLP_ENTITY_TYPES = [
+  'medication',
+  'condition',
+  'procedure',
+  'lab',
+  'symptom',
+] as const;
 
-export function extractEntities(text: string): { type: string; value: string; confidence: number }[] {
+export function extractEntities(
+  text: string,
+): { type: string; value: string; confidence: number }[] {
   const tokens = text.split(/\s+/).filter(Boolean);
   return tokens.slice(0, 5).map((token, i) => ({
     type: NLP_ENTITY_TYPES[i % NLP_ENTITY_TYPES.length]!,
@@ -14,12 +22,19 @@ export function sentimentScore(text: string): number {
   const negative = ['critical', 'worsening', 'abnormal', 'urgent'];
   const lower = text.toLowerCase();
   let score = 0.5;
-  positive.forEach((w) => { if (lower.includes(w)) score += 0.1; });
-  negative.forEach((w) => { if (lower.includes(w)) score -= 0.1; });
+  positive.forEach((w) => {
+    if (lower.includes(w)) score += 0.1;
+  });
+  negative.forEach((w) => {
+    if (lower.includes(w)) score -= 0.1;
+  });
   return Math.max(0, Math.min(1, Math.round(score * 100) / 100));
 }
 
-export function toFhirObservation(entity: { type: string; value: string; confidence: number }, patientId: string) {
+export function toFhirObservation(
+  entity: { type: string; value: string; confidence: number },
+  patientId: string,
+) {
   return {
     resourceType: 'Observation',
     status: 'final',

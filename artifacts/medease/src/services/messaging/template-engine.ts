@@ -1,6 +1,9 @@
 import type { MessageTemplate } from '@/services/messaging/types';
 
-export function renderTemplate(template: MessageTemplate, variables: Record<string, string>): { subject: string; body: string } {
+export function renderTemplate(
+  template: MessageTemplate,
+  variables: Record<string, string>,
+): { subject: string; body: string } {
   let subject = template.subject;
   let body = template.body;
   for (const [key, value] of Object.entries(variables)) {

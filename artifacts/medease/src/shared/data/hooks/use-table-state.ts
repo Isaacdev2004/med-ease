@@ -31,7 +31,9 @@ export function useTableState<T>({
 
     if (searchQuery.trim() && getSearchText) {
       const query = searchQuery.trim().toLowerCase();
-      rows = rows.filter((row) => getSearchText(row).toLowerCase().includes(query));
+      rows = rows.filter((row) =>
+        getSearchText(row).toLowerCase().includes(query),
+      );
     }
 
     if (filterFn) {
@@ -63,5 +65,15 @@ export function useTableState<T>({
       from: total === 0 ? 0 : start + 1,
       to: Math.min(start + pageSize, total),
     };
-  }, [data, dir, filterFn, getSearchText, getSortValue, page, pageSize, searchQuery, sort]);
+  }, [
+    data,
+    dir,
+    filterFn,
+    getSearchText,
+    getSortValue,
+    page,
+    pageSize,
+    searchQuery,
+    sort,
+  ]);
 }

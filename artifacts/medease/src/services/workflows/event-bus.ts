@@ -19,7 +19,12 @@ class WorkflowEventBus {
 
 export const workflowEventBus = new WorkflowEventBus();
 
-export function createEvent(type: string, source: string, module: string, payload: string): WorkflowEvent {
+export function createEvent(
+  type: string,
+  source: string,
+  module: string,
+  payload: string,
+): WorkflowEvent {
   return {
     eventId: `evt-${Date.now()}`,
     type,

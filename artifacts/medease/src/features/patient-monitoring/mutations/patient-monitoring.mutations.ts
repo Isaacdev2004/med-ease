@@ -13,7 +13,10 @@ import type {
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    patientMonitoringOfflineQueue.enqueue({ label, execute: () => execute().then(() => undefined) });
+    patientMonitoringOfflineQueue.enqueue({
+      label,
+      execute: () => execute().then(() => undefined),
+    });
     appToast.offline('Monitoring update queued until you are back online.');
     return Promise.resolve(null);
   }
@@ -29,7 +32,9 @@ export function useMonitoringMutations() {
 
   const createObservation = useMutation({
     mutationFn: (input: CreateObservationInput) =>
-      runOrQueue('Create observation', () => patientMonitoringService.createObservation(input)),
+      runOrQueue('Create observation', () =>
+        patientMonitoringService.createObservation(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Observation recorded.' });
@@ -38,7 +43,9 @@ export function useMonitoringMutations() {
 
   const updateObservation = useMutation({
     mutationFn: (input: UpdateObservationInput) =>
-      runOrQueue('Update observation', () => patientMonitoringService.updateObservation(input)),
+      runOrQueue('Update observation', () =>
+        patientMonitoringService.updateObservation(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Observation updated.' });
@@ -47,7 +54,9 @@ export function useMonitoringMutations() {
 
   const assignDevice = useMutation({
     mutationFn: (input: AssignDeviceInput) =>
-      runOrQueue('Assign device', () => patientMonitoringService.assignDevice(input)),
+      runOrQueue('Assign device', () =>
+        patientMonitoringService.assignDevice(input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Device assigned.' });
@@ -56,7 +65,9 @@ export function useMonitoringMutations() {
 
   const syncDevice = useMutation({
     mutationFn: (deviceId: string) =>
-      runOrQueue('Sync device', () => patientMonitoringService.syncDevice(deviceId)),
+      runOrQueue('Sync device', () =>
+        patientMonitoringService.syncDevice(deviceId),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Device synchronized.' });
@@ -65,7 +76,9 @@ export function useMonitoringMutations() {
 
   const resolveAlert = useMutation({
     mutationFn: ({ id, by }: { id: string; by?: string }) =>
-      runOrQueue('Resolve alert', () => patientMonitoringService.resolveAlert(id, by)),
+      runOrQueue('Resolve alert', () =>
+        patientMonitoringService.resolveAlert(id, by),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Alert resolved.' });
@@ -74,7 +87,9 @@ export function useMonitoringMutations() {
 
   const dismissAlert = useMutation({
     mutationFn: (id: string) =>
-      runOrQueue('Dismiss alert', () => patientMonitoringService.dismissAlert(id)),
+      runOrQueue('Dismiss alert', () =>
+        patientMonitoringService.dismissAlert(id),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Alert dismissed.' });
@@ -92,7 +107,9 @@ export function useMonitoringMutations() {
 
   const removeRPM = useMutation({
     mutationFn: (programId: string) =>
-      runOrQueue('Remove RPM', () => patientMonitoringService.removeRPM(programId)),
+      runOrQueue('Remove RPM', () =>
+        patientMonitoringService.removeRPM(programId),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'RPM program completed.' });
@@ -100,20 +117,50 @@ export function useMonitoringMutations() {
   });
 
   const toggleFavorite = useMutation({
-    mutationFn: ({ patientId, observationId }: { patientId: string; observationId: string }) =>
-      runOrQueue('Toggle favorite', () => patientMonitoringService.toggleFavorite(patientId, observationId)),
+    mutationFn: ({
+      patientId,
+      observationId,
+    }: {
+      patientId: string;
+      observationId: string;
+    }) =>
+      runOrQueue('Toggle favorite', () =>
+        patientMonitoringService.toggleFavorite(patientId, observationId),
+      ),
     onSuccess: () => invalidateAll(client),
   });
 
   const exportObservations = useMutation({
-    mutationFn: ({ patientId, format }: { patientId: string; format: 'pdf' | 'csv' | 'fhir' }) =>
-      runOrQueue('Export observations', () => patientMonitoringService.exportObservations(patientId, format)),
+    mutationFn: ({
+      patientId,
+      format,
+    }: {
+      patientId: string;
+      format: 'pdf' | 'csv' | 'fhir';
+    }) =>
+      runOrQueue('Export observations', () =>
+        patientMonitoringService.exportObservations(patientId, format),
+      ),
     onSuccess: () => appToast.success({ title: 'Export ready.' }),
   });
 
   const shareObservations = useMutation({
-    mutationFn: ({ patientId, sharedWith, observationIds }: { patientId: string; sharedWith: string; observationIds: string[] }) =>
-      runOrQueue('Share observations', () => patientMonitoringService.shareObservations(patientId, sharedWith, observationIds)),
+    mutationFn: ({
+      patientId,
+      sharedWith,
+      observationIds,
+    }: {
+      patientId: string;
+      sharedWith: string;
+      observationIds: string[];
+    }) =>
+      runOrQueue('Share observations', () =>
+        patientMonitoringService.shareObservations(
+          patientId,
+          sharedWith,
+          observationIds,
+        ),
+      ),
     onSuccess: () => appToast.success({ title: 'Observations shared.' }),
   });
 

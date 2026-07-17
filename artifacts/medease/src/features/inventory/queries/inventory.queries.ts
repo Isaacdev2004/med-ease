@@ -10,7 +10,9 @@ export const inventoryQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   inventory: (filters?: InventoryFilters) => ({
-    queryKey: queryKeys.inventory.list(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.inventory.list(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => inventoryService.searchInventory(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -21,12 +23,16 @@ export const inventoryQueries = {
     enabled: Boolean(inventoryId),
   }),
   movements: (filters?: InventoryFilters) => ({
-    queryKey: queryKeys.inventory.movements(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.inventory.movements(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => inventoryService.getStockMovements(filters),
     staleTime: CACHE_TIMES.patientTimeline,
   }),
   purchaseOrders: (filters?: InventoryFilters) => ({
-    queryKey: queryKeys.inventory.purchaseOrders(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.inventory.purchaseOrders(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => inventoryService.getPurchaseOrders(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -41,12 +47,16 @@ export const inventoryQueries = {
     staleTime: CACHE_TIMES.reference,
   }),
   assets: (filters?: InventoryFilters) => ({
-    queryKey: queryKeys.inventory.assets(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.inventory.assets(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => inventoryService.getAssets(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   transfers: (filters?: InventoryFilters) => ({
-    queryKey: queryKeys.inventory.transfers(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.inventory.transfers(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => inventoryService.getTransfers(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

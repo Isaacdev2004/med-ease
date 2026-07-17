@@ -9,14 +9,21 @@ export function generateClientSecret(): string {
   return `sec_${Math.random().toString(36).slice(2, 18)}${Math.random().toString(36).slice(2, 18)}`;
 }
 
-export function nextOAuthAppStatus(current: OAuthAppStatus, action: 'publish' | 'suspend' | 'draft'): OAuthAppStatus {
+export function nextOAuthAppStatus(
+  current: OAuthAppStatus,
+  action: 'publish' | 'suspend' | 'draft',
+): OAuthAppStatus {
   if (action === 'publish') return 'published';
   if (action === 'suspend') return 'suspended';
   return 'draft';
 }
 
 export function canPublishOAuthApp(app: OAuthApp): boolean {
-  return app.status === 'draft' && app.redirectUris.length > 0 && app.scopes.length > 0;
+  return (
+    app.status === 'draft' &&
+    app.redirectUris.length > 0 &&
+    app.scopes.length > 0
+  );
 }
 
 export function publishedOAuthAppCount(apps: OAuthApp[]): number {

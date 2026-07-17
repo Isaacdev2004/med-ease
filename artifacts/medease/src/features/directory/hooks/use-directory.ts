@@ -35,7 +35,11 @@ export function useFavorites() {
 
 export function useNearbyProviders(filters?: DirectoryFilters) {
   const nearbyFilters = useMemo(
-    () => ({ ...filters, sort: 'distance' as const, distanceMax: filters?.distanceMax ?? 10 }),
+    () => ({
+      ...filters,
+      sort: 'distance' as const,
+      distanceMax: filters?.distanceMax ?? 10,
+    }),
     [filters],
   );
   return useDirectory(nearbyFilters);

@@ -23,7 +23,11 @@ export function DirectoryStatsPanel({ stats, loading }: DirectoryStatsProps) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
       <StatCard label="Total Providers" value={stats.total} icon={MapPin} />
-      <MetricCard title="Professionals" value={stats.professionals} status="neutral" />
+      <MetricCard
+        title="Professionals"
+        value={stats.professionals}
+        status="neutral"
+      />
       <StatCard label="Facilities" value={stats.facilities} icon={Building2} />
       <StatCard label="Pharmacies" value={stats.pharmacies} icon={Pill} />
       <StatCard label="Your Favorites" value={stats.favorites} icon={Heart} />

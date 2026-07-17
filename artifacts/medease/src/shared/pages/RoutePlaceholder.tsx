@@ -9,7 +9,10 @@ interface RoutePlaceholderProps {
   description?: string;
 }
 
-export function RoutePlaceholder({ title, description }: RoutePlaceholderProps) {
+export function RoutePlaceholder({
+  title,
+  description,
+}: RoutePlaceholderProps) {
   return (
     <div>
       <PageHeader

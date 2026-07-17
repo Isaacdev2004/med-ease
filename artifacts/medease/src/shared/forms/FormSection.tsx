@@ -22,7 +22,9 @@ export function FormSection({
       <legend className="px-1">
         <span className={TYPOGRAPHY.h4}>{title}</span>
         {description ? (
-          <p className="text-sm text-muted-foreground font-normal mt-1">{description}</p>
+          <p className="text-sm text-muted-foreground font-normal mt-1">
+            {description}
+          </p>
         ) : null}
       </legend>
       <div className="space-y-4">{children}</div>

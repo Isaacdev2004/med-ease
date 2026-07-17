@@ -63,7 +63,10 @@ import { createProfessionalMedicationRoutes } from '@/features/medications/route
 import { createClinicianPatientRecordRoutes } from '@/features/patient-records/routes';
 import { createMedicalLibraryRoutes } from '@/features/medical-library/routes';
 import { createDirectoryRoutes } from '@/features/directory/routes';
-import { createLaboratoryInventoryRoutes, createRadiologyInventoryRoutes } from '@/features/inventory/routes';
+import {
+  createLaboratoryInventoryRoutes,
+  createRadiologyInventoryRoutes,
+} from '@/features/inventory/routes';
 import {
   createConsultationsRoute,
   createMedicalRecordsRoute,

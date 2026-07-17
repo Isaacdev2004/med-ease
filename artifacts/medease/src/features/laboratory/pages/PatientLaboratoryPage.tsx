@@ -7,7 +7,13 @@ import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
 export default function PatientLaboratoryPage() {
   const [location] = useLocation();
-  if (location.match(/\/laboratory\/[^/]+$/) && !location.endsWith('/orders') && !location.endsWith('/results') && !location.endsWith('/history') && !location.endsWith('/trends')) {
+  if (
+    location.match(/\/laboratory\/[^/]+$/) &&
+    !location.endsWith('/orders') &&
+    !location.endsWith('/results') &&
+    !location.endsWith('/history') &&
+    !location.endsWith('/trends')
+  ) {
     return (
       <PageShell title="Lab Result Details">
         <ResultDetailSection />
@@ -15,5 +21,11 @@ export default function PatientLaboratoryPage() {
     );
   }
   const basePath = resolveModuleBasePath(location, 'laboratory');
-  return <LaboratoryShell basePath={basePath} variant="patient" title="My Laboratory" />;
+  return (
+    <LaboratoryShell
+      basePath={basePath}
+      variant="patient"
+      title="My Laboratory"
+    />
+  );
 }

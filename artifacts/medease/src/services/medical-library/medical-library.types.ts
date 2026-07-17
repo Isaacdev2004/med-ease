@@ -34,7 +34,8 @@ export type MedicationSort =
 
 export type MedicationViewMode = 'cards' | 'table' | 'compact' | 'categories';
 
-export type PregnancySafety = 'safe' | 'caution' | 'contraindicated' | 'unknown';
+export type PregnancySafety =
+  'safe' | 'caution' | 'contraindicated' | 'unknown';
 
 export interface MedicationInteraction {
   drugName: string;

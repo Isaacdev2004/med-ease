@@ -25,7 +25,9 @@ const FOREIGN_PATIENT_ID = '00000000-0000-0000-0000-000000000099';
 
 function assertStatus(response, expected, label) {
   if (response.status !== expected) {
-    throw new Error(`${label}: expected ${expected}, got ${response.status} — ${response.statusText}`);
+    throw new Error(
+      `${label}: expected ${expected}, got ${response.status} — ${response.statusText}`,
+    );
   }
 }
 
@@ -52,7 +54,10 @@ async function main() {
   const adminToken = adminLogin.token;
 
   process.stdout.write('\n==> P8 patient list\n');
-  const listResponse = await authedFetch(adminToken, '/patients?page=1&pageSize=10');
+  const listResponse = await authedFetch(
+    adminToken,
+    '/patients?page=1&pageSize=10',
+  );
   assertStatus(listResponse, 200, 'GET /patients');
   const listBody = await listResponse.json();
   if (!Array.isArray(listBody.items) || listBody.items.length === 0) {
@@ -62,7 +67,10 @@ async function main() {
     throw new Error('Patient list returned cross-tenant records');
   }
 
-  const activeList = await authedFetch(adminToken, '/patients?status=active&page=1&pageSize=25');
+  const activeList = await authedFetch(
+    adminToken,
+    '/patients?status=active&page=1&pageSize=25',
+  );
   assertStatus(activeList, 200, 'GET /patients?status=active');
   const activeBody = await activeList.json();
   if (!activeBody.items.every((patient) => patient.status === 'active')) {
@@ -70,17 +78,27 @@ async function main() {
   }
 
   process.stdout.write('\n==> P8 patient search\n');
-  const searchResponse = await authedFetch(adminToken, '/patients/search?q=sarah&page=1&pageSize=10');
+  const searchResponse = await authedFetch(
+    adminToken,
+    '/patients/search?q=sarah&page=1&pageSize=10',
+  );
   assertStatus(searchResponse, 200, 'GET /patients/search');
   const searchBody = await searchResponse.json();
-  const sarah = searchBody.items.find((patient) => patient.fullName?.includes('Sarah'));
+  const sarah = searchBody.items.find((patient) =>
+    patient.fullName?.includes('Sarah'),
+  );
   if (!sarah) {
     throw new Error('Search did not return Sarah Jenkins');
   }
 
-  const emptySearch = await authedFetch(adminToken, '/patients/search?q=%20&page=1&pageSize=10');
+  const emptySearch = await authedFetch(
+    adminToken,
+    '/patients/search?q=%20&page=1&pageSize=10',
+  );
   if (emptySearch.status !== 422 && emptySearch.status !== 400) {
-    throw new Error(`Expected 422/400 for empty search, got ${emptySearch.status}`);
+    throw new Error(
+      `Expected 422/400 for empty search, got ${emptySearch.status}`,
+    );
   }
 
   process.stdout.write('\n==> P8 create patient\n');
@@ -105,14 +123,20 @@ async function main() {
     throw new Error('Create patient response missing patientId');
   }
 
-  const identifiersResponse = await authedFetch(adminToken, `/patients/${createdPatientId}/identifiers`);
+  const identifiersResponse = await authedFetch(
+    adminToken,
+    `/patients/${createdPatientId}/identifiers`,
+  );
   assertStatus(identifiersResponse, 200, 'GET identifiers');
   const identifiers = await identifiersResponse.json();
   if (!Array.isArray(identifiers) || identifiers.length === 0) {
     throw new Error('Expected identifiers after patient registration');
   }
 
-  const preferencesResponse = await authedFetch(adminToken, `/patients/${createdPatientId}/preferences`);
+  const preferencesResponse = await authedFetch(
+    adminToken,
+    `/patients/${createdPatientId}/preferences`,
+  );
   assertStatus(preferencesResponse, 200, 'GET preferences');
   const preferences = await preferencesResponse.json();
   if (!preferences?.language) {
@@ -121,7 +145,10 @@ async function main() {
 
   const queueBeforeAudit = await getAuditQueueDepth();
   expectPatientAudit(
-    await waitForPatientAuditLog({ patientId: createdPatientId, auditAction: 'CREATE' }),
+    await waitForPatientAuditLog({
+      patientId: createdPatientId,
+      auditAction: 'CREATE',
+    }),
     { patientId: createdPatientId, auditAction: 'CREATE' },
   );
   const queueAfterAudit = await getAuditQueueDepth();
@@ -130,7 +157,10 @@ async function main() {
   );
 
   process.stdout.write('\n==> P8 duplicate MRN\n');
-  const auditCountBefore = await countPatientAuditLogs(createdPatientId, 'CREATE');
+  const auditCountBefore = await countPatientAuditLogs(
+    createdPatientId,
+    'CREATE',
+  );
   const duplicateResponse = await authedFetch(adminToken, '/patients', {
     method: 'POST',
     body: JSON.stringify({
@@ -141,50 +171,87 @@ async function main() {
     }),
   });
   if (duplicateResponse.status !== 409) {
-    throw new Error(`Expected 409 for duplicate MRN, got ${duplicateResponse.status}`);
+    throw new Error(
+      `Expected 409 for duplicate MRN, got ${duplicateResponse.status}`,
+    );
   }
-  const auditCountAfter = await countPatientAuditLogs(createdPatientId, 'CREATE');
+  const auditCountAfter = await countPatientAuditLogs(
+    createdPatientId,
+    'CREATE',
+  );
   if (auditCountAfter !== auditCountBefore) {
-    throw new Error('Duplicate MRN registration should not create additional CREATE audit rows');
+    throw new Error(
+      'Duplicate MRN registration should not create additional CREATE audit rows',
+    );
   }
 
   process.stdout.write('\n==> P8 archive + restore\n');
-  const archiveResponse = await authedFetch(adminToken, `/patients/${createdPatientId}`, {
-    method: 'DELETE',
-  });
+  const archiveResponse = await authedFetch(
+    adminToken,
+    `/patients/${createdPatientId}`,
+    {
+      method: 'DELETE',
+    },
+  );
   assertStatus(archiveResponse, 200, 'DELETE /patients/:id');
   expectPatientAudit(
-    await waitForPatientAuditLog({ patientId: createdPatientId, auditAction: 'UPDATE' }),
+    await waitForPatientAuditLog({
+      patientId: createdPatientId,
+      auditAction: 'UPDATE',
+    }),
     { patientId: createdPatientId, auditAction: 'UPDATE' },
   );
 
-  const hiddenList = await authedFetch(adminToken, '/patients?page=1&pageSize=100');
+  const hiddenList = await authedFetch(
+    adminToken,
+    '/patients?page=1&pageSize=100',
+  );
   const hiddenBody = await hiddenList.json();
-  if (hiddenBody.items.some((patient) => patient.patientId === createdPatientId)) {
+  if (
+    hiddenBody.items.some((patient) => patient.patientId === createdPatientId)
+  ) {
     throw new Error('Archived patient still visible in default list');
   }
 
-  const restoreResponse = await authedFetch(adminToken, `/patients/${createdPatientId}/restore`, {
-    method: 'POST',
-  });
+  const restoreResponse = await authedFetch(
+    adminToken,
+    `/patients/${createdPatientId}/restore`,
+    {
+      method: 'POST',
+    },
+  );
   assertStatus(restoreResponse, 200, 'POST /patients/:id/restore');
   expectPatientAudit(
-    await waitForPatientAuditLog({ patientId: createdPatientId, auditAction: 'UPDATE' }),
+    await waitForPatientAuditLog({
+      patientId: createdPatientId,
+      auditAction: 'UPDATE',
+    }),
     { patientId: createdPatientId, auditAction: 'UPDATE' },
   );
 
   process.stdout.write('\n==> P8 patient viewed audit\n');
-  const viewResponse = await authedFetch(adminToken, `/patients/${SEEDED_PATIENT_ID}`);
+  const viewResponse = await authedFetch(
+    adminToken,
+    `/patients/${SEEDED_PATIENT_ID}`,
+  );
   assertStatus(viewResponse, 200, 'GET /patients/:id');
   expectPatientAudit(
-    await waitForPatientAuditLog({ patientId: SEEDED_PATIENT_ID, auditAction: 'READ' }),
+    await waitForPatientAuditLog({
+      patientId: SEEDED_PATIENT_ID,
+      auditAction: 'READ',
+    }),
     { patientId: SEEDED_PATIENT_ID, auditAction: 'READ' },
   );
 
   process.stdout.write('\n==> P8 RLS / tenant isolation\n');
-  const foreignResponse = await authedFetch(adminToken, `/patients/${FOREIGN_PATIENT_ID}`);
+  const foreignResponse = await authedFetch(
+    adminToken,
+    `/patients/${FOREIGN_PATIENT_ID}`,
+  );
   if (foreignResponse.status !== 404) {
-    throw new Error(`Expected 404 for foreign patient id, got ${foreignResponse.status}`);
+    throw new Error(
+      `Expected 404 for foreign patient id, got ${foreignResponse.status}`,
+    );
   }
 
   process.stdout.write('\n==> P8 permission enforcement\n');
@@ -199,11 +266,16 @@ async function main() {
     }),
   });
   if (deniedResponse.status !== 403) {
-    throw new Error(`Expected 403 for patient role write, got ${deniedResponse.status}`);
+    throw new Error(
+      `Expected 403 for patient role write, got ${deniedResponse.status}`,
+    );
   }
 
   process.stdout.write('\n==> P8 seeded patient integrity\n');
-  const seededResponse = await authedFetch(adminToken, `/patients/${SEEDED_PATIENT_ID}`);
+  const seededResponse = await authedFetch(
+    adminToken,
+    `/patients/${SEEDED_PATIENT_ID}`,
+  );
   assertStatus(seededResponse, 200, 'GET seeded patient');
   const seeded = await seededResponse.json();
   if (seeded.mrn !== SEEDED_MRN) {
@@ -213,7 +285,9 @@ async function main() {
   await sleep(500);
   const finalQueue = await getAuditQueueDepth();
   if (finalQueue.total > 5) {
-    throw new Error(`Audit queue backlog too high after worker drain: ${JSON.stringify(finalQueue)}`);
+    throw new Error(
+      `Audit queue backlog too high after worker drain: ${JSON.stringify(finalQueue)}`,
+    );
   }
 
   process.stdout.write('\nPatients E2E certification passed.\n');

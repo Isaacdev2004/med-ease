@@ -11,11 +11,17 @@ export function useMedications(filters?: MedicationFilters) {
 }
 
 export function useMedication(id: string | undefined) {
-  return useQuery({ ...medicationQueries.detail(id ?? ''), enabled: Boolean(id) });
+  return useQuery({
+    ...medicationQueries.detail(id ?? ''),
+    enabled: Boolean(id),
+  });
 }
 
 export function useTodaysMedications(patientId: string | undefined) {
-  return useQuery({ ...medicationQueries.today(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...medicationQueries.today(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useMedicationSchedule(patientId?: string) {
@@ -23,11 +29,17 @@ export function useMedicationSchedule(patientId?: string) {
 }
 
 export function useMedicationHistory(patientId: string | undefined) {
-  return useQuery({ ...medicationQueries.history(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...medicationQueries.history(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useMedicationTimeline(patientId: string | undefined) {
-  return useQuery({ ...medicationQueries.timeline(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...medicationQueries.timeline(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useMedicationReminders(patientId?: string) {
@@ -39,19 +51,31 @@ export function useMedicationLogs(patientId?: string) {
 }
 
 export function useMedicationDashboard(patientId: string | undefined) {
-  return useQuery({ ...medicationQueries.dashboard(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...medicationQueries.dashboard(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useMedicationAdherence(patientId: string | undefined) {
-  return useQuery({ ...medicationQueries.adherence(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...medicationQueries.adherence(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useMedicationInteractions(patientId: string | undefined) {
-  return useQuery({ ...medicationQueries.interactions(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...medicationQueries.interactions(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function usePrescription(id: string | undefined) {
-  return useQuery({ ...medicationQueries.prescription(id ?? ''), enabled: Boolean(id) });
+  return useQuery({
+    ...medicationQueries.prescription(id ?? ''),
+    enabled: Boolean(id),
+  });
 }
 
 export function usePrescriptions(filters?: MedicationFilters) {
@@ -67,7 +91,10 @@ export function useMedicationAnalytics(filters?: MedicationFilters) {
 }
 
 export function useMedicationSearch(query: string, patientId?: string) {
-  return useQuery({ ...medicationQueries.search(query, patientId), enabled: query.length >= 2 });
+  return useQuery({
+    ...medicationQueries.search(query, patientId),
+    enabled: query.length >= 2,
+  });
 }
 
 export function usePatientMedications(patientId: string | undefined) {
@@ -83,14 +110,20 @@ export function useMedicationAdministration(patientId?: string) {
 }
 
 export function useMedicationEducation(medicationId: string | undefined) {
-  return useQuery({ ...medicationQueries.education(medicationId ?? ''), enabled: Boolean(medicationId) });
+  return useQuery({
+    ...medicationQueries.education(medicationId ?? ''),
+    enabled: Boolean(medicationId),
+  });
 }
 
 export function useMedicationRefills(patientId?: string) {
   return useRefills(patientId);
 }
 
-export function useMedicationCalendar(patientId: string | undefined, referenceDate?: Date) {
+export function useMedicationCalendar(
+  patientId: string | undefined,
+  referenceDate?: Date,
+) {
   return useQuery({
     ...medicationQueries.calendar(patientId ?? '', referenceDate),
     enabled: Boolean(patientId),

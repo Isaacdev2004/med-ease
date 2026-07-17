@@ -47,7 +47,8 @@ export function MedicationTable({
       rowActions={(row) => (
         <DropdownMenuItem asChild>
           <Link href={getMedicationProfilePath(portalBase, row.id)}>
-            <Eye className="mr-2 h-4 w-4" />View profile
+            <Eye className="mr-2 h-4 w-4" />
+            View profile
           </Link>
         </DropdownMenuItem>
       )}
@@ -57,8 +58,12 @@ export function MedicationTable({
           header: 'Medication',
           cell: (row) => (
             <div>
-              <p className="font-medium"><HighlightMatch text={row.name} query={searchQuery} /></p>
-              <p className="text-xs text-muted-foreground">{row.brandName ?? row.genericName}</p>
+              <p className="font-medium">
+                <HighlightMatch text={row.name} query={searchQuery} />
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {row.brandName ?? row.genericName}
+              </p>
             </div>
           ),
         },
@@ -69,7 +74,9 @@ export function MedicationTable({
           id: 'rx',
           header: 'Rx',
           cell: (row) => (
-            <Badge variant={row.prescriptionRequired ? 'destructive' : 'secondary'}>
+            <Badge
+              variant={row.prescriptionRequired ? 'destructive' : 'secondary'}
+            >
               {row.prescriptionRequired ? 'Rx' : 'OTC'}
             </Badge>
           ),
@@ -79,13 +86,21 @@ export function MedicationTable({
           header: '',
           cell: (row) => (
             <Button size="sm" variant="outline" asChild>
-              <Link href={getMedicationProfilePath(portalBase, row.id)}>View</Link>
+              <Link href={getMedicationProfilePath(portalBase, row.id)}>
+                View
+              </Link>
             </Button>
           ),
         },
       ]}
       footer={
-        <DataPagination page={page} pageSize={pageSize} total={total} onPageChange={onPageChange} onPageSizeChange={onPageSizeChange} />
+        <DataPagination
+          page={page}
+          pageSize={pageSize}
+          total={total}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+        />
       }
     />
   );

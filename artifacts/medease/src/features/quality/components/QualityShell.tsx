@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { QualitySectionContent } from '@/features/quality/components/QualitySections';
-import { QualityTabs, getQualitySectionFromPath } from '@/features/quality/components/QualityTabs';
+import {
+  QualityTabs,
+  getQualitySectionFromPath,
+} from '@/features/quality/components/QualityTabs';
 import { useQualityPermissions } from '@/features/quality/hooks/use-quality-permissions';
 import type { QualityFilters } from '@/services/quality/types';
 import { PageShell } from '@/shared/components';
@@ -25,18 +28,27 @@ export function QualityShell({
   const perms = useQualityPermissions();
   const section = getQualitySectionFromPath(location);
 
-  const scopedFilters = useMemo((): QualityFilters => ({ facilityId }), [facilityId]);
+  const scopedFilters = useMemo(
+    (): QualityFilters => ({ facilityId }),
+    [facilityId],
+  );
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view quality data." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view quality data."
+        />
       </PageShell>
     );
   }
 
   return (
-    <PageShell title={title} subtitle="Enterprise quality management, patient safety, risk, compliance, accreditation, and clinical governance.">
+    <PageShell
+      title={title}
+      subtitle="Enterprise quality management, patient safety, risk, compliance, accreditation, and clinical governance."
+    >
       <div className="space-y-6">
         <QualityTabs basePath={basePath} variant={variant} />
         <QualitySectionContent section={section} filters={scopedFilters} />

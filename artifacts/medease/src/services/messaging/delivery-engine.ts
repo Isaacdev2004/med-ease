@@ -1,12 +1,15 @@
 import type { DeliveryRecord, MessageStatus } from '@/services/messaging/types';
 
 export function pendingDeliveryCount(deliveries: DeliveryRecord[]): number {
-  return deliveries.filter((d) => d.status === 'queued' || d.status === 'sent').length;
+  return deliveries.filter((d) => d.status === 'queued' || d.status === 'sent')
+    .length;
 }
 
 export function deliverySuccessRate(deliveries: DeliveryRecord[]): number {
   if (deliveries.length === 0) return 0;
-  const success = deliveries.filter((d) => d.status === 'delivered' || d.status === 'read').length;
+  const success = deliveries.filter(
+    (d) => d.status === 'delivered' || d.status === 'read',
+  ).length;
   return Math.round((success / deliveries.length) * 100);
 }
 
@@ -27,6 +30,8 @@ export function nextDeliveryStatus(attempts: number): MessageStatus {
 
 export function bounceRate(deliveries: DeliveryRecord[]): number {
   if (deliveries.length === 0) return 0;
-  const bounced = deliveries.filter((d) => d.status === 'bounced' || d.status === 'failed').length;
+  const bounced = deliveries.filter(
+    (d) => d.status === 'bounced' || d.status === 'failed',
+  ).length;
   return Math.round((bounced / deliveries.length) * 100);
 }

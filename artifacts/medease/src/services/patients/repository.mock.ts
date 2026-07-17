@@ -8,7 +8,11 @@ import type {
   PatientSearchFilters,
   UpdatePatientInput,
 } from '@medease/patients-contract';
-import { ConflictError, NotFoundError, ValidationError } from '@workspace/repository-transport';
+import {
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from '@workspace/repository-transport';
 
 import { MOCK_PATIENTS } from '@/services/patients/mock-data';
 
@@ -31,22 +35,30 @@ function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
 }
 
 function applyFilters(items: Patient[], filters?: PatientFilters): Patient[] {
-  let result = filters?.includeArchived ? [...items] : items.filter((patient) => !patient.deletedAt);
+  let result = filters?.includeArchived
+    ? [...items]
+    : items.filter((patient) => !patient.deletedAt);
 
   if (filters?.status) {
     result = result.filter((patient) => patient.status === filters.status);
   }
   if (filters?.facilityId) {
-    result = result.filter((patient) => patient.facilityId === filters.facilityId);
+    result = result.filter(
+      (patient) => patient.facilityId === filters.facilityId,
+    );
   }
   if (filters?.userId) {
     result = result.filter((patient) => patient.userId === filters.userId);
   }
   if (filters?.primaryProviderId) {
-    result = result.filter((patient) => patient.primaryProviderId === filters.primaryProviderId);
+    result = result.filter(
+      (patient) => patient.primaryProviderId === filters.primaryProviderId,
+    );
   }
   if (filters?.q) {
-    result = result.filter((patient) => matchQ(filters.q, patient.fullName, patient.mrn, patient.patientId));
+    result = result.filter((patient) =>
+      matchQ(filters.q, patient.fullName, patient.mrn, patient.patientId),
+    );
   }
 
   return result;
@@ -56,7 +68,9 @@ class PatientsMockRepository implements PatientsRepositoryContract {
   private patients = MOCK_PATIENTS.map((patient) => ({ ...patient }));
 
   private findPatient(patientId: string): Patient {
-    const patient = this.patients.find((entry) => entry.patientId === patientId);
+    const patient = this.patients.find(
+      (entry) => entry.patientId === patientId,
+    );
     if (!patient) {
       throw new NotFoundError('Patient not found');
     }
@@ -82,7 +96,9 @@ class PatientsMockRepository implements PatientsRepositoryContract {
   async createPatient(input: CreatePatientInput) {
     if (
       this.patients.some(
-        (entry) => !entry.deletedAt && entry.mrn.toLowerCase() === input.mrn.toLowerCase(),
+        (entry) =>
+          !entry.deletedAt &&
+          entry.mrn.toLowerCase() === input.mrn.toLowerCase(),
       )
     ) {
       throw new ConflictError('Patient with this MRN already exists');
@@ -92,7 +108,8 @@ class PatientsMockRepository implements PatientsRepositoryContract {
     const now = new Date().toISOString();
     const patient: Patient = {
       patientId,
-      tenantId: MOCK_PATIENTS[0]?.tenantId ?? '01930000-0000-7000-8000-000000000001',
+      tenantId:
+        MOCK_PATIENTS[0]?.tenantId ?? '01930000-0000-7000-8000-000000000001',
       facilityId: input.facilityId,
       userId: input.userId,
       mrn: input.mrn,
@@ -101,7 +118,9 @@ class PatientsMockRepository implements PatientsRepositoryContract {
       gender: input.gender,
       status: input.status ?? 'active',
       primaryProviderId: input.primaryProviderId,
-      fhirResourceId: input.fhirResourceId ?? `01930000-0000-7000-8000-00000000f${patientId.slice(-3)}`,
+      fhirResourceId:
+        input.fhirResourceId ??
+        `01930000-0000-7000-8000-00000000f${patientId.slice(-3)}`,
       createdBy: input.createdBy,
       createdAt: now,
       updatedAt: now,
@@ -112,7 +131,9 @@ class PatientsMockRepository implements PatientsRepositoryContract {
   }
 
   async updatePatient(patientId: string, input: UpdatePatientInput) {
-    const index = this.patients.findIndex((entry) => entry.patientId === patientId);
+    const index = this.patients.findIndex(
+      (entry) => entry.patientId === patientId,
+    );
     if (index < 0) {
       throw new NotFoundError('Patient not found');
     }
@@ -125,10 +146,16 @@ class PatientsMockRepository implements PatientsRepositoryContract {
       dateOfBirth: input.dateOfBirth ?? current.dateOfBirth,
       gender: input.gender ?? current.gender,
       status: input.status ?? current.status,
-      facilityId: input.facilityId === null ? undefined : (input.facilityId ?? current.facilityId),
-      userId: input.userId === null ? undefined : (input.userId ?? current.userId),
+      facilityId:
+        input.facilityId === null
+          ? undefined
+          : (input.facilityId ?? current.facilityId),
+      userId:
+        input.userId === null ? undefined : (input.userId ?? current.userId),
       primaryProviderId:
-        input.primaryProviderId === null ? undefined : (input.primaryProviderId ?? current.primaryProviderId),
+        input.primaryProviderId === null
+          ? undefined
+          : (input.primaryProviderId ?? current.primaryProviderId),
       updatedBy: input.updatedBy,
       updatedAt: new Date().toISOString(),
       version: input.version ?? current.version + 1,
@@ -138,7 +165,9 @@ class PatientsMockRepository implements PatientsRepositoryContract {
   }
 
   async archivePatient(patientId: string, updatedBy: string) {
-    const index = this.patients.findIndex((entry) => entry.patientId === patientId);
+    const index = this.patients.findIndex(
+      (entry) => entry.patientId === patientId,
+    );
     if (index < 0) {
       throw new NotFoundError('Patient not found');
     }
@@ -159,7 +188,9 @@ class PatientsMockRepository implements PatientsRepositoryContract {
   }
 
   async restorePatient(patientId: string, updatedBy: string) {
-    const index = this.patients.findIndex((entry) => entry.patientId === patientId);
+    const index = this.patients.findIndex(
+      (entry) => entry.patientId === patientId,
+    );
     if (index < 0) {
       throw new NotFoundError('Patient not found');
     }

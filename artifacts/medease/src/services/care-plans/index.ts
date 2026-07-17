@@ -1,9 +1,19 @@
 export { carePlanService } from '@/services/care-plans/care-plan.service';
 export { carePlanOfflineQueue } from '@/services/care-plans/offline-sync';
 export { computeGoalCompletionRate } from '@/services/care-plans/goal-engine';
-export { computeOverallRisk, getRiskSeverityColor } from '@/services/care-plans/risk-engine';
-export { categorizeTasks, sortTasksByDueDate } from '@/services/care-plans/task-engine';
-export { toFhirCarePlan, toFhirGoal, toFhirTask } from '@/services/care-plans/mapper';
+export {
+  computeOverallRisk,
+  getRiskSeverityColor,
+} from '@/services/care-plans/risk-engine';
+export {
+  categorizeTasks,
+  sortTasksByDueDate,
+} from '@/services/care-plans/task-engine';
+export {
+  toFhirCarePlan,
+  toFhirGoal,
+  toFhirTask,
+} from '@/services/care-plans/mapper';
 export { CARE_PLAN_TEMPLATES } from '@/services/care-plans/templates';
 export { carePlanRepository } from '@/services/care-plans/repository';
 export {

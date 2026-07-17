@@ -66,13 +66,19 @@ export function DashboardSection({ filters }: { filters?: ResearchFilters }) {
   const dashboard = useResearchDashboard(filters?.facilityId);
   const trials = useClinicalTrials(filters);
   const { exportData } = useResearchMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading research dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={FlaskConical} title="No research data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading research dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={FlaskConical} title="No research data" />;
   return (
     <div className="space-y-6">
       <StudyDashboard dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(trials.data?.items ?? dashboard.data.topTrials).slice(0, 6).map((t) => <TrialCard key={t.trialId} trial={t} />)}
+        {(trials.data?.items ?? dashboard.data.topTrials)
+          .slice(0, 6)
+          .map((t) => (
+            <TrialCard key={t.trialId} trial={t} />
+          ))}
       </div>
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
@@ -84,22 +90,32 @@ export function TrialsSection({ filters }: { filters?: ResearchFilters }) {
   if (trials.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(trials.data?.items ?? []).map((t) => <TrialCard key={t.trialId} trial={t} />)}
+      {(trials.data?.items ?? []).map((t) => (
+        <TrialCard key={t.trialId} trial={t} />
+      ))}
     </div>
   );
 }
 
-export function ParticipantsSection({ filters }: { filters?: ResearchFilters }) {
+export function ParticipantsSection({
+  filters,
+}: {
+  filters?: ResearchFilters;
+}) {
   const participants = useParticipants(filters);
   const consents = useConsent(filters);
   if (participants.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(participants.data?.items ?? []).slice(0, 12).map((p) => <ParticipantCard key={p.participantId} participant={p} />)}
+        {(participants.data?.items ?? []).slice(0, 12).map((p) => (
+          <ParticipantCard key={p.participantId} participant={p} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(consents.data?.items ?? []).slice(0, 6).map((c) => <ConsentCard key={c.consentId} consent={c} />)}
+        {(consents.data?.items ?? []).slice(0, 6).map((c) => (
+          <ConsentCard key={c.consentId} consent={c} />
+        ))}
       </div>
     </div>
   );
@@ -111,7 +127,11 @@ export function VisitsSection({ filters }: { filters?: ResearchFilters }) {
   return <VisitTimeline visits={visits.data?.items ?? []} />;
 }
 
-export function AdverseEventsSection({ filters }: { filters?: ResearchFilters }) {
+export function AdverseEventsSection({
+  filters,
+}: {
+  filters?: ResearchFilters;
+}) {
   const events = useAdverseEvents(filters);
   const safety = useSafetyBoard(filters);
   if (events.isLoading) return <LoadingView />;
@@ -119,18 +139,26 @@ export function AdverseEventsSection({ filters }: { filters?: ResearchFilters })
     <div className="space-y-6">
       <SafetyBoard events={safety.data?.items ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(events.data?.items ?? []).slice(0, 12).map((e) => <AdverseEventCard key={e.eventId} event={e} />)}
+        {(events.data?.items ?? []).slice(0, 12).map((e) => (
+          <AdverseEventCard key={e.eventId} event={e} />
+        ))}
       </div>
     </div>
   );
 }
 
-export function BiospecimensSection({ filters }: { filters?: ResearchFilters }) {
+export function BiospecimensSection({
+  filters,
+}: {
+  filters?: ResearchFilters;
+}) {
   const specimens = useBiospecimens(filters);
   if (specimens.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(specimens.data?.items ?? []).slice(0, 12).map((s) => <BiospecimenCard key={s.specimenId} specimen={s} />)}
+      {(specimens.data?.items ?? []).slice(0, 12).map((s) => (
+        <BiospecimenCard key={s.specimenId} specimen={s} />
+      ))}
     </div>
   );
 }
@@ -142,10 +170,14 @@ export function SitesSection({ filters }: { filters?: ResearchFilters }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(sites.data?.items ?? []).map((s) => <ResearchSiteCard key={s.siteId} site={s} />)}
+        {(sites.data?.items ?? []).map((s) => (
+          <ResearchSiteCard key={s.siteId} site={s} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(investigators.data?.items ?? []).slice(0, 6).map((i) => <InvestigatorCard key={i.investigatorId} investigator={i} />)}
+        {(investigators.data?.items ?? []).slice(0, 6).map((i) => (
+          <InvestigatorCard key={i.investigatorId} investigator={i} />
+        ))}
       </div>
     </div>
   );
@@ -162,7 +194,9 @@ export function InnovationSection({ filters }: { filters?: ResearchFilters }) {
   if (projects.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(projects.data?.items ?? []).map((p) => <InnovationCard key={p.projectId} project={p} />)}
+      {(projects.data?.items ?? []).map((p) => (
+        <InnovationCard key={p.projectId} project={p} />
+      ))}
     </div>
   );
 }
@@ -172,17 +206,25 @@ export function RegulatorySection({ filters }: { filters?: ResearchFilters }) {
   if (regulatory.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(regulatory.data?.regulatory?.items ?? []).map((r) => <RegulatoryCard key={r.submissionId} submission={r} />)}
+      {(regulatory.data?.regulatory?.items ?? []).map((r) => (
+        <RegulatoryCard key={r.submissionId} submission={r} />
+      ))}
     </div>
   );
 }
 
-export function PublicationsSection({ filters }: { filters?: ResearchFilters }) {
+export function PublicationsSection({
+  filters,
+}: {
+  filters?: ResearchFilters;
+}) {
   const pubs = usePublications(filters);
   if (pubs.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(pubs.data?.items ?? []).map((p) => <PublicationCard key={p.publicationId} publication={p} />)}
+      {(pubs.data?.items ?? []).map((p) => (
+        <PublicationCard key={p.publicationId} publication={p} />
+      ))}
     </div>
   );
 }
@@ -192,7 +234,9 @@ export function GrantsSection({ filters }: { filters?: ResearchFilters }) {
   if (grants.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(grants.data?.grants?.items ?? []).map((g) => <GrantCard key={g.grantId} grant={g} />)}
+      {(grants.data?.grants?.items ?? []).map((g) => (
+        <GrantCard key={g.grantId} grant={g} />
+      ))}
     </div>
   );
 }
@@ -202,7 +246,9 @@ export function ProtocolsSection({ filters }: { filters?: ResearchFilters }) {
   if (protocol.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(protocol.data?.deviations?.items ?? []).slice(0, 12).map((d) => <ProtocolCard key={d.deviationId} deviation={d} />)}
+      {(protocol.data?.deviations?.items ?? []).slice(0, 12).map((d) => (
+        <ProtocolCard key={d.deviationId} deviation={d} />
+      ))}
     </div>
   );
 }
@@ -219,12 +265,21 @@ export function AuditSection({ filters }: { filters?: ResearchFilters }) {
   if (audit.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(audit.data?.items ?? []).slice(0, 12).map((log) => <ResearchAuditCard key={log.auditId} log={log} />)}
+      {(audit.data?.items ?? []).slice(0, 12).map((log) => (
+        <ResearchAuditCard key={log.auditId} log={log} />
+      ))}
     </div>
   );
 }
 
-export function ResearchSectionContent({ section, filters }: { section: ResearchSection; filters?: ResearchFilters; variant?: 'professional' | 'facility' | 'admin' }) {
+export function ResearchSectionContent({
+  section,
+  filters,
+}: {
+  section: ResearchSection;
+  filters?: ResearchFilters;
+  variant?: 'professional' | 'facility' | 'admin';
+}) {
   switch (section) {
     case 'trials':
     case 'trials-admin':

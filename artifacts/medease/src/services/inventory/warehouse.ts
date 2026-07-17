@@ -6,5 +6,7 @@ export function getWarehouseUtilization(warehouseId: string) {
 }
 
 export function listWarehouseZones(warehouseId: string) {
-  return MOCK_WAREHOUSES.find((w) => w.warehouseId === warehouseId)?.zones ?? [];
+  return (
+    MOCK_WAREHOUSES.find((w) => w.warehouseId === warehouseId)?.zones ?? []
+  );
 }

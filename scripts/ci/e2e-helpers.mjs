@@ -28,7 +28,9 @@ export async function login(email, password = DEMO_PASSWORD) {
   });
 
   if (!response.ok) {
-    throw new Error(`Login failed for ${email}: ${response.status} ${await response.text()}`);
+    throw new Error(
+      `Login failed for ${email}: ${response.status} ${await response.text()}`,
+    );
   }
 
   const json = await response.json();
@@ -59,7 +61,10 @@ export function sleep(ms) {
 
 export async function waitForIamAudit(token, action, attempts = 20) {
   for (let i = 0; i < attempts; i += 1) {
-    const response = await authedFetch(token, '/iam/audit-events?page=1&pageSize=25');
+    const response = await authedFetch(
+      token,
+      '/iam/audit-events?page=1&pageSize=25',
+    );
     if (!response.ok) {
       throw new Error(`IAM audit query failed: ${response.status}`);
     }

@@ -1,4 +1,10 @@
-import { approveClaim, denyClaim, resubmitClaim, submitClaim, validateClaim } from '@/services/billing/claims';
+import {
+  approveClaim,
+  denyClaim,
+  resubmitClaim,
+  submitClaim,
+  validateClaim,
+} from '@/services/billing/claims';
 import {
   buildDashboard,
   buildOutstandingBalances,
@@ -28,29 +34,42 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = (page - 1) * pageSize;
-  return { items: items.slice(start, start + pageSize), total: items.length, page, pageSize };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page,
+    pageSize,
+  };
 }
 
-function matchInvoice(inv: typeof MOCK_INVOICES[0], filters: BillingFilters) {
+function matchInvoice(inv: (typeof MOCK_INVOICES)[0], filters: BillingFilters) {
   if (filters.patientId && inv.patientId !== filters.patientId) return false;
   if (filters.providerId && inv.providerId !== filters.providerId) return false;
   if (filters.facilityId && inv.facilityId !== filters.facilityId) return false;
   if (filters.status && inv.status !== filters.status) return false;
   if (filters.q) {
     const q = filters.q.toLowerCase();
-    if (!inv.invoiceNumber.toLowerCase().includes(q) && !inv.patientName.toLowerCase().includes(q)) return false;
+    if (
+      !inv.invoiceNumber.toLowerCase().includes(q) &&
+      !inv.patientName.toLowerCase().includes(q)
+    )
+      return false;
   }
   return true;
 }
 
-function matchClaim(c: typeof MOCK_CLAIMS[0], filters: BillingFilters) {
+function matchClaim(c: (typeof MOCK_CLAIMS)[0], filters: BillingFilters) {
   if (filters.patientId && c.patientId !== filters.patientId) return false;
   if (filters.providerId && c.providerId !== filters.providerId) return false;
   if (filters.facilityId && c.facilityId !== filters.facilityId) return false;
   if (filters.status && c.status !== filters.status) return false;
   if (filters.q) {
     const q = filters.q.toLowerCase();
-    if (!c.claimId.toLowerCase().includes(q) && !c.payer.toLowerCase().includes(q)) return false;
+    if (
+      !c.claimId.toLowerCase().includes(q) &&
+      !c.payer.toLowerCase().includes(q)
+    )
+      return false;
   }
   return true;
 }
@@ -67,17 +86,35 @@ class BillingRepository {
   private nextId = 6000;
 
   searchInvoices(filters?: BillingFilters) {
-    const filtered = this.invoices.filter((i) => matchInvoice(i, filters ?? {}));
-    return paginate(filtered.sort((a, b) => b.issueDate.localeCompare(a.issueDate)), filters?.page, filters?.pageSize);
+    const filtered = this.invoices.filter((i) =>
+      matchInvoice(i, filters ?? {}),
+    );
+    return paginate(
+      filtered.sort((a, b) => b.issueDate.localeCompare(a.issueDate)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getInvoice(invoiceId: string) {
     return this.invoices.find((i) => i.invoiceId === invoiceId) ?? null;
   }
 
-  createInvoice(input: CreateInvoiceInput, patientName: string, facilityName: string, providerName: string) {
+  createInvoice(
+    input: CreateInvoiceInput,
+    patientName: string,
+    facilityName: string,
+    providerName: string,
+  ) {
     const id = `inv-${String(++this.nextId).padStart(5, '0')}`;
-    const invoice = buildInvoice(input, id, `INV-${2025000 + this.nextId}`, patientName, facilityName, providerName);
+    const invoice = buildInvoice(
+      input,
+      id,
+      `INV-${2025000 + this.nextId}`,
+      patientName,
+      facilityName,
+      providerName,
+    );
     this.invoices.unshift(invoice);
     return invoice;
   }
@@ -89,7 +126,11 @@ class BillingRepository {
     if (input.notes !== undefined) inv.notes = input.notes;
     if (input.status) inv.status = input.status;
     if (input.lineItems) {
-      inv.lineItems = input.lineItems.map((li, i) => ({ ...li, id: `li-${inv.invoiceId}-${i}`, total: li.quantity * li.unitPrice }));
+      inv.lineItems = input.lineItems.map((li, i) => ({
+        ...li,
+        id: `li-${inv.invoiceId}-${i}`,
+        total: li.quantity * li.unitPrice,
+      }));
       inv.subtotal = inv.lineItems.reduce((s, li) => s + li.total, 0);
       inv.total = inv.subtotal - inv.discounts + inv.tax;
       inv.balance = inv.total - inv.paidAmount;
@@ -108,7 +149,11 @@ class BillingRepository {
 
   searchClaims(filters?: BillingFilters) {
     const filtered = this.claims.filter((c) => matchClaim(c, filters ?? {}));
-    return paginate(filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt)), filters?.page, filters?.pageSize);
+    return paginate(
+      filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getClaim(claimId: string) {
@@ -185,19 +230,32 @@ class BillingRepository {
 
   getPayments(filters?: BillingFilters) {
     let items = [...this.payments];
-    if (filters?.patientId) items = items.filter((p) => p.patientId === filters.patientId);
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
-    return paginate(items.sort((a, b) => b.paidAt.localeCompare(a.paidAt)), filters?.page, filters?.pageSize);
+    if (filters?.patientId)
+      items = items.filter((p) => p.patientId === filters.patientId);
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
+    return paginate(
+      items.sort((a, b) => b.paidAt.localeCompare(a.paidAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getReceipts(filters?: BillingFilters) {
     let items = [...this.receipts];
-    if (filters?.patientId) items = items.filter((r) => r.patientId === filters.patientId);
-    return paginate(items.sort((a, b) => b.issuedAt.localeCompare(a.issuedAt)), filters?.page, filters?.pageSize);
+    if (filters?.patientId)
+      items = items.filter((r) => r.patientId === filters.patientId);
+    return paginate(
+      items.sort((a, b) => b.issuedAt.localeCompare(a.issuedAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getInsurance(patientId?: string) {
-    return patientId ? this.policies.filter((p) => p.patientId === patientId) : this.policies;
+    return patientId
+      ? this.policies.filter((p) => p.patientId === patientId)
+      : this.policies;
   }
 
   getRefunds(filters?: BillingFilters) {
@@ -208,7 +266,11 @@ class BillingRepository {
         return inv?.patientId === filters.patientId;
       });
     }
-    return paginate(items.sort((a, b) => b.createdAt.localeCompare(a.createdAt)), filters?.page, filters?.pageSize);
+    return paginate(
+      items.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getDashboard(patientId?: string, providerId?: string, facilityId?: string) {
@@ -225,8 +287,16 @@ class BillingRepository {
   }
 
   favoriteInvoice(invoiceId: string, patientId: string) {
-    if (!this.favorites.some((f) => f.invoiceId === invoiceId && f.patientId === patientId)) {
-      this.favorites.push({ invoiceId, patientId, createdAt: new Date().toISOString() });
+    if (
+      !this.favorites.some(
+        (f) => f.invoiceId === invoiceId && f.patientId === patientId,
+      )
+    ) {
+      this.favorites.push({
+        invoiceId,
+        patientId,
+        createdAt: new Date().toISOString(),
+      });
     }
     return this.favorites.filter((f) => f.patientId === patientId);
   }
@@ -240,7 +310,10 @@ class BillingRepository {
   downloadInvoice(invoiceId: string) {
     const inv = this.getInvoice(invoiceId);
     if (!inv) return null;
-    return { url: `/mock/invoices/${invoiceId}.pdf`, invoiceNumber: inv.invoiceNumber };
+    return {
+      url: `/mock/invoices/${invoiceId}.pdf`,
+      invoiceNumber: inv.invoiceNumber,
+    };
   }
 
   exportFinancialReport(format: 'csv' | 'pdf' | 'xlsx'): FinancialExport {
@@ -254,8 +327,22 @@ class BillingRepository {
 
   search(query: string, patientId?: string) {
     const q = query.toLowerCase();
-    const invoices = this.invoices.filter((i) => (!patientId || i.patientId === patientId) && (i.invoiceNumber.toLowerCase().includes(q) || i.patientName.toLowerCase().includes(q))).slice(0, 10);
-    const claims = this.claims.filter((c) => (!patientId || c.patientId === patientId) && (c.claimId.toLowerCase().includes(q) || c.payer.toLowerCase().includes(q))).slice(0, 10);
+    const invoices = this.invoices
+      .filter(
+        (i) =>
+          (!patientId || i.patientId === patientId) &&
+          (i.invoiceNumber.toLowerCase().includes(q) ||
+            i.patientName.toLowerCase().includes(q)),
+      )
+      .slice(0, 10);
+    const claims = this.claims
+      .filter(
+        (c) =>
+          (!patientId || c.patientId === patientId) &&
+          (c.claimId.toLowerCase().includes(q) ||
+            c.payer.toLowerCase().includes(q)),
+      )
+      .slice(0, 10);
     return { invoices, claims };
   }
 }

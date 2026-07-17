@@ -1,4 +1,7 @@
-import { verifyEligibility, checkPreauthorization } from '@/services/billing/claims';
+import {
+  verifyEligibility,
+  checkPreauthorization,
+} from '@/services/billing/claims';
 import type { InsurancePolicy } from '@/services/billing/types';
 
 export { verifyEligibility, checkPreauthorization };
@@ -16,7 +19,14 @@ export function getCoverageSummary(policy: InsurancePolicy) {
   };
 }
 
-export function estimatePatientResponsibility(total: number, policy: InsurancePolicy) {
+export function estimatePatientResponsibility(
+  total: number,
+  policy: InsurancePolicy,
+) {
   const covered = total * (1 - policy.coinsurance / 100);
-  return { total, covered: Math.round(covered), patientOwes: Math.round(total - covered + policy.copay) };
+  return {
+    total,
+    covered: Math.round(covered),
+    patientOwes: Math.round(total - covered + policy.copay),
+  };
 }

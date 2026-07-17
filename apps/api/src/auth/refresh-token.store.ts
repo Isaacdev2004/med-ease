@@ -22,8 +22,17 @@ export class RefreshTokenStore {
     return `auth:refresh-family:${familyId}:revoked`;
   }
 
-  async store(token: string, record: RefreshTokenRecord, ttlSeconds: number): Promise<void> {
-    await this.redis.set(this.key(token), JSON.stringify(record), 'EX', ttlSeconds);
+  async store(
+    token: string,
+    record: RefreshTokenRecord,
+    ttlSeconds: number,
+  ): Promise<void> {
+    await this.redis.set(
+      this.key(token),
+      JSON.stringify(record),
+      'EX',
+      ttlSeconds,
+    );
   }
 
   async consume(token: string): Promise<RefreshTokenRecord | null> {

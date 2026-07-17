@@ -18,5 +18,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalApiPlatformPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <ApiPlatformShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <ApiPlatformShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

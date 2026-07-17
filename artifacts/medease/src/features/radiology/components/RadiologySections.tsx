@@ -58,18 +58,29 @@ export type RadiologySection =
 export function DashboardSection({ filters }: { filters?: StudyFilters }) {
   const dashboard = useRadiologyDashboard(filters?.patientId);
   const critical = useCriticalResults(filters?.patientId);
-  if (dashboard.isLoading) return <LoadingView label="Loading radiology dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={Scan} title="No imaging data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading radiology dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Scan} title="No imaging data" />;
   return (
     <div className="space-y-6">
       <RadiologyMetrics dashboard={dashboard.data} />
-      <BarChartPanel title="Studies by modality" data={dashboard.data.chartData} />
+      <BarChartPanel
+        title="Studies by modality"
+        data={dashboard.data.chartData}
+      />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {dashboard.data.recentStudies.map((s) => <RadiologyStudyCard key={s.id} study={s} />)}
+        {dashboard.data.recentStudies.map((s) => (
+          <RadiologyStudyCard key={s.id} study={s} />
+        ))}
       </div>
       <StudyTimeline entries={dashboard.data.recentActivity} />
       {(critical.data ?? []).slice(0, 2).map((r) => (
-        <CriticalFindingBanner key={r.id} title={r.title} message={r.impression.summary} />
+        <CriticalFindingBanner
+          key={r.id}
+          title={r.title}
+          message={r.impression.summary}
+        />
       ))}
     </div>
   );
@@ -82,9 +93,13 @@ export function HistorySection({ filters }: { filters?: StudyFilters }) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2">
-        {(studies.data ?? []).slice(0, 12).map((s) => <RadiologyStudyCard key={s.id} study={s} />)}
+        {(studies.data ?? []).slice(0, 12).map((s) => (
+          <RadiologyStudyCard key={s.id} study={s} />
+        ))}
       </div>
-      {filters?.patientId ? <StudyTimeline entries={timeline.data ?? []} /> : null}
+      {filters?.patientId ? (
+        <StudyTimeline entries={timeline.data ?? []} />
+      ) : null}
     </div>
   );
 }
@@ -94,7 +109,9 @@ export function StudiesListSection({ filters }: { filters?: StudyFilters }) {
   if (query.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(query.data ?? []).slice(0, 24).map((s) => <RadiologyStudyCard key={s.id} study={s} />)}
+      {(query.data ?? []).slice(0, 24).map((s) => (
+        <RadiologyStudyCard key={s.id} study={s} />
+      ))}
     </div>
   );
 }
@@ -105,10 +122,17 @@ export function WorklistSection() {
   if (pending.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      <p className="text-sm text-muted-foreground">{dash.data?.activeStudies ?? 0} studies awaiting interpretation · {pending.data?.length ?? 0} pending reports</p>
+      <p className="text-sm text-muted-foreground">
+        {dash.data?.activeStudies ?? 0} studies awaiting interpretation ·{' '}
+        {pending.data?.length ?? 0} pending reports
+      </p>
       <div className="grid gap-4 sm:grid-cols-2">
         {(pending.data ?? []).slice(0, 12).map((r) => (
-          <CriticalFindingBanner key={r.id} title={r.title} message={r.impression.summary} />
+          <CriticalFindingBanner
+            key={r.id}
+            title={r.title}
+            message={r.impression.summary}
+          />
         ))}
       </div>
     </div>
@@ -117,10 +141,14 @@ export function WorklistSection() {
 
 export function ReportsSection({ filters }: { filters?: StudyFilters }) {
   const studies = useRadiologyStudies(filters);
-  const withReports = (studies.data ?? []).filter((s) => s.reportId).slice(0, 16);
+  const withReports = (studies.data ?? [])
+    .filter((s) => s.reportId)
+    .slice(0, 16);
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {withReports.map((s) => <ReportLoader key={s.reportId!} reportId={s.reportId!} />)}
+      {withReports.map((s) => (
+        <ReportLoader key={s.reportId!} reportId={s.reportId!} />
+      ))}
     </div>
   );
 }
@@ -135,27 +163,49 @@ export function CriticalSection({ filters }: { filters?: StudyFilters }) {
   const query = useCriticalResults(filters?.patientId);
   if (query.isLoading) return <LoadingView />;
   const items = query.data ?? [];
-  if (!items.length) return <EmptyState icon={Scan} title="No critical findings" />;
+  if (!items.length)
+    return <EmptyState icon={Scan} title="No critical findings" />;
   return (
     <div className="grid gap-4">
-      {items.map((r) => <CriticalFindingBanner key={r.id} title={r.title} message={r.impression.summary} />)}
+      {items.map((r) => (
+        <CriticalFindingBanner
+          key={r.id}
+          title={r.title}
+          message={r.impression.summary}
+        />
+      ))}
     </div>
   );
 }
 
 export function ViewerSection() {
   const [, params] = useRoute('/viewer/:studyId');
-  const studyId = params?.studyId ? (params.studyId.startsWith('img-') ? params.studyId : `img-${params.studyId.padStart(4, '0')}`) : undefined;
+  const studyId = params?.studyId
+    ? params.studyId.startsWith('img-')
+      ? params.studyId
+      : `img-${params.studyId.padStart(4, '0')}`
+    : undefined;
   const study = useRadiologyStudy(studyId);
   const viewer = useImageViewer(studyId);
   const { exportStudy, shareStudy } = useRadiologyMutations();
-  if (!studyId || study.isLoading) return <LoadingView label="Loading viewer…" />;
+  if (!studyId || study.isLoading)
+    return <LoadingView label="Loading viewer…" />;
   if (!study.data) return <EmptyState icon={Scan} title="Study not found" />;
   return (
     <div className="space-y-4">
       <ExportShareToolbar
-        onExport={() => void exportStudy.mutateAsync({ studyId: study.data!.id, format: 'pdf' })}
-        onShare={() => void shareStudy.mutateAsync({ studyId: study.data!.id, sharedWith: 'care-team@medease.app' })}
+        onExport={() =>
+          void exportStudy.mutateAsync({
+            studyId: study.data!.id,
+            format: 'pdf',
+          })
+        }
+        onShare={() =>
+          void shareStudy.mutateAsync({
+            studyId: study.data!.id,
+            sharedWith: 'care-team@medease.app',
+          })
+        }
       />
       <ImagingViewer study={study.data} initialState={viewer.data} />
     </div>
@@ -181,9 +231,19 @@ export function StudyDetailSection() {
   return (
     <div className="space-y-6">
       <RadiologyStudyCard study={study.data} />
-      {study.data.reportId ? <ReportLoader reportId={study.data.reportId} /> : null}
       {study.data.reportId ? (
-        <Button onClick={() => void approveReport.mutateAsync({ reportId: study.data!.reportId!, radiologistId: 'rad-001', radiologistName: 'Dr. Antoine Moreau' })}>
+        <ReportLoader reportId={study.data.reportId} />
+      ) : null}
+      {study.data.reportId ? (
+        <Button
+          onClick={() =>
+            void approveReport.mutateAsync({
+              reportId: study.data!.reportId!,
+              radiologistId: 'rad-001',
+              radiologistName: 'Dr. Antoine Moreau',
+            })
+          }
+        >
           Sign report (demo)
         </Button>
       ) : null}
@@ -193,7 +253,11 @@ export function StudyDetailSection() {
 
 export function ReportDetailSection() {
   const [, params] = useRoute('/radiology/report/:reportId');
-  const reportId = params?.reportId ? (params.reportId.startsWith('rpt-') ? params.reportId : `rpt-img-${params.reportId.padStart(4, '0')}`) : undefined;
+  const reportId = params?.reportId
+    ? params.reportId.startsWith('rpt-')
+      ? params.reportId
+      : `rpt-img-${params.reportId.padStart(4, '0')}`
+    : undefined;
   const report = useDiagnosticReport(reportId);
   if (!reportId || report.isLoading) return <LoadingView />;
   if (!report.data) return <EmptyState icon={Scan} title="Report not found" />;
@@ -206,7 +270,8 @@ export function CompareSection() {
   const b = studies.data?.[1];
   const comparison = useCompareStudies(a?.id, b?.id);
   if (studies.isLoading) return <LoadingView />;
-  if (!comparison.data) return <EmptyState icon={Scan} title="Select studies to compare" />;
+  if (!comparison.data)
+    return <EmptyState icon={Scan} title="Select studies to compare" />;
   return <StudyComparisonPanel comparison={comparison.data} />;
 }
 
@@ -215,7 +280,9 @@ export function DevicesSection() {
     <div className="space-y-4">
       <PACSStatusCard />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {MOCK_IMAGING_DEVICES.map((d) => <DeviceCard key={d.id} device={d} />)}
+        {MOCK_IMAGING_DEVICES.map((d) => (
+          <DeviceCard key={d.id} device={d} />
+        ))}
       </div>
     </div>
   );
@@ -226,9 +293,14 @@ export function FacilityDashboardSection() {
   if (facility.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      <p className="text-sm">Studies today: {facility.data?.studiesToday ?? 0} · Pending: {facility.data?.pending ?? 0}</p>
+      <p className="text-sm">
+        Studies today: {facility.data?.studiesToday ?? 0} · Pending:{' '}
+        {facility.data?.pending ?? 0}
+      </p>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(facility.data?.studies ?? []).map((s) => <RadiologyStudyCard key={s.id} study={s} />)}
+        {(facility.data?.studies ?? []).map((s) => (
+          <RadiologyStudyCard key={s.id} study={s} />
+        ))}
       </div>
     </div>
   );
@@ -245,24 +317,53 @@ export function WorkloadSection() {
   if (dash.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-3">
-      {MOCK_RADIOLOGISTS.map((r) => <RadiologistCard key={r.id} radiologist={r} />)}
+      {MOCK_RADIOLOGISTS.map((r) => (
+        <RadiologistCard key={r.id} radiologist={r} />
+      ))}
     </div>
   );
 }
 
-export function RadiologySectionContent({ section, filters }: { section: RadiologySection; filters?: StudyFilters }) {
+export function RadiologySectionContent({
+  section,
+  filters,
+}: {
+  section: RadiologySection;
+  filters?: StudyFilters;
+}) {
   switch (section) {
-    case 'history': return <HistorySection filters={filters} />;
-    case 'list': case 'queue': case 'imaging': return <StudiesListSection filters={filters} />;
-    case 'worklist': return <WorklistSection />;
-    case 'reports': return <ReportsSection filters={filters} />;
-    case 'critical': return <CriticalSection filters={filters} />;
-    case 'viewer': return <ViewerSection />;
-    case 'report': return <ReportDetailSection />;
-    case 'compare': return <CompareSection />;
-    case 'devices': return <DevicesSection />;
-    case 'dashboard_facility': case 'dashboard': return <FacilityDashboardSection />;
-    case 'analytics': case 'catalog': case 'workload': return section === 'workload' ? <WorkloadSection /> : <AnalyticsSection />;
-    default: return <DashboardSection filters={filters} />;
+    case 'history':
+      return <HistorySection filters={filters} />;
+    case 'list':
+    case 'queue':
+    case 'imaging':
+      return <StudiesListSection filters={filters} />;
+    case 'worklist':
+      return <WorklistSection />;
+    case 'reports':
+      return <ReportsSection filters={filters} />;
+    case 'critical':
+      return <CriticalSection filters={filters} />;
+    case 'viewer':
+      return <ViewerSection />;
+    case 'report':
+      return <ReportDetailSection />;
+    case 'compare':
+      return <CompareSection />;
+    case 'devices':
+      return <DevicesSection />;
+    case 'dashboard_facility':
+    case 'dashboard':
+      return <FacilityDashboardSection />;
+    case 'analytics':
+    case 'catalog':
+    case 'workload':
+      return section === 'workload' ? (
+        <WorkloadSection />
+      ) : (
+        <AnalyticsSection />
+      );
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

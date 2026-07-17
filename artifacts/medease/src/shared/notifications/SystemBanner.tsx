@@ -4,7 +4,8 @@ import { AlertTriangle, Info, Shield, WifiOff, X } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/lib/utils';
 
-type SystemBannerVariant = 'offline' | 'maintenance' | 'emergency' | 'security' | 'info';
+type SystemBannerVariant =
+  'offline' | 'maintenance' | 'emergency' | 'security' | 'info';
 
 interface SystemBannerProps {
   variant: SystemBannerVariant;
@@ -17,10 +18,13 @@ interface SystemBannerProps {
 }
 
 const VARIANT_STYLES: Record<SystemBannerVariant, string> = {
-  offline: 'border-amber-500/30 bg-amber-500/10 text-amber-950 dark:text-amber-100',
-  maintenance: 'border-blue-500/30 bg-blue-500/10 text-blue-950 dark:text-blue-100',
+  offline:
+    'border-amber-500/30 bg-amber-500/10 text-amber-950 dark:text-amber-100',
+  maintenance:
+    'border-blue-500/30 bg-blue-500/10 text-blue-950 dark:text-blue-100',
   emergency: 'border-destructive/40 bg-destructive/10 text-destructive',
-  security: 'border-orange-500/30 bg-orange-500/10 text-orange-950 dark:text-orange-100',
+  security:
+    'border-orange-500/30 bg-orange-500/10 text-orange-950 dark:text-orange-100',
   info: 'border-border bg-muted/50 text-foreground',
 };
 
@@ -56,7 +60,9 @@ export function SystemBanner({
       <Icon className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium">{title}</p>
-        {message ? <p className="text-sm opacity-90 mt-0.5">{message}</p> : null}
+        {message ? (
+          <p className="text-sm opacity-90 mt-0.5">{message}</p>
+        ) : null}
         {action ? <div className="mt-2">{action}</div> : null}
       </div>
       {dismissible ? (

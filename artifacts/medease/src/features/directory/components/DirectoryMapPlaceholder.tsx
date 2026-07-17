@@ -64,7 +64,9 @@ export function DirectoryMapPlaceholder({
   );
 
   const selected =
-    mapProviders.find((provider) => provider.id === selectedId) ?? mapProviders[0] ?? null;
+    mapProviders.find((provider) => provider.id === selectedId) ??
+    mapProviders[0] ??
+    null;
 
   const handleDirections = (provider: DirectoryProvider) => {
     const destination = [
@@ -82,7 +84,13 @@ export function DirectoryMapPlaceholder({
   };
 
   return (
-    <div className={cn('grid gap-4', focusProvider ? 'grid-cols-1' : 'lg:grid-cols-[1fr_320px]', className)}>
+    <div
+      className={cn(
+        'grid gap-4',
+        focusProvider ? 'grid-cols-1' : 'lg:grid-cols-[1fr_320px]',
+        className,
+      )}
+    >
       <Card className="overflow-hidden">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">
@@ -178,20 +186,29 @@ export function DirectoryMapPlaceholder({
             <div>
               <p className="font-medium">{selected.name}</p>
               <p className="text-muted-foreground text-sm">
-                {selected.address.street}, {selected.address.postalCode} {selected.address.city}
+                {selected.address.street}, {selected.address.postalCode}{' '}
+                {selected.address.city}
               </p>
               {selected.distanceKm != null ? (
-                <p className="text-muted-foreground text-xs">{selected.distanceKm.toFixed(1)} km away</p>
+                <p className="text-muted-foreground text-xs">
+                  {selected.distanceKm.toFixed(1)} km away
+                </p>
               ) : null}
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm" onClick={() => handleDirections(selected)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleDirections(selected)}
+              >
                 <Navigation className="mr-2 size-4" />
                 Get directions
               </Button>
               {!focusProvider ? (
                 <Button size="sm" asChild>
-                  <Link href={getProviderProfilePath(portalBase, selected.id)}>View profile</Link>
+                  <Link href={getProviderProfilePath(portalBase, selected.id)}>
+                    View profile
+                  </Link>
                 </Button>
               ) : null}
             </div>

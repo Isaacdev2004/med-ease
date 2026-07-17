@@ -1,7 +1,10 @@
 export { documentService } from '@/services/documents/document.service';
 export { documentRepository } from '@/services/documents/repository';
 export { documentOfflineQueue } from '@/services/documents/offline-sync';
-export { computeDocumentAnalytics, buildDocumentDashboard } from '@/services/documents/analytics';
+export {
+  computeDocumentAnalytics,
+  buildDocumentDashboard,
+} from '@/services/documents/analytics';
 export {
   MOCK_DOCUMENTS,
   MOCK_FOLDERS,

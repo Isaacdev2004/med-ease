@@ -84,7 +84,9 @@ export default function TransferRequestsPage() {
       chips.push({
         key: 'status',
         label: 'Status',
-        value: STATUS_OPTIONS.find((option) => option.value === filters.status)?.label ?? filters.status,
+        value:
+          STATUS_OPTIONS.find((option) => option.value === filters.status)
+            ?.label ?? filters.status,
       });
     }
     return chips;
@@ -124,13 +126,17 @@ export default function TransferRequestsPage() {
           />
           <MetricCard
             title="Critical Priority"
-            value={transfers.filter((row) => row.priority === 'critical').length}
+            value={
+              transfers.filter((row) => row.priority === 'critical').length
+            }
             status="critical"
             description="Requires immediate dispatch"
           />
           <MetricCard
             title="In Transit"
-            value={transfers.filter((row) => row.status === 'in_transit').length}
+            value={
+              transfers.filter((row) => row.status === 'in_transit').length
+            }
             status="info"
           />
           <StatCard
@@ -166,7 +172,10 @@ export default function TransferRequestsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {STATUS_OPTIONS.map((option) => (
-                      <SelectItem key={option.value || 'all'} value={option.value || 'all'}>
+                      <SelectItem
+                        key={option.value || 'all'}
+                        value={option.value || 'all'}
+                      >
                         {option.label}
                       </SelectItem>
                     ))}
@@ -239,15 +248,27 @@ export default function TransferRequestsPage() {
             patientName={row.patientName}
             fromFacility={row.fromFacility}
             toFacility={row.toFacility}
-            status={row.status === 'in_transit' ? 'transferred' : row.status === 'pending' ? 'pending' : 'stable'}
+            status={
+              row.status === 'in_transit'
+                ? 'transferred'
+                : row.status === 'pending'
+                  ? 'pending'
+                  : 'stable'
+            }
           />
         )}
         rowActions={() => (
           <>
-            <DropdownMenuItem onClick={() => appToast.info({ title: 'Transfer details opened' })}>
+            <DropdownMenuItem
+              onClick={() =>
+                appToast.info({ title: 'Transfer details opened' })
+              }
+            >
               View
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => appToast.success({ title: 'Transfer assigned' })}>
+            <DropdownMenuItem
+              onClick={() => appToast.success({ title: 'Transfer assigned' })}
+            >
               Assign
             </DropdownMenuItem>
           </>
@@ -332,7 +353,9 @@ export default function TransferRequestsPage() {
             pageSize={tableState.pageSize}
             total={tableState.total}
             onPageChange={(page) => filters.setParam('page', String(page))}
-            onPageSizeChange={(pageSize) => filters.setParam('pageSize', String(pageSize))}
+            onPageSizeChange={(pageSize) =>
+              filters.setParam('pageSize', String(pageSize))
+            }
           />
         }
       />

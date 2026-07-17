@@ -1,4 +1,9 @@
-import type { CareGap, DiseaseRegistry, PatientCohort, PopulationMember } from '@/services/population-health/types';
+import type {
+  CareGap,
+  DiseaseRegistry,
+  PatientCohort,
+  PopulationMember,
+} from '@/services/population-health/types';
 
 export function toFhirGroup(cohort: PatientCohort) {
   return {

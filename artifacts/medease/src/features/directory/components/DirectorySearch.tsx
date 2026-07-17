@@ -38,7 +38,9 @@ export function DirectorySearch({
 }: DirectorySearchProps) {
   const [focused, setFocused] = useState(false);
   const [recent, setRecent] = useState<string[]>([]);
-  const suggestions = defaultValue ? directoryService.getSuggestions(defaultValue) : [];
+  const suggestions = defaultValue
+    ? directoryService.getSuggestions(defaultValue)
+    : [];
   const popular = directoryService.getPopularSearches();
 
   useEffect(() => {
@@ -63,7 +65,11 @@ export function DirectorySearch({
   const showPanel = focused;
 
   return (
-    <div className={cn('relative', className)} onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 150)}>
+    <div
+      className={cn('relative', className)}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setTimeout(() => setFocused(false), 150)}
+    >
       <SearchBar
         defaultValue={defaultValue}
         onSearch={handleSearch}
@@ -79,7 +85,9 @@ export function DirectorySearch({
         >
           {suggestions.length > 0 ? (
             <div className="mb-3">
-              <p className="text-xs font-medium text-muted-foreground mb-2">Suggestions</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">
+                Suggestions
+              </p>
               <div className="flex flex-wrap gap-2">
                 {suggestions.map((item) => (
                   <button
@@ -96,7 +104,9 @@ export function DirectorySearch({
           ) : null}
           {recent.length > 0 ? (
             <div className="mb-3">
-              <p className="text-xs font-medium text-muted-foreground mb-2">Recent</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">
+                Recent
+              </p>
               <div className="flex flex-wrap gap-2">
                 {recent.map((item) => (
                   <button
@@ -112,7 +122,9 @@ export function DirectorySearch({
             </div>
           ) : null}
           <div>
-            <p className="text-xs font-medium text-muted-foreground mb-2">Popular</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2">
+              Popular
+            </p>
             <div className="flex flex-wrap gap-2">
               {popular.map((item) => (
                 <button

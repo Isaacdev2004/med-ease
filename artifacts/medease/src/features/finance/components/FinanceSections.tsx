@@ -64,17 +64,29 @@ export function DashboardSection({ filters }: { filters?: FinanceFilters }) {
   const dashboard = useFinanceDashboard(filters?.facilityId);
   const journals = useJournalEntries(filters);
   const { postJournal } = useFinanceMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading finance dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={Landmark} title="No finance data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading finance dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Landmark} title="No finance data" />;
   return (
     <div className="space-y-6">
       <FinancialDashboard dashboard={dashboard.data} />
       <AgingChart title="AP Aging" buckets={dashboard.data.agingAP} />
       <AgingChart title="AR Aging" buckets={dashboard.data.agingAR} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(journals.data?.items ?? dashboard.data.recentJournals).slice(0, 6).map((j) => (
-          <JournalCard key={j.journalId} journal={j} onPost={j.status !== 'posted' ? () => postJournal.mutate(j.journalId) : undefined} />
-        ))}
+        {(journals.data?.items ?? dashboard.data.recentJournals)
+          .slice(0, 6)
+          .map((j) => (
+            <JournalCard
+              key={j.journalId}
+              journal={j}
+              onPost={
+                j.status !== 'posted'
+                  ? () => postJournal.mutate(j.journalId)
+                  : undefined
+              }
+            />
+          ))}
       </div>
     </div>
   );
@@ -87,7 +99,15 @@ export function RevenueSection({ filters }: { filters?: FinanceFilters }) {
   return (
     <div className="space-y-6">
       {analytics.data ? <RevenueChart analytics={analytics.data} /> : null}
-      {revenue.data ? <AgingChart title="Revenue by Department" buckets={revenue.data.byDepartment.map((d) => ({ bucket: d.label, amount: d.value }))} /> : null}
+      {revenue.data ? (
+        <AgingChart
+          title="Revenue by Department"
+          buckets={revenue.data.byDepartment.map((d) => ({
+            bucket: d.label,
+            amount: d.value,
+          }))}
+        />
+      ) : null}
     </div>
   );
 }
@@ -99,15 +119,33 @@ export function ExpensesSection({ filters }: { filters?: FinanceFilters }) {
   return (
     <div className="space-y-6">
       {analytics.data ? <ExpenseChart analytics={analytics.data} /> : null}
-      {expenses.data ? <AgingChart title="Expenses by Cost Center" buckets={expenses.data.byCostCenter.map((d) => ({ bucket: d.label, amount: d.value }))} /> : null}
+      {expenses.data ? (
+        <AgingChart
+          title="Expenses by Cost Center"
+          buckets={expenses.data.byCostCenter.map((d) => ({
+            bucket: d.label,
+            amount: d.value,
+          }))}
+        />
+      ) : null}
     </div>
   );
 }
 
-export function GeneralLedgerSection({ filters }: { filters?: FinanceFilters }) {
+export function GeneralLedgerSection({
+  filters,
+}: {
+  filters?: FinanceFilters;
+}) {
   const accounts = useChartOfAccounts(filters);
   if (accounts.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(accounts.data?.items ?? []).slice(0, 12).map((a) => <AccountCard key={a.accountId} account={a} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(accounts.data?.items ?? []).slice(0, 12).map((a) => (
+        <AccountCard key={a.accountId} account={a} />
+      ))}
+    </div>
+  );
 }
 
 export function JournalsSection({ filters }: { filters?: FinanceFilters }) {
@@ -122,12 +160,28 @@ export function JournalsSection({ filters }: { filters?: FinanceFilters }) {
           <JournalCard
             key={j.journalId}
             journal={j}
-            onApprove={j.status === 'draft' ? () => approveJournal.mutate(j.journalId) : undefined}
-            onPost={j.status !== 'posted' && j.status !== 'reversed' ? () => postJournal.mutate(j.journalId) : undefined}
+            onApprove={
+              j.status === 'draft'
+                ? () => approveJournal.mutate(j.journalId)
+                : undefined
+            }
+            onPost={
+              j.status !== 'posted' && j.status !== 'reversed'
+                ? () => postJournal.mutate(j.journalId)
+                : undefined
+            }
           />
         ))}
       </div>
-      <LedgerViewer journals={ledger.data?.items ?? journals.data?.items?.filter((j) => j.status === 'posted').slice(0, 5) ?? []} />
+      <LedgerViewer
+        journals={
+          ledger.data?.items ??
+          journals.data?.items
+            ?.filter((j) => j.status === 'posted')
+            .slice(0, 5) ??
+          []
+        }
+      />
     </div>
   );
 }
@@ -138,7 +192,11 @@ export function TrialBalanceSection({ filters }: { filters?: FinanceFilters }) {
   return <TrialBalanceTable lines={trialBalance.data ?? []} />;
 }
 
-export function AccountsPayableSection({ filters }: { filters?: FinanceFilters }) {
+export function AccountsPayableSection({
+  filters,
+}: {
+  filters?: FinanceFilters;
+}) {
   const ap = useAccountsPayable(filters);
   const { recordPayment } = useFinanceMutations();
   if (ap.isLoading) return <LoadingView />;
@@ -147,17 +205,42 @@ export function AccountsPayableSection({ filters }: { filters?: FinanceFilters }
       {(ap.data?.items ?? []).slice(0, 12).map((b) => (
         <APInvoiceCard key={b.billId} bill={b} />
       ))}
-      {(ap.data?.items ?? []).slice(0, 3).filter((b) => b.status === 'open').map((b) => (
-        <button key={`pay-${b.billId}`} type="button" className="hidden" onClick={() => recordPayment.mutate({ billId: b.billId, amount: b.totalAmount, paymentDate: new Date().toISOString().split('T')[0]!, method: 'wire' })} />
-      ))}
+      {(ap.data?.items ?? [])
+        .slice(0, 3)
+        .filter((b) => b.status === 'open')
+        .map((b) => (
+          <button
+            key={`pay-${b.billId}`}
+            type="button"
+            className="hidden"
+            onClick={() =>
+              recordPayment.mutate({
+                billId: b.billId,
+                amount: b.totalAmount,
+                paymentDate: new Date().toISOString().split('T')[0]!,
+                method: 'wire',
+              })
+            }
+          />
+        ))}
     </div>
   );
 }
 
-export function AccountsReceivableSection({ filters }: { filters?: FinanceFilters }) {
+export function AccountsReceivableSection({
+  filters,
+}: {
+  filters?: FinanceFilters;
+}) {
   const ar = useAccountsReceivable(filters);
   if (ar.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(ar.data?.items ?? []).slice(0, 12).map((r) => <ARInvoiceCard key={r.receivableId} receivable={r} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(ar.data?.items ?? []).slice(0, 12).map((r) => (
+        <ARInvoiceCard key={r.receivableId} receivable={r} />
+      ))}
+    </div>
+  );
 }
 
 export function BudgetsSection({ filters }: { filters?: FinanceFilters }) {
@@ -166,9 +249,18 @@ export function BudgetsSection({ filters }: { filters?: FinanceFilters }) {
   if (budgets.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(budgets.data?.items ?? []).slice(0, 9).map((b) => <BudgetCard key={b.budgetId} budget={b} />)}</div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {(budgets.data?.items ?? []).slice(0, 9).map((b) => (
+          <BudgetCard key={b.budgetId} budget={b} />
+        ))}
+      </div>
       <BudgetVarianceChart budgets={budgets.data?.items ?? []} />
-      {variance.data ? <p className="text-sm text-muted-foreground">Total variance: €{variance.data.variance.toLocaleString()} ({variance.data.variancePercent}%)</p> : null}
+      {variance.data ? (
+        <p className="text-sm text-muted-foreground">
+          Total variance: €{variance.data.variance.toLocaleString()} (
+          {variance.data.variancePercent}%)
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -182,7 +274,16 @@ export function AssetsSection({ filters }: { filters?: FinanceFilters }) {
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(assets.data?.items ?? []).slice(0, 9).map((a) => (
-          <AssetCard key={a.assetId} asset={a} onDispose={() => disposeAsset.mutate({ assetId: a.assetId, disposalProceeds: a.netBookValue * 0.8 })} />
+          <AssetCard
+            key={a.assetId}
+            asset={a}
+            onDispose={() =>
+              disposeAsset.mutate({
+                assetId: a.assetId,
+                disposalProceeds: a.netBookValue * 0.8,
+              })
+            }
+          />
         ))}
       </div>
       <DepreciationSchedule entries={depreciation.data?.items ?? []} />
@@ -198,12 +299,27 @@ export function CashSection({ filters }: { filters?: FinanceFilters }) {
   const bank = banks.data?.items?.[0];
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(cash.data?.items ?? []).slice(0, 6).map((c) => <CashAccountCard key={c.cashAccountId} account={c} />)}</div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(banks.data?.items ?? []).slice(0, 6).map((b) => <BankAccountCard key={b.bankAccountId} account={b} />)}</div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {(cash.data?.items ?? []).slice(0, 6).map((c) => (
+          <CashAccountCard key={c.cashAccountId} account={c} />
+        ))}
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {(banks.data?.items ?? []).slice(0, 6).map((b) => (
+          <BankAccountCard key={b.bankAccountId} account={b} />
+        ))}
+      </div>
       {bank ? (
         <ReconciliationPanel
           account={bank}
-          onReconcile={() => reconcileBank.mutate({ bankAccountId: bank.bankAccountId, statementDate: new Date().toISOString().split('T')[0]!, statementBalance: bank.balance, matchedTransactionIds: [] })}
+          onReconcile={() =>
+            reconcileBank.mutate({
+              bankAccountId: bank.bankAccountId,
+              statementDate: new Date().toISOString().split('T')[0]!,
+              statementBalance: bank.balance,
+              matchedTransactionIds: [],
+            })
+          }
         />
       ) : null}
     </div>
@@ -237,20 +353,39 @@ export function AnalyticsSection({ filters }: { filters?: FinanceFilters }) {
   );
 }
 
-export function FinanceSectionContent({ section, filters }: { section: FinanceSection; filters?: FinanceFilters }) {
+export function FinanceSectionContent({
+  section,
+  filters,
+}: {
+  section: FinanceSection;
+  filters?: FinanceFilters;
+}) {
   switch (section) {
-    case 'revenue': return <RevenueSection filters={filters} />;
-    case 'expenses': return <ExpensesSection filters={filters} />;
-    case 'generalLedger': return <GeneralLedgerSection filters={filters} />;
-    case 'journals': return <JournalsSection filters={filters} />;
-    case 'trialBalance': return <TrialBalanceSection filters={filters} />;
-    case 'accountsPayable': return <AccountsPayableSection filters={filters} />;
-    case 'accountsReceivable': return <AccountsReceivableSection filters={filters} />;
-    case 'budgets': return <BudgetsSection filters={filters} />;
-    case 'assets': return <AssetsSection filters={filters} />;
-    case 'cash': return <CashSection filters={filters} />;
-    case 'statements': return <StatementsSection filters={filters} />;
-    case 'analytics': return <AnalyticsSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'revenue':
+      return <RevenueSection filters={filters} />;
+    case 'expenses':
+      return <ExpensesSection filters={filters} />;
+    case 'generalLedger':
+      return <GeneralLedgerSection filters={filters} />;
+    case 'journals':
+      return <JournalsSection filters={filters} />;
+    case 'trialBalance':
+      return <TrialBalanceSection filters={filters} />;
+    case 'accountsPayable':
+      return <AccountsPayableSection filters={filters} />;
+    case 'accountsReceivable':
+      return <AccountsReceivableSection filters={filters} />;
+    case 'budgets':
+      return <BudgetsSection filters={filters} />;
+    case 'assets':
+      return <AssetsSection filters={filters} />;
+    case 'cash':
+      return <CashSection filters={filters} />;
+    case 'statements':
+      return <StatementsSection filters={filters} />;
+    case 'analytics':
+      return <AnalyticsSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

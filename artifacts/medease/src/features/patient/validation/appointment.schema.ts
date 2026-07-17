@@ -18,4 +18,6 @@ export const rescheduleAppointmentSchema = z.object({
   reason: z.string().trim().optional(),
 });
 
-export type RescheduleAppointmentFormValues = z.infer<typeof rescheduleAppointmentSchema>;
+export type RescheduleAppointmentFormValues = z.infer<
+  typeof rescheduleAppointmentSchema
+>;

@@ -11,9 +11,7 @@ import {
 import type { DirectoryProvider } from '@/services/directory/directory.types';
 import { getProviderProfilePath } from '@/services/directory/directory.service';
 import { Button } from '@/shared/ui/button';
-import {
-  DropdownMenuItem,
-} from '@/shared/ui/dropdown-menu';
+import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 
 interface ProviderTableProps {
   providers: DirectoryProvider[];
@@ -103,7 +101,8 @@ export function ProviderTable({
         {
           id: 'distance',
           header: 'Distance',
-          cell: (row) => (row.distanceKm ? `${row.distanceKm.toFixed(1)} km` : '—'),
+          cell: (row) =>
+            row.distanceKm ? `${row.distanceKm.toFixed(1)} km` : '—',
         },
         {
           id: 'status',
@@ -115,7 +114,9 @@ export function ProviderTable({
           header: '',
           cell: (row) => (
             <Button size="sm" variant="outline" asChild>
-              <Link href={getProviderProfilePath(portalBase, row.id)}>View</Link>
+              <Link href={getProviderProfilePath(portalBase, row.id)}>
+                View
+              </Link>
             </Button>
           ),
         },

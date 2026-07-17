@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_PATIENTS, type PatientRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_PATIENTS,
+  type PatientRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -37,7 +40,12 @@ export default function PatientsListPage() {
     <PageShell
       title="Patients"
       subtitle="Active patient census and care team assignments."
-      primaryAction={<PortalActionButton label="Register patient" successTitle="Patient registered" />}
+      primaryAction={
+        <PortalActionButton
+          label="Register patient"
+          successTitle="Patient registered"
+        />
+      }
     >
       <PortalMetricsGrid
         metrics={[
@@ -62,7 +70,9 @@ export default function PatientsListPage() {
               onClick={() => {
                 setPatients((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'discharged' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'discharged' as const }
+                      : item,
                   ),
                 );
               }}

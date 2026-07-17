@@ -60,27 +60,48 @@ function applyFilters(
   const q = normalizeQuery(filters.q);
 
   return providers.filter((provider) => {
-    if (filters.type && filters.type !== 'all' && provider.type !== filters.type) {
+    if (
+      filters.type &&
+      filters.type !== 'all' &&
+      provider.type !== filters.type
+    ) {
       return false;
     }
-    if (filters.specialty && provider.specialty !== filters.specialty && provider.medicalSpecialty !== filters.specialty) {
+    if (
+      filters.specialty &&
+      provider.specialty !== filters.specialty &&
+      provider.medicalSpecialty !== filters.specialty
+    ) {
       return false;
     }
-    if (filters.department && provider.address.department !== filters.department) {
+    if (
+      filters.department &&
+      provider.address.department !== filters.department
+    ) {
       return false;
     }
     if (filters.city && provider.address.city !== filters.city) {
       return false;
     }
-    if (filters.postalCode && !provider.address.postalCode.startsWith(filters.postalCode)) {
+    if (
+      filters.postalCode &&
+      !provider.address.postalCode.startsWith(filters.postalCode)
+    ) {
       return false;
     }
-    if (filters.distanceMax && (provider.distanceKm ?? Infinity) > filters.distanceMax) {
+    if (
+      filters.distanceMax &&
+      (provider.distanceKm ?? Infinity) > filters.distanceMax
+    ) {
       return false;
     }
     if (filters.teleconsultation && !provider.teleconsultation) return false;
     if (filters.emergency && !provider.emergencyServices) return false;
-    if (filters.openNow && provider.availability !== 'Open now' && provider.availability !== '24/7 dispatch') {
+    if (
+      filters.openNow &&
+      provider.availability !== 'Open now' &&
+      provider.availability !== '24/7 dispatch'
+    ) {
       return false;
     }
     if (filters.favoritesOnly && !favoriteIds.has(provider.id)) return false;
@@ -97,14 +118,19 @@ function sortProviders(
 
   switch (sort) {
     case 'distance':
-      return items.sort((a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999));
+      return items.sort(
+        (a, b) => (a.distanceKm ?? 999) - (b.distanceKm ?? 999),
+      );
     case 'alphabetical':
       return items.sort((a, b) => a.name.localeCompare(b.name, 'fr'));
     case 'availability':
-      return items.sort((a, b) => (a.availability ?? '').localeCompare(b.availability ?? '', 'fr'));
+      return items.sort((a, b) =>
+        (a.availability ?? '').localeCompare(b.availability ?? '', 'fr'),
+      );
     case 'updated':
       return items.sort(
-        (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+        (a, b) =>
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
       );
     case 'relevance':
     default:
@@ -141,9 +167,7 @@ export const directoryService = {
     await delay();
     const page = filters.page ?? 1;
     const pageSize = filters.pageSize ?? 12;
-    const favoriteIds = new Set(
-      getFavoritesStore()['global'] ?? [],
-    );
+    const favoriteIds = new Set(getFavoritesStore()['global'] ?? []);
 
     const filtered = sortProviders(
       applyFilters(MOCK_DIRECTORY_PROVIDERS, filters, favoriteIds),
@@ -165,14 +189,18 @@ export const directoryService = {
 
   async getProvider(id: string): Promise<DirectoryProvider | null> {
     await delay();
-    const provider = MOCK_DIRECTORY_PROVIDERS.find((item) => item.id === id) ?? null;
+    const provider =
+      MOCK_DIRECTORY_PROVIDERS.find((item) => item.id === id) ?? null;
     if (!provider) return null;
 
     if (provider.associatedFacilityIds?.length) {
       const facilities = MOCK_DIRECTORY_PROVIDERS.filter((item) =>
         provider.associatedFacilityIds?.includes(item.id),
       );
-      return { ...provider, associatedFacilityIds: facilities.map((f) => f.id) };
+      return {
+        ...provider,
+        associatedFacilityIds: facilities.map((f) => f.id),
+      };
     }
 
     return provider;
@@ -183,7 +211,10 @@ export const directoryService = {
     const provider = MOCK_DIRECTORY_PROVIDERS.find((item) => item.id === id);
     if (!provider) return [];
 
-    if (provider.type === 'professional' && provider.associatedFacilityIds?.length) {
+    if (
+      provider.type === 'professional' &&
+      provider.associatedFacilityIds?.length
+    ) {
       return MOCK_DIRECTORY_PROVIDERS.filter((item) =>
         provider.associatedFacilityIds?.includes(item.id),
       );
@@ -199,7 +230,8 @@ export const directoryService = {
 
   async getStats(userId: string): Promise<DirectoryStats> {
     await delay(100);
-    const favorites = getFavoritesStore()[userId] ?? getFavoritesStore()['global'] ?? [];
+    const favorites =
+      getFavoritesStore()[userId] ?? getFavoritesStore()['global'] ?? [];
     const all = MOCK_DIRECTORY_PROVIDERS;
 
     return {
@@ -252,9 +284,12 @@ export const directoryService = {
     const matches = new Set<string>();
     for (const provider of MOCK_DIRECTORY_PROVIDERS) {
       if (provider.name.toLowerCase().includes(q)) matches.add(provider.name);
-      if (provider.specialty?.toLowerCase().includes(q)) matches.add(provider.specialty);
+      if (provider.specialty?.toLowerCase().includes(q))
+        matches.add(provider.specialty);
       if (provider.address.city.toLowerCase().includes(q)) {
-        matches.add(`${provider.specialty ?? provider.facilityType ?? 'Provider'} ${provider.address.city}`);
+        matches.add(
+          `${provider.specialty ?? provider.facilityType ?? 'Provider'} ${provider.address.city}`,
+        );
       }
     }
     return [...matches].slice(0, 6);

@@ -7,13 +7,35 @@ export type SessionStatus =
   | 'no_show'
   | 'failed';
 
-export type SessionType = 'consultation' | 'follow_up' | 'urgent' | 'specialist' | 'group' | 'interpreter';
-export type VideoPlatform = 'webrtc' | 'twilio' | 'agora' | 'daily' | 'zoom' | 'teams';
-export type RecordingStatus = 'none' | 'pending_consent' | 'recording' | 'stopped' | 'processing' | 'available';
-export type ParticipantRole = 'patient' | 'clinician' | 'nurse' | 'interpreter' | 'caregiver' | 'observer';
-export type ConnectionQuality = 'excellent' | 'good' | 'fair' | 'poor' | 'disconnected';
+export type SessionType =
+  | 'consultation'
+  | 'follow_up'
+  | 'urgent'
+  | 'specialist'
+  | 'group'
+  | 'interpreter';
+export type VideoPlatform =
+  'webrtc' | 'twilio' | 'agora' | 'daily' | 'zoom' | 'teams';
+export type RecordingStatus =
+  | 'none'
+  | 'pending_consent'
+  | 'recording'
+  | 'stopped'
+  | 'processing'
+  | 'available';
+export type ParticipantRole =
+  'patient' | 'clinician' | 'nurse' | 'interpreter' | 'caregiver' | 'observer';
+export type ConnectionQuality =
+  'excellent' | 'good' | 'fair' | 'poor' | 'disconnected';
 export type MessageDeliveryStatus = 'sent' | 'delivered' | 'read' | 'failed';
-export type AttachmentType = 'image' | 'pdf' | 'lab' | 'radiology' | 'prescription' | 'consent' | 'document';
+export type AttachmentType =
+  | 'image'
+  | 'pdf'
+  | 'lab'
+  | 'radiology'
+  | 'prescription'
+  | 'consent'
+  | 'document';
 export type WaitingRoomStatus = 'waiting' | 'admitted' | 'rejected' | 'left';
 export type DeviceCheckStatus = 'pass' | 'warning' | 'fail';
 
@@ -190,7 +212,8 @@ export interface SessionTimelineEntry {
   id: string;
   sessionId: string;
   date: string;
-  type: 'join' | 'leave' | 'message' | 'recording' | 'note' | 'file' | 'waiting';
+  type:
+    'join' | 'leave' | 'message' | 'recording' | 'note' | 'file' | 'waiting';
   title: string;
   description: string;
   actor?: string;
@@ -272,8 +295,9 @@ export const AUTH_USER_PATIENT_MAP: Record<string, string> = {
   'user-patient': 'phr-001',
 };
 
-export const TELEMEDICINE_PATIENT_IDS = Array.from({ length: 40 }, (_, i) =>
-  `phr-${String(i + 1).padStart(3, '0')}`,
+export const TELEMEDICINE_PATIENT_IDS = Array.from(
+  { length: 40 },
+  (_, i) => `phr-${String(i + 1).padStart(3, '0')}`,
 );
 
 export interface TelemedicinePermissions {

@@ -358,7 +358,11 @@ export class IamController {
   @RequirePermission('iam.read')
   @ApiOperation({ summary: 'Favorite IAM entity' })
   favorite(@Body() input: IamFavoriteDto) {
-    return this.iamService.favorite(input.userId, input.entityType, input.entityId);
+    return this.iamService.favorite(
+      input.userId,
+      input.entityType,
+      input.entityId,
+    );
   }
 
   @Get('favorites')

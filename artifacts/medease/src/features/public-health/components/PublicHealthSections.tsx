@@ -57,57 +57,87 @@ export type PublicHealthSection =
   | 'analytics'
   | 'community-dashboard';
 
-export function DashboardSection({ filters }: { filters?: PublicHealthFilters }) {
+export function DashboardSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const dashboard = usePublicHealthDashboard(filters?.facilityId);
   const cases = useDiseaseCases(filters);
   const outbreaks = useOutbreaks(filters);
   const { exportData } = usePublicHealthMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading public health dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={Shield} title="No public health data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading public health dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Shield} title="No public health data" />;
   return (
     <div className="space-y-6">
       <EpidemiologyDashboard dashboard={dashboard.data} />
-      <PublicHealthSafetyPanel outbreaks={outbreaks.data?.items ?? dashboard.data.recentOutbreaks} />
+      <PublicHealthSafetyPanel
+        outbreaks={outbreaks.data?.items ?? dashboard.data.recentOutbreaks}
+      />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(cases.data?.items ?? []).slice(0, 6).map((c) => <DiseaseCaseCard key={c.caseId} caseRecord={c} />)}
+        {(cases.data?.items ?? []).slice(0, 6).map((c) => (
+          <DiseaseCaseCard key={c.caseId} caseRecord={c} />
+        ))}
       </div>
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
   );
 }
 
-export function SurveillanceSection({ filters }: { filters?: PublicHealthFilters }) {
+export function SurveillanceSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const cases = useDiseaseCases(filters);
   const outbreaks = useOutbreaks(filters);
   if (cases.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(outbreaks.data?.items ?? []).slice(0, 4).map((o) => <OutbreakCard key={o.outbreakId} outbreak={o} />)}
+        {(outbreaks.data?.items ?? []).slice(0, 4).map((o) => (
+          <OutbreakCard key={o.outbreakId} outbreak={o} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(cases.data?.items ?? []).slice(0, 12).map((c) => <DiseaseCaseCard key={c.caseId} caseRecord={c} />)}
+        {(cases.data?.items ?? []).slice(0, 12).map((c) => (
+          <DiseaseCaseCard key={c.caseId} caseRecord={c} />
+        ))}
       </div>
     </div>
   );
 }
 
-export function ImmunizationsSection({ filters }: { filters?: PublicHealthFilters }) {
+export function ImmunizationsSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const immunizations = useImmunizations(filters);
   if (immunizations.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(immunizations.data?.items ?? []).slice(0, 12).map((r) => <ImmunizationCard key={r.immunizationId} record={r} />)}
+      {(immunizations.data?.items ?? []).slice(0, 12).map((r) => (
+        <ImmunizationCard key={r.immunizationId} record={r} />
+      ))}
     </div>
   );
 }
 
-export function CommunityProgramsSection({ filters }: { filters?: PublicHealthFilters }) {
+export function CommunityProgramsSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const programs = useCommunityPrograms(filters);
   if (programs.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(programs.data?.items ?? []).map((p) => <CommunityProgramCard key={p.programId} program={p} />)}
+      {(programs.data?.items ?? []).map((p) => (
+        <CommunityProgramCard key={p.programId} program={p} />
+      ))}
     </div>
   );
 }
@@ -117,116 +147,184 @@ export function SdohSection({ filters }: { filters?: PublicHealthFilters }) {
   if (sdoh.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(sdoh.data?.items ?? []).slice(0, 12).map((a) => <SDOHCard key={a.assessmentId} assessment={a} />)}
+      {(sdoh.data?.items ?? []).slice(0, 12).map((a) => (
+        <SDOHCard key={a.assessmentId} assessment={a} />
+      ))}
     </div>
   );
 }
 
-export function OutbreaksSection({ filters }: { filters?: PublicHealthFilters }) {
+export function OutbreaksSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const outbreaks = useOutbreaks(filters);
   const contacts = useContactTracing(filters);
   if (outbreaks.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(outbreaks.data?.items ?? []).map((o) => <OutbreakCard key={o.outbreakId} outbreak={o} />)}
+        {(outbreaks.data?.items ?? []).map((o) => (
+          <OutbreakCard key={o.outbreakId} outbreak={o} />
+        ))}
       </div>
       <ContactTracingBoard contacts={contacts.data?.items ?? []} />
     </div>
   );
 }
 
-export function ContactTracingSection({ filters }: { filters?: PublicHealthFilters }) {
+export function ContactTracingSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const contacts = useContactTracing(filters);
   if (contacts.isLoading) return <LoadingView />;
   return <ContactTracingBoard contacts={contacts.data?.items ?? []} />;
 }
 
-export function EnvironmentalSection({ filters }: { filters?: PublicHealthFilters }) {
+export function EnvironmentalSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const inspections = useEnvironmentalHealth(filters);
   if (inspections.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(inspections.data?.items ?? []).map((i) => <EnvironmentalInspectionCard key={i.inspectionId} inspection={i} />)}
+      {(inspections.data?.items ?? []).map((i) => (
+        <EnvironmentalInspectionCard key={i.inspectionId} inspection={i} />
+      ))}
     </div>
   );
 }
 
-export function OutreachSection({ filters }: { filters?: PublicHealthFilters }) {
+export function OutreachSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   return <CommunityProgramsSection filters={filters} />;
 }
 
-export function ImmunizationRegistrySection({ filters }: { filters?: PublicHealthFilters }) {
+export function ImmunizationRegistrySection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const registries = useRegistries(filters);
   const immunizations = useImmunizations(filters);
   if (registries.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(registries.data?.items ?? []).map((r) => <RegistryCard key={r.registryId} registry={r} />)}
+        {(registries.data?.items ?? []).map((r) => (
+          <RegistryCard key={r.registryId} registry={r} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(immunizations.data?.items ?? []).slice(0, 6).map((r) => <ImmunizationCard key={r.immunizationId} record={r} />)}
+        {(immunizations.data?.items ?? []).slice(0, 6).map((r) => (
+          <ImmunizationCard key={r.immunizationId} record={r} />
+        ))}
       </div>
     </div>
   );
 }
 
-export function MaternalChildSection({ filters }: { filters?: PublicHealthFilters }) {
+export function MaternalChildSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const maternal = useMaternalHealth(filters);
   const child = useChildHealth(filters);
   if (maternal.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(maternal.data?.items ?? []).map((m) => <MaternalHealthCard key={m.recordId} record={m} />)}
+        {(maternal.data?.items ?? []).map((m) => (
+          <MaternalHealthCard key={m.recordId} record={m} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(child.data?.items ?? []).slice(0, 6).map((c) => <ChildHealthCard key={c.recordId} record={c} />)}
+        {(child.data?.items ?? []).slice(0, 6).map((c) => (
+          <ChildHealthCard key={c.recordId} record={c} />
+        ))}
       </div>
     </div>
   );
 }
 
-export function SchoolHealthSection({ filters }: { filters?: PublicHealthFilters }) {
+export function SchoolHealthSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const school = useSchoolHealth(filters);
   if (school.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(school.data?.items ?? []).map((s) => <SchoolHealthCard key={s.screeningId} screening={s} />)}
+      {(school.data?.items ?? []).map((s) => (
+        <SchoolHealthCard key={s.screeningId} screening={s} />
+      ))}
     </div>
   );
 }
 
-export function OccupationalSection({ filters }: { filters?: PublicHealthFilters }) {
+export function OccupationalSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const occupational = useOccupationalHealth(filters);
   if (occupational.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(occupational.data?.items ?? []).map((a) => <OccupationalHealthCard key={a.assessmentId} assessment={a} />)}
+      {(occupational.data?.items ?? []).map((a) => (
+        <OccupationalHealthCard key={a.assessmentId} assessment={a} />
+      ))}
     </div>
   );
 }
 
-export function AnalyticsSection({ filters }: { filters?: PublicHealthFilters }) {
+export function AnalyticsSection({
+  filters,
+}: {
+  filters?: PublicHealthFilters;
+}) {
   const analytics = usePublicHealthAnalytics(filters?.facilityId);
   if (analytics.isLoading) return <LoadingView />;
   if (!analytics.data) return <EmptyState title="No analytics data" />;
   return <AnalyticsPanel analytics={analytics.data} />;
 }
 
-export function PublicHealthSectionContent({ section, filters }: { section: PublicHealthSection; filters?: PublicHealthFilters }) {
+export function PublicHealthSectionContent({
+  section,
+  filters,
+}: {
+  section: PublicHealthSection;
+  filters?: PublicHealthFilters;
+}) {
   switch (section) {
     case 'surveillance':
     case 'epidemiology':
       return <SurveillanceSection filters={filters} />;
     case 'immunizations':
     case 'immunization-registry':
-      return section === 'immunization-registry' ? <ImmunizationRegistrySection filters={filters} /> : <ImmunizationsSection filters={filters} />;
+      return section === 'immunization-registry' ? (
+        <ImmunizationRegistrySection filters={filters} />
+      ) : (
+        <ImmunizationsSection filters={filters} />
+      );
     case 'community-programs':
     case 'outreach':
     case 'community-dashboard':
-      return section === 'outreach' ? <OutreachSection filters={filters} /> : <CommunityProgramsSection filters={filters} />;
+      return section === 'outreach' ? (
+        <OutreachSection filters={filters} />
+      ) : (
+        <CommunityProgramsSection filters={filters} />
+      );
     case 'sdoh':
       return <SdohSection filters={filters} />;
     case 'outbreaks':

@@ -58,7 +58,9 @@ export function TextField<T extends FieldValues>({
         <FormItem className={className}>
           <FormLabel>
             {label}
-            {required ? <span className="text-destructive ml-0.5">*</span> : null}
+            {required ? (
+              <span className="text-destructive ml-0.5">*</span>
+            ) : null}
           </FormLabel>
           <FormControl>
             <Input
@@ -70,7 +72,9 @@ export function TextField<T extends FieldValues>({
               value={field.value ?? ''}
             />
           </FormControl>
-          {description ? <FormDescription>{description}</FormDescription> : null}
+          {description ? (
+            <FormDescription>{description}</FormDescription>
+          ) : null}
           <FormMessage />
         </FormItem>
       )}
@@ -98,7 +102,9 @@ export function TextareaField<T extends FieldValues>({
         <FormItem className={className}>
           <FormLabel>
             {label}
-            {required ? <span className="text-destructive ml-0.5">*</span> : null}
+            {required ? (
+              <span className="text-destructive ml-0.5">*</span>
+            ) : null}
           </FormLabel>
           <FormControl>
             <Textarea
@@ -112,10 +118,12 @@ export function TextareaField<T extends FieldValues>({
           </FormControl>
           {maxLength ? (
             <p className="text-xs text-muted-foreground text-right">
-              {(field.value?.length ?? 0)}/{maxLength}
+              {field.value?.length ?? 0}/{maxLength}
             </p>
           ) : null}
-          {description ? <FormDescription>{description}</FormDescription> : null}
+          {description ? (
+            <FormDescription>{description}</FormDescription>
+          ) : null}
           <FormMessage />
         </FormItem>
       )}
@@ -143,7 +151,9 @@ export function PasswordField<T extends FieldValues>({
         <FormItem className={className}>
           <FormLabel>
             {label}
-            {required ? <span className="text-destructive ml-0.5">*</span> : null}
+            {required ? (
+              <span className="text-destructive ml-0.5">*</span>
+            ) : null}
           </FormLabel>
           <FormControl>
             <div className="relative">
@@ -164,11 +174,17 @@ export function PasswordField<T extends FieldValues>({
                 onClick={() => setVisible((v) => !v)}
                 aria-label={visible ? 'Hide password' : 'Show password'}
               >
-                {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {visible ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </Button>
             </div>
           </FormControl>
-          {description ? <FormDescription>{description}</FormDescription> : null}
+          {description ? (
+            <FormDescription>{description}</FormDescription>
+          ) : null}
           <FormMessage />
         </FormItem>
       )}
@@ -200,7 +216,9 @@ export function SelectField<T extends FieldValues>({
         <FormItem className={className}>
           <FormLabel>
             {label}
-            {required ? <span className="text-destructive ml-0.5">*</span> : null}
+            {required ? (
+              <span className="text-destructive ml-0.5">*</span>
+            ) : null}
           </FormLabel>
           <Select
             onValueChange={field.onChange}
@@ -221,7 +239,9 @@ export function SelectField<T extends FieldValues>({
               ))}
             </SelectContent>
           </Select>
-          {description ? <FormDescription>{description}</FormDescription> : null}
+          {description ? (
+            <FormDescription>{description}</FormDescription>
+          ) : null}
           <FormMessage />
         </FormItem>
       )}
@@ -242,7 +262,12 @@ export function CheckboxField<T extends FieldValues>({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className={cn('flex flex-row items-start space-x-3 space-y-0', className)}>
+        <FormItem
+          className={cn(
+            'flex flex-row items-start space-x-3 space-y-0',
+            className,
+          )}
+        >
           <FormControl>
             <Checkbox
               checked={field.value === true}
@@ -252,7 +277,9 @@ export function CheckboxField<T extends FieldValues>({
           </FormControl>
           <div className="space-y-1 leading-none">
             <FormLabel>{label}</FormLabel>
-            {description ? <FormDescription>{description}</FormDescription> : null}
+            {description ? (
+              <FormDescription>{description}</FormDescription>
+            ) : null}
             <FormMessage />
           </div>
         </FormItem>
@@ -278,7 +305,9 @@ export function DateField<T extends FieldValues>({
         <FormItem className={cn('flex flex-col', className)}>
           <FormLabel>
             {label}
-            {required ? <span className="text-destructive ml-0.5">*</span> : null}
+            {required ? (
+              <span className="text-destructive ml-0.5">*</span>
+            ) : null}
           </FormLabel>
           <Popover>
             <PopoverTrigger asChild>
@@ -306,7 +335,9 @@ export function DateField<T extends FieldValues>({
               />
             </PopoverContent>
           </Popover>
-          {description ? <FormDescription>{description}</FormDescription> : null}
+          {description ? (
+            <FormDescription>{description}</FormDescription>
+          ) : null}
           <FormMessage />
         </FormItem>
       )}
@@ -314,7 +345,9 @@ export function DateField<T extends FieldValues>({
   );
 }
 
-interface FileUploadFieldProps<T extends FieldValues> extends BaseFieldProps<T> {
+interface FileUploadFieldProps<
+  T extends FieldValues,
+> extends BaseFieldProps<T> {
   accept?: string;
   maxSizeMb?: number;
 }
@@ -346,7 +379,9 @@ export function FileUploadField<T extends FieldValues>({
           <FormItem className={className}>
             <FormLabel>
               {label}
-              {required ? <span className="text-destructive ml-0.5">*</span> : null}
+              {required ? (
+                <span className="text-destructive ml-0.5">*</span>
+              ) : null}
             </FormLabel>
             <FormControl>
               <div className="space-y-2">
@@ -356,9 +391,16 @@ export function FileUploadField<T extends FieldValues>({
                     disabled && 'pointer-events-none opacity-50',
                   )}
                 >
-                  <Upload className="h-8 w-8 text-muted-foreground mb-2" aria-hidden="true" />
-                  <span className="text-sm font-medium">Click to upload or drag and drop</span>
-                  <span className="text-xs text-muted-foreground mt-1">PDF, JPEG, or PNG up to 10 MB</span>
+                  <Upload
+                    className="h-8 w-8 text-muted-foreground mb-2"
+                    aria-hidden="true"
+                  />
+                  <span className="text-sm font-medium">
+                    Click to upload or drag and drop
+                  </span>
+                  <span className="text-xs text-muted-foreground mt-1">
+                    PDF, JPEG, or PNG up to 10 MB
+                  </span>
                   <Input
                     {...field}
                     type="file"
@@ -384,7 +426,9 @@ export function FileUploadField<T extends FieldValues>({
                 ) : null}
               </div>
             </FormControl>
-            {description ? <FormDescription>{description}</FormDescription> : null}
+            {description ? (
+              <FormDescription>{description}</FormDescription>
+            ) : null}
             <FormMessage />
           </FormItem>
         );

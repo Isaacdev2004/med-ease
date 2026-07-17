@@ -61,7 +61,8 @@ export const AUTH_ERROR_CODES = {
   too_many_requests: 'too_many_requests',
 } as const;
 
-export type AuthErrorCode = (typeof AUTH_ERROR_CODES)[keyof typeof AUTH_ERROR_CODES];
+export type AuthErrorCode =
+  (typeof AUTH_ERROR_CODES)[keyof typeof AUTH_ERROR_CODES];
 
 export const REFRESH_COOKIE_NAME = 'medease_refresh_token';
 

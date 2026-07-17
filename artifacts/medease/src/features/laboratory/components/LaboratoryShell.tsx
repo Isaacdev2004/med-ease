@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { LaboratorySectionContent } from '@/features/laboratory/components/LaboratorySections';
-import { LaboratoryTabs, getLaboratorySectionFromPath } from '@/features/laboratory/components/LaboratoryTabs';
+import {
+  LaboratoryTabs,
+  getLaboratorySectionFromPath,
+} from '@/features/laboratory/components/LaboratoryTabs';
 import { useLaboratoryPermissions } from '@/features/laboratory/hooks/use-laboratory-permissions';
 import { usePatientLaboratoryContext } from '@/features/laboratory/hooks/use-laboratory';
 import type { LabOrderFilters } from '@/services/laboratory/types';
@@ -28,14 +31,19 @@ export function LaboratoryShell({
   const section = getLaboratorySectionFromPath(location);
 
   const scopedFilters = useMemo((): LabOrderFilters => {
-    const patientId = explicitPatientId ?? (variant === 'patient' ? patientResolve.data ?? undefined : undefined);
+    const patientId =
+      explicitPatientId ??
+      (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
     return patientId ? { patientId } : {};
   }, [explicitPatientId, patientResolve.data, variant]);
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view laboratory records." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view laboratory records."
+        />
       </PageShell>
     );
   }

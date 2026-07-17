@@ -10,9 +10,7 @@ import {
 
 import type { MedNotification } from '@/services/notifications/notification.types';
 import { Button } from '@/shared/ui/button';
-import {
-  DropdownMenuItem,
-} from '@/shared/ui/dropdown-menu';
+import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 
 interface NotificationActionsProps {
   notification: MedNotification;
@@ -56,7 +54,9 @@ export function NotificationActions({
             Mark unread
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem onClick={() => onPin?.(notification.id, !notification.pinned)}>
+        <DropdownMenuItem
+          onClick={() => onPin?.(notification.id, !notification.pinned)}
+        >
           {notification.pinned ? (
             <>
               <PinOff className="mr-2 h-4 w-4" />
@@ -89,12 +89,20 @@ export function NotificationActions({
   return (
     <div className="flex flex-wrap gap-2">
       {notification.target?.href ? (
-        <Button size="sm" variant="outline" onClick={() => onOpen?.(notification)}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => onOpen?.(notification)}
+        >
           Open
         </Button>
       ) : null}
       {!notification.read ? (
-        <Button size="sm" variant="ghost" onClick={() => onMarkRead?.(notification.id)}>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => onMarkRead?.(notification.id)}
+        >
           Mark read
         </Button>
       ) : null}

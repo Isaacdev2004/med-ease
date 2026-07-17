@@ -13,7 +13,11 @@ interface MedicationHeaderProps {
   actions?: ReactNode;
 }
 
-export function MedicationHeader({ medication, backHref, actions }: MedicationHeaderProps) {
+export function MedicationHeader({
+  medication,
+  backHref,
+  actions,
+}: MedicationHeaderProps) {
   return (
     <div className="space-y-6">
       <Button variant="ghost" size="sm" asChild>
@@ -26,11 +30,18 @@ export function MedicationHeader({ medication, backHref, actions }: MedicationHe
         <div className="space-y-3">
           <h1 className="text-2xl font-bold">{medication.name}</h1>
           {medication.brandName ? (
-            <p className="text-muted-foreground">Brand: {medication.brandName}</p>
+            <p className="text-muted-foreground">
+              Brand: {medication.brandName}
+            </p>
           ) : null}
-          <p className="text-sm">{medication.genericName} · {medication.strength} · {medication.dosageForm}</p>
+          <p className="text-sm">
+            {medication.genericName} · {medication.strength} ·{' '}
+            {medication.dosageForm}
+          </p>
           <MedicationBadges medication={medication} />
-          <p className="text-sm text-muted-foreground max-w-2xl">{medication.description}</p>
+          <p className="text-sm text-muted-foreground max-w-2xl">
+            {medication.description}
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           {actions}

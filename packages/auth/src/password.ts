@@ -12,7 +12,10 @@ export async function hashPassword(password: string): Promise<string> {
   return argon2.hash(password, ARGON2_OPTIONS);
 }
 
-export async function verifyPassword(password: string, passwordHash: string): Promise<boolean> {
+export async function verifyPassword(
+  password: string,
+  passwordHash: string,
+): Promise<boolean> {
   try {
     return await argon2.verify(passwordHash, password);
   } catch {
@@ -28,6 +31,9 @@ export function hashRefreshToken(token: string): string {
   return createHash('sha256').update(token).digest('hex');
 }
 
-export async function verifyRefreshToken(token: string, tokenHash: string): Promise<boolean> {
+export async function verifyRefreshToken(
+  token: string,
+  tokenHash: string,
+): Promise<boolean> {
   return hashRefreshToken(token) === tokenHash;
 }

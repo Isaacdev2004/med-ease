@@ -1,4 +1,11 @@
-export type CarePlanStatus = 'draft' | 'active' | 'on_hold' | 'completed' | 'cancelled' | 'archived' | 'suspended';
+export type CarePlanStatus =
+  | 'draft'
+  | 'active'
+  | 'on_hold'
+  | 'completed'
+  | 'cancelled'
+  | 'archived'
+  | 'suspended';
 export type CarePlanType =
   | 'chronic_disease'
   | 'rehabilitation'
@@ -9,7 +16,13 @@ export type CarePlanType =
   | 'goal_based'
   | 'collaborative'
   | 'shared';
-export type GoalStatus = 'not_started' | 'in_progress' | 'achieved' | 'partial' | 'missed' | 'cancelled';
+export type GoalStatus =
+  | 'not_started'
+  | 'in_progress'
+  | 'achieved'
+  | 'partial'
+  | 'missed'
+  | 'cancelled';
 export type GoalPriority = 'low' | 'medium' | 'high' | 'critical';
 export type GoalCategory =
   | 'clinical'
@@ -24,7 +37,8 @@ export type GoalCategory =
   | 'blood_pressure'
   | 'blood_sugar'
   | 'custom';
-export type TaskStatus = 'pending' | 'in_progress' | 'completed' | 'overdue' | 'missed' | 'cancelled';
+export type TaskStatus =
+  'pending' | 'in_progress' | 'completed' | 'overdue' | 'missed' | 'cancelled';
 export type TaskPriority = 'low' | 'medium' | 'high' | 'urgent';
 export type TaskType =
   | 'medication'

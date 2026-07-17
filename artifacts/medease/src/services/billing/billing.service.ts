@@ -11,7 +11,9 @@ import type {
 } from '@/services/billing/types';
 
 const DELAY = 250;
-async function delay(ms = DELAY) { await new Promise((r) => setTimeout(r, ms)); }
+async function delay(ms = DELAY) {
+  await new Promise((r) => setTimeout(r, ms));
+}
 
 export const billingService = {
   async resolvePatientId(userId: string, explicitId?: string) {
@@ -31,7 +33,12 @@ export const billingService = {
 
   async createInvoice(input: CreateInvoiceInput) {
     await delay();
-    return billingRepository.createInvoice(input, `Patient ${input.patientId}`, `Facility ${input.facilityId}`, `Provider ${input.providerId}`);
+    return billingRepository.createInvoice(
+      input,
+      `Patient ${input.patientId}`,
+      `Facility ${input.facilityId}`,
+      `Provider ${input.providerId}`,
+    );
   },
 
   async updateInvoice(input: UpdateInvoiceInput) {
@@ -109,7 +116,11 @@ export const billingService = {
     const payments = billingRepository.getPayments();
     const payment = payments.items.find((p) => p.paymentId === paymentId);
     if (!payment) return null;
-    return billingRepository.getReceipts({ patientId: payment.patientId }).items.find((r) => r.paymentId === paymentId) ?? null;
+    return (
+      billingRepository
+        .getReceipts({ patientId: payment.patientId })
+        .items.find((r) => r.paymentId === paymentId) ?? null
+    );
   },
 
   async downloadInvoice(invoiceId: string) {
@@ -127,7 +138,11 @@ export const billingService = {
     return billingRepository.favoriteInvoice(invoiceId, patientId);
   },
 
-  async getDashboard(patientId?: string, providerId?: string, facilityId?: string) {
+  async getDashboard(
+    patientId?: string,
+    providerId?: string,
+    facilityId?: string,
+  ) {
     await delay();
     return billingRepository.getDashboard(patientId, providerId, facilityId);
   },

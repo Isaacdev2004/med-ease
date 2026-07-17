@@ -11,7 +11,10 @@ import {
   Wifi,
 } from 'lucide-react';
 
-import type { MedNotification, NotificationType } from '@/services/notifications/notification.types';
+import type {
+  MedNotification,
+  NotificationType,
+} from '@/services/notifications/notification.types';
 import { NotificationActions } from '@/shared/notifications/NotificationActions';
 import { UnreadIndicator } from '@/shared/notifications/NotificationBadge';
 import { StatusBadge } from '@/shared/components/StatusBadge';
@@ -71,7 +74,9 @@ export function NotificationItem({
         <div
           className={cn(
             'mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-            isCritical ? 'bg-destructive/10 text-destructive' : 'bg-primary/10 text-primary',
+            isCritical
+              ? 'bg-destructive/10 text-destructive'
+              : 'bg-primary/10 text-primary',
           )}
         >
           <Icon className="h-4 w-4" aria-hidden="true" />
@@ -80,7 +85,9 @@ export function NotificationItem({
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-2 min-w-0">
               <UnreadIndicator visible={!notification.read} />
-              <h3 className="font-medium text-sm truncate">{notification.title}</h3>
+              <h3 className="font-medium text-sm truncate">
+                {notification.title}
+              </h3>
               {notification.pinned ? (
                 <span className="text-[10px] uppercase tracking-wide text-primary font-semibold">
                   Pinned
@@ -98,12 +105,18 @@ export function NotificationItem({
               label={notification.priority}
             />
           </div>
-          <p className="text-sm text-muted-foreground">{notification.message}</p>
+          <p className="text-sm text-muted-foreground">
+            {notification.message}
+          </p>
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <time dateTime={notification.timestamp}>
-              {formatDistanceToNow(new Date(notification.timestamp), { addSuffix: true })}
+              {formatDistanceToNow(new Date(notification.timestamp), {
+                addSuffix: true,
+              })}
             </time>
-            {notification.actor ? <span>· {notification.actor.name}</span> : null}
+            {notification.actor ? (
+              <span>· {notification.actor.name}</span>
+            ) : null}
           </div>
           {!compact ? (
             <NotificationActions

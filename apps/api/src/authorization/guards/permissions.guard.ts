@@ -8,7 +8,10 @@ import {
   AuthenticationRequiredException,
   AuthorizationHttpException,
 } from '../authorization.exceptions';
-import { IS_PUBLIC_KEY, PERMISSIONS_KEY } from '../decorators/require-permission.decorator';
+import {
+  IS_PUBLIC_KEY,
+  PERMISSIONS_KEY,
+} from '../decorators/require-permission.decorator';
 import { PermissionService } from '../permission.service';
 import { PolicyService } from '../policy.service';
 
@@ -35,10 +38,9 @@ export class PermissionsGuard implements CanActivate {
       return true;
     }
 
-    const requirement = this.reflector.getAllAndOverride<PermissionRequirement | undefined>(
-      PERMISSIONS_KEY,
-      [context.getHandler(), context.getClass()],
-    );
+    const requirement = this.reflector.getAllAndOverride<
+      PermissionRequirement | undefined
+    >(PERMISSIONS_KEY, [context.getHandler(), context.getClass()]);
 
     if (!requirement) {
       return true;

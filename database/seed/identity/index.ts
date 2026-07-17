@@ -52,8 +52,11 @@ export const identitySeed: SeedModule = {
       return;
     }
 
-    const { PrismaClient, runInSystemTransaction } = await import('@medease/prisma');
-    type TransactionClient = Parameters<Parameters<typeof runInSystemTransaction>[1]>[0];
+    const { PrismaClient, runInSystemTransaction } =
+      await import('@medease/prisma');
+    type TransactionClient = Parameters<
+      Parameters<typeof runInSystemTransaction>[1]
+    >[0];
     const prisma = new PrismaClient();
     const passwordHash = await hashPassword('demo');
 
@@ -82,7 +85,9 @@ export const identitySeed: SeedModule = {
 
         for (const user of demoUsers) {
           await tx.user.upsert({
-            where: { tenantId_email: { tenantId: DEMO_TENANT_ID, email: user.email } },
+            where: {
+              tenantId_email: { tenantId: DEMO_TENANT_ID, email: user.email },
+            },
             create: {
               id: user.id,
               tenantId: DEMO_TENANT_ID,

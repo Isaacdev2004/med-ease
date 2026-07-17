@@ -9,7 +9,11 @@ interface RealtimeStatusProps {
 }
 
 /** Realtime connection indicator for notification center. */
-export function RealtimeStatus({ connected, offline, className }: RealtimeStatusProps) {
+export function RealtimeStatus({
+  connected,
+  offline,
+  className,
+}: RealtimeStatusProps) {
   const Icon = offline ? WifiOff : connected ? Radio : Wifi;
 
   return (
@@ -26,8 +30,15 @@ export function RealtimeStatus({ connected, offline, className }: RealtimeStatus
       role="status"
       aria-live="polite"
     >
-      <Icon className={cn('h-3.5 w-3.5', connected && !offline && 'animate-pulse')} aria-hidden="true" />
-      {offline ? 'Offline — actions queued' : connected ? 'Live sync active' : 'Connecting…'}
+      <Icon
+        className={cn('h-3.5 w-3.5', connected && !offline && 'animate-pulse')}
+        aria-hidden="true"
+      />
+      {offline
+        ? 'Offline — actions queued'
+        : connected
+          ? 'Live sync active'
+          : 'Connecting…'}
     </div>
   );
 }

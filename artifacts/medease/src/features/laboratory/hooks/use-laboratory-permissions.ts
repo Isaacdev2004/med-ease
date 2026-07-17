@@ -34,7 +34,8 @@ export function useLaboratoryPermissions(): LaboratoryPermissions {
     canRelease: canApprove || canWrite,
     canExport: canExport,
     canShare: canShare,
-    canViewAnalytics: canRead && (canAdmin || permissions.includes('reports.export')),
+    canViewAnalytics:
+      canRead && (canAdmin || permissions.includes('reports.export')),
     canAdmin: canAdmin,
   };
 }

@@ -1,7 +1,10 @@
 import { computeDocumentAnalytics } from '@/services/documents/analytics';
 import { extractSystemMetadata } from '@/services/documents/metadata-engine';
 import { simulateOcr } from '@/services/documents/ocr-engine';
-import { searchDocuments, searchIndex } from '@/services/documents/search-engine';
+import {
+  searchDocuments,
+  searchIndex,
+} from '@/services/documents/search-engine';
 import { nextSignatureStatus } from '@/services/documents/signature-engine';
 import { nextVersionNumber } from '@/services/documents/versioning';
 import { nextDocumentStatus } from '@/services/documents/document-engine';
@@ -43,7 +46,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -52,7 +60,11 @@ function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
   return fields.some((f) => f?.toLowerCase().includes(lower));
 }
 
-function logAccess(documentId: string, userId: string, action: 'view' | 'download' | 'share' | 'edit' | 'sign') {
+function logAccess(
+  documentId: string,
+  userId: string,
+  action: 'view' | 'download' | 'share' | 'edit' | 'sign',
+) {
   MOCK_ACCESS_LOGS.unshift({
     logId: `log-${Date.now()}`,
     documentId,
@@ -74,54 +86,76 @@ class DocumentRepository {
   private favorites: DocumentFavorite[] = [];
   private nextId = 880000;
 
-  dashboard(tenantId?: string, facilityId?: string) { return buildDocumentDashboard(tenantId, facilityId); }
-  analytics(tenantId?: string, facilityId?: string) { return computeDocumentAnalytics(tenantId, facilityId); }
+  dashboard(tenantId?: string, facilityId?: string) {
+    return buildDocumentDashboard(tenantId, facilityId);
+  }
+  analytics(tenantId?: string, facilityId?: string) {
+    return computeDocumentAnalytics(tenantId, facilityId);
+  }
 
   getDocuments(filters?: DocumentFilters) {
     let items = this.documents.filter((d) => d.status !== 'deleted');
-    if (filters?.tenantId) items = items.filter((d) => d.tenantId === filters.tenantId);
-    if (filters?.facilityId) items = items.filter((d) => d.facilityId === filters.facilityId);
-    if (filters?.folderId) items = items.filter((d) => d.folderId === filters.folderId);
-    if (filters?.categoryId) items = items.filter((d) => d.categoryId === filters.categoryId);
-    if (filters?.patientId) items = items.filter((d) => d.patientId === filters.patientId);
-    if (filters?.module) items = items.filter((d) => d.module === filters.module);
-    if (filters?.status) items = items.filter((d) => d.status === filters.status);
-    if (filters?.tag) items = items.filter((d) => d.tags.includes(filters.tag!));
-    if (filters?.userId) items = items.filter((d) => d.uploadedBy === filters.userId);
+    if (filters?.tenantId)
+      items = items.filter((d) => d.tenantId === filters.tenantId);
+    if (filters?.facilityId)
+      items = items.filter((d) => d.facilityId === filters.facilityId);
+    if (filters?.folderId)
+      items = items.filter((d) => d.folderId === filters.folderId);
+    if (filters?.categoryId)
+      items = items.filter((d) => d.categoryId === filters.categoryId);
+    if (filters?.patientId)
+      items = items.filter((d) => d.patientId === filters.patientId);
+    if (filters?.module)
+      items = items.filter((d) => d.module === filters.module);
+    if (filters?.status)
+      items = items.filter((d) => d.status === filters.status);
+    if (filters?.tag)
+      items = items.filter((d) => d.tags.includes(filters.tag!));
+    if (filters?.userId)
+      items = items.filter((d) => d.uploadedBy === filters.userId);
     if (filters?.q) items = searchDocuments(items, filters.q);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getDocument(documentId: string) {
-    const doc = this.documents.find((d) => d.documentId === documentId && d.status !== 'deleted');
+    const doc = this.documents.find(
+      (d) => d.documentId === documentId && d.status !== 'deleted',
+    );
     if (doc) logAccess(documentId, 'current-user', 'view');
     return doc ?? null;
   }
 
   getFolders(filters?: DocumentFilters) {
     let items = this.folders;
-    if (filters?.tenantId) items = items.filter((f) => f.tenantId === filters.tenantId);
-    if (filters?.facilityId) items = items.filter((f) => f.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((f) => matchQ(filters.q, f.name, f.path));
+    if (filters?.tenantId)
+      items = items.filter((f) => f.tenantId === filters.tenantId);
+    if (filters?.facilityId)
+      items = items.filter((f) => f.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((f) => matchQ(filters.q, f.name, f.path));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getCategories(filters?: DocumentFilters) {
     let items = MOCK_CATEGORIES;
-    if (filters?.module) items = items.filter((c) => c.module === filters.module);
+    if (filters?.module)
+      items = items.filter((c) => c.module === filters.module);
     if (filters?.q) items = items.filter((c) => matchQ(filters.q, c.name));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getTemplates(filters?: DocumentFilters) {
     let items = MOCK_TEMPLATES;
-    if (filters?.module) items = items.filter((t) => t.module === filters.module);
+    if (filters?.module)
+      items = items.filter((t) => t.module === filters.module);
     if (filters?.q) items = items.filter((t) => matchQ(filters.q, t.name));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getVersions(documentId: string) {
-    const items = this.versions.filter((v) => v.documentId === documentId).sort((a, b) => b.versionNumber - a.versionNumber);
+    const items = this.versions
+      .filter((v) => v.documentId === documentId)
+      .sort((a, b) => b.versionNumber - a.versionNumber);
     return paginate(items, 1, 50);
   }
 
@@ -134,7 +168,10 @@ class DocumentRepository {
   }
 
   search(query: string, filters?: DocumentFilters) {
-    const docs = searchDocuments(this.documents.filter((d) => d.status !== 'deleted'), query);
+    const docs = searchDocuments(
+      this.documents.filter((d) => d.status !== 'deleted'),
+      query,
+    );
     const indices = searchIndex(MOCK_CONTENT_INDEX, query);
     return {
       documents: paginate(docs, filters?.page, filters?.pageSize),
@@ -144,56 +181,71 @@ class DocumentRepository {
 
   getOcrResults(filters?: DocumentFilters) {
     let items = this.ocrResults;
-    if (filters?.q) items = items.filter((o) => matchQ(filters.q, o.extractedText, o.documentId));
+    if (filters?.q)
+      items = items.filter((o) =>
+        matchQ(filters.q, o.extractedText, o.documentId),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getSignatureRequests(filters?: DocumentFilters) {
     let items = this.signatureRequests;
-    if (filters?.userId) items = items.filter((r) => r.signerId === filters.userId || r.requestedBy === filters.userId);
-    if (filters?.status) items = items.filter((r) => r.status === filters.status);
+    if (filters?.userId)
+      items = items.filter(
+        (r) =>
+          r.signerId === filters.userId || r.requestedBy === filters.userId,
+      );
+    if (filters?.status)
+      items = items.filter((r) => r.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getSignatures(filters?: DocumentFilters) {
     let items = this.signatures;
-    if (filters?.userId) items = items.filter((s) => s.signerId === filters.userId);
+    if (filters?.userId)
+      items = items.filter((s) => s.signerId === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getSharedLinks(filters?: DocumentFilters) {
     let items = this.sharedLinks.filter((l) => !l.revoked);
-    if (filters?.userId) items = items.filter((l) => l.createdBy === filters.userId);
+    if (filters?.userId)
+      items = items.filter((l) => l.createdBy === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getRetentionPolicies(filters?: DocumentFilters) {
     let items = MOCK_RETENTION_POLICIES;
-    if (filters?.module) items = items.filter((p) => p.module === filters.module);
+    if (filters?.module)
+      items = items.filter((p) => p.module === filters.module);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getLegalHolds(filters?: DocumentFilters) {
     let items = MOCK_LEGAL_HOLDS;
-    if (filters?.status) items = items.filter((h) => h.status === filters.status);
+    if (filters?.status)
+      items = items.filter((h) => h.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getArchives(filters?: DocumentFilters) {
     let items = MOCK_ARCHIVE_JOBS;
-    if (filters?.status) items = items.filter((j) => j.status === filters.status);
+    if (filters?.status)
+      items = items.filter((j) => j.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getRecords(filters?: DocumentFilters) {
     let items = MOCK_RECORDS;
-    if (filters?.status) items = items.filter((r) => r.status === filters.status);
+    if (filters?.status)
+      items = items.filter((r) => r.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getAccessLogs(filters?: DocumentFilters) {
     let items = MOCK_ACCESS_LOGS;
-    if (filters?.userId) items = items.filter((l) => l.userId === filters.userId);
+    if (filters?.userId)
+      items = items.filter((l) => l.userId === filters.userId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -221,7 +273,9 @@ class DocumentRepository {
       signatureRequired: false,
     };
     this.documents.unshift(doc);
-    this.metadata.push(...extractSystemMetadata(documentId, input.module, input.patientId));
+    this.metadata.push(
+      ...extractSystemMetadata(documentId, input.module, input.patientId),
+    );
     logAccess(documentId, input.uploadedBy, 'edit');
     return doc;
   }
@@ -270,7 +324,9 @@ class DocumentRepository {
   createVersion(input: CreateVersionInput) {
     const doc = this.documents.find((d) => d.documentId === input.documentId);
     if (!doc) return null;
-    const existing = this.versions.filter((v) => v.documentId === input.documentId);
+    const existing = this.versions.filter(
+      (v) => v.documentId === input.documentId,
+    );
     const versionNumber = nextVersionNumber(existing);
     const version = {
       versionId: `ver-${this.nextId++}`,
@@ -315,7 +371,9 @@ class DocumentRepository {
   }
 
   signDocument(input: SignDocumentInput) {
-    const request = this.signatureRequests.find((r) => r.requestId === input.requestId);
+    const request = this.signatureRequests.find(
+      (r) => r.requestId === input.requestId,
+    );
     if (!request) return null;
     request.status = nextSignatureStatus('sign');
     const signature = {
@@ -371,18 +429,32 @@ class DocumentRepository {
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.documents.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.documents.length,
+    };
   }
 
   favorite(userId: string, documentId: string) {
-    if (!this.favorites.some((f) => f.userId === userId && f.documentId === documentId)) {
-      this.favorites.push({ userId, documentId, createdAt: new Date().toISOString() });
+    if (
+      !this.favorites.some(
+        (f) => f.userId === userId && f.documentId === documentId,
+      )
+    ) {
+      this.favorites.push({
+        userId,
+        documentId,
+        createdAt: new Date().toISOString(),
+      });
     }
     return { userId, documentId };
   }
 
   getFavorites(userId: string) {
-    const ids = this.favorites.filter((f) => f.userId === userId).map((f) => f.documentId);
+    const ids = this.favorites
+      .filter((f) => f.userId === userId)
+      .map((f) => f.documentId);
     return this.documents.filter((d) => ids.includes(d.documentId));
   }
 }

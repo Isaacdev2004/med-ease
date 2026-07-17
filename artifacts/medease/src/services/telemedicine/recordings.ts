@@ -1,6 +1,9 @@
 import type { SessionRecording } from '@/services/telemedicine/types';
 
-export function startRecording(sessionId: string, consentGiven: boolean): SessionRecording {
+export function startRecording(
+  sessionId: string,
+  consentGiven: boolean,
+): SessionRecording {
   return {
     id: `rec-${Date.now()}`,
     sessionId,
@@ -17,7 +20,9 @@ export function stopRecording(recording: SessionRecording): SessionRecording {
     status: 'processing',
     stoppedAt: new Date().toISOString(),
     durationSeconds: recording.startedAt
-      ? Math.round((Date.now() - new Date(recording.startedAt).getTime()) / 1000)
+      ? Math.round(
+          (Date.now() - new Date(recording.startedAt).getTime()) / 1000,
+        )
       : 0,
   };
 }

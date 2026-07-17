@@ -5,7 +5,12 @@ import {
   usePatientDashboard,
   useRescheduleAppointmentMutation,
 } from '@/features/patient/hooks/use-patient-data';
-import { PageShell, SectionHeader, LoadingButton, StatusBadge } from '@/shared/components';
+import {
+  PageShell,
+  SectionHeader,
+  LoadingButton,
+  StatusBadge,
+} from '@/shared/components';
 import { QueryStateView } from '@/shared/data/QueryStateView';
 import { SparklineChart, ChartPanel } from '@/shared/charts';
 import { AppointmentCard, MedicationCard } from '@/shared/medical';
@@ -120,7 +125,10 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <ChartPanel title="Recent Test Results" description={data.recentTestLabel}>
+            <ChartPanel
+              title="Recent Test Results"
+              description={data.recentTestLabel}
+            >
               <SparklineChart data={demoTrend} />
               <Button variant="link" className="px-0 mt-4 h-auto">
                 View full report →

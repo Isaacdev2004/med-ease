@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_VACCINATIONS, type VaccinationRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_VACCINATIONS,
+  type VaccinationRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -22,7 +25,13 @@ const columns: DataTableColumn<VaccinationRow>[] = [
     cell: (row) => (
       <PortalStatusBadge
         label={row.status}
-        variant={row.status === 'overdue' ? 'destructive' : row.status === 'due' ? 'secondary' : 'outline'}
+        variant={
+          row.status === 'overdue'
+            ? 'destructive'
+            : row.status === 'due'
+              ? 'secondary'
+              : 'outline'
+        }
       />
     ),
   },
@@ -31,20 +40,39 @@ const columns: DataTableColumn<VaccinationRow>[] = [
 export default function VaccinationsPage() {
   const [vaccinations, setVaccinations] = useState(MOCK_VACCINATIONS);
 
-  const due = vaccinations.filter((row) => row.status === 'due' || row.status === 'overdue').length;
+  const due = vaccinations.filter(
+    (row) => row.status === 'due' || row.status === 'overdue',
+  ).length;
 
   return (
     <PageShell
       title="Vaccinations"
       subtitle="Immunization history and upcoming vaccine schedules."
-      primaryAction={<PortalActionButton label="Schedule vaccination" successTitle="Vaccination scheduled" />}
+      primaryAction={
+        <PortalActionButton
+          label="Schedule vaccination"
+          successTitle="Vaccination scheduled"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
         metrics={[
-          { title: 'Completed', value: vaccinations.filter((v) => v.status === 'completed').length, status: 'stable' },
-          { title: 'Due / overdue', value: due, status: due > 0 ? 'observation' : 'stable' },
-          { title: 'Next appointment', value: 'Aug 12', description: 'COVID-19 booster' },
+          {
+            title: 'Completed',
+            value: vaccinations.filter((v) => v.status === 'completed').length,
+            status: 'stable',
+          },
+          {
+            title: 'Due / overdue',
+            value: due,
+            status: due > 0 ? 'observation' : 'stable',
+          },
+          {
+            title: 'Next appointment',
+            value: 'Aug 12',
+            description: 'COVID-19 booster',
+          },
         ]}
       />
 

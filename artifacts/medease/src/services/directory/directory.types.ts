@@ -9,11 +9,7 @@ export type ProviderType =
   | 'medical_center';
 
 export type DirectorySort =
-  | 'relevance'
-  | 'distance'
-  | 'alphabetical'
-  | 'availability'
-  | 'updated';
+  'relevance' | 'distance' | 'alphabetical' | 'availability' | 'updated';
 
 export type DirectoryViewMode = 'cards' | 'table' | 'compact' | 'map';
 

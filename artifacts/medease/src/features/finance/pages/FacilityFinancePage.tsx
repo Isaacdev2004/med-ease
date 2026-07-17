@@ -3,7 +3,8 @@ import { useLocation } from 'wouter';
 import { FinanceShell } from '@/features/finance/components/FinanceShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'finance' | 'accounts-payable' | 'accounts-receivable' | 'budgets' | 'cash';
+type Segment =
+  'finance' | 'accounts-payable' | 'accounts-receivable' | 'budgets' | 'cash';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/accounts-payable')) return 'accounts-payable';
@@ -24,5 +25,11 @@ const TITLES: Record<Segment, string> = {
 export default function FacilityFinancePage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <FinanceShell basePath={resolveModuleBasePath(location, segment)} variant="facility" title={TITLES[segment]} />;
+  return (
+    <FinanceShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="facility"
+      title={TITLES[segment]}
+    />
+  );
 }

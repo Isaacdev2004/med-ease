@@ -67,5 +67,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminPlatformPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <PlatformAdminShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <PlatformAdminShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

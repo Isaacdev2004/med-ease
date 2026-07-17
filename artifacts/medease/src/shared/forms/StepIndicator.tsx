@@ -16,7 +16,11 @@ interface StepIndicatorProps {
 }
 
 /** Multi-step wizard progress with titles and completion state. */
-export function StepIndicator({ steps, currentStep, className }: StepIndicatorProps) {
+export function StepIndicator({
+  steps,
+  currentStep,
+  className,
+}: StepIndicatorProps) {
   const progress = ((currentStep + 1) / steps.length) * 100;
 
   return (
@@ -46,12 +50,18 @@ export function StepIndicator({ steps, currentStep, className }: StepIndicatorPr
                     !active && !completed && 'bg-muted text-muted-foreground',
                   )}
                 >
-                  {completed ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : index + 1}
+                  {completed ? (
+                    <Check className="h-3.5 w-3.5" aria-hidden="true" />
+                  ) : (
+                    index + 1
+                  )}
                 </span>
                 <div>
                   <p className="text-sm font-medium">{step.title}</p>
                   {step.description ? (
-                    <p className="text-xs text-muted-foreground mt-0.5">{step.description}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {step.description}
+                    </p>
                   ) : null}
                 </div>
               </div>

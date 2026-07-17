@@ -3,7 +3,11 @@ import { Route, Switch } from 'wouter';
 
 import { AuthRoute, PublicRoute } from '@/app/router/GlobalRouter';
 import { LazyRoute } from '@/app/router/LazyRoute';
-import { authRoutes, portalAuthRoutes, publicRoutes } from '@/app/router/route-registry';
+import {
+  authRoutes,
+  portalAuthRoutes,
+  publicRoutes,
+} from '@/app/router/route-registry';
 import { ROUTES } from '@/config/routes';
 import { useScrollRestoration } from '@/shared/hooks/use-scroll-restoration';
 

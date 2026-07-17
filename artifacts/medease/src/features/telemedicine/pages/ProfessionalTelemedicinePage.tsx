@@ -4,10 +4,14 @@ import { TelemedicineShell } from '@/features/telemedicine/components/Telemedici
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
 function resolveProfessionalBasePath(location: string) {
-  if (location.includes('/waiting-room')) return resolveModuleBasePath(location, 'waiting-room');
-  if (location.includes('/current-session')) return resolveModuleBasePath(location, 'current-session');
-  if (location.includes('/availability')) return resolveModuleBasePath(location, 'availability');
-  if (location.includes('/telemedicine/history')) return resolveModuleBasePath(location, 'telemedicine/history');
+  if (location.includes('/waiting-room'))
+    return resolveModuleBasePath(location, 'waiting-room');
+  if (location.includes('/current-session'))
+    return resolveModuleBasePath(location, 'current-session');
+  if (location.includes('/availability'))
+    return resolveModuleBasePath(location, 'availability');
+  if (location.includes('/telemedicine/history'))
+    return resolveModuleBasePath(location, 'telemedicine/history');
   return resolveModuleBasePath(location, 'telemedicine');
 }
 

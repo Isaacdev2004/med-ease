@@ -22,5 +22,11 @@ export default function FacilityMonitoringPage() {
     devices: 'Bedside Devices',
     alerts: 'Clinical Alerts',
   };
-  return <MonitoringShell basePath={basePath} variant="facility" title={titles[segment]} />;
+  return (
+    <MonitoringShell
+      basePath={basePath}
+      variant="facility"
+      title={titles[segment]}
+    />
+  );
 }

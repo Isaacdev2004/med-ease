@@ -1,6 +1,9 @@
 import type { WhiteboardSession } from '@/services/telemedicine/types';
 
-export function createWhiteboard(sessionId: string, createdBy: string): WhiteboardSession {
+export function createWhiteboard(
+  sessionId: string,
+  createdBy: string,
+): WhiteboardSession {
   return {
     id: `wb-${Date.now()}`,
     sessionId,
@@ -11,6 +14,12 @@ export function createWhiteboard(sessionId: string, createdBy: string): Whiteboa
   };
 }
 
-export function exportWhiteboard(session: WhiteboardSession, format: 'png' | 'pdf') {
-  return { ...session, exportedUrl: `/mock/whiteboard/${session.id}.${format}` };
+export function exportWhiteboard(
+  session: WhiteboardSession,
+  format: 'png' | 'pdf',
+) {
+  return {
+    ...session,
+    exportedUrl: `/mock/whiteboard/${session.id}.${format}`,
+  };
 }

@@ -22,5 +22,9 @@ export function createTransfer(
 }
 
 export function completeTransfer(transfer: StockTransfer): StockTransfer {
-  return { ...transfer, status: 'completed' as TransferStatus, completedAt: new Date().toISOString() };
+  return {
+    ...transfer,
+    status: 'completed' as TransferStatus,
+    completedAt: new Date().toISOString(),
+  };
 }

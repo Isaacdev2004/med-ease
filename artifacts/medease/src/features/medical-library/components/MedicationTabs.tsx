@@ -23,26 +23,38 @@ export function MedicationTabs({ medication }: MedicationTabsProps) {
 
       <TabsContent value="overview" className="space-y-4 mt-6">
         <Card>
-          <CardHeader><CardTitle>Active Ingredients</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle>Active Ingredients</CardTitle>
+          </CardHeader>
           <CardContent>
             <ul className="list-disc pl-5 text-sm text-muted-foreground">
-              {medication.activeIngredients.map((i) => <li key={i}>{i}</li>)}
+              {medication.activeIngredients.map((i) => (
+                <li key={i}>{i}</li>
+              ))}
             </ul>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader><CardTitle>Indications</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle>Indications</CardTitle>
+          </CardHeader>
           <CardContent>
             <ul className="list-disc pl-5 text-sm text-muted-foreground">
-              {medication.indications.map((i) => <li key={i}>{i}</li>)}
+              {medication.indications.map((i) => (
+                <li key={i}>{i}</li>
+              ))}
             </ul>
           </CardContent>
         </Card>
         <Card>
-          <CardHeader><CardTitle>Side Effects</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle>Side Effects</CardTitle>
+          </CardHeader>
           <CardContent>
             <ul className="list-disc pl-5 text-sm text-muted-foreground">
-              {medication.sideEffects.map((i) => <li key={i}>{i}</li>)}
+              {medication.sideEffects.map((i) => (
+                <li key={i}>{i}</li>
+              ))}
             </ul>
           </CardContent>
         </Card>
@@ -62,22 +74,34 @@ export function MedicationTabs({ medication }: MedicationTabsProps) {
 
       <TabsContent value="patient" className="mt-6">
         <Card>
-          <CardHeader><CardTitle>Patient Information</CardTitle></CardHeader>
-          <CardContent className="text-sm text-muted-foreground">{medication.patientInformation}</CardContent>
+          <CardHeader>
+            <CardTitle>Patient Information</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            {medication.patientInformation}
+          </CardContent>
         </Card>
       </TabsContent>
 
       <TabsContent value="professional" className="mt-6">
         <Card>
-          <CardHeader><CardTitle>Professional Information</CardTitle></CardHeader>
-          <CardContent className="text-sm text-muted-foreground">{medication.professionalInformation}</CardContent>
+          <CardHeader>
+            <CardTitle>Professional Information</CardTitle>
+          </CardHeader>
+          <CardContent className="text-sm text-muted-foreground">
+            {medication.professionalInformation}
+          </CardContent>
         </Card>
         {medication.references.length ? (
           <Card className="mt-4">
-            <CardHeader><CardTitle>References</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>References</CardTitle>
+            </CardHeader>
             <CardContent>
               <ul className="list-disc pl-5 text-sm text-muted-foreground">
-                {medication.references.map((ref) => <li key={ref}>{ref}</li>)}
+                {medication.references.map((ref) => (
+                  <li key={ref}>{ref}</li>
+                ))}
               </ul>
             </CardContent>
           </Card>

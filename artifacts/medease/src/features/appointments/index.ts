@@ -5,7 +5,10 @@ export {
   createProfessionalAppointmentsRoutes,
 } from '@/features/appointments/routes';
 export { AppointmentsShell } from '@/features/appointments/components/AppointmentsShell';
-export { AppointmentTabs, getAppointmentSectionFromPath } from '@/features/appointments/components/AppointmentTabs';
+export {
+  AppointmentTabs,
+  getAppointmentSectionFromPath,
+} from '@/features/appointments/components/AppointmentTabs';
 export {
   AppointmentStatusBadge,
   AppointmentHeader,
@@ -18,7 +21,10 @@ export {
   CheckInCard,
   ReminderCard,
 } from '@/features/appointments/components/AppointmentComponents';
-export { BookingWizard, TimeSlotPicker } from '@/features/appointments/components/BookingWizard';
+export {
+  BookingWizard,
+  TimeSlotPicker,
+} from '@/features/appointments/components/BookingWizard';
 export {
   CalendarView,
   CalendarToolbar,

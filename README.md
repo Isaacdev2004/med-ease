@@ -45,15 +45,15 @@ Verify health after containers are up:
 pnpm docker:verify
 ```
 
-| Service | URL |
-|---------|-----|
-| API liveness | http://localhost:3000/api/healthz |
+| Service       | URL                                     |
+| ------------- | --------------------------------------- |
+| API liveness  | http://localhost:3000/api/healthz       |
 | API readiness | http://localhost:3000/api/healthz/ready |
-| Swagger | http://localhost:3000/api/docs |
-| Worker | http://localhost:3001/healthz |
-| Mailpit UI | http://localhost:8025 |
-| pgAdmin | http://localhost:5050 |
-| MinIO Console | http://localhost:9001 |
+| Swagger       | http://localhost:3000/api/docs          |
+| Worker        | http://localhost:3001/healthz           |
+| Mailpit UI    | http://localhost:8025                   |
+| pgAdmin       | http://localhost:5050                   |
+| MinIO Console | http://localhost:9001                   |
 
 See [docker/README.md](./docker/README.md) for credentials, pgAdmin setup, and reset instructions.
 
@@ -61,20 +61,20 @@ See [docker/README.md](./docker/README.md) for credentials, pgAdmin setup, and r
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `pnpm dev` | Start the Med-Ease frontend dev server |
-| `pnpm dev:api` | Start the NestJS API dev server (`@medease/api`) |
-| `pnpm build` | Typecheck all packages, then build all artifacts |
-| `pnpm build:web` | Build the frontend only |
-| `pnpm typecheck` | Run TypeScript checks across the workspace |
-| `pnpm lint` | Run ESLint |
-| `pnpm format` | Format code with Prettier |
-| `pnpm format:check` | Check formatting without writing |
+| Script                  | Description                                                |
+| ----------------------- | ---------------------------------------------------------- |
+| `pnpm dev`              | Start the Med-Ease frontend dev server                     |
+| `pnpm dev:api`          | Start the NestJS API dev server (`@medease/api`)           |
+| `pnpm build`            | Typecheck all packages, then build all artifacts           |
+| `pnpm build:web`        | Build the frontend only                                    |
+| `pnpm typecheck`        | Run TypeScript checks across the workspace                 |
+| `pnpm lint`             | Run ESLint                                                 |
+| `pnpm format`           | Format code with Prettier                                  |
+| `pnpm format:check`     | Check formatting without writing                           |
 | `pnpm docker:bootstrap` | Create `docker/.env` (if needed) and start the local stack |
-| `pnpm docker:ps` | Show Docker Compose service status |
-| `pnpm docker:verify` | Probe API, worker, OpenSearch, and Mailpit health |
-| `pnpm docker:down` | Stop the local infrastructure stack |
+| `pnpm docker:ps`        | Show Docker Compose service status                         |
+| `pnpm docker:verify`    | Probe API, worker, OpenSearch, and Mailpit health          |
+| `pnpm docker:down`      | Stop the local infrastructure stack                        |
 
 ### Backend API (`apps/api`)
 
@@ -209,18 +209,19 @@ src/
 
 **Import aliases (required):**
 
-| Alias | Path |
-|-------|------|
-| `@/app/*` | Application layer |
-| `@/shared/*` | Shared UI, layout, hooks |
+| Alias          | Path                                     |
+| -------------- | ---------------------------------------- |
+| `@/app/*`      | Application layer                        |
+| `@/shared/*`   | Shared UI, layout, hooks                 |
 | `@/features/*` | Feature modules (via `index.ts` barrels) |
-| `@/services/*` | Service layer |
-| `@/config/*` | Configuration |
-| `@/types/*` | Global types |
-| `@/assets/*` | Static assets |
-| `@/styles/*` | Global styles |
+| `@/services/*` | Service layer                            |
+| `@/config/*`   | Configuration                            |
+| `@/types/*`    | Global types                             |
+| `@/assets/*`   | Static assets                            |
+| `@/styles/*`   | Global styles                            |
 
 **Naming conventions:**
+
 - React components & pages: `PascalCase.tsx` (e.g. `Dashboard.tsx`)
 - Hooks: `useAppointments.ts`
 - Folders: `kebab-case`
@@ -231,39 +232,40 @@ src/
 RootLayout → Route Group Layout → Portal/Marketing/Auth Layout → Page → Section
 ```
 
-| Layout | Routes | Purpose |
-|--------|--------|---------|
-| `RootLayout` | All | Skip link, global error boundary |
-| `MarketingLayout` | `/` | Public nav, footer, theme toggle |
-| `AuthLayout` | `/login`, `/register`, `/forgot-password` | Split-screen auth frame |
-| `PortalLayout` | `/patient`, `/professional`, etc. | 72px header, 280px sidebar, breadcrumbs, ⌘K search |
+| Layout            | Routes                                    | Purpose                                            |
+| ----------------- | ----------------------------------------- | -------------------------------------------------- |
+| `RootLayout`      | All                                       | Skip link, global error boundary                   |
+| `MarketingLayout` | `/`                                       | Public nav, footer, theme toggle                   |
+| `AuthLayout`      | `/login`, `/register`, `/forgot-password` | Split-screen auth frame                            |
+| `PortalLayout`    | `/patient`, `/professional`, etc.         | 72px header, 280px sidebar, breadcrumbs, ⌘K search |
 
 Portal pages render **content only** inside `PageContainer` (max 1600px). Use `PageHeader` and `SectionLayout` for structured pages.
+
 - Constants: `UPPER_SNAKE_CASE`
 
 ## Environment Variables
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `PORT` | No | `5173` | Frontend dev/preview server port |
-| `BASE_PATH` | No | `/` | Vite base path for deployment |
-| `DATABASE_URL` | For API/DB | — | PostgreSQL connection string |
+| Variable       | Required   | Default | Description                      |
+| -------------- | ---------- | ------- | -------------------------------- |
+| `PORT`         | No         | `5173`  | Frontend dev/preview server port |
+| `BASE_PATH`    | No         | `/`     | Vite base path for deployment    |
+| `DATABASE_URL` | For API/DB | —       | PostgreSQL connection string     |
 
 See `.env.example` for a template.
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | React 19, Vite 7, TypeScript 5.9 |
-| Styling | Tailwind CSS 4, shadcn/ui (New York) |
-| Routing | wouter |
-| State / Data | TanStack React Query |
-| Theme | next-themes (light / dark / system) |
-| API | Express 5, Zod validation |
-| Database | PostgreSQL, Drizzle ORM |
-| Codegen | Orval (OpenAPI → React Query hooks) |
-| Package manager | pnpm workspaces with catalog |
+| Layer           | Technology                           |
+| --------------- | ------------------------------------ |
+| Frontend        | React 19, Vite 7, TypeScript 5.9     |
+| Styling         | Tailwind CSS 4, shadcn/ui (New York) |
+| Routing         | wouter                               |
+| State / Data    | TanStack React Query                 |
+| Theme           | next-themes (light / dark / system)  |
+| API             | Express 5, Zod validation            |
+| Database        | PostgreSQL, Drizzle ORM              |
+| Codegen         | Orval (OpenAPI → React Query hooks)  |
+| Package manager | pnpm workspaces with catalog         |
 
 ## IDE Setup (Cursor / VS Code)
 

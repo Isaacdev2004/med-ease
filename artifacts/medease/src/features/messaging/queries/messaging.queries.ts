@@ -15,7 +15,9 @@ export const messagingQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   messages: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.messages(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.messages(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getMessages(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -26,38 +28,53 @@ export const messagingQueries = {
     enabled: Boolean(messageId),
   }),
   inbox: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.inbox(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.inbox(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getInbox(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   announcements: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.announcements(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.announcements(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getAnnouncements(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   threads: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.threads(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.threads(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getThreads(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   chatMessages: (threadId: string, filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.chatMessages(threadId, filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.chatMessages(
+      threadId,
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getChatMessages(threadId, filters),
     staleTime: CACHE_TIMES.default,
     enabled: Boolean(threadId),
   }),
   secureMessages: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.secureMessages(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.secureMessages(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getSecureMessages(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   broadcasts: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.broadcasts(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.broadcasts(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getBroadcasts(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   templates: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.templates(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.templates(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getTemplates(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -68,7 +85,9 @@ export const messagingQueries = {
     enabled: Boolean(templateId),
   }),
   campaigns: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.campaigns(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.campaigns(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getCampaigns(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -79,7 +98,9 @@ export const messagingQueries = {
     enabled: Boolean(campaignId),
   }),
   deliveries: (filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.deliveries(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.deliveries(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.getDeliveries(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -94,7 +115,10 @@ export const messagingQueries = {
     staleTime: CACHE_TIMES.patientList,
   }),
   search: (query: string, filters?: MessagingFilters) => ({
-    queryKey: queryKeys.messaging.search(query, filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.messaging.search(
+      query,
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => messagingService.search(query, filters),
     staleTime: CACHE_TIMES.patientList,
     enabled: query.length >= 2,

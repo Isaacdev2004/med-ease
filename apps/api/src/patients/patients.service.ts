@@ -35,7 +35,10 @@ export class PatientsService {
   ) {}
 
   private actorId(): string {
-    return this.requestContext.require().userId ?? '00000000-0000-0000-0000-000000000000';
+    return (
+      this.requestContext.require().userId ??
+      '00000000-0000-0000-0000-000000000000'
+    );
   }
 
   private eventContext(patient: { tenantId: string; facilityId?: string }) {
@@ -96,13 +99,16 @@ export class PatientsService {
         identifier.value.trim(),
       );
       if (duplicateIdentifier) {
-        throw new ConflictError('Primary identifier already assigned to another patient', {
-          details: {
-            type: identifier.type,
-            value: identifier.value,
-            patientId: duplicateIdentifier.patientId,
+        throw new ConflictError(
+          'Primary identifier already assigned to another patient',
+          {
+            details: {
+              type: identifier.type,
+              value: identifier.value,
+              patientId: duplicateIdentifier.patientId,
+            },
           },
-        });
+        );
       }
     }
 
@@ -157,14 +163,23 @@ export class PatientsService {
     return patient;
   }
 
-  async updatePatient(patientId: string, input: Omit<UpdatePatientInput, 'updatedBy'>) {
+  async updatePatient(
+    patientId: string,
+    input: Omit<UpdatePatientInput, 'updatedBy'>,
+  ) {
     validateUpdateFields({ ...input, updatedBy: this.actorId() });
 
     const existing = await this.repository.getPatient(patientId);
     assertNotAlreadyArchived(existing);
 
-    if (input.mrn && input.mrn.trim().toLowerCase() !== existing.mrn.toLowerCase()) {
-      const duplicateMrn = await this.repository.findByMrn(input.mrn.trim(), patientId);
+    if (
+      input.mrn &&
+      input.mrn.trim().toLowerCase() !== existing.mrn.toLowerCase()
+    ) {
+      const duplicateMrn = await this.repository.findByMrn(
+        input.mrn.trim(),
+        patientId,
+      );
       if (duplicateMrn) {
         throw new ConflictError('Patient with this MRN already exists', {
           details: { mrn: input.mrn, patientId: duplicateMrn.patientId },
@@ -198,7 +213,10 @@ export class PatientsService {
     const existing = await this.repository.getPatient(patientId);
     assertNotAlreadyArchived(existing);
 
-    const patient = await this.repository.archivePatient(patientId, this.actorId());
+    const patient = await this.repository.archivePatient(
+      patientId,
+      this.actorId(),
+    );
 
     await this.eventBus.publish(
       PatientEvents.patientArchived(
@@ -218,7 +236,10 @@ export class PatientsService {
     const existing = await this.repository.getPatient(patientId);
     assertPatientIsArchived(existing);
 
-    const patient = await this.repository.restorePatient(patientId, this.actorId());
+    const patient = await this.repository.restorePatient(
+      patientId,
+      this.actorId(),
+    );
 
     await this.eventBus.publish(
       PatientEvents.patientRestored(
@@ -257,7 +278,10 @@ export class PatientsService {
           patientId: existing.patientId,
           tenantId: existing.tenantId,
           facilityId: existing.facilityId,
-          metadata: { allergyId: allergy.allergyId, allergen: allergy.allergen },
+          metadata: {
+            allergyId: allergy.allergyId,
+            allergen: allergy.allergen,
+          },
         },
         this.eventContext(existing),
       ),
@@ -266,13 +290,19 @@ export class PatientsService {
     return allergy;
   }
 
-  async updatePreferences(patientId: string, input: CreatePatientPreferenceInput) {
+  async updatePreferences(
+    patientId: string,
+    input: CreatePatientPreferenceInput,
+  ) {
     validatePreferenceInput(input);
 
     const existing = await this.repository.getPatient(patientId);
     assertNotAlreadyArchived(existing);
 
-    const preferences = await this.repository.upsertPreferences(patientId, input);
+    const preferences = await this.repository.upsertPreferences(
+      patientId,
+      input,
+    );
 
     await this.eventBus.publish(
       PatientEvents.patientPreferenceUpdated(

@@ -17,7 +17,9 @@ export function toDicomMetadata(study: RadiologyStudy): DICOMMetadata {
   };
 }
 
-export function parseDicomPlaceholder(buffer: ArrayBuffer): DICOMMetadata | null {
+export function parseDicomPlaceholder(
+  buffer: ArrayBuffer,
+): DICOMMetadata | null {
   void buffer;
   return null;
 }

@@ -13,7 +13,9 @@ function getClinicianPatientId(pathname: string): string | undefined {
 export default function ClinicianPatientRecordPage() {
   const [location] = useLocation();
   const patientId = getClinicianPatientId(location);
-  const basePath = patientId ? `/patient/${patientId}` : resolveModuleBasePath(location, 'records');
+  const basePath = patientId
+    ? `/patient/${patientId}`
+    : resolveModuleBasePath(location, 'records');
 
   return <PatientRecordsShell basePath={basePath} routePatientId={patientId} />;
 }

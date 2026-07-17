@@ -30,7 +30,9 @@ export function assertPatientAuditRow(
   { patientId, auditAction, actorId, tenantId, resourceType = 'patient' },
 ) {
   if (row.resource_type !== resourceType) {
-    throw new Error(`Expected resource_type=${resourceType}, got ${row.resource_type}`);
+    throw new Error(
+      `Expected resource_type=${resourceType}, got ${row.resource_type}`,
+    );
   }
   if (row.action !== auditAction) {
     throw new Error(`Expected action=${auditAction}, got ${row.action}`);
@@ -88,7 +90,11 @@ export async function countPatientAuditLogs(patientId, auditAction) {
   return rows[0]?.count ?? 0;
 }
 
-export async function waitForSecurityEvent(eventType, attempts = 20, delayMs = 1500) {
+export async function waitForSecurityEvent(
+  eventType,
+  attempts = 20,
+  delayMs = 1500,
+) {
   for (let i = 0; i < attempts; i += 1) {
     const rows = await queryRows(
       `SELECT id, event_type, user_id, tenant_id, created_at
@@ -109,7 +115,10 @@ export async function waitForSecurityEvent(eventType, attempts = 20, delayMs = 1
 export async function getAuditQueueDepth() {
   const redisUrl = process.env.REDIS_URL ?? 'redis://localhost:6379';
   const Redis = require('ioredis');
-  const redis = new Redis(redisUrl, { maxRetriesPerRequest: 1, enableReadyCheck: false });
+  const redis = new Redis(redisUrl, {
+    maxRetriesPerRequest: 1,
+    enableReadyCheck: false,
+  });
   try {
     const [wait, active, delayed] = await Promise.all([
       redis.llen('bull:medease:audit:wait'),

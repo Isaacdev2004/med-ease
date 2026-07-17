@@ -22,5 +22,11 @@ const TITLES: Record<Segment, string> = {
 export default function FacilityPhmPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <PhmShell basePath={resolveModuleBasePath(location, segment)} variant="facility" title={TITLES[segment]} />;
+  return (
+    <PhmShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="facility"
+      title={TITLES[segment]}
+    />
+  );
 }

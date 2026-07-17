@@ -2,7 +2,10 @@ export { iamService } from '@/services/iam/iam.service';
 export { iamRepository } from '@/services/iam/repository';
 export { iamMockRepository } from '@/services/iam/repository.mock';
 export { iamOfflineQueue } from '@/services/iam/offline-sync';
-export { computeIamAnalytics, buildIamDashboard } from '@/services/iam/analytics';
+export {
+  computeIamAnalytics,
+  buildIamDashboard,
+} from '@/services/iam/analytics';
 export {
   MOCK_IAM_USERS,
   MOCK_IAM_ROLES,

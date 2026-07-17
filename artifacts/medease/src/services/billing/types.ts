@@ -1,4 +1,11 @@
-export type InvoiceStatus = 'draft' | 'issued' | 'partial' | 'paid' | 'overdue' | 'cancelled' | 'written_off';
+export type InvoiceStatus =
+  | 'draft'
+  | 'issued'
+  | 'partial'
+  | 'paid'
+  | 'overdue'
+  | 'cancelled'
+  | 'written_off';
 export type ClaimStatus =
   | 'draft'
   | 'submitted'
@@ -19,13 +26,21 @@ export type PaymentMethod =
   | 'paystack'
   | 'flutterwave'
   | 'mobile_money';
-export type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded' | 'partially_refunded';
+export type PaymentStatus =
+  | 'pending'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'refunded'
+  | 'partially_refunded';
 export type RefundStatus = 'pending' | 'processing' | 'completed' | 'failed';
-export type InsurancePolicyStatus = 'active' | 'inactive' | 'pending' | 'expired';
+export type InsurancePolicyStatus =
+  'active' | 'inactive' | 'pending' | 'expired';
 export type Currency = 'EUR' | 'USD' | 'GBP' | 'NGN' | 'XOF';
 
-export const BILLING_PATIENT_IDS = Array.from({ length: 40 }, (_, i) =>
-  `phr-${String(i + 1).padStart(3, '0')}`,
+export const BILLING_PATIENT_IDS = Array.from(
+  { length: 40 },
+  (_, i) => `phr-${String(i + 1).padStart(3, '0')}`,
 );
 
 export const AUTH_USER_PATIENT_MAP: Record<string, string> = {
@@ -69,7 +84,15 @@ export interface InvoiceLineItem {
   quantity: number;
   unitPrice: number;
   total: number;
-  category: 'consultation' | 'laboratory' | 'radiology' | 'medication' | 'monitoring' | 'telemedicine' | 'procedure' | 'other';
+  category:
+    | 'consultation'
+    | 'laboratory'
+    | 'radiology'
+    | 'medication'
+    | 'monitoring'
+    | 'telemedicine'
+    | 'procedure'
+    | 'other';
 }
 
 export interface InsuranceClaim {
@@ -194,8 +217,17 @@ export interface RevenueAnalytics {
   facilityRevenue: { facility: string; amount: number }[];
   dailyRevenue: { label: string; value: number }[];
   monthlyRevenue: { label: string; value: number }[];
-  claimsTrends: { month: string; submitted: number; approved: number; denied: number }[];
-  collectionsTrends: { month: string; collected: number; outstanding: number }[];
+  claimsTrends: {
+    month: string;
+    submitted: number;
+    approved: number;
+    denied: number;
+  }[];
+  collectionsTrends: {
+    month: string;
+    collected: number;
+    outstanding: number;
+  }[];
   payerMix: { payer: string; amount: number; percentage: number }[];
   agingReport: { bucket: string; count: number; amount: number }[];
 }

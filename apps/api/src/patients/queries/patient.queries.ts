@@ -1,7 +1,13 @@
-import type { PatientFilters, PatientSearchFilters } from '@medease/patients-contract';
+import type {
+  PatientFilters,
+  PatientSearchFilters,
+} from '@medease/patients-contract';
 import { buildOrContains, type Prisma } from '@medease/prisma';
 
-function buildPatientTextSearchOr(tenantId: string, query: string): Prisma.PatientWhereInput[] {
+function buildPatientTextSearchOr(
+  tenantId: string,
+  query: string,
+): Prisma.PatientWhereInput[] {
   return [
     ...buildOrContains(['fullName', 'mrn'], query),
     {

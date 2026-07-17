@@ -10,5 +10,11 @@ export default function ProfessionalAppointmentsPage() {
     : location.includes('/schedule')
       ? resolveModuleBasePath(location, 'schedule')
       : resolveModuleBasePath(location, 'appointments');
-  return <AppointmentsShell basePath={basePath} variant="clinician" title="Clinical Schedule" />;
+  return (
+    <AppointmentsShell
+      basePath={basePath}
+      variant="clinician"
+      title="Clinical Schedule"
+    />
+  );
 }

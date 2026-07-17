@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { SecuritySectionContent } from '@/features/iam/components/SecuritySections';
-import { SecurityTabs, getIamSectionFromPath } from '@/features/iam/components/SecurityTabs';
+import {
+  SecurityTabs,
+  getIamSectionFromPath,
+} from '@/features/iam/components/SecurityTabs';
 import { useIamPermissions } from '@/features/iam/hooks/use-iam-permissions';
 import type { IamFilters } from '@/services/iam/types';
 import { PageShell } from '@/shared/components';
@@ -26,12 +29,18 @@ export function SecurityShell({
   const [location] = useLocation();
   const perms = useIamPermissions();
   const section = getIamSectionFromPath(location);
-  const scopedFilters = useMemo((): IamFilters => ({ tenantId, userId }), [tenantId, userId]);
+  const scopedFilters = useMemo(
+    (): IamFilters => ({ tenantId, userId }),
+    [tenantId, userId],
+  );
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view identity and security." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view identity and security."
+        />
       </PageShell>
     );
   }
@@ -43,7 +52,11 @@ export function SecurityShell({
     >
       <div className="space-y-6">
         <SecurityTabs basePath={basePath} variant={variant} />
-        <SecuritySectionContent section={section} filters={scopedFilters} variant={variant} />
+        <SecuritySectionContent
+          section={section}
+          filters={scopedFilters}
+          variant={variant}
+        />
       </div>
     </PageShell>
   );

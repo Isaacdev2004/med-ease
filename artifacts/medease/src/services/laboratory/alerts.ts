@@ -1,7 +1,9 @@
 import type { LabAlert, LabAlertSeverity } from '@/services/laboratory/types';
 
 export function sortAlertsByDate(alerts: LabAlert[]): LabAlert[] {
-  return [...alerts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  return [...alerts].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  );
 }
 
 export function getUnacknowledgedAlerts(alerts: LabAlert[]): LabAlert[] {

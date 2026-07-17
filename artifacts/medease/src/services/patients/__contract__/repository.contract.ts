@@ -8,7 +8,11 @@ import {
   expectSearchMatch,
   type RepositoryContractCapabilities,
 } from '@medease/repository-contract-test';
-import { ConflictError, NotFoundError, ValidationError } from '@workspace/repository-transport';
+import {
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from '@workspace/repository-transport';
 
 import { patientsContractFixtures } from './fixtures/patients.fixtures';
 
@@ -19,7 +23,9 @@ export interface PatientsRepositoryContractContext {
   capabilities?: RepositoryContractCapabilities;
 }
 
-export function patientsRepositoryContract(ctx: PatientsRepositoryContractContext): void {
+export function patientsRepositoryContract(
+  ctx: PatientsRepositoryContractContext,
+): void {
   const fixtures = ctx.fixtures ?? patientsContractFixtures;
   const capabilities = ctx.capabilities ?? {
     mutations: true,
@@ -34,7 +40,10 @@ export function patientsRepositoryContract(ctx: PatientsRepositoryContractContex
         pageSize: fixtures.pageSize,
       });
 
-      expectPagination(result, { page: fixtures.page, pageSize: fixtures.pageSize });
+      expectPagination(result, {
+        page: fixtures.page,
+        pageSize: fixtures.pageSize,
+      });
       assert.ok(result.items.length > 0);
       assert.ok(result.items[0]?.patientId);
       assert.ok(result.items[0]?.mrn);
@@ -64,7 +73,10 @@ export function patientsRepositoryContract(ctx: PatientsRepositoryContractContex
       assert.ok(result.items.length > 0);
       assert.ok(
         result.items.every((patient) =>
-          expectSearchMatch(patient.fullName, fixtures.searchQuery, [patient.fullName, patient.mrn]),
+          expectSearchMatch(patient.fullName, fixtures.searchQuery, [
+            patient.fullName,
+            patient.mrn,
+          ]),
         ),
       );
     });
@@ -79,7 +91,9 @@ export function patientsRepositoryContract(ctx: PatientsRepositoryContractContex
     });
 
     it('gets an existing patient by id', async () => {
-      const patient = await ctx.repository.getPatient(fixtures.existingPatientId);
+      const patient = await ctx.repository.getPatient(
+        fixtures.existingPatientId,
+      );
       assert.equal(patient.patientId, fixtures.existingPatientId);
       assert.equal(patient.mrn, fixtures.existingMrn);
       assert.ok(patient.fullName);
@@ -93,23 +107,34 @@ export function patientsRepositoryContract(ctx: PatientsRepositoryContractContex
     });
 
     it('lists patient child entities', async () => {
-      const [identifiers, contacts, addresses, emergencyContacts, allergies] = await Promise.all([
-        ctx.repository.getIdentifiers(fixtures.existingPatientId),
-        ctx.repository.getContacts(fixtures.existingPatientId),
-        ctx.repository.getAddresses(fixtures.existingPatientId),
-        ctx.repository.getEmergencyContacts(fixtures.existingPatientId),
-        ctx.repository.getAllergies(fixtures.existingPatientId),
-      ]);
+      const [identifiers, contacts, addresses, emergencyContacts, allergies] =
+        await Promise.all([
+          ctx.repository.getIdentifiers(fixtures.existingPatientId),
+          ctx.repository.getContacts(fixtures.existingPatientId),
+          ctx.repository.getAddresses(fixtures.existingPatientId),
+          ctx.repository.getEmergencyContacts(fixtures.existingPatientId),
+          ctx.repository.getAllergies(fixtures.existingPatientId),
+        ]);
 
-      for (const collection of [identifiers, contacts, addresses, emergencyContacts, allergies]) {
+      for (const collection of [
+        identifiers,
+        contacts,
+        addresses,
+        emergencyContacts,
+        allergies,
+      ]) {
         assert.ok(Array.isArray(collection));
         if (collection.length > 0) {
           assert.ok(collection[0]?.patientId);
         }
       }
 
-      const preferences = await ctx.repository.getPreferences(fixtures.existingPatientId);
-      assert.ok(preferences === null || typeof preferences.preferenceId === 'string');
+      const preferences = await ctx.repository.getPreferences(
+        fixtures.existingPatientId,
+      );
+      assert.ok(
+        preferences === null || typeof preferences.preferenceId === 'string',
+      );
     });
 
     if (capabilities.export) {
@@ -154,7 +179,10 @@ export function patientsRepositoryContract(ctx: PatientsRepositoryContractContex
         });
         assert.equal(updated.fullName, 'Contract Test Patient Updated');
 
-        const archived = await ctx.repository.archivePatient(created.patientId, fixtures.actorId);
+        const archived = await ctx.repository.archivePatient(
+          created.patientId,
+          fixtures.actorId,
+        );
         assert.ok(archived.deletedAt);
 
         await expectRejectsWithErrorName(
@@ -162,7 +190,10 @@ export function patientsRepositoryContract(ctx: PatientsRepositoryContractContex
           ValidationError.name,
         );
 
-        const restored = await ctx.repository.restorePatient(created.patientId, fixtures.actorId);
+        const restored = await ctx.repository.restorePatient(
+          created.patientId,
+          fixtures.actorId,
+        );
         assert.equal(restored.deletedAt, undefined);
         assert.equal(restored.status, 'active');
       });

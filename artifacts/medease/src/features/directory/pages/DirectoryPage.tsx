@@ -10,15 +10,14 @@ import { DirectoryToolbar } from '@/features/directory/components/DirectoryToolb
 import { ProviderCard } from '@/features/directory/components/ProviderCard';
 import { ProviderTable } from '@/features/directory/components/ProviderTable';
 import { useDirectoryFilters } from '@/features/directory/hooks/use-directory-filters';
-import { useDirectory, useDirectoryStats, useFavorites } from '@/features/directory/hooks/use-directory';
 import {
-  getCategoryFromPath,
-} from '@/features/directory/utils/directory-path';
+  useDirectory,
+  useDirectoryStats,
+  useFavorites,
+} from '@/features/directory/hooks/use-directory';
+import { getCategoryFromPath } from '@/features/directory/utils/directory-path';
 import { useAuth } from '@/services/auth/auth-context';
-import {
-  DataPageLayout,
-  FilterChips,
-} from '@/shared/components';
+import { DataPageLayout, FilterChips } from '@/shared/components';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { cn } from '@/shared/lib/utils';
@@ -36,7 +35,9 @@ export default function DirectoryPage() {
   const { user, permissions } = useAuth();
   const categoryFromPath = getCategoryFromPath(location);
   const portalBase = '';
-  const filterState = useDirectoryFilters(categoryFromPath === 'all' ? undefined : categoryFromPath);
+  const filterState = useDirectoryFilters(
+    categoryFromPath === 'all' ? undefined : categoryFromPath,
+  );
   const query = useDirectory(filterState.filters);
   const statsQuery = useDirectoryStats();
   const favoritesQuery = useFavorites();
@@ -48,14 +49,24 @@ export default function DirectoryPage() {
 
   const activeFilters = useMemo(() => {
     const chips = [];
-    if (filterState.q) chips.push({ key: 'q', label: 'Search', value: filterState.q });
+    if (filterState.q)
+      chips.push({ key: 'q', label: 'Search', value: filterState.q });
     if (filterState.specialty) {
-      chips.push({ key: 'status', label: 'Specialty', value: filterState.specialty });
+      chips.push({
+        key: 'status',
+        label: 'Specialty',
+        value: filterState.specialty,
+      });
     }
     if (filterState.department) {
-      chips.push({ key: 'department', label: 'Department', value: filterState.department });
+      chips.push({
+        key: 'department',
+        label: 'Department',
+        value: filterState.department,
+      });
     }
-    if (filterState.city) chips.push({ key: 'city', label: 'City', value: filterState.city });
+    if (filterState.city)
+      chips.push({ key: 'city', label: 'City', value: filterState.city });
     if (filterState.favoritesOnly) {
       chips.push({ key: 'favorites', label: 'Favorites', value: 'Yes' });
     }
@@ -64,7 +75,8 @@ export default function DirectoryPage() {
 
   const activeFilterCount = activeFilters.length;
   const providers = query.data?.items ?? [];
-  const showExport = permissions.includes('reports.export') || user?.role === 'platform_admin';
+  const showExport =
+    permissions.includes('reports.export') || user?.role === 'platform_admin';
 
   const exportRows = providers.map((provider) => ({
     name: provider.name,
@@ -81,9 +93,16 @@ export default function DirectoryPage() {
       title="Healthcare Services Directory"
       subtitle="Find professionals, facilities, pharmacies, and transport providers across France."
       lastUpdated={
-        query.dataUpdatedAt ? new Date(query.dataUpdatedAt).toLocaleString() : undefined
+        query.dataUpdatedAt
+          ? new Date(query.dataUpdatedAt).toLocaleString()
+          : undefined
       }
-      metrics={<DirectoryStatsPanel stats={statsQuery.data} loading={statsQuery.isLoading} />}
+      metrics={
+        <DirectoryStatsPanel
+          stats={statsQuery.data}
+          loading={statsQuery.isLoading}
+        />
+      }
       toolbar={
         <DirectoryToolbar
           search={
@@ -127,18 +146,29 @@ export default function DirectoryPage() {
       }
       filters={
         <>
-          <Tabs value={location.split('/').pop() === 'directory' ? '' : (location.split('/').pop() ?? '')}>
+          <Tabs
+            value={
+              location.split('/').pop() === 'directory'
+                ? ''
+                : (location.split('/').pop() ?? '')
+            }
+          >
             <TabsList className="mb-4 flex flex-wrap h-auto">
               {CATEGORY_TABS.map((tab) => {
-                const href = tab.segment ? `${directoryHref}/${tab.segment}` : directoryHref;
+                const href = tab.segment
+                  ? `${directoryHref}/${tab.segment}`
+                  : directoryHref;
                 const isActive = tab.segment
                   ? location.endsWith(`/${tab.segment}`)
-                  : location.endsWith('/directory') || location.match(/\/directory\/?$/);
+                  : location.endsWith('/directory') ||
+                    location.match(/\/directory\/?$/);
                 return (
                   <TabsTrigger key={tab.label} value={tab.segment} asChild>
                     <Link
                       href={href}
-                      className={cn(isActive && 'data-[state=active]:bg-background')}
+                      className={cn(
+                        isActive && 'data-[state=active]:bg-background',
+                      )}
                     >
                       {tab.label}
                     </Link>
@@ -161,7 +191,10 @@ export default function DirectoryPage() {
       }
     >
       {filterState.view === 'map' ? (
-        <DirectoryMapPlaceholder providers={providers} portalBase={portalBase} />
+        <DirectoryMapPlaceholder
+          providers={providers}
+          portalBase={portalBase}
+        />
       ) : filterState.view === 'table' ? (
         <ProviderTable
           providers={providers}
@@ -179,13 +212,20 @@ export default function DirectoryPage() {
       ) : query.isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="h-56 animate-pulse rounded-lg bg-muted" />
+            <div
+              key={index}
+              className="h-56 animate-pulse rounded-lg bg-muted"
+            />
           ))}
         </div>
       ) : providers.length === 0 ? (
         <EmptyState
           icon={Search}
-          title={filterState.favoritesOnly ? 'No favorites yet' : 'No providers found'}
+          title={
+            filterState.favoritesOnly
+              ? 'No favorites yet'
+              : 'No providers found'
+          }
           description={
             filterState.favoritesOnly
               ? 'Save providers to quickly access them from your directory.'

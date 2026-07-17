@@ -1,6 +1,17 @@
-import type { InnovationProject, InnovationStatus } from '@/services/research/types';
+import type {
+  InnovationProject,
+  InnovationStatus,
+} from '@/services/research/types';
 
-export const INNOVATION_CATEGORIES = ['Digital Health', 'AI/ML', 'Medical Device', 'Diagnostics', 'Therapeutics', 'Process Improvement', 'Precision Medicine'];
+export const INNOVATION_CATEGORIES = [
+  'Digital Health',
+  'AI/ML',
+  'Medical Device',
+  'Diagnostics',
+  'Therapeutics',
+  'Process Improvement',
+  'Precision Medicine',
+];
 
 export function innovationReadinessScore(project: InnovationProject): number {
   const statusScores: Record<InnovationStatus, number> = {

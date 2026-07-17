@@ -9,7 +9,9 @@ import {
 
 import type { RegisteredQueue } from '../framework/queue-registry.js';
 
-async function getOldestJobAgeMs(queue: Queue<QueueJobEnvelope>): Promise<number | null> {
+async function getOldestJobAgeMs(
+  queue: Queue<QueueJobEnvelope>,
+): Promise<number | null> {
   const jobs = await queue.getJobs(['waiting', 'delayed'], 0, 0, true);
   const oldest = jobs[0];
   if (!oldest) {
@@ -26,8 +28,22 @@ export async function collectQueueDepth(
   workerVersion: string,
 ): Promise<QueueDashboardRow> {
   const [counts, dlqCounts, oldestJobAgeMs] = await Promise.all([
-    queue.getJobCounts('waiting', 'active', 'completed', 'failed', 'delayed', 'paused'),
-    dlq.getJobCounts('waiting', 'active', 'completed', 'failed', 'delayed', 'paused'),
+    queue.getJobCounts(
+      'waiting',
+      'active',
+      'completed',
+      'failed',
+      'delayed',
+      'paused',
+    ),
+    dlq.getJobCounts(
+      'waiting',
+      'active',
+      'completed',
+      'failed',
+      'delayed',
+      'paused',
+    ),
     getOldestJobAgeMs(queue),
   ]);
 
@@ -52,14 +68,24 @@ export async function collectAllQueueDashboards(
 ): Promise<QueueDashboardRow[]> {
   return Promise.all(
     registered.map(({ producer }) =>
-      collectQueueDepth(producer.queue, producer.deadLetterQueue, workerVersion),
+      collectQueueDepth(
+        producer.queue,
+        producer.deadLetterQueue,
+        workerVersion,
+      ),
     ),
   );
 }
 
 export function summarizeQueueHealth(depths: QueueDepthSnapshot[]) {
-  const totalWaiting = depths.reduce((sum, item) => sum + item.waiting + item.delayed, 0);
-  const totalFailed = depths.reduce((sum, item) => sum + item.failed + item.dlqWaiting, 0);
+  const totalWaiting = depths.reduce(
+    (sum, item) => sum + item.waiting + item.delayed,
+    0,
+  );
+  const totalFailed = depths.reduce(
+    (sum, item) => sum + item.failed + item.dlqWaiting,
+    0,
+  );
 
   return {
     queueCount: depths.length,

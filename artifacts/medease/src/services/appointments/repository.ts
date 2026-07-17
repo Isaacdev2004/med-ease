@@ -14,15 +14,25 @@ import {
   generateAppointment,
 } from '@/services/appointments/mock-data';
 
-function matchesFilters(appointment: Appointment, filters: AppointmentFilters): boolean {
-  if (filters.patientId && appointment.patient.id !== filters.patientId) return false;
-  if (filters.providerId && appointment.provider.id !== filters.providerId) return false;
-  if (filters.facilityId && appointment.facility.id !== filters.facilityId) return false;
-  if (filters.department && appointment.department !== filters.department) return false;
-  if (filters.specialty && appointment.specialty !== filters.specialty) return false;
+function matchesFilters(
+  appointment: Appointment,
+  filters: AppointmentFilters,
+): boolean {
+  if (filters.patientId && appointment.patient.id !== filters.patientId)
+    return false;
+  if (filters.providerId && appointment.provider.id !== filters.providerId)
+    return false;
+  if (filters.facilityId && appointment.facility.id !== filters.facilityId)
+    return false;
+  if (filters.department && appointment.department !== filters.department)
+    return false;
+  if (filters.specialty && appointment.specialty !== filters.specialty)
+    return false;
   if (filters.status && appointment.status !== filters.status) return false;
-  if (filters.visitType && appointment.visitType !== filters.visitType) return false;
-  if (filters.priority && appointment.priority !== filters.priority) return false;
+  if (filters.visitType && appointment.visitType !== filters.visitType)
+    return false;
+  if (filters.priority && appointment.priority !== filters.priority)
+    return false;
   if (filters.telemedicine !== undefined) {
     const isTele = appointment.visitType === 'telemedicine';
     if (filters.telemedicine !== isTele) return false;
@@ -31,9 +41,21 @@ function matchesFilters(appointment: Appointment, filters: AppointmentFilters): 
     const isCheckedIn = appointment.checkInStatus !== 'not_checked_in';
     if (filters.checkedIn !== isCheckedIn) return false;
   }
-  if (filters.followUp !== undefined && appointment.followUpRequired !== filters.followUp) return false;
-  if (filters.dateFrom && new Date(appointment.scheduledAt) < new Date(filters.dateFrom)) return false;
-  if (filters.dateTo && new Date(appointment.scheduledAt) > new Date(filters.dateTo)) return false;
+  if (
+    filters.followUp !== undefined &&
+    appointment.followUpRequired !== filters.followUp
+  )
+    return false;
+  if (
+    filters.dateFrom &&
+    new Date(appointment.scheduledAt) < new Date(filters.dateFrom)
+  )
+    return false;
+  if (
+    filters.dateTo &&
+    new Date(appointment.scheduledAt) > new Date(filters.dateTo)
+  )
+    return false;
   if (filters.q) {
     const q = filters.q.toLowerCase();
     const haystack = [
@@ -43,7 +65,9 @@ function matchesFilters(appointment: Appointment, filters: AppointmentFilters): 
       appointment.facility.name,
       appointment.specialty,
       appointment.reason,
-    ].join(' ').toLowerCase();
+    ]
+      .join(' ')
+      .toLowerCase();
     if (!haystack.includes(q)) return false;
   }
   return true;
@@ -58,7 +82,10 @@ class AppointmentRepository {
     const pageSize = filters?.pageSize ?? 25;
     const filtered = this.appointments
       .filter((a) => matchesFilters(a, filters ?? {}))
-      .sort((a, b) => new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime());
+      .sort(
+        (a, b) =>
+          new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime(),
+      );
     const start = (page - 1) * pageSize;
     return {
       items: filtered.slice(start, start + pageSize),
@@ -71,7 +98,10 @@ class AppointmentRepository {
   getAll(filters?: AppointmentFilters): Appointment[] {
     return this.appointments
       .filter((a) => matchesFilters(a, filters ?? {}))
-      .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
+      .sort(
+        (a, b) =>
+          new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime(),
+      );
   }
 
   getById(id: string): Appointment | null {
@@ -81,14 +111,18 @@ class AppointmentRepository {
   getUpcoming(filters?: AppointmentFilters): Appointment[] {
     const now = new Date();
     return this.getAll(filters).filter(
-      (a) => new Date(a.scheduledAt) >= now && !['cancelled', 'completed', 'no_show'].includes(a.status),
+      (a) =>
+        new Date(a.scheduledAt) >= now &&
+        !['cancelled', 'completed', 'no_show'].includes(a.status),
     );
   }
 
   getPast(filters?: AppointmentFilters): Appointment[] {
     const now = new Date();
     return this.getAll(filters).filter(
-      (a) => new Date(a.scheduledAt) < now || ['completed', 'cancelled', 'no_show'].includes(a.status),
+      (a) =>
+        new Date(a.scheduledAt) < now ||
+        ['completed', 'cancelled', 'no_show'].includes(a.status),
     );
   }
 
@@ -108,8 +142,10 @@ class AppointmentRepository {
   }
 
   book(input: BookAppointmentInput): Appointment {
-    const provider = PROVIDERS.find((p) => p.id === input.providerId) ?? PROVIDERS[0]!;
-    const facility = FACILITIES.find((f) => f.id === input.facilityId) ?? FACILITIES[0]!;
+    const provider =
+      PROVIDERS.find((p) => p.id === input.providerId) ?? PROVIDERS[0]!;
+    const facility =
+      FACILITIES.find((f) => f.id === input.facilityId) ?? FACILITIES[0]!;
     const patientIdx = parseInt(input.patientId.replace('phr-', ''), 10) - 1;
     const appointment = generateAppointment(this.appointments.length);
     const created: Appointment = {
@@ -183,7 +219,9 @@ class AppointmentRepository {
     return [...this.waitlist].sort((a, b) => a.position - b.position);
   }
 
-  getQueue(filters?: AppointmentFilters): ReturnType<typeof buildQueueFromAppointments> {
+  getQueue(
+    filters?: AppointmentFilters,
+  ): ReturnType<typeof buildQueueFromAppointments> {
     return buildQueueFromAppointments(this.getToday(filters));
   }
 }

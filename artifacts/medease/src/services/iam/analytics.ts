@@ -15,25 +15,49 @@ import {
 
 export function computeIamAnalytics(tenantId?: string): IamAnalytics {
   const dashboard = buildIamDashboard(tenantId);
-  const users = tenantId ? MOCK_IAM_USERS.filter((u) => u.tenantId === tenantId) : MOCK_IAM_USERS;
+  const users = tenantId
+    ? MOCK_IAM_USERS.filter((u) => u.tenantId === tenantId)
+    : MOCK_IAM_USERS;
   const sessions = tenantId
-    ? MOCK_IAM_SESSIONS.filter((s) => MOCK_IAM_USERS.find((u) => u.userId === s.userId)?.tenantId === tenantId)
+    ? MOCK_IAM_SESSIONS.filter(
+        (s) =>
+          MOCK_IAM_USERS.find((u) => u.userId === s.userId)?.tenantId ===
+          tenantId,
+      )
     : MOCK_IAM_SESSIONS;
   const logins = MOCK_LOGIN_HISTORY;
-  const audit = tenantId ? MOCK_IAM_AUDIT.filter((a) => a.tenantId === tenantId) : MOCK_IAM_AUDIT;
+  const audit = tenantId
+    ? MOCK_IAM_AUDIT.filter((a) => a.tenantId === tenantId)
+    : MOCK_IAM_AUDIT;
 
-  const avgDuration = sessions.length > 0
-    ? sessions.reduce((s, sess) => s + sessionDurationMinutes(sess), 0) / sessions.length
-    : 0;
+  const avgDuration =
+    sessions.length > 0
+      ? sessions.reduce((s, sess) => s + sessionDurationMinutes(sess), 0) /
+        sessions.length
+      : 0;
 
   return {
-    authenticationSuccessRate: Math.round((logins.filter((l) => l.success).length / Math.max(logins.length, 1)) * 100),
+    authenticationSuccessRate: Math.round(
+      (logins.filter((l) => l.success).length / Math.max(logins.length, 1)) *
+        100,
+    ),
     mfaEnrollmentRate: dashboard.mfaAdoptionRate,
     averageSessionDuration: Math.round(avgDuration),
-    policyDenialRate: Math.round((MOCK_IAM_POLICIES.filter((p) => p.effect === 'deny').length / MOCK_IAM_POLICIES.length) * 100),
-    breakGlassUsage: MOCK_BREAK_GLASS.filter((e) => e.status === 'active' || e.status === 'ended').length * 10,
+    policyDenialRate: Math.round(
+      (MOCK_IAM_POLICIES.filter((p) => p.effect === 'deny').length /
+        MOCK_IAM_POLICIES.length) *
+        100,
+    ),
+    breakGlassUsage:
+      MOCK_BREAK_GLASS.filter(
+        (e) => e.status === 'active' || e.status === 'ended',
+      ).length * 10,
     consentComplianceRate: consentComplianceRate(MOCK_CONSENTS),
-    riskScoreAverage: Math.round((MOCK_RISK_SCORES.reduce((s, r) => s + r.score, 0) / MOCK_RISK_SCORES.length) * 100),
+    riskScoreAverage: Math.round(
+      (MOCK_RISK_SCORES.reduce((s, r) => s + r.score, 0) /
+        MOCK_RISK_SCORES.length) *
+        100,
+    ),
     authTrend: dashboard.loginTrend,
     accessByModule: [
       { label: 'Clinical', value: users.length * 80 },

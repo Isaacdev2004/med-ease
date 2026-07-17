@@ -37,7 +37,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -46,7 +51,12 @@ function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
   return fields.some((f) => f?.toLowerCase().includes(lower));
 }
 
-function audit(action: string, resource: string, actorId = 'admin-001', tenantId?: string) {
+function audit(
+  action: string,
+  resource: string,
+  actorId = 'admin-001',
+  tenantId?: string,
+) {
   MOCK_PLATFORM_AUDITS.unshift({
     auditId: `pa-${Date.now()}`,
     tenantId,
@@ -72,129 +82,175 @@ class PlatformAdminRepository {
   private backups = [...MOCK_BACKUPS];
   private nextId = 880000;
 
-  dashboard(tenantId?: string) { return buildPlatformDashboard(tenantId); }
-  analytics(tenantId?: string) { return computePlatformAnalytics(tenantId); }
+  dashboard(tenantId?: string) {
+    return buildPlatformDashboard(tenantId);
+  }
+  analytics(tenantId?: string) {
+    return computePlatformAnalytics(tenantId);
+  }
 
   getTenants(filters?: PlatformFilters) {
     let items = this.tenants;
-    if (filters?.status) items = items.filter((t) => t.status === filters.status);
-    if (filters?.q) items = items.filter((t) => matchQ(filters.q, t.name, t.slug, t.region));
+    if (filters?.status)
+      items = items.filter((t) => t.status === filters.status);
+    if (filters?.q)
+      items = items.filter((t) => matchQ(filters.q, t.name, t.slug, t.region));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getTenant(tenantId: string) { return this.tenants.find((t) => t.tenantId === tenantId) ?? null; }
+  getTenant(tenantId: string) {
+    return this.tenants.find((t) => t.tenantId === tenantId) ?? null;
+  }
 
   getHospitals(filters?: PlatformFilters) {
     let items = this.hospitals;
-    if (filters?.tenantId) items = items.filter((h) => h.tenantId === filters.tenantId);
-    if (filters?.q) items = items.filter((h) => matchQ(filters.q, h.name, h.code, h.city));
+    if (filters?.tenantId)
+      items = items.filter((h) => h.tenantId === filters.tenantId);
+    if (filters?.q)
+      items = items.filter((h) => matchQ(filters.q, h.name, h.code, h.city));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getHospital(hospitalId: string) { return this.hospitals.find((h) => h.hospitalId === hospitalId) ?? null; }
+  getHospital(hospitalId: string) {
+    return this.hospitals.find((h) => h.hospitalId === hospitalId) ?? null;
+  }
 
   getFacilities(filters?: PlatformFilters) {
     let items = this.facilities;
-    if (filters?.tenantId) items = items.filter((f) => f.tenantId === filters.tenantId);
-    if (filters?.facilityId) items = items.filter((f) => f.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((f) => matchQ(filters.q, f.name, f.type));
+    if (filters?.tenantId)
+      items = items.filter((f) => f.tenantId === filters.tenantId);
+    if (filters?.facilityId)
+      items = items.filter((f) => f.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((f) => matchQ(filters.q, f.name, f.type));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getFacility(facilityId: string) { return this.facilities.find((f) => f.facilityId === facilityId) ?? null; }
+  getFacility(facilityId: string) {
+    return this.facilities.find((f) => f.facilityId === facilityId) ?? null;
+  }
 
   getDepartments(filters?: PlatformFilters) {
     let items = this.departments;
-    if (filters?.facilityId) items = items.filter((d) => d.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((d) => matchQ(filters.q, d.name, d.code, d.specialty));
+    if (filters?.facilityId)
+      items = items.filter((d) => d.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((d) =>
+        matchQ(filters.q, d.name, d.code, d.specialty),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getLocalization(tenantId?: string) {
-    if (tenantId) return this.localization.find((l) => l.tenantId === tenantId) ?? null;
+    if (tenantId)
+      return this.localization.find((l) => l.tenantId === tenantId) ?? null;
     return this.localization[0] ?? null;
   }
 
   getLocalizations(filters?: PlatformFilters) {
     let items = this.localization;
-    if (filters?.tenantId) items = items.filter((l) => l.tenantId === filters.tenantId);
+    if (filters?.tenantId)
+      items = items.filter((l) => l.tenantId === filters.tenantId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getBranding(tenantId?: string) {
-    if (tenantId) return this.branding.find((b) => b.tenantId === tenantId) ?? null;
+    if (tenantId)
+      return this.branding.find((b) => b.tenantId === tenantId) ?? null;
     return this.branding[0] ?? null;
   }
 
   getBrandingList(filters?: PlatformFilters) {
     let items = this.branding;
-    if (filters?.tenantId) items = items.filter((b) => b.tenantId === filters.tenantId);
+    if (filters?.tenantId)
+      items = items.filter((b) => b.tenantId === filters.tenantId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getLicenses(filters?: PlatformFilters) {
     let items = MOCK_LICENSES;
-    if (filters?.tenantId) items = items.filter((l) => l.tenantId === filters.tenantId);
-    if (filters?.status) items = items.filter((l) => l.status === filters.status);
+    if (filters?.tenantId)
+      items = items.filter((l) => l.tenantId === filters.tenantId);
+    if (filters?.status)
+      items = items.filter((l) => l.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getSubscriptions(filters?: PlatformFilters) {
     let items = MOCK_SUBSCRIPTIONS;
-    if (filters?.tenantId) items = items.filter((s) => s.tenantId === filters.tenantId);
+    if (filters?.tenantId)
+      items = items.filter((s) => s.tenantId === filters.tenantId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getStorage(filters?: PlatformFilters) {
     let items = MOCK_STORAGE;
-    if (filters?.tenantId) items = items.filter((s) => s.tenantId === filters.tenantId);
+    if (filters?.tenantId)
+      items = items.filter((s) => s.tenantId === filters.tenantId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getFeatureFlags(filters?: PlatformFilters) {
     let items = this.featureFlags;
-    if (filters?.q) items = items.filter((f) => matchQ(filters.q, f.key, f.label, f.description));
+    if (filters?.q)
+      items = items.filter((f) =>
+        matchQ(filters.q, f.key, f.label, f.description),
+      );
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getJobs(filters?: PlatformFilters) {
     let items = this.jobs;
-    if (filters?.status) items = items.filter((j) => j.status === filters.status);
-    if (filters?.q) items = items.filter((j) => matchQ(filters.q, j.name, j.type));
+    if (filters?.status)
+      items = items.filter((j) => j.status === filters.status);
+    if (filters?.q)
+      items = items.filter((j) => matchQ(filters.q, j.name, j.type));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
-  getWorkers() { return MOCK_WORKERS; }
-  getQueues() { return MOCK_QUEUES; }
+  getWorkers() {
+    return MOCK_WORKERS;
+  }
+  getQueues() {
+    return MOCK_QUEUES;
+  }
 
-  getSystemHealth() { return MOCK_SYSTEM_HEALTH; }
+  getSystemHealth() {
+    return MOCK_SYSTEM_HEALTH;
+  }
 
   getBackups(filters?: PlatformFilters) {
     let items = this.backups;
-    if (filters?.status) items = items.filter((b) => b.status === filters.status);
+    if (filters?.status)
+      items = items.filter((b) => b.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getMaintenance(filters?: PlatformFilters) {
     let items = this.maintenance;
-    if (filters?.status) items = items.filter((m) => m.status === filters.status);
+    if (filters?.status)
+      items = items.filter((m) => m.status === filters.status);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getAudits(filters?: PlatformFilters) {
     let items = MOCK_PLATFORM_AUDITS;
-    if (filters?.tenantId) items = items.filter((a) => a.tenantId === filters.tenantId);
-    if (filters?.q) items = items.filter((a) => matchQ(filters.q, a.action, a.resource));
+    if (filters?.tenantId)
+      items = items.filter((a) => a.tenantId === filters.tenantId);
+    if (filters?.q)
+      items = items.filter((a) => matchQ(filters.q, a.action, a.resource));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getEmailServers(tenantId?: string) {
-    if (tenantId) return MOCK_EMAIL_SERVERS.filter((s) => s.tenantId === tenantId);
+    if (tenantId)
+      return MOCK_EMAIL_SERVERS.filter((s) => s.tenantId === tenantId);
     return MOCK_EMAIL_SERVERS;
   }
 
   getSmsServers(tenantId?: string) {
-    if (tenantId) return MOCK_SMS_SERVERS.filter((s) => s.tenantId === tenantId);
+    if (tenantId)
+      return MOCK_SMS_SERVERS.filter((s) => s.tenantId === tenantId);
     return MOCK_SMS_SERVERS;
   }
 
@@ -244,10 +300,13 @@ class PlatformAdminRepository {
   }
 
   updateHospital(input: UpdateHospitalInput) {
-    const hospital = this.hospitals.find((h) => h.hospitalId === input.hospitalId);
+    const hospital = this.hospitals.find(
+      (h) => h.hospitalId === input.hospitalId,
+    );
     if (!hospital) return null;
     if (input.name) hospital.name = input.name;
-    if (input.bedCapacity !== undefined) hospital.bedCapacity = input.bedCapacity;
+    if (input.bedCapacity !== undefined)
+      hospital.bedCapacity = input.bedCapacity;
     if (input.status) hospital.status = input.status;
     hospital.updatedAt = new Date().toISOString();
     audit('hospital.update', 'hospital', 'admin-001', hospital.tenantId);
@@ -255,7 +314,9 @@ class PlatformAdminRepository {
   }
 
   updateFacility(input: UpdateFacilityInput) {
-    const facility = this.facilities.find((f) => f.facilityId === input.facilityId);
+    const facility = this.facilities.find(
+      (f) => f.facilityId === input.facilityId,
+    );
     if (!facility) return null;
     if (input.name) facility.name = input.name;
     if (input.timezone) facility.timezone = input.timezone;
@@ -338,7 +399,11 @@ class PlatformAdminRepository {
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.tenants.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.tenants.length,
+    };
   }
 
   search(query: string, filters?: PlatformFilters) {

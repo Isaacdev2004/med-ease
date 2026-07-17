@@ -57,7 +57,9 @@ export const transportRouteGroup: PortalRouteGroup = {
     createTransportFacilitiesRoute('transport', {
       nav: { icon: Building2, order: 5 },
     }),
-    createTransportHistoryRoute('transport', { nav: { icon: History, order: 6 } }),
+    createTransportHistoryRoute('transport', {
+      nav: { icon: History, order: 6 },
+    }),
     createReportsRoute('transport', { nav: { icon: BarChart3, order: 7 } }),
     {
       path: '/notifications',

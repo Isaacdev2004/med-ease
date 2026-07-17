@@ -27,7 +27,9 @@ import type { MedicationRecord } from '@/services/medical-library/medical-librar
 export default function MedicalLibraryPage() {
   const [location] = useLocation();
   const [compareOpen, setCompareOpen] = useState(false);
-  const [comparePrimary, setComparePrimary] = useState<MedicationRecord | null>(null);
+  const [comparePrimary, setComparePrimary] = useState<MedicationRecord | null>(
+    null,
+  );
   const { user, permissions } = useAuth();
   const portalBase = '';
   const pathCategory = getCategoryFromPath(location);
@@ -44,17 +46,25 @@ export default function MedicalLibraryPage() {
 
   const activeFilters = useMemo(() => {
     const chips = [];
-    if (filterState.q) chips.push({ key: 'q', label: 'Search', value: filterState.q });
+    if (filterState.q)
+      chips.push({ key: 'q', label: 'Search', value: filterState.q });
     if (filterState.therapeuticClass) {
-      chips.push({ key: 'status', label: 'Class', value: filterState.therapeuticClass });
+      chips.push({
+        key: 'status',
+        label: 'Class',
+        value: filterState.therapeuticClass,
+      });
     }
-    if (filterState.favoritesOnly) chips.push({ key: 'favorites', label: 'Favorites', value: 'Yes' });
+    if (filterState.favoritesOnly)
+      chips.push({ key: 'favorites', label: 'Favorites', value: 'Yes' });
     return chips;
   }, [filterState]);
 
   const medications = query.data?.items ?? [];
-  const showExport = permissions.includes('reports.export') || user?.role === 'platform_admin';
-  const showCategories = filterState.view === 'categories' || pathCategory === 'categories';
+  const showExport =
+    permissions.includes('reports.export') || user?.role === 'platform_admin';
+  const showCategories =
+    filterState.view === 'categories' || pathCategory === 'categories';
   const libraryHref = `${portalBase}/medical-library`;
 
   const openCompare = (medication: MedicationRecord) => {
@@ -66,8 +76,17 @@ export default function MedicalLibraryPage() {
     <DataPageLayout
       title="Medical Library"
       subtitle="Centralized medication reference — BDPM-ready knowledge base for all Med-ease portals."
-      lastUpdated={query.dataUpdatedAt ? new Date(query.dataUpdatedAt).toLocaleString() : undefined}
-      metrics={<MedicationStats stats={statsQuery.data} loading={statsQuery.isLoading} />}
+      lastUpdated={
+        query.dataUpdatedAt
+          ? new Date(query.dataUpdatedAt).toLocaleString()
+          : undefined
+      }
+      metrics={
+        <MedicationStats
+          stats={statsQuery.data}
+          loading={statsQuery.isLoading}
+        />
+      }
       toolbar={
         <MedicationToolbar
           search={
@@ -142,7 +161,10 @@ export default function MedicalLibraryPage() {
             ))}
           </div>
         ) : (
-          <CategoryGrid categories={categoriesQuery.data ?? []} portalBase={portalBase} />
+          <CategoryGrid
+            categories={categoriesQuery.data ?? []}
+            portalBase={portalBase}
+          />
         )
       ) : filterState.view === 'table' ? (
         <MedicationTable
@@ -167,24 +189,43 @@ export default function MedicalLibraryPage() {
       ) : medications.length === 0 ? (
         <EmptyState
           icon={Search}
-          title={filterState.favoritesOnly ? 'No favorites yet' : 'No medications found'}
+          title={
+            filterState.favoritesOnly
+              ? 'No favorites yet'
+              : 'No medications found'
+          }
           description="Try adjusting your search or filters."
         />
       ) : filterState.view === 'compact' ? (
         <div className="space-y-2">
           {medications.map((med) => (
-            <MedicationCard key={med.id} medication={med} portalBase={portalBase} isFavorite={favoriteIds.has(med.id)} compact onCompare={openCompare} />
+            <MedicationCard
+              key={med.id}
+              medication={med}
+              portalBase={portalBase}
+              isFavorite={favoriteIds.has(med.id)}
+              compact
+              onCompare={openCompare}
+            />
           ))}
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {medications.map((med) => (
-            <MedicationCard key={med.id} medication={med} portalBase={portalBase} isFavorite={favoriteIds.has(med.id)} onCompare={openCompare} />
+            <MedicationCard
+              key={med.id}
+              medication={med}
+              portalBase={portalBase}
+              isFavorite={favoriteIds.has(med.id)}
+              onCompare={openCompare}
+            />
           ))}
         </div>
       )}
 
-      {!showCategories && filterState.view !== 'table' && medications.length > 0 ? (
+      {!showCategories &&
+      filterState.view !== 'table' &&
+      medications.length > 0 ? (
         <p className="mt-4 text-sm text-muted-foreground">
           Showing {medications.length} of {query.data?.total ?? 0} medications
         </p>

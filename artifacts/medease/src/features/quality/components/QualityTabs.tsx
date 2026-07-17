@@ -15,7 +15,11 @@ const PROFESSIONAL_TABS: Tab[] = [
 const FACILITY_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Quality', path: 'eqms' },
   { segment: 'incidents', label: 'Incidents', path: 'incidents' },
-  { segment: 'infection', label: 'Infection Control', path: 'infection-control' },
+  {
+    segment: 'infection',
+    label: 'Infection Control',
+    path: 'infection-control',
+  },
   { segment: 'audits', label: 'Audits', path: 'eqms-audits' },
   { segment: 'compliance', label: 'Compliance', path: 'compliance' },
 ];
@@ -42,17 +46,33 @@ function getTabs(variant: QualityTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function QualityTabs({ basePath: _basePath, variant = 'professional' }: QualityTabsProps) {
+export function QualityTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: QualityTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Quality sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Quality sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );

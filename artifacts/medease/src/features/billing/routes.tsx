@@ -1,9 +1,12 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
 const patientPage = () => import('@/features/billing/pages/PatientBillingPage');
-const professionalPage = () => import('@/features/billing/pages/ProfessionalBillingPage');
-const facilityPage = () => import('@/features/billing/pages/FacilityBillingPage');
-const pharmacyPage = () => import('@/features/billing/pages/PharmacyBillingPage');
+const professionalPage = () =>
+  import('@/features/billing/pages/ProfessionalBillingPage');
+const facilityPage = () =>
+  import('@/features/billing/pages/FacilityBillingPage');
+const pharmacyPage = () =>
+  import('@/features/billing/pages/PharmacyBillingPage');
 const adminPage = () => import('@/features/billing/pages/AdminBillingPage');
 
 export function createPatientBillingRoutes(options: {
@@ -106,7 +109,9 @@ export function createProfessionalBillingRoutes(
   ];
 }
 
-export function createFacilityBillingRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createFacilityBillingRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/billing',
@@ -147,7 +152,9 @@ export function createFacilityBillingRoutes(analyticsPrefix: string): RouteDefin
   ];
 }
 
-export function createPharmacyBillingRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createPharmacyBillingRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/billing',
@@ -179,7 +186,9 @@ export function createPharmacyBillingRoutes(analyticsPrefix: string): RouteDefin
   ];
 }
 
-export function createAdminBillingRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createAdminBillingRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   return [
     {
       path: '/billing',

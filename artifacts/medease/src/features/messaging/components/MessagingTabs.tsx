@@ -15,17 +15,33 @@ const PROFESSIONAL_TABS: Tab[] = [
 const FACILITY_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Messaging', path: 'messaging' },
   { segment: 'broadcasts', label: 'Broadcasts', path: 'broadcasts' },
-  { segment: 'message-templates', label: 'Templates', path: 'message-templates' },
+  {
+    segment: 'message-templates',
+    label: 'Templates',
+    path: 'message-templates',
+  },
 ];
 
 const ADMIN_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Messaging', path: 'messaging' },
-  { segment: 'message-center', label: 'Message Center', path: 'message-center' },
+  {
+    segment: 'message-center',
+    label: 'Message Center',
+    path: 'message-center',
+  },
   { segment: 'channels', label: 'Channels', path: 'channels' },
   { segment: 'templates', label: 'Templates', path: 'templates' },
   { segment: 'campaigns', label: 'Campaigns', path: 'campaigns' },
-  { segment: 'delivery-tracking', label: 'Delivery', path: 'delivery-tracking' },
-  { segment: 'messaging-analytics', label: 'Analytics', path: 'messaging-analytics' },
+  {
+    segment: 'delivery-tracking',
+    label: 'Delivery',
+    path: 'delivery-tracking',
+  },
+  {
+    segment: 'messaging-analytics',
+    label: 'Analytics',
+    path: 'messaging-analytics',
+  },
   { segment: 'integrations', label: 'Integrations', path: 'integrations' },
 ];
 
@@ -40,17 +56,33 @@ function getTabs(variant: MessagingTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function MessagingTabs({ basePath: _basePath, variant = 'professional' }: MessagingTabsProps) {
+export function MessagingTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: MessagingTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Messaging sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Messaging sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.path} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.path}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -73,7 +105,9 @@ const PATH_MAP: [string, MessagingSection][] = [
   ['/inbox', 'inbox'],
 ];
 
-export function getMessagingSectionFromPath(pathname: string): MessagingSection {
+export function getMessagingSectionFromPath(
+  pathname: string,
+): MessagingSection {
   for (const [path, section] of PATH_MAP) {
     if (pathname.includes(path)) return section;
   }

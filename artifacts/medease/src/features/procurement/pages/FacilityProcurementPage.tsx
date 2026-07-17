@@ -20,5 +20,12 @@ export default function FacilityProcurementPage() {
     receiving: 'Goods Receiving',
     deliveries: 'Deliveries',
   };
-  return <ProcurementShell basePath={basePath} variant="facility" title={titles[segment]} department="facility" />;
+  return (
+    <ProcurementShell
+      basePath={basePath}
+      variant="facility"
+      title={titles[segment]}
+      department="facility"
+    />
+  );
 }

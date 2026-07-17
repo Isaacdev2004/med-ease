@@ -1,5 +1,6 @@
 export type AlertSeverity = 'info' | 'low' | 'medium' | 'high' | 'critical';
-export type AlertStatus = 'active' | 'acknowledged' | 'overridden' | 'resolved' | 'expired';
+export type AlertStatus =
+  'active' | 'acknowledged' | 'overridden' | 'resolved' | 'expired';
 export type AlertType =
   | 'abnormal_lab'
   | 'allergy'
@@ -11,9 +12,11 @@ export type AlertType =
   | 'care_gap'
   | 'guideline'
   | 'diagnostic';
-export type GuidelineSource = 'nice' | 'who' | 'cdc' | 'aha' | 'esc' | 'ada' | 'kdigo' | 'idsa' | 'local';
+export type GuidelineSource =
+  'nice' | 'who' | 'cdc' | 'aha' | 'esc' | 'ada' | 'kdigo' | 'idsa' | 'local';
 export type GuidelineStatus = 'draft' | 'published' | 'archived' | 'superseded';
-export type RecommendationStatus = 'pending' | 'accepted' | 'declined' | 'deferred';
+export type RecommendationStatus =
+  'pending' | 'accepted' | 'declined' | 'deferred';
 export type OrderSetCategory =
   | 'sepsis'
   | 'stroke'
@@ -40,8 +43,16 @@ export type CalculatorType =
   | 'bsa'
   | 'creatinine_clearance'
   | 'egfr';
-export type DrugSafetyType = 'interaction' | 'allergy' | 'contraindication' | 'duplicate_therapy' | 'black_box' | 'pregnancy' | 'breastfeeding';
-export type PreventiveCategory = 'vaccine' | 'screening' | 'wellness' | 'chronic_review' | 'follow_up';
+export type DrugSafetyType =
+  | 'interaction'
+  | 'allergy'
+  | 'contraindication'
+  | 'duplicate_therapy'
+  | 'black_box'
+  | 'pregnancy'
+  | 'breastfeeding';
+export type PreventiveCategory =
+  'vaccine' | 'screening' | 'wellness' | 'chronic_review' | 'follow_up';
 
 export interface CdssFilters {
   q?: string;
@@ -244,7 +255,12 @@ export interface RiskCalculator {
   name: string;
   type: CalculatorType;
   description: string;
-  inputs: { key: string; label: string; type: 'number' | 'boolean' | 'select'; options?: string[] }[];
+  inputs: {
+    key: string;
+    label: string;
+    type: 'number' | 'boolean' | 'select';
+    options?: string[];
+  }[];
   interpretationBands: { label: string; min: number; max: number }[];
 }
 

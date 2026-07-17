@@ -15,52 +15,72 @@ export const phmQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   population: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.population(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.population(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getPopulation(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   highRiskPatients: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.highRiskPatients(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.highRiskPatients(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getHighRiskPatients(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   registries: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.registries(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.registries(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getRegistries(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   careGaps: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.careGaps(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.careGaps(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getCareGaps(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   riskScores: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.riskScores(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.riskScores(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getRiskScores(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   cohorts: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.cohorts(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.cohorts(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getCohorts(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   chronicPrograms: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.chronicPrograms(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.chronicPrograms(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getChronicPrograms(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   preventiveCare: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.preventiveCare(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.preventiveCare(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getPreventiveCare(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   outreach: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.outreach(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.outreach(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getOutreach(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   communityHealth: (filters?: PhmFilters) => ({
-    queryKey: queryKeys.phm.communityHealth(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.phm.communityHealth(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => populationHealthService.getCommunityHealth(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

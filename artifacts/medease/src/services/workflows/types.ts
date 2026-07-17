@@ -1,6 +1,8 @@
 export type WorkflowStatus = 'draft' | 'published' | 'archived';
-export type InstanceStatus = 'running' | 'paused' | 'completed' | 'cancelled' | 'failed';
-export type TaskStatus = 'pending' | 'in_progress' | 'completed' | 'cancelled' | 'escalated';
+export type InstanceStatus =
+  'running' | 'paused' | 'completed' | 'cancelled' | 'failed';
+export type TaskStatus =
+  'pending' | 'in_progress' | 'completed' | 'cancelled' | 'escalated';
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'escalated';
 export type JobStatus = 'queued' | 'running' | 'completed' | 'failed';
 export type SlaStatus = 'on_track' | 'at_risk' | 'breached';

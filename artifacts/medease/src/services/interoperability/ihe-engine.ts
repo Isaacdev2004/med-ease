@@ -1,6 +1,14 @@
 import type { IheProfile } from '@/services/interoperability/types';
 
-export const IHE_PROFILES: IheProfile[] = ['XDS', 'XCA', 'PIX', 'PDQ', 'XCPD', 'ATNA', 'BPPC'];
+export const IHE_PROFILES: IheProfile[] = [
+  'XDS',
+  'XCA',
+  'PIX',
+  'PDQ',
+  'XCPD',
+  'ATNA',
+  'BPPC',
+];
 
 export function getIheProfileDescription(profile: IheProfile): string {
   const descriptions: Record<IheProfile, string> = {

@@ -38,15 +38,26 @@ const COMPARISON_ROWS: Array<{
   { label: 'Dosage form', value: (med) => med.dosageForm },
   { label: 'Route', value: (med) => med.route },
   { label: 'Therapeutic class', value: (med) => med.therapeuticClass },
-  { label: 'Prescription', value: (med) => (med.prescriptionRequired ? 'Required' : 'OTC') },
+  {
+    label: 'Prescription',
+    value: (med) => (med.prescriptionRequired ? 'Required' : 'OTC'),
+  },
   { label: 'Pregnancy safety', value: (med) => med.pregnancySafety },
   { label: 'Breastfeeding', value: (med) => med.breastfeedingSafety },
-  { label: 'Pediatric approved', value: (med) => (med.pediatricApproved ? 'Yes' : 'No') },
+  {
+    label: 'Pediatric approved',
+    value: (med) => (med.pediatricApproved ? 'Yes' : 'No'),
+  },
   { label: 'Interactions', value: (med) => String(med.interactions.length) },
-  { label: 'Contraindications', value: (med) => String(med.contraindications.length) },
+  {
+    label: 'Contraindications',
+    value: (med) => String(med.contraindications.length),
+  },
 ];
 
-function formatSafety(value: string): 'default' | 'secondary' | 'destructive' | 'outline' {
+function formatSafety(
+  value: string,
+): 'default' | 'secondary' | 'destructive' | 'outline' {
   if (value === 'safe') return 'default';
   if (value === 'caution') return 'secondary';
   if (value === 'contraindicated') return 'destructive';
@@ -70,17 +81,23 @@ export function ComparisonDrawer({
 
   useEffect(() => {
     if (!open || !primary) return;
-    const defaultSecondary = options.find((med) => med.therapeuticClass === primary.therapeuticClass)?.id
-      ?? options[0]?.id
-      ?? '';
+    const defaultSecondary =
+      options.find((med) => med.therapeuticClass === primary.therapeuticClass)
+        ?.id ??
+      options[0]?.id ??
+      '';
     setSecondaryId(defaultSecondary);
   }, [open, primary, options]);
 
-  const secondary = options.find((medication) => medication.id === secondaryId) ?? null;
+  const secondary =
+    options.find((medication) => medication.id === secondaryId) ?? null;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-2xl">
+      <SheetContent
+        side="right"
+        className="w-full overflow-y-auto sm:max-w-2xl"
+      >
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <GitCompare className="size-5" />
@@ -92,14 +109,20 @@ export function ComparisonDrawer({
         </SheetHeader>
 
         {!primary ? (
-          <p className="text-muted-foreground mt-6 text-sm">Select a medication to compare.</p>
+          <p className="text-muted-foreground mt-6 text-sm">
+            Select a medication to compare.
+          </p>
         ) : (
           <div className="mt-6 space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-lg border p-4">
-                <p className="text-muted-foreground text-xs uppercase tracking-wide">Primary</p>
+                <p className="text-muted-foreground text-xs uppercase tracking-wide">
+                  Primary
+                </p>
                 <p className="mt-1 font-semibold">{primary.name}</p>
-                <p className="text-muted-foreground text-sm">{primary.strength}</p>
+                <p className="text-muted-foreground text-sm">
+                  {primary.strength}
+                </p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="compare-secondary">Compare with</Label>
@@ -125,8 +148,12 @@ export function ComparisonDrawer({
                     <thead>
                       <tr className="border-b bg-muted/40">
                         <th className="p-3 text-left font-medium">Attribute</th>
-                        <th className="p-3 text-left font-medium">{primary.name}</th>
-                        <th className="p-3 text-left font-medium">{secondary.name}</th>
+                        <th className="p-3 text-left font-medium">
+                          {primary.name}
+                        </th>
+                        <th className="p-3 text-left font-medium">
+                          {secondary.name}
+                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -136,18 +163,41 @@ export function ComparisonDrawer({
                         const differs = left !== right;
 
                         return (
-                          <tr key={row.label} className="border-b last:border-0">
-                            <td className="text-muted-foreground p-3">{row.label}</td>
-                            <td className={cn('p-3', differs && 'bg-amber-50/60 dark:bg-amber-950/20')}>
-                              {row.label.includes('safety') || row.label.includes('Breastfeeding') ? (
-                                <Badge variant={formatSafety(left)}>{left}</Badge>
+                          <tr
+                            key={row.label}
+                            className="border-b last:border-0"
+                          >
+                            <td className="text-muted-foreground p-3">
+                              {row.label}
+                            </td>
+                            <td
+                              className={cn(
+                                'p-3',
+                                differs &&
+                                  'bg-amber-50/60 dark:bg-amber-950/20',
+                              )}
+                            >
+                              {row.label.includes('safety') ||
+                              row.label.includes('Breastfeeding') ? (
+                                <Badge variant={formatSafety(left)}>
+                                  {left}
+                                </Badge>
                               ) : (
                                 left
                               )}
                             </td>
-                            <td className={cn('p-3', differs && 'bg-amber-50/60 dark:bg-amber-950/20')}>
-                              {row.label.includes('safety') || row.label.includes('Breastfeeding') ? (
-                                <Badge variant={formatSafety(right)}>{right}</Badge>
+                            <td
+                              className={cn(
+                                'p-3',
+                                differs &&
+                                  'bg-amber-50/60 dark:bg-amber-950/20',
+                              )}
+                            >
+                              {row.label.includes('safety') ||
+                              row.label.includes('Breastfeeding') ? (
+                                <Badge variant={formatSafety(right)}>
+                                  {right}
+                                </Badge>
                               ) : (
                                 right
                               )}
@@ -161,7 +211,9 @@ export function ComparisonDrawer({
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="rounded-lg border p-4">
-                    <p className="mb-2 font-medium">{primary.name} — key warnings</p>
+                    <p className="mb-2 font-medium">
+                      {primary.name} — key warnings
+                    </p>
                     <ul className="text-muted-foreground list-disc space-y-1 pl-4 text-sm">
                       {primary.warnings.slice(0, 3).map((warning) => (
                         <li key={warning}>{warning}</li>
@@ -169,7 +221,9 @@ export function ComparisonDrawer({
                     </ul>
                   </div>
                   <div className="rounded-lg border p-4">
-                    <p className="mb-2 font-medium">{secondary.name} — key warnings</p>
+                    <p className="mb-2 font-medium">
+                      {secondary.name} — key warnings
+                    </p>
                     <ul className="text-muted-foreground list-disc space-y-1 pl-4 text-sm">
                       {secondary.warnings.slice(0, 3).map((warning) => (
                         <li key={warning}>{warning}</li>
@@ -183,7 +237,9 @@ export function ComparisonDrawer({
                 </Button>
               </>
             ) : (
-              <p className="text-muted-foreground text-sm">Choose a second medication to compare.</p>
+              <p className="text-muted-foreground text-sm">
+                Choose a second medication to compare.
+              </p>
             )}
           </div>
         )}

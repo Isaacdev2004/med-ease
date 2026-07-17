@@ -1,6 +1,9 @@
 import { CACHE_TIMES } from '@/services/api/cache-config';
 import { queryKeys } from '@/services/api/query-keys';
-import type { LabOrderFilters, LabResultFilters } from '@/services/laboratory/types';
+import type {
+  LabOrderFilters,
+  LabResultFilters,
+} from '@/services/laboratory/types';
 import { laboratoryService } from '@/services/laboratory/laboratory.service';
 
 export const laboratoryQueries = {
@@ -15,7 +18,9 @@ export const laboratoryQueries = {
     staleTime: CACHE_TIMES.patientList,
   }),
   allOrders: (filters?: LabOrderFilters) => ({
-    queryKey: queryKeys.laboratory.allOrders(filters as Record<string, unknown>),
+    queryKey: queryKeys.laboratory.allOrders(
+      filters as Record<string, unknown>,
+    ),
     queryFn: () => laboratoryService.getAllOrders(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -31,7 +36,9 @@ export const laboratoryQueries = {
     staleTime: CACHE_TIMES.patientList,
   }),
   allResults: (filters?: LabResultFilters) => ({
-    queryKey: queryKeys.laboratory.allResults(filters as Record<string, unknown>),
+    queryKey: queryKeys.laboratory.allResults(
+      filters as Record<string, unknown>,
+    ),
     queryFn: () => laboratoryService.getAllResults(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

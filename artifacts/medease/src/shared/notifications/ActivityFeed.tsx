@@ -9,7 +9,10 @@ import {
   User,
 } from 'lucide-react';
 
-import type { ActivityEvent, ActivityEventCategory } from '@/services/notifications/notification.types';
+import type {
+  ActivityEvent,
+  ActivityEventCategory,
+} from '@/services/notifications/notification.types';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/lib/utils';
 
@@ -30,7 +33,10 @@ interface ActivityTimelineItemProps {
   onOpen?: (event: ActivityEvent) => void;
 }
 
-export function ActivityTimelineItem({ event, onOpen }: ActivityTimelineItemProps) {
+export function ActivityTimelineItem({
+  event,
+  onOpen,
+}: ActivityTimelineItemProps) {
   const Icon = CATEGORY_ICONS[event.category];
 
   return (
@@ -41,8 +47,13 @@ export function ActivityTimelineItem({ event, onOpen }: ActivityTimelineItemProp
       <div className="min-w-0 flex-1 space-y-1">
         <div className="flex items-start justify-between gap-2">
           <h3 className="text-sm font-medium">{event.title}</h3>
-          <time className="text-xs text-muted-foreground shrink-0" dateTime={event.timestamp}>
-            {formatDistanceToNow(new Date(event.timestamp), { addSuffix: true })}
+          <time
+            className="text-xs text-muted-foreground shrink-0"
+            dateTime={event.timestamp}
+          >
+            {formatDistanceToNow(new Date(event.timestamp), {
+              addSuffix: true,
+            })}
           </time>
         </div>
         {event.description ? (
@@ -54,7 +65,12 @@ export function ActivityTimelineItem({ event, onOpen }: ActivityTimelineItemProp
           {event.status ? <span>· {event.status}</span> : null}
         </div>
         {event.href ? (
-          <Button size="sm" variant="link" className="h-auto p-0" onClick={() => onOpen?.(event)}>
+          <Button
+            size="sm"
+            variant="link"
+            className="h-auto p-0"
+            onClick={() => onOpen?.(event)}
+          >
             View details
           </Button>
         ) : null}
@@ -70,14 +86,27 @@ interface ActivityFeedProps {
   onOpen?: (event: ActivityEvent) => void;
 }
 
-export function ActivityFeed({ events, loading, className, onOpen }: ActivityFeedProps) {
+export function ActivityFeed({
+  events,
+  loading,
+  className,
+  onOpen,
+}: ActivityFeedProps) {
   if (loading) {
-    return <div className={cn('space-y-4', className)} aria-busy="true" aria-label="Loading activity" />;
+    return (
+      <div
+        className={cn('space-y-4', className)}
+        aria-busy="true"
+        aria-label="Loading activity"
+      />
+    );
   }
 
   if (events.length === 0) {
     return (
-      <p className={cn('text-sm text-muted-foreground', className)}>No recent activity.</p>
+      <p className={cn('text-sm text-muted-foreground', className)}>
+        No recent activity.
+      </p>
     );
   }
 

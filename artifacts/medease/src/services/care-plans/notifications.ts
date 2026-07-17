@@ -6,7 +6,8 @@ export function buildTaskDueReminder(task: CareTask) {
     title: 'Care plan task due',
     message: `${task.title} is due ${new Date(task.dueDate).toLocaleDateString()}.`,
     type: 'care_plan' as const,
-    priority: task.priority === 'urgent' ? 'high' as const : 'normal' as const,
+    priority:
+      task.priority === 'urgent' ? ('high' as const) : ('normal' as const),
   };
 }
 

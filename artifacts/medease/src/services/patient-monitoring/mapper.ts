@@ -1,4 +1,9 @@
-import type { MonitoringDevice, Observation, RemoteMonitoringProgram, VitalSign } from '@/services/patient-monitoring/types';
+import type {
+  MonitoringDevice,
+  Observation,
+  RemoteMonitoringProgram,
+  VitalSign,
+} from '@/services/patient-monitoring/types';
 
 export function toFhirObservation(observation: Observation) {
   return {
@@ -9,14 +14,18 @@ export function toFhirObservation(observation: Observation) {
     code: { text: observation.display },
     subject: { reference: `Patient/${observation.patientId}` },
     effectiveDateTime: observation.recordedAt,
-    valueQuantity: typeof observation.value === 'number'
-      ? { value: observation.value, unit: observation.unit }
-      : undefined,
-    valueString: typeof observation.value === 'string' ? observation.value : undefined,
+    valueQuantity:
+      typeof observation.value === 'number'
+        ? { value: observation.value, unit: observation.unit }
+        : undefined,
+    valueString:
+      typeof observation.value === 'string' ? observation.value : undefined,
     interpretation: observation.interpretation
       ? [{ text: observation.interpretation }]
       : undefined,
-    device: observation.deviceId ? { reference: `Device/${observation.deviceId}` } : undefined,
+    device: observation.deviceId
+      ? { reference: `Device/${observation.deviceId}` }
+      : undefined,
   };
 }
 
@@ -38,7 +47,9 @@ export function toFhirDeviceMetric(vital: VitalSign) {
     id: `metric-${vital.id}`,
     type: { text: vital.type },
     unit: { text: vital.unit },
-    source: vital.deviceId ? { reference: `Device/${vital.deviceId}` } : undefined,
+    source: vital.deviceId
+      ? { reference: `Device/${vital.deviceId}` }
+      : undefined,
   };
 }
 
@@ -64,13 +75,18 @@ export function toFhirCarePlanMonitoring(program: RemoteMonitoringProgram) {
   };
 }
 
-export function toFhirQuestionnaireResponse(patientId: string, symptomReport: string) {
+export function toFhirQuestionnaireResponse(
+  patientId: string,
+  symptomReport: string,
+) {
   return {
     resourceType: 'QuestionnaireResponse' as const,
     id: `qr-${Date.now()}`,
     status: 'completed',
     subject: { reference: `Patient/${patientId}` },
     authored: new Date().toISOString(),
-    item: [{ text: 'Symptom report', answer: [{ valueString: symptomReport }] }],
+    item: [
+      { text: 'Symptom report', answer: [{ valueString: symptomReport }] },
+    ],
   };
 }

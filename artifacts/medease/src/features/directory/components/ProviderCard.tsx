@@ -14,7 +14,9 @@ interface ProviderCardProps {
   compact?: boolean;
 }
 
-function mapCardType(type: DirectoryProvider['type']): 'professional' | 'facility' | 'pharmacy' | 'transport' {
+function mapCardType(
+  type: DirectoryProvider['type'],
+): 'professional' | 'facility' | 'pharmacy' | 'transport' {
   if (type === 'pharmacy') return 'pharmacy';
   if (type === 'transport') return 'transport';
   if (type === 'professional') return 'professional';
@@ -23,7 +25,9 @@ function mapCardType(type: DirectoryProvider['type']): 'professional' | 'facilit
 
 function formatLocation(provider: DirectoryProvider) {
   const { street, city, postalCode } = provider.address;
-  const distance = provider.distanceKm ? ` · ${provider.distanceKm.toFixed(1)} km` : '';
+  const distance = provider.distanceKm
+    ? ` · ${provider.distanceKm.toFixed(1)} km`
+    : '';
   return `${street}, ${postalCode} ${city}${distance}`;
 }
 
@@ -47,7 +51,9 @@ export function ProviderCard({
             {provider.specialty ?? provider.facilityType ?? provider.type}
           </p>
         </div>
-        <span className="text-xs text-muted-foreground">{provider.address.city}</span>
+        <span className="text-xs text-muted-foreground">
+          {provider.address.city}
+        </span>
       </Link>
     );
   }
@@ -64,7 +70,11 @@ export function ProviderCard({
       phone={provider.phone}
       actions={
         <>
-          <FavoriteButton providerId={provider.id} isFavorite={isFavorite} size="sm" />
+          <FavoriteButton
+            providerId={provider.id}
+            isFavorite={isFavorite}
+            size="sm"
+          />
           <Button size="sm" variant="outline" asChild>
             <Link href={profilePath}>
               <Eye className="mr-2 h-4 w-4" />

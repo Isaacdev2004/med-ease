@@ -3,7 +3,12 @@ import { after, before, describe, it } from 'node:test';
 
 import 'reflect-metadata';
 
-import { CanActivate, ExecutionContext, Injectable, Module } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  Module,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import type { INestApplication } from '@nestjs/common';
@@ -65,7 +70,9 @@ class IamControllerTestModule {}
 @Injectable()
 class TestAuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
-    const request = context.switchToHttp().getRequest<{ user?: JwtAccessPayload }>();
+    const request = context
+      .switchToHttp()
+      .getRequest<{ user?: JwtAccessPayload }>();
     request.user = testUser;
     return true;
   }
@@ -78,7 +85,9 @@ class RejectAuthGuard implements CanActivate {
   }
 }
 
-async function createTestApp(authenticated: boolean): Promise<INestApplication> {
+async function createTestApp(
+  authenticated: boolean,
+): Promise<INestApplication> {
   const moduleRef = await Test.createTestingModule({
     imports: [IamControllerTestModule],
   })
@@ -112,14 +121,18 @@ describe('IamController integration', () => {
   });
 
   it('GET /api/iam/users returns paginated users when authorized', async () => {
-    const response = await request(app.getHttpServer()).get('/api/iam/users').expect(200);
+    const response = await request(app.getHttpServer())
+      .get('/api/iam/users')
+      .expect(200);
 
     assert.equal(response.body.total, 1);
     assert.equal(response.body.items[0].userId, 'user-1');
   });
 
   it('GET /api/iam/dashboard returns dashboard metrics', async () => {
-    const response = await request(app.getHttpServer()).get('/api/iam/dashboard').expect(200);
+    const response = await request(app.getHttpServer())
+      .get('/api/iam/dashboard')
+      .expect(200);
 
     assert.equal(response.body.totalUsers, 1);
   });
@@ -128,7 +141,9 @@ describe('IamController integration', () => {
     const unauthenticatedApp = await createTestApp(false);
 
     try {
-      await request(unauthenticatedApp.getHttpServer()).get('/api/iam/users').expect(401);
+      await request(unauthenticatedApp.getHttpServer())
+        .get('/api/iam/users')
+        .expect(401);
     } finally {
       await unauthenticatedApp.close();
     }

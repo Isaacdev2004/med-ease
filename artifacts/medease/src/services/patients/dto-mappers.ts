@@ -14,7 +14,9 @@ import type {
 } from '@medease/patients-contract';
 
 function asRecord(value: unknown): Record<string, unknown> {
-  return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+  return value && typeof value === 'object'
+    ? (value as Record<string, unknown>)
+    : {};
 }
 
 function asString(value: unknown, fallback = ''): string {
@@ -33,7 +35,10 @@ function asOptionalString(value: unknown): string | undefined {
   return typeof value === 'string' ? value : undefined;
 }
 
-function asPatientStatus(value: unknown, fallback: PatientStatus = 'active'): PatientStatus {
+function asPatientStatus(
+  value: unknown,
+  fallback: PatientStatus = 'active',
+): PatientStatus {
   const status = asString(value, fallback);
   return status === 'inactive' || status === 'observation' ? status : 'active';
 }
@@ -56,7 +61,10 @@ export function mapPatientDto(dto: unknown): Patient {
     fullName: asString(raw.fullName),
     dateOfBirth: asString(raw.dateOfBirth),
     gender:
-      raw.gender === 'male' || raw.gender === 'female' || raw.gender === 'other' || raw.gender === 'unknown'
+      raw.gender === 'male' ||
+      raw.gender === 'female' ||
+      raw.gender === 'other' ||
+      raw.gender === 'unknown'
         ? raw.gender
         : undefined,
     status: asPatientStatus(raw.status),
@@ -118,7 +126,9 @@ export function mapPatientAddressDto(dto: unknown): PatientAddress {
   };
 }
 
-export function mapPatientEmergencyContactDto(dto: unknown): PatientEmergencyContact {
+export function mapPatientEmergencyContactDto(
+  dto: unknown,
+): PatientEmergencyContact {
   const raw = asRecord(dto);
   return {
     emergencyContactId: asString(raw.emergencyContactId),
@@ -177,7 +187,10 @@ export function mapExportResultDto(dto: unknown): ExportResult {
   };
 }
 
-export function mapPaginatedDto<T>(dto: unknown, mapItem: (item: unknown) => T): PaginatedResult<T> {
+export function mapPaginatedDto<T>(
+  dto: unknown,
+  mapItem: (item: unknown) => T,
+): PaginatedResult<T> {
   const raw = asRecord(dto);
   const items = Array.isArray(raw.items) ? raw.items.map(mapItem) : [];
   return {
@@ -188,10 +201,16 @@ export function mapPaginatedDto<T>(dto: unknown, mapItem: (item: unknown) => T):
   };
 }
 
-export function mapArrayDto<T>(dto: unknown, mapItem: (item: unknown) => T): T[] {
+export function mapArrayDto<T>(
+  dto: unknown,
+  mapItem: (item: unknown) => T,
+): T[] {
   return Array.isArray(dto) ? dto.map(mapItem) : [];
 }
 
-export function filtersToQuery(filters?: PatientFilters | PatientSearchFilters) {
-  return filters as Record<string, string | number | boolean | null | undefined> | undefined;
+export function filtersToQuery(
+  filters?: PatientFilters | PatientSearchFilters,
+) {
+  return filters as
+    Record<string, string | number | boolean | null | undefined> | undefined;
 }

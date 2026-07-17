@@ -1,7 +1,9 @@
 import type { Campaign, CampaignStatus } from '@/services/messaging/types';
 
 export function activeCampaignCount(campaigns: Campaign[]): number {
-  return campaigns.filter((c) => c.status === 'running' || c.status === 'scheduled').length;
+  return campaigns.filter(
+    (c) => c.status === 'running' || c.status === 'scheduled',
+  ).length;
 }
 
 export function campaignOpenRate(campaigns: Campaign[]): number {
@@ -10,7 +12,9 @@ export function campaignOpenRate(campaigns: Campaign[]): number {
   return Math.round(total / campaigns.length);
 }
 
-export function nextCampaignStatus(action: 'start' | 'complete' | 'cancel'): CampaignStatus {
+export function nextCampaignStatus(
+  action: 'start' | 'complete' | 'cancel',
+): CampaignStatus {
   if (action === 'start') return 'running';
   if (action === 'complete') return 'completed';
   return 'cancelled';

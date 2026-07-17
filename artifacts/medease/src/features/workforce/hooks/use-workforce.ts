@@ -3,7 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import { workforceQueries } from '@/features/workforce/queries/workforce.queries';
 import type { WorkforceFilters } from '@/services/workforce/types';
 
-export function useWorkforceDashboard(facilityId?: string, departmentId?: string) {
+export function useWorkforceDashboard(
+  facilityId?: string,
+  departmentId?: string,
+) {
   return useQuery(workforceQueries.dashboard(facilityId, departmentId));
 }
 

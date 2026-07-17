@@ -63,7 +63,10 @@ export function SparklineChart({ data, className }: SparklineChartProps) {
   }
 
   return (
-    <ChartContainer config={sparklineConfig} className={cn('h-32 w-full', className)}>
+    <ChartContainer
+      config={sparklineConfig}
+      className={cn('h-32 w-full', className)}
+    >
       <LineChart data={data} margin={{ top: 8, right: 8, left: 8, bottom: 0 }}>
         <ChartTooltip content={<ChartTooltipContent hideLabel />} />
         <Line

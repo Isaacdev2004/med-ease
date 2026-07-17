@@ -8,7 +8,11 @@ type Tab = { segment: ProcurementSection; label: string; path: string };
 
 const PHARMACY_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Procurement', path: 'procurement' },
-  { segment: 'purchase-orders', label: 'Purchase Orders', path: 'purchase-orders' },
+  {
+    segment: 'purchase-orders',
+    label: 'Purchase Orders',
+    path: 'purchase-orders',
+  },
   { segment: 'suppliers', label: 'Suppliers', path: 'suppliers' },
 ];
 
@@ -25,7 +29,11 @@ const FACILITY_TABS: Tab[] = [
 
 const ADMIN_TABS: Tab[] = [
   { segment: 'dashboard', label: 'Dashboard', path: 'procurement' },
-  { segment: 'purchase-orders', label: 'Purchase Orders', path: 'purchase-orders' },
+  {
+    segment: 'purchase-orders',
+    label: 'Purchase Orders',
+    path: 'purchase-orders',
+  },
   { segment: 'rfqs', label: 'RFQs', path: 'rfqs' },
   { segment: 'contracts', label: 'Contracts', path: 'contracts' },
   { segment: 'suppliers', label: 'Suppliers', path: 'suppliers' },
@@ -46,17 +54,33 @@ function getTabs(variant: ProcurementTabsProps['variant']) {
   return PHARMACY_TABS;
 }
 
-export function ProcurementTabs({ basePath: _basePath, variant = 'pharmacy' }: ProcurementTabsProps) {
+export function ProcurementTabs({
+  basePath: _basePath,
+  variant = 'pharmacy',
+}: ProcurementTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="Procurement sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="Procurement sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.label} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.label}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -65,7 +89,9 @@ export function ProcurementTabs({ basePath: _basePath, variant = 'pharmacy' }: P
   );
 }
 
-export function getProcurementSectionFromPath(pathname: string): ProcurementSection {
+export function getProcurementSectionFromPath(
+  pathname: string,
+): ProcurementSection {
   if (pathname.includes('/purchase-orders')) return 'purchase-orders';
   if (pathname.includes('/suppliers')) return 'suppliers';
   if (pathname.includes('/requests')) return 'requests';

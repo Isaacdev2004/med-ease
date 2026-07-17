@@ -9,13 +9,11 @@ export type PredictionType =
   | 'no_show';
 
 export type ForecastType =
-  | 'resource'
-  | 'bed_occupancy'
-  | 'operating_room'
-  | 'financial';
+  'resource' | 'bed_occupancy' | 'operating_room' | 'financial';
 
 export type ModelStatus = 'draft' | 'staging' | 'production' | 'archived';
-export type RecommendationStatus = 'pending' | 'accepted' | 'rejected' | 'overridden';
+export type RecommendationStatus =
+  'pending' | 'accepted' | 'rejected' | 'overridden';
 export type AlertSeverity = 'info' | 'warning' | 'critical';
 export type CopilotRole = 'user' | 'assistant' | 'system';
 
@@ -226,7 +224,8 @@ export interface AiPermissions {
 
 export interface AiFavorite {
   userId: string;
-  entityType: 'prediction' | 'recommendation' | 'model' | 'summary' | 'forecast';
+  entityType:
+    'prediction' | 'recommendation' | 'model' | 'summary' | 'forecast';
   entityId: string;
   createdAt: string;
 }

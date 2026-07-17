@@ -32,7 +32,10 @@ export function StatCard({
         </CardTitle>
         {Icon ? (
           <div className="rounded-full bg-muted p-2">
-            <Icon className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+            <Icon
+              className="h-4 w-4 text-muted-foreground"
+              aria-hidden="true"
+            />
           </div>
         ) : null}
       </CardHeader>

@@ -7,7 +7,8 @@ import { iamRepositoryContract } from './repository.contract';
 import { iamContractFixtures } from './fixtures/iam.fixtures';
 import { iamRepository } from '../repository';
 
-const API_BASE = process.env.CONTRACT_TEST_API_URL ?? process.env.VITE_API_BASE_URL ?? '';
+const API_BASE =
+  process.env.CONTRACT_TEST_API_URL ?? process.env.VITE_API_BASE_URL ?? '';
 
 async function loginAccessToken(): Promise<string> {
   const response = await fetch(`${API_BASE}/api/auth/login`, {
@@ -24,7 +25,10 @@ async function loginAccessToken(): Promise<string> {
     throw new Error(`Login failed (${response.status}): ${body}`);
   }
 
-  const json = (await response.json()) as { session?: { accessToken?: string }; accessToken?: string };
+  const json = (await response.json()) as {
+    session?: { accessToken?: string };
+    accessToken?: string;
+  };
   const accessToken = json.session?.accessToken ?? json.accessToken;
   if (!accessToken) {
     throw new Error('Login response missing accessToken');

@@ -1,16 +1,74 @@
 export type Currency = 'EUR' | 'USD' | 'GBP' | 'NGN' | 'XOF';
-export type ProcurementDepartment = 'pharmacy' | 'laboratory' | 'radiology' | 'facility' | 'biomedical' | 'general' | 'admin';
-export type VendorCategory = 'medical' | 'laboratory' | 'radiology' | 'equipment' | 'pharmaceutical' | 'international' | 'local' | 'consumables';
-export type RequisitionStatus = 'draft' | 'submitted' | 'pending_approval' | 'approved' | 'rejected' | 'cancelled' | 'converted';
+export type ProcurementDepartment =
+  | 'pharmacy'
+  | 'laboratory'
+  | 'radiology'
+  | 'facility'
+  | 'biomedical'
+  | 'general'
+  | 'admin';
+export type VendorCategory =
+  | 'medical'
+  | 'laboratory'
+  | 'radiology'
+  | 'equipment'
+  | 'pharmaceutical'
+  | 'international'
+  | 'local'
+  | 'consumables';
+export type RequisitionStatus =
+  | 'draft'
+  | 'submitted'
+  | 'pending_approval'
+  | 'approved'
+  | 'rejected'
+  | 'cancelled'
+  | 'converted';
 export type RFQStatus = 'draft' | 'open' | 'closed' | 'awarded' | 'cancelled';
-export type POStatus = 'draft' | 'pending_approval' | 'approved' | 'ordered' | 'partially_received' | 'received' | 'closed' | 'cancelled';
-export type InvoiceStatus = 'draft' | 'pending_match' | 'matched' | 'approved' | 'paid' | 'disputed' | 'cancelled';
-export type ContractStatus = 'draft' | 'active' | 'expiring' | 'expired' | 'terminated' | 'renewed';
-export type DeliveryStatus = 'scheduled' | 'in_transit' | 'delivered' | 'delayed' | 'cancelled';
+export type POStatus =
+  | 'draft'
+  | 'pending_approval'
+  | 'approved'
+  | 'ordered'
+  | 'partially_received'
+  | 'received'
+  | 'closed'
+  | 'cancelled';
+export type InvoiceStatus =
+  | 'draft'
+  | 'pending_match'
+  | 'matched'
+  | 'approved'
+  | 'paid'
+  | 'disputed'
+  | 'cancelled';
+export type ContractStatus =
+  'draft' | 'active' | 'expiring' | 'expired' | 'terminated' | 'renewed';
+export type DeliveryStatus =
+  'scheduled' | 'in_transit' | 'delivered' | 'delayed' | 'cancelled';
 export type ReceiptStatus = 'pending' | 'partial' | 'complete' | 'rejected';
-export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'delegated' | 'escalated';
-export type Incoterm = 'EXW' | 'FCA' | 'CPT' | 'CIP' | 'DAP' | 'DPU' | 'DDP' | 'FAS' | 'FOB' | 'CFR' | 'CIF';
-export type PaymentTerms = 'net_15' | 'net_30' | 'net_45' | 'net_60' | 'net_90' | 'due_on_receipt' | 'prepaid';
+export type ApprovalStatus =
+  'pending' | 'approved' | 'rejected' | 'delegated' | 'escalated';
+export type Incoterm =
+  | 'EXW'
+  | 'FCA'
+  | 'CPT'
+  | 'CIP'
+  | 'DAP'
+  | 'DPU'
+  | 'DDP'
+  | 'FAS'
+  | 'FOB'
+  | 'CFR'
+  | 'CIF';
+export type PaymentTerms =
+  | 'net_15'
+  | 'net_30'
+  | 'net_45'
+  | 'net_60'
+  | 'net_90'
+  | 'due_on_receipt'
+  | 'prepaid';
 
 export interface ProcurementFilters {
   q?: string;
@@ -237,7 +295,12 @@ export interface GoodsReceipt {
   supplierId: string;
   warehouseId: string;
   status: ReceiptStatus;
-  lineItems: { lineId: string; description: string; orderedQty: number; receivedQty: number }[];
+  lineItems: {
+    lineId: string;
+    description: string;
+    orderedQty: number;
+    receivedQty: number;
+  }[];
   receivedBy: string;
   receivedAt: string;
   notes?: string;

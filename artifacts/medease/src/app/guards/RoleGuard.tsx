@@ -20,7 +20,10 @@ export function RoleGuard({ portalId, children }: RoleGuardProps) {
     return children;
   }
 
-  trackAuthEvent('route_denied', { portal: portalId, role: activeRole ?? 'none' });
+  trackAuthEvent('route_denied', {
+    portal: portalId,
+    role: activeRole ?? 'none',
+  });
   return <Redirect to={ROUTES.forbidden} />;
 }
 
@@ -37,6 +40,9 @@ export function RoleRequiredGuard({ role, children }: RoleGateGuardProps) {
     return children;
   }
 
-  trackAuthEvent('route_denied', { requiredRole: role, role: activeRole ?? 'none' });
+  trackAuthEvent('route_denied', {
+    requiredRole: role,
+    role: activeRole ?? 'none',
+  });
   return <Redirect to={ROUTES.forbidden} />;
 }

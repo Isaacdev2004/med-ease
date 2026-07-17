@@ -31,7 +31,11 @@ export default function EmergencyProfilePage() {
         columns={3}
         metrics={[
           { title: 'Blood type', value: profile.bloodType, status: 'critical' },
-          { title: 'Allergies', value: profile.allergies.length, status: 'observation' },
+          {
+            title: 'Allergies',
+            value: profile.allergies.length,
+            status: 'observation',
+          },
           { title: 'Active conditions', value: profile.conditions.length },
         ]}
       />
@@ -62,20 +66,33 @@ export default function EmergencyProfilePage() {
 
         <PortalInfoCard title="Emergency contact">
           <PortalField label="Name" value={profile.emergencyContact.name} />
-          <PortalField label="Relation" value={profile.emergencyContact.relation} />
+          <PortalField
+            label="Relation"
+            value={profile.emergencyContact.relation}
+          />
           <PortalField label="Phone" value={profile.emergencyContact.phone} />
-          <PortalActionButton label="Notify contact" variant="outline" successTitle="Emergency contact notified" />
+          <PortalActionButton
+            label="Notify contact"
+            variant="outline"
+            successTitle="Emergency contact notified"
+          />
         </PortalInfoCard>
       </div>
 
-      <SectionHeader title="Current medications" description="Active prescriptions for emergency reference." />
+      <SectionHeader
+        title="Current medications"
+        description="Active prescriptions for emergency reference."
+      />
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Medication list</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           {profile.medications.map((med) => (
-            <div key={med} className="flex items-center justify-between border-b pb-2 last:border-0 text-sm">
+            <div
+              key={med}
+              className="flex items-center justify-between border-b pb-2 last:border-0 text-sm"
+            >
               <span>{med}</span>
               <Badge variant="outline">Active</Badge>
             </div>
@@ -85,8 +102,16 @@ export default function EmergencyProfilePage() {
 
       <Card>
         <CardContent className="pt-6 grid gap-4 sm:grid-cols-2">
-          <PortalFormField id="primary-care" label="Primary care provider" defaultValue={profile.primaryCare} />
-          <PortalFormField id="insurance" label="Insurance" defaultValue={profile.insurance} />
+          <PortalFormField
+            id="primary-care"
+            label="Primary care provider"
+            defaultValue={profile.primaryCare}
+          />
+          <PortalFormField
+            id="insurance"
+            label="Insurance"
+            defaultValue={profile.insurance}
+          />
         </CardContent>
       </Card>
     </PageShell>

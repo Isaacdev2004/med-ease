@@ -33,9 +33,13 @@ export function MedicationCard({
       >
         <div>
           <p className="font-medium">{medication.name}</p>
-          <p className="text-sm text-muted-foreground">{medication.strength} · {medication.dosageForm}</p>
+          <p className="text-sm text-muted-foreground">
+            {medication.strength} · {medication.dosageForm}
+          </p>
         </div>
-        <span className="text-xs text-muted-foreground">{medication.therapeuticClass}</span>
+        <span className="text-xs text-muted-foreground">
+          {medication.therapeuticClass}
+        </span>
       </Link>
     );
   }
@@ -50,9 +54,13 @@ export function MedicationCard({
           <div className="min-w-0 flex-1">
             <h3 className="font-semibold leading-tight">{medication.name}</h3>
             {medication.brandName ? (
-              <p className="text-sm text-muted-foreground">{medication.brandName}</p>
+              <p className="text-sm text-muted-foreground">
+                {medication.brandName}
+              </p>
             ) : null}
-            <p className="text-sm mt-1">{medication.strength} · {medication.dosageForm}</p>
+            <p className="text-sm mt-1">
+              {medication.strength} · {medication.dosageForm}
+            </p>
           </div>
         </div>
         <MedicationBadges medication={medication} />
@@ -61,14 +69,22 @@ export function MedicationCard({
         {medication.description}
       </CardContent>
       <CardFooter className="gap-2 flex-wrap">
-        <FavoriteButton medicationId={medication.id} isFavorite={isFavorite} size="sm" />
+        <FavoriteButton
+          medicationId={medication.id}
+          isFavorite={isFavorite}
+          size="sm"
+        />
         <Button size="sm" variant="outline" asChild>
           <Link href={profilePath}>
             <Eye className="mr-2 h-4 w-4" />
             View
           </Link>
         </Button>
-        <Button size="sm" variant="ghost" onClick={() => onCompare?.(medication)}>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => onCompare?.(medication)}
+        >
           <GitCompare className="mr-2 h-4 w-4" />
           Compare
         </Button>

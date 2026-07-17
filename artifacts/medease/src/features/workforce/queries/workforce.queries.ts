@@ -10,7 +10,9 @@ export const workforceQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   employees: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.employees(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.employees(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.searchEmployees(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -21,37 +23,51 @@ export const workforceQueries = {
     enabled: Boolean(employeeId),
   }),
   departments: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.departments(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.departments(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.getDepartments(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   schedules: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.calendar(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.calendar(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.getSchedules(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   attendance: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.attendance(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.attendance(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.getAttendance(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   leave: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.leave(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.leave(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.getLeaveRequests(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   training: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.training(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.training(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.getTraining(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   performance: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.performance(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.performance(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.getPerformance(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   payroll: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.payroll(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.payroll(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.getPayroll(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -82,7 +98,9 @@ export const workforceQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   onCall: (filters?: WorkforceFilters) => ({
-    queryKey: queryKeys.workforce.onCall(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.workforce.onCall(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => workforceService.getOnCall(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

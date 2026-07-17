@@ -1,7 +1,12 @@
 import type { BookAppointmentInput } from '@/services/appointments/types';
 import { getAvailableSlots } from '@/services/appointments/availability';
 
-export function validateBookingSlot(input: Pick<BookAppointmentInput, 'providerId' | 'facilityId' | 'scheduledAt'>): boolean {
+export function validateBookingSlot(
+  input: Pick<
+    BookAppointmentInput,
+    'providerId' | 'facilityId' | 'scheduledAt'
+  >,
+): boolean {
   const date = input.scheduledAt.split('T')[0]!;
   const slots = getAvailableSlots(input.providerId, input.facilityId, date);
   const scheduled = new Date(input.scheduledAt).getTime();

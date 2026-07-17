@@ -4,7 +4,12 @@ export function toFhirCarePlan(plan: CarePlan) {
   return {
     resourceType: 'CarePlan',
     id: plan.id,
-    status: plan.status === 'active' ? 'active' : plan.status === 'completed' ? 'completed' : 'on-hold',
+    status:
+      plan.status === 'active'
+        ? 'active'
+        : plan.status === 'completed'
+          ? 'completed'
+          : 'on-hold',
     intent: 'plan',
     title: plan.title,
     description: plan.description,

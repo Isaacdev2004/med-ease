@@ -16,5 +16,11 @@ export default function FacilityCarePlansPage() {
     coordination: 'Clinical Coordination',
     'ward-care': 'Ward Care Plans',
   };
-  return <CarePlansShell basePath={basePath} variant="facility" title={titles[segment] ?? 'Care Plans'} />;
+  return (
+    <CarePlansShell
+      basePath={basePath}
+      variant="facility"
+      title={titles[segment] ?? 'Care Plans'}
+    />
+  );
 }

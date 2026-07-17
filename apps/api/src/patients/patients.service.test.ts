@@ -70,7 +70,12 @@ function createService(repository: Partial<PatientsRepository>) {
 describe('patients.service.validation', () => {
   it('validateRegistrationFields rejects missing MRN', () => {
     assert.throws(
-      () => validateRegistrationFields({ mrn: ' ', fullName: 'Jane', dateOfBirth: '1990-01-01' }),
+      () =>
+        validateRegistrationFields({
+          mrn: ' ',
+          fullName: 'Jane',
+          dateOfBirth: '1990-01-01',
+        }),
       (error: unknown) => error instanceof ValidationError,
     );
   });
@@ -134,7 +139,9 @@ describe('PatientsService', () => {
           mrn: 'MRN-90002',
           fullName: 'Jane Doe',
           dateOfBirth: '1990-05-01',
-          identifiers: [{ type: 'national_id', value: 'US-123', isPrimary: true }],
+          identifiers: [
+            { type: 'national_id', value: 'US-123', isPrimary: true },
+          ],
         }),
       (error: unknown) => error instanceof ConflictError,
     );
@@ -162,7 +169,11 @@ describe('PatientsService', () => {
 
   it('archivePatient rejects already archived patients', async () => {
     const { service } = createService({
-      getPatient: async () => samplePatient({ deletedAt: '2026-07-10T00:00:00.000Z', status: 'inactive' }),
+      getPatient: async () =>
+        samplePatient({
+          deletedAt: '2026-07-10T00:00:00.000Z',
+          status: 'inactive',
+        }),
     });
 
     await assert.rejects(
@@ -183,7 +194,10 @@ describe('PatientsService', () => {
   });
 
   it('archivePatient publishes PatientArchived after successful archive', async () => {
-    const archived = samplePatient({ deletedAt: '2026-07-16T12:00:00.000Z', status: 'inactive' });
+    const archived = samplePatient({
+      deletedAt: '2026-07-16T12:00:00.000Z',
+      status: 'inactive',
+    });
     const { service, published } = createService({
       getPatient: async () => samplePatient(),
       archivePatient: async () => archived,
@@ -197,7 +211,10 @@ describe('PatientsService', () => {
     const restored = samplePatient();
     const { service, published } = createService({
       getPatient: async () =>
-        samplePatient({ deletedAt: '2026-07-10T00:00:00.000Z', status: 'inactive' }),
+        samplePatient({
+          deletedAt: '2026-07-10T00:00:00.000Z',
+          status: 'inactive',
+        }),
       restorePatient: async () => restored,
     });
 
@@ -226,10 +243,13 @@ describe('PatientsService', () => {
   });
 
   it('validateMerge returns candidates when valid', async () => {
-    const source = samplePatient({ patientId: '01930000-0000-7000-8000-000000000302' });
+    const source = samplePatient({
+      patientId: '01930000-0000-7000-8000-000000000302',
+    });
     const target = samplePatient();
     const { service } = createService({
-      getPatient: async (id: string) => (id === source.patientId ? source : target),
+      getPatient: async (id: string) =>
+        id === source.patientId ? source : target,
     });
 
     const result = await service.validateMerge({

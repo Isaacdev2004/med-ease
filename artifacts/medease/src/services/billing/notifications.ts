@@ -10,7 +10,10 @@ export type BillingNotificationType =
   | 'balance_reminder'
   | 'receipt_available';
 
-export function buildBillingNotification(type: BillingNotificationType, context: Record<string, string>) {
+export function buildBillingNotification(
+  type: BillingNotificationType,
+  context: Record<string, string>,
+) {
   const templates: Record<BillingNotificationType, string> = {
     invoice_created: `Invoice ${context.invoiceNumber} has been created. Amount due: ${context.amount}.`,
     payment_received: `Payment of ${context.amount} received for invoice ${context.invoiceNumber}.`,
@@ -23,5 +26,10 @@ export function buildBillingNotification(type: BillingNotificationType, context:
     balance_reminder: `Outstanding balance reminder: ${context.amount} due by ${context.dueDate}.`,
     receipt_available: `Receipt ${context.receiptNumber} is available for download.`,
   };
-  return { type, message: templates[type], context, createdAt: new Date().toISOString() };
+  return {
+    type,
+    message: templates[type],
+    context,
+    createdAt: new Date().toISOString(),
+  };
 }

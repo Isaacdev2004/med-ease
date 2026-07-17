@@ -14,7 +14,10 @@ export function useTelemedicineContext() {
   });
 }
 
-export function useTelemedicineDashboard(patientId?: string, clinicianId?: string) {
+export function useTelemedicineDashboard(
+  patientId?: string,
+  clinicianId?: string,
+) {
   return useQuery(telemedicineQueries.dashboard(patientId, clinicianId));
 }
 

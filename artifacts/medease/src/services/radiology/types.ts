@@ -44,7 +44,8 @@ export type RadiologyCategory =
   | 'follow_up'
   | 'research';
 
-export type ReportStatus = 'draft' | 'preliminary' | 'final' | 'amended' | 'cancelled';
+export type ReportStatus =
+  'draft' | 'preliminary' | 'final' | 'amended' | 'cancelled';
 
 export type BillingStatus = 'pending' | 'submitted' | 'paid' | 'denied';
 

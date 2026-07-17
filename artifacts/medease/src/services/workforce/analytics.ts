@@ -1,5 +1,15 @@
-import { MOCK_ATTENDANCE, MOCK_DEPARTMENTS, MOCK_EMPLOYEES, MOCK_PAYROLL, MOCK_SHIFTS, MOCK_TRAINING } from '@/services/workforce/mock-data';
-import type { CoverageMetrics, WorkforceAnalytics } from '@/services/workforce/types';
+import {
+  MOCK_ATTENDANCE,
+  MOCK_DEPARTMENTS,
+  MOCK_EMPLOYEES,
+  MOCK_PAYROLL,
+  MOCK_SHIFTS,
+  MOCK_TRAINING,
+} from '@/services/workforce/mock-data';
+import type {
+  CoverageMetrics,
+  WorkforceAnalytics,
+} from '@/services/workforce/types';
 
 export function computeWorkforceAnalytics(): WorkforceAnalytics {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
@@ -16,17 +26,29 @@ export function computeWorkforceAnalytics(): WorkforceAnalytics {
   const absent = MOCK_ATTENDANCE.filter((a) => a.status === 'absent').length;
   const absenteeismTrend = months.map((label, i) => ({
     label,
-    value: Math.round((absent / MOCK_ATTENDANCE.length) * 100 * (0.8 + i * 0.04)),
+    value: Math.round(
+      (absent / MOCK_ATTENDANCE.length) * 100 * (0.8 + i * 0.04),
+    ),
   }));
 
-  const trainingDone = MOCK_TRAINING.filter((t) => t.status === 'completed').length;
+  const trainingDone = MOCK_TRAINING.filter(
+    (t) => t.status === 'completed',
+  ).length;
   const trainingCompliance = [
     { label: 'Completed', value: trainingDone },
-    { label: 'In Progress', value: MOCK_TRAINING.filter((t) => t.status === 'in_progress').length },
-    { label: 'Overdue', value: MOCK_TRAINING.filter((t) => t.status === 'overdue').length },
+    {
+      label: 'In Progress',
+      value: MOCK_TRAINING.filter((t) => t.status === 'in_progress').length,
+    },
+    {
+      label: 'Overdue',
+      value: MOCK_TRAINING.filter((t) => t.status === 'overdue').length,
+    },
   ];
 
-  const expiring = MOCK_EMPLOYEES.flatMap((e) => e.certifications).filter((c) => c.status === 'expiring').length;
+  const expiring = MOCK_EMPLOYEES.flatMap((e) => e.certifications).filter(
+    (c) => c.status === 'expiring',
+  ).length;
   const totalCerts = MOCK_EMPLOYEES.flatMap((e) => e.certifications).length;
 
   return {
@@ -34,7 +56,9 @@ export function computeWorkforceAnalytics(): WorkforceAnalytics {
     coverageByDepartment,
     absenteeismTrend,
     trainingCompliance,
-    credentialCompliance: totalCerts ? Math.round(((totalCerts - expiring) / totalCerts) * 100) : 100,
+    credentialCompliance: totalCerts
+      ? Math.round(((totalCerts - expiring) / totalCerts) * 100)
+      : 100,
     overtimeHours: MOCK_SHIFTS.filter((s) => s.isOvertime).length * 8,
     turnoverRate: 8.5,
     burnoutIndicator: 32,
@@ -44,9 +68,13 @@ export function computeWorkforceAnalytics(): WorkforceAnalytics {
 }
 
 export function computeCoverage(departmentId?: string): CoverageMetrics[] {
-  const depts = departmentId ? MOCK_DEPARTMENTS.filter((d) => d.departmentId === departmentId) : MOCK_DEPARTMENTS.slice(0, 12);
+  const depts = departmentId
+    ? MOCK_DEPARTMENTS.filter((d) => d.departmentId === departmentId)
+    : MOCK_DEPARTMENTS.slice(0, 12);
   return depts.map((d) => {
-    const scheduled = MOCK_SHIFTS.filter((s) => s.departmentId === d.departmentId && s.status !== 'cancelled').length;
+    const scheduled = MOCK_SHIFTS.filter(
+      (s) => s.departmentId === d.departmentId && s.status !== 'cancelled',
+    ).length;
     const required = d.staffCount * 5;
     return {
       departmentId: d.departmentId,
@@ -55,7 +83,9 @@ export function computeCoverage(departmentId?: string): CoverageMetrics[] {
       scheduled,
       coveragePercent: Math.min(100, Math.round((scheduled / required) * 100)),
       gaps: Math.max(0, required - scheduled),
-      overtimeShifts: MOCK_SHIFTS.filter((s) => s.departmentId === d.departmentId && s.isOvertime).length,
+      overtimeShifts: MOCK_SHIFTS.filter(
+        (s) => s.departmentId === d.departmentId && s.isOvertime,
+      ).length,
     };
   });
 }

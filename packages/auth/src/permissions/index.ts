@@ -20,7 +20,11 @@ export {
   resolveEffectivePermissions,
 } from './engine';
 
-export { ROLE_HIERARCHY, ROLE_PERMISSIONS, getPermissionsForRole } from './role-permissions';
+export {
+  ROLE_HIERARCHY,
+  ROLE_PERMISSIONS,
+  getPermissionsForRole,
+} from './role-permissions';
 
 export type {
   AbacPolicy,

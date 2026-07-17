@@ -1,7 +1,9 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const recordsPage = () => import('@/features/patient-records/pages/PatientRecordsPage');
-const clinicianPage = () => import('@/features/patient-records/pages/ClinicianPatientRecordPage');
+const recordsPage = () =>
+  import('@/features/patient-records/pages/PatientRecordsPage');
+const clinicianPage = () =>
+  import('@/features/patient-records/pages/ClinicianPatientRecordPage');
 
 const SECTIONS = [
   'profile',
@@ -51,7 +53,9 @@ export function createPatientRecordsRoutes(options: {
   ];
 }
 
-export function createClinicianPatientRecordRoute(analyticsPrefix: string): RouteDefinition {
+export function createClinicianPatientRecordRoute(
+  analyticsPrefix: string,
+): RouteDefinition {
   return {
     path: '/patient/:patientId',
     title: 'Patient Health Record',
@@ -62,7 +66,9 @@ export function createClinicianPatientRecordRoute(analyticsPrefix: string): Rout
   };
 }
 
-export function createClinicianPatientRecordRoutes(analyticsPrefix: string): RouteDefinition[] {
+export function createClinicianPatientRecordRoutes(
+  analyticsPrefix: string,
+): RouteDefinition[] {
   const sectionRoutes: RouteDefinition[] = SECTIONS.map((section) => ({
     path: `/patient/:patientId/${section}`,
     title: `Patient Health Record — ${section}`,

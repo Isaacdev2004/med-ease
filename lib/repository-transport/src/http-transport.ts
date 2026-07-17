@@ -2,14 +2,25 @@ import { customFetch } from '@workspace/api-client-react';
 
 import { mapApiError } from './map-api-error.js';
 import { appendQuery } from './query.js';
-import type { RepositoryTransport, TransportRequestOptions } from './transport.js';
+import type {
+  RepositoryTransport,
+  TransportRequestOptions,
+} from './transport.js';
 
-function serializeBody(body: unknown, headers: HeadersInit | undefined): { body?: BodyInit; headers?: HeadersInit } {
+function serializeBody(
+  body: unknown,
+  headers: HeadersInit | undefined,
+): { body?: BodyInit; headers?: HeadersInit } {
   if (body === undefined || body === null) {
     return { headers };
   }
 
-  if (typeof body === 'string' || body instanceof FormData || body instanceof Blob || body instanceof URLSearchParams) {
+  if (
+    typeof body === 'string' ||
+    body instanceof FormData ||
+    body instanceof Blob ||
+    body instanceof URLSearchParams
+  ) {
     return { body: body as BodyInit, headers };
   }
 
@@ -26,7 +37,10 @@ export class HttpTransport implements RepositoryTransport {
     return this.request<T>(url, 'GET', options);
   }
 
-  async post<T>(url: string, options: TransportRequestOptions = {}): Promise<T> {
+  async post<T>(
+    url: string,
+    options: TransportRequestOptions = {},
+  ): Promise<T> {
     return this.request<T>(url, 'POST', options);
   }
 
@@ -34,15 +48,25 @@ export class HttpTransport implements RepositoryTransport {
     return this.request<T>(url, 'PUT', options);
   }
 
-  async patch<T>(url: string, options: TransportRequestOptions = {}): Promise<T> {
+  async patch<T>(
+    url: string,
+    options: TransportRequestOptions = {},
+  ): Promise<T> {
     return this.request<T>(url, 'PATCH', options);
   }
 
-  async delete<T>(url: string, options: TransportRequestOptions = {}): Promise<T> {
+  async delete<T>(
+    url: string,
+    options: TransportRequestOptions = {},
+  ): Promise<T> {
     return this.request<T>(url, 'DELETE', options);
   }
 
-  private async request<T>(url: string, method: string, options: TransportRequestOptions): Promise<T> {
+  private async request<T>(
+    url: string,
+    method: string,
+    options: TransportRequestOptions,
+  ): Promise<T> {
     const { query, body, headers, ...init } = options;
     const targetUrl = appendQuery(url, query);
     const serialized = serializeBody(body, headers);

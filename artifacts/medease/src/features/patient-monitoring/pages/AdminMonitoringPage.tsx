@@ -16,13 +16,26 @@ export default function AdminMonitoringPage() {
   const segment = resolveSegment(location);
   const basePath = location.includes('/monitoring/analytics')
     ? resolveModuleBasePath(location, 'monitoring/analytics')
-    : resolveModuleBasePath(location, segment === 'monitoring' && location.includes('/analytics') ? 'monitoring/analytics' : segment);
+    : resolveModuleBasePath(
+        location,
+        segment === 'monitoring' && location.includes('/analytics')
+          ? 'monitoring/analytics'
+          : segment,
+      );
   const titles: Record<string, string> = {
     monitoring: 'Population Monitoring',
     rpm: 'RPM Program Administration',
     devices: 'Device Fleet Management',
     'monitoring/analytics': 'Monitoring Analytics',
   };
-  const titleKey = location.includes('/monitoring/analytics') ? 'monitoring/analytics' : segment;
-  return <MonitoringShell basePath={basePath} variant="admin" title={titles[titleKey] ?? 'Monitoring'} />;
+  const titleKey = location.includes('/monitoring/analytics')
+    ? 'monitoring/analytics'
+    : segment;
+  return (
+    <MonitoringShell
+      basePath={basePath}
+      variant="admin"
+      title={titles[titleKey] ?? 'Monitoring'}
+    />
+  );
 }

@@ -33,7 +33,9 @@ function getVisiblePages(page: number, totalPages: number) {
   }
 
   const pages = new Set<number>([1, totalPages, page, page - 1, page + 1]);
-  return [...pages].filter((value) => value >= 1 && value <= totalPages).sort((a, b) => a - b);
+  return [...pages]
+    .filter((value) => value >= 1 && value <= totalPages)
+    .sort((a, b) => a - b);
 }
 
 /** Server-pagination-ready footer with page numbers, rows per page, and totals. */
@@ -94,12 +96,15 @@ export function DataPagination({
                 event.preventDefault();
                 if (safePage > 1) onPageChange(safePage - 1);
               }}
-              className={safePage <= 1 ? 'pointer-events-none opacity-50' : undefined}
+              className={
+                safePage <= 1 ? 'pointer-events-none opacity-50' : undefined
+              }
             />
           </PaginationItem>
           {visiblePages.map((pageNumber, index) => {
             const previous = visiblePages[index - 1];
-            const showEllipsis = previous !== undefined && pageNumber - previous > 1;
+            const showEllipsis =
+              previous !== undefined && pageNumber - previous > 1;
 
             return (
               <span key={pageNumber} className="contents">
@@ -130,7 +135,11 @@ export function DataPagination({
                 event.preventDefault();
                 if (safePage < totalPages) onPageChange(safePage + 1);
               }}
-              className={safePage >= totalPages ? 'pointer-events-none opacity-50' : undefined}
+              className={
+                safePage >= totalPages
+                  ? 'pointer-events-none opacity-50'
+                  : undefined
+              }
             />
           </PaginationItem>
         </PaginationContent>

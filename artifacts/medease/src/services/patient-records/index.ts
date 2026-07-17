@@ -1,6 +1,13 @@
 export { patientRecordOfflineQueue } from '@/services/patient-records/offline-sync';
-export { toFhirObservationSummary, toFhirPatientReference } from '@/services/patient-records/mapper';
-export { MOCK_PATIENT_RECORDS, generatePatientRecord, getPatientIdForUser } from '@/services/patient-records/mock-data';
+export {
+  toFhirObservationSummary,
+  toFhirPatientReference,
+} from '@/services/patient-records/mapper';
+export {
+  MOCK_PATIENT_RECORDS,
+  generatePatientRecord,
+  getPatientIdForUser,
+} from '@/services/patient-records/mock-data';
 export {
   getPatientRecordBasePath,
   patientRecordService,

@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 import type { JwtAccessPayload } from '@medease/auth';
-import { tenantContextFromJwt, type RequestContext } from '@medease/observability';
+import {
+  tenantContextFromJwt,
+  type RequestContext,
+} from '@medease/observability';
 
 import { RequestContextService } from './request-context.service';
 
@@ -11,9 +14,12 @@ export class TenantResolver {
 
   resolveFromJwt(payload: JwtAccessPayload): Partial<RequestContext> {
     const current = this.requestContext.get();
-    return tenantContextFromJwt(payload, current
-      ? { requestId: current.requestId, correlationId: current.correlationId }
-      : undefined);
+    return tenantContextFromJwt(
+      payload,
+      current
+        ? { requestId: current.requestId, correlationId: current.correlationId }
+        : undefined,
+    );
   }
 
   applyFromJwt(payload: JwtAccessPayload): RequestContext {

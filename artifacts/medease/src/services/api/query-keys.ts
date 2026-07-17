@@ -30,11 +30,27 @@ export const queryKeys = {
     past: (filters?: Record<string, unknown>) =>
       [...queryKeys.appointments.all, 'past', filters ?? {}] as const,
     calendar: (filters?: Record<string, unknown>, mode?: string) =>
-      [...queryKeys.appointments.all, 'calendar', mode ?? 'month', filters ?? {}] as const,
+      [
+        ...queryKeys.appointments.all,
+        'calendar',
+        mode ?? 'month',
+        filters ?? {},
+      ] as const,
     availability: (providerId: string, facilityId: string, date: string) =>
-      [...queryKeys.appointments.all, 'availability', providerId, facilityId, date] as const,
+      [
+        ...queryKeys.appointments.all,
+        'availability',
+        providerId,
+        facilityId,
+        date,
+      ] as const,
     facilitySchedule: (facilityId: string, date: string) =>
-      [...queryKeys.appointments.all, 'facility-schedule', facilityId, date] as const,
+      [
+        ...queryKeys.appointments.all,
+        'facility-schedule',
+        facilityId,
+        date,
+      ] as const,
     waitlist: () => [...queryKeys.appointments.all, 'waitlist'] as const,
     queue: (filters?: Record<string, unknown>) =>
       [...queryKeys.appointments.all, 'queue', filters ?? {}] as const,
@@ -43,7 +59,13 @@ export const queryKeys = {
     analytics: (filters?: Record<string, unknown>) =>
       [...queryKeys.appointments.all, 'analytics', filters ?? {}] as const,
     slots: (providerId: string, facilityId: string, date: string) =>
-      [...queryKeys.appointments.all, 'slots', providerId, facilityId, date] as const,
+      [
+        ...queryKeys.appointments.all,
+        'slots',
+        providerId,
+        facilityId,
+        date,
+      ] as const,
   },
   medications: {
     all: ['medications'] as const,
@@ -80,17 +102,35 @@ export const queryKeys = {
     analytics: (filters?: Record<string, unknown>) =>
       [...queryKeys.medications.all, 'analytics', filters ?? {}] as const,
     calendar: (patientId: string, month?: string) =>
-      [...queryKeys.medications.all, 'calendar', patientId, month ?? 'current'] as const,
+      [
+        ...queryKeys.medications.all,
+        'calendar',
+        patientId,
+        month ?? 'current',
+      ] as const,
     pharmacyQueue: (pharmacyId?: string) =>
-      [...queryKeys.medications.all, 'pharmacy-queue', pharmacyId ?? 'all'] as const,
+      [
+        ...queryKeys.medications.all,
+        'pharmacy-queue',
+        pharmacyId ?? 'all',
+      ] as const,
     administration: (patientId?: string) =>
-      [...queryKeys.medications.all, 'administration', patientId ?? 'all'] as const,
+      [
+        ...queryKeys.medications.all,
+        'administration',
+        patientId ?? 'all',
+      ] as const,
     education: (medicationId: string) =>
       [...queryKeys.medications.all, 'education', medicationId] as const,
     favorites: (patientId?: string) =>
       [...queryKeys.medications.all, 'favorites', patientId ?? 'all'] as const,
     search: (query: string, patientId?: string) =>
-      [...queryKeys.medications.all, 'search', query, patientId ?? 'all'] as const,
+      [
+        ...queryKeys.medications.all,
+        'search',
+        query,
+        patientId ?? 'all',
+      ] as const,
     inventory: () => [...queryKeys.medications.all, 'inventory'] as const,
   },
   carePlans: {
@@ -102,9 +142,19 @@ export const queryKeys = {
     patientPlan: (patientId: string) =>
       [...queryKeys.carePlans.all, 'patient-plan', patientId] as const,
     goals: (patientId?: string, carePlanId?: string) =>
-      [...queryKeys.carePlans.all, 'goals', patientId ?? 'all', carePlanId ?? 'all'] as const,
+      [
+        ...queryKeys.carePlans.all,
+        'goals',
+        patientId ?? 'all',
+        carePlanId ?? 'all',
+      ] as const,
     tasks: (patientId?: string, carePlanId?: string) =>
-      [...queryKeys.carePlans.all, 'tasks', patientId ?? 'all', carePlanId ?? 'all'] as const,
+      [
+        ...queryKeys.carePlans.all,
+        'tasks',
+        patientId ?? 'all',
+        carePlanId ?? 'all',
+      ] as const,
     todayTasks: (patientId: string) =>
       [...queryKeys.carePlans.all, 'today-tasks', patientId] as const,
     timeline: (patientId: string) =>
@@ -112,9 +162,15 @@ export const queryKeys = {
     team: (carePlanId: string) =>
       [...queryKeys.carePlans.all, 'team', carePlanId] as const,
     risks: (patientId: string, carePlanId?: string) =>
-      [...queryKeys.carePlans.all, 'risks', patientId, carePlanId ?? 'all'] as const,
+      [
+        ...queryKeys.carePlans.all,
+        'risks',
+        patientId,
+        carePlanId ?? 'all',
+      ] as const,
     pathways: () => [...queryKeys.carePlans.all, 'pathways'] as const,
-    pathway: (id: string) => [...queryKeys.carePlans.all, 'pathway', id] as const,
+    pathway: (id: string) =>
+      [...queryKeys.carePlans.all, 'pathway', id] as const,
     dashboard: (patientId: string) =>
       [...queryKeys.carePlans.all, 'dashboard', patientId] as const,
     progress: (patientId: string) =>
@@ -139,7 +195,8 @@ export const queryKeys = {
       [...queryKeys.laboratory.all, 'results', filters ?? {}] as const,
     allResults: (filters?: Record<string, unknown>) =>
       [...queryKeys.laboratory.all, 'all-results', filters ?? {}] as const,
-    result: (id: string) => [...queryKeys.laboratory.all, 'result', id] as const,
+    result: (id: string) =>
+      [...queryKeys.laboratory.all, 'result', id] as const,
     patientLab: (patientId: string) =>
       [...queryKeys.laboratory.all, 'patient-lab', patientId] as const,
     timeline: (patientId: string) =>
@@ -151,26 +208,46 @@ export const queryKeys = {
     critical: (patientId?: string) =>
       [...queryKeys.laboratory.all, 'critical', patientId ?? 'all'] as const,
     specimens: (orderId?: string, patientId?: string) =>
-      [...queryKeys.laboratory.all, 'specimens', orderId ?? 'all', patientId ?? 'all'] as const,
+      [
+        ...queryKeys.laboratory.all,
+        'specimens',
+        orderId ?? 'all',
+        patientId ?? 'all',
+      ] as const,
     analytics: () => [...queryKeys.laboratory.all, 'analytics'] as const,
     search: (query: string, patientId?: string) =>
-      [...queryKeys.laboratory.all, 'search', query, patientId ?? 'all'] as const,
+      [
+        ...queryKeys.laboratory.all,
+        'search',
+        query,
+        patientId ?? 'all',
+      ] as const,
     catalog: () => [...queryKeys.laboratory.all, 'catalog'] as const,
-    referenceRanges: () => [...queryKeys.laboratory.all, 'reference-ranges'] as const,
+    referenceRanges: () =>
+      [...queryKeys.laboratory.all, 'reference-ranges'] as const,
     pending: (patientId?: string) =>
       [...queryKeys.laboratory.all, 'pending', patientId ?? 'all'] as const,
     quality: () => [...queryKeys.laboratory.all, 'quality'] as const,
     favorites: (patientId?: string) =>
       [...queryKeys.laboratory.all, 'favorites', patientId ?? 'all'] as const,
     microbiology: (patientId?: string) =>
-      [...queryKeys.laboratory.all, 'microbiology', patientId ?? 'all'] as const,
+      [
+        ...queryKeys.laboratory.all,
+        'microbiology',
+        patientId ?? 'all',
+      ] as const,
     pathology: (patientId?: string) =>
       [...queryKeys.laboratory.all, 'pathology', patientId ?? 'all'] as const,
     bloodBank: (patientId?: string) =>
       [...queryKeys.laboratory.all, 'blood-bank', patientId ?? 'all'] as const,
     instruments: () => [...queryKeys.laboratory.all, 'instruments'] as const,
     trendAnalysis: (patientId: string, testId?: string) =>
-      [...queryKeys.laboratory.all, 'trend-analysis', patientId, testId ?? 'all'] as const,
+      [
+        ...queryKeys.laboratory.all,
+        'trend-analysis',
+        patientId,
+        testId ?? 'all',
+      ] as const,
   },
   radiology: {
     all: ['radiology'] as const,
@@ -191,7 +268,8 @@ export const queryKeys = {
     critical: (patientId?: string) =>
       [...queryKeys.radiology.all, 'critical', patientId ?? 'all'] as const,
     pending: () => [...queryKeys.radiology.all, 'pending'] as const,
-    viewer: (studyId: string) => [...queryKeys.radiology.all, 'viewer', studyId] as const,
+    viewer: (studyId: string) =>
+      [...queryKeys.radiology.all, 'viewer', studyId] as const,
     annotations: (studyId: string) =>
       [...queryKeys.radiology.all, 'annotations', studyId] as const,
     measurements: (studyId: string) =>
@@ -203,16 +281,34 @@ export const queryKeys = {
       [...queryKeys.radiology.all, 'favorites', patientId ?? 'all'] as const,
     devices: () => [...queryKeys.radiology.all, 'devices'] as const,
     radiologistDashboard: (id?: string) =>
-      [...queryKeys.radiology.all, 'radiologist-dashboard', id ?? 'all'] as const,
+      [
+        ...queryKeys.radiology.all,
+        'radiologist-dashboard',
+        id ?? 'all',
+      ] as const,
     facilityImaging: (facilityId?: string) =>
-      [...queryKeys.radiology.all, 'facility-imaging', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.radiology.all,
+        'facility-imaging',
+        facilityId ?? 'all',
+      ] as const,
     search: (query: string, patientId?: string) =>
-      [...queryKeys.radiology.all, 'search', query, patientId ?? 'all'] as const,
+      [
+        ...queryKeys.radiology.all,
+        'search',
+        query,
+        patientId ?? 'all',
+      ] as const,
   },
   telemedicine: {
     all: ['telemedicine'] as const,
     dashboard: (patientId?: string, clinicianId?: string) =>
-      [...queryKeys.telemedicine.all, 'dashboard', patientId ?? 'all', clinicianId ?? 'all'] as const,
+      [
+        ...queryKeys.telemedicine.all,
+        'dashboard',
+        patientId ?? 'all',
+        clinicianId ?? 'all',
+      ] as const,
     sessions: (filters?: Record<string, unknown>) =>
       [...queryKeys.telemedicine.all, 'sessions', filters ?? {}] as const,
     session: (sessionId: string) =>
@@ -222,9 +318,17 @@ export const queryKeys = {
     messages: (sessionId: string) =>
       [...queryKeys.telemedicine.all, 'messages', sessionId] as const,
     waitingRoom: (sessionId?: string) =>
-      [...queryKeys.telemedicine.all, 'waiting-room', sessionId ?? 'all'] as const,
+      [
+        ...queryKeys.telemedicine.all,
+        'waiting-room',
+        sessionId ?? 'all',
+      ] as const,
     recordings: (sessionId?: string) =>
-      [...queryKeys.telemedicine.all, 'recordings', sessionId ?? 'all'] as const,
+      [
+        ...queryKeys.telemedicine.all,
+        'recordings',
+        sessionId ?? 'all',
+      ] as const,
     clinicalNotes: (sessionId: string) =>
       [...queryKeys.telemedicine.all, 'clinical-notes', sessionId] as const,
     transcript: (sessionId: string) =>
@@ -233,12 +337,21 @@ export const queryKeys = {
     providerAvailability: () =>
       [...queryKeys.telemedicine.all, 'provider-availability'] as const,
     deviceCheck: (sessionId?: string) =>
-      [...queryKeys.telemedicine.all, 'device-check', sessionId ?? 'all'] as const,
+      [
+        ...queryKeys.telemedicine.all,
+        'device-check',
+        sessionId ?? 'all',
+      ] as const,
     bandwidth: () => [...queryKeys.telemedicine.all, 'bandwidth'] as const,
     timeline: (sessionId: string) =>
       [...queryKeys.telemedicine.all, 'timeline', sessionId] as const,
     search: (query: string, patientId?: string) =>
-      [...queryKeys.telemedicine.all, 'search', query, patientId ?? 'all'] as const,
+      [
+        ...queryKeys.telemedicine.all,
+        'search',
+        query,
+        patientId ?? 'all',
+      ] as const,
     attachments: (sessionId: string) =>
       [...queryKeys.telemedicine.all, 'attachments', sessionId] as const,
     whiteboard: (sessionId: string) =>
@@ -249,7 +362,13 @@ export const queryKeys = {
   billing: {
     all: ['billing'] as const,
     dashboard: (patientId?: string, providerId?: string, facilityId?: string) =>
-      [...queryKeys.billing.all, 'dashboard', patientId ?? 'all', providerId ?? 'all', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.billing.all,
+        'dashboard',
+        patientId ?? 'all',
+        providerId ?? 'all',
+        facilityId ?? 'all',
+      ] as const,
     invoices: (filters?: Record<string, unknown>) =>
       [...queryKeys.billing.all, 'invoices', filters ?? {}] as const,
     invoice: (invoiceId: string) =>
@@ -279,7 +398,12 @@ export const queryKeys = {
   inventory: {
     all: ['inventory'] as const,
     dashboard: (department?: string, warehouseId?: string) =>
-      [...queryKeys.inventory.all, 'dashboard', department ?? 'all', warehouseId ?? 'all'] as const,
+      [
+        ...queryKeys.inventory.all,
+        'dashboard',
+        department ?? 'all',
+        warehouseId ?? 'all',
+      ] as const,
     list: (filters?: Record<string, unknown>) =>
       [...queryKeys.inventory.all, 'list', filters ?? {}] as const,
     item: (inventoryId: string) =>
@@ -302,7 +426,12 @@ export const queryKeys = {
     barcode: (code: string) =>
       [...queryKeys.inventory.all, 'barcode', code] as const,
     search: (query: string, department?: string) =>
-      [...queryKeys.inventory.all, 'search', query, department ?? 'all'] as const,
+      [
+        ...queryKeys.inventory.all,
+        'search',
+        query,
+        department ?? 'all',
+      ] as const,
     favorites: (userId?: string) =>
       [...queryKeys.inventory.all, 'favorites', userId ?? 'all'] as const,
   },
@@ -317,7 +446,11 @@ export const queryKeys = {
     purchaseOrders: (filters?: Record<string, unknown>) =>
       [...queryKeys.procurement.all, 'purchase-orders', filters ?? {}] as const,
     purchaseOrder: (purchaseOrderId: string) =>
-      [...queryKeys.procurement.all, 'purchase-order', purchaseOrderId] as const,
+      [
+        ...queryKeys.procurement.all,
+        'purchase-order',
+        purchaseOrderId,
+      ] as const,
     rfqs: (filters?: Record<string, unknown>) =>
       [...queryKeys.procurement.all, 'rfqs', filters ?? {}] as const,
     suppliers: (filters?: Record<string, unknown>) =>
@@ -339,19 +472,35 @@ export const queryKeys = {
     analytics: () => [...queryKeys.procurement.all, 'analytics'] as const,
     forecast: (department?: string) =>
       [...queryKeys.procurement.all, 'forecast', department ?? 'all'] as const,
-    approvalQueue: () => [...queryKeys.procurement.all, 'approval-queue'] as const,
-    supplierPerformance: () => [...queryKeys.procurement.all, 'supplier-performance'] as const,
+    approvalQueue: () =>
+      [...queryKeys.procurement.all, 'approval-queue'] as const,
+    supplierPerformance: () =>
+      [...queryKeys.procurement.all, 'supplier-performance'] as const,
     spendAnalysis: (department?: string) =>
-      [...queryKeys.procurement.all, 'spend-analysis', department ?? 'all'] as const,
+      [
+        ...queryKeys.procurement.all,
+        'spend-analysis',
+        department ?? 'all',
+      ] as const,
     favorites: (userId?: string) =>
       [...queryKeys.procurement.all, 'favorites', userId ?? 'all'] as const,
     search: (query: string, department?: string) =>
-      [...queryKeys.procurement.all, 'search', query, department ?? 'all'] as const,
+      [
+        ...queryKeys.procurement.all,
+        'search',
+        query,
+        department ?? 'all',
+      ] as const,
   },
   workforce: {
     all: ['workforce'] as const,
     dashboard: (facilityId?: string, departmentId?: string) =>
-      [...queryKeys.workforce.all, 'dashboard', facilityId ?? 'all', departmentId ?? 'all'] as const,
+      [
+        ...queryKeys.workforce.all,
+        'dashboard',
+        facilityId ?? 'all',
+        departmentId ?? 'all',
+      ] as const,
     employees: (filters?: Record<string, unknown>) =>
       [...queryKeys.workforce.all, 'employees', filters ?? {}] as const,
     employee: (employeeId: string) =>
@@ -381,7 +530,11 @@ export const queryKeys = {
     coverage: (departmentId?: string) =>
       [...queryKeys.workforce.all, 'coverage', departmentId ?? 'all'] as const,
     availability: (employeeId?: string) =>
-      [...queryKeys.workforce.all, 'availability', employeeId ?? 'all'] as const,
+      [
+        ...queryKeys.workforce.all,
+        'availability',
+        employeeId ?? 'all',
+      ] as const,
     onCall: (filters?: Record<string, unknown>) =>
       [...queryKeys.workforce.all, 'onCall', filters ?? {}] as const,
     payroll: (filters?: Record<string, unknown>) =>
@@ -389,7 +542,12 @@ export const queryKeys = {
     favorites: (userId?: string) =>
       [...queryKeys.workforce.all, 'favorites', userId ?? 'all'] as const,
     search: (query: string, facilityId?: string) =>
-      [...queryKeys.workforce.all, 'search', query, facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.workforce.all,
+        'search',
+        query,
+        facilityId ?? 'all',
+      ] as const,
   },
   monitoring: {
     all: ['patient-monitoring'] as const,
@@ -402,11 +560,21 @@ export const queryKeys = {
     observation: (id: string) =>
       [...queryKeys.monitoring.all, 'observation', id] as const,
     vitals: (patientId: string, filters?: Record<string, unknown>) =>
-      [...queryKeys.monitoring.all, 'vitals', patientId, filters ?? {}] as const,
+      [
+        ...queryKeys.monitoring.all,
+        'vitals',
+        patientId,
+        filters ?? {},
+      ] as const,
     timeline: (patientId: string) =>
       [...queryKeys.monitoring.all, 'timeline', patientId] as const,
     alerts: (patientId?: string, filters?: Record<string, unknown>) =>
-      [...queryKeys.monitoring.all, 'alerts', patientId ?? 'all', filters ?? {}] as const,
+      [
+        ...queryKeys.monitoring.all,
+        'alerts',
+        patientId ?? 'all',
+        filters ?? {},
+      ] as const,
     devices: (patientId?: string) =>
       [...queryKeys.monitoring.all, 'devices', patientId ?? 'all'] as const,
     device: (id: string) =>
@@ -421,14 +589,25 @@ export const queryKeys = {
     favorites: (patientId: string) =>
       [...queryKeys.monitoring.all, 'favorites', patientId] as const,
     search: (query: string, patientId?: string) =>
-      [...queryKeys.monitoring.all, 'search', query, patientId ?? 'all'] as const,
+      [
+        ...queryKeys.monitoring.all,
+        'search',
+        query,
+        patientId ?? 'all',
+      ] as const,
     trendAnalysis: (patientId: string, metric?: string) =>
-      [...queryKeys.monitoring.all, 'trendAnalysis', patientId, metric ?? 'all'] as const,
+      [
+        ...queryKeys.monitoring.all,
+        'trendAnalysis',
+        patientId,
+        metric ?? 'all',
+      ] as const,
   },
   facilities: {
     all: ['facilities'] as const,
     list: () => [...queryKeys.facilities.all, 'list'] as const,
-    detail: (id: string) => [...queryKeys.facilities.all, 'detail', id] as const,
+    detail: (id: string) =>
+      [...queryKeys.facilities.all, 'detail', id] as const,
     beds: (facilityId: string) =>
       [...queryKeys.facilities.all, 'beds', facilityId] as const,
     dashboard: (facilityId?: string) =>
@@ -472,7 +651,12 @@ export const queryKeys = {
     favorites: (userId?: string) =>
       [...queryKeys.facilities.all, 'favorites', userId ?? 'all'] as const,
     search: (query: string, facilityId?: string) =>
-      [...queryKeys.facilities.all, 'search', query, facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.facilities.all,
+        'search',
+        query,
+        facilityId ?? 'all',
+      ] as const,
   },
   finance: {
     all: ['finance'] as const,
@@ -497,13 +681,22 @@ export const queryKeys = {
     budgets: (filters?: Record<string, unknown>) =>
       [...queryKeys.finance.all, 'budgets', filters ?? {}] as const,
     budgetVariance: (facilityId?: string) =>
-      [...queryKeys.finance.all, 'budget-variance', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.finance.all,
+        'budget-variance',
+        facilityId ?? 'all',
+      ] as const,
     assets: (filters?: Record<string, unknown>) =>
       [...queryKeys.finance.all, 'assets', filters ?? {}] as const,
     depreciation: (filters?: Record<string, unknown>) =>
       [...queryKeys.finance.all, 'depreciation', filters ?? {}] as const,
     financialStatements: (facilityId?: string, asOfDate?: string) =>
-      [...queryKeys.finance.all, 'financial-statements', facilityId ?? 'all', asOfDate ?? 'latest'] as const,
+      [
+        ...queryKeys.finance.all,
+        'financial-statements',
+        facilityId ?? 'all',
+        asOfDate ?? 'latest',
+      ] as const,
     revenue: (facilityId?: string) =>
       [...queryKeys.finance.all, 'revenue', facilityId ?? 'all'] as const,
     expenses: (facilityId?: string) =>
@@ -578,7 +771,8 @@ export const queryKeys = {
       [...queryKeys.phm.all, 'outreach', filters ?? {}] as const,
     communityHealth: (filters?: Record<string, unknown>) =>
       [...queryKeys.phm.all, 'community-health', filters ?? {}] as const,
-    geographicRegions: () => [...queryKeys.phm.all, 'geographic-regions'] as const,
+    geographicRegions: () =>
+      [...queryKeys.phm.all, 'geographic-regions'] as const,
     favorites: (userId?: string) =>
       [...queryKeys.phm.all, 'favorites', userId ?? 'all'] as const,
     search: (query: string, facilityId?: string) =>
@@ -626,13 +820,25 @@ export const queryKeys = {
   interoperability: {
     all: ['interoperability'] as const,
     dashboard: (facilityId?: string) =>
-      [...queryKeys.interoperability.all, 'dashboard', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.interoperability.all,
+        'dashboard',
+        facilityId ?? 'all',
+      ] as const,
     analytics: (facilityId?: string) =>
-      [...queryKeys.interoperability.all, 'analytics', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.interoperability.all,
+        'analytics',
+        facilityId ?? 'all',
+      ] as const,
     endpoints: (filters?: Record<string, unknown>) =>
       [...queryKeys.interoperability.all, 'endpoints', filters ?? {}] as const,
     fhirServers: (filters?: Record<string, unknown>) =>
-      [...queryKeys.interoperability.all, 'fhir-servers', filters ?? {}] as const,
+      [
+        ...queryKeys.interoperability.all,
+        'fhir-servers',
+        filters ?? {},
+      ] as const,
     hl7: (filters?: Record<string, unknown>) =>
       [...queryKeys.interoperability.all, 'hl7', filters ?? {}] as const,
     dicom: (filters?: Record<string, unknown>) =>
@@ -642,23 +848,41 @@ export const queryKeys = {
     mappings: (filters?: Record<string, unknown>) =>
       [...queryKeys.interoperability.all, 'mappings', filters ?? {}] as const,
     subscriptions: (filters?: Record<string, unknown>) =>
-      [...queryKeys.interoperability.all, 'subscriptions', filters ?? {}] as const,
+      [
+        ...queryKeys.interoperability.all,
+        'subscriptions',
+        filters ?? {},
+      ] as const,
     queue: () => [...queryKeys.interoperability.all, 'queue'] as const,
     jobs: (filters?: Record<string, unknown>) =>
       [...queryKeys.interoperability.all, 'jobs', filters ?? {}] as const,
     webhooks: (filters?: Record<string, unknown>) =>
       [...queryKeys.interoperability.all, 'webhooks', filters ?? {}] as const,
     apiClients: (filters?: Record<string, unknown>) =>
-      [...queryKeys.interoperability.all, 'api-clients', filters ?? {}] as const,
+      [
+        ...queryKeys.interoperability.all,
+        'api-clients',
+        filters ?? {},
+      ] as const,
     smartApps: (filters?: Record<string, unknown>) =>
       [...queryKeys.interoperability.all, 'smart-apps', filters ?? {}] as const,
     audit: (filters?: Record<string, unknown>) =>
       [...queryKeys.interoperability.all, 'audit', filters ?? {}] as const,
-    terminology: () => [...queryKeys.interoperability.all, 'terminology'] as const,
+    terminology: () =>
+      [...queryKeys.interoperability.all, 'terminology'] as const,
     favorites: (userId?: string) =>
-      [...queryKeys.interoperability.all, 'favorites', userId ?? 'all'] as const,
+      [
+        ...queryKeys.interoperability.all,
+        'favorites',
+        userId ?? 'all',
+      ] as const,
     search: (query: string, facilityId?: string) =>
-      [...queryKeys.interoperability.all, 'search', query, facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.interoperability.all,
+        'search',
+        query,
+        facilityId ?? 'all',
+      ] as const,
   },
   research: {
     all: ['research'] as const,
@@ -697,14 +921,27 @@ export const queryKeys = {
     favorites: (userId?: string) =>
       [...queryKeys.research.all, 'favorites', userId ?? 'all'] as const,
     search: (query: string, facilityId?: string) =>
-      [...queryKeys.research.all, 'search', query, facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.research.all,
+        'search',
+        query,
+        facilityId ?? 'all',
+      ] as const,
   },
   publicHealth: {
     all: ['publicHealth'] as const,
     dashboard: (facilityId?: string) =>
-      [...queryKeys.publicHealth.all, 'dashboard', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.publicHealth.all,
+        'dashboard',
+        facilityId ?? 'all',
+      ] as const,
     analytics: (facilityId?: string) =>
-      [...queryKeys.publicHealth.all, 'analytics', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.publicHealth.all,
+        'analytics',
+        facilityId ?? 'all',
+      ] as const,
     cases: (filters?: Record<string, unknown>) =>
       [...queryKeys.publicHealth.all, 'cases', filters ?? {}] as const,
     case: (caseId: string) =>
@@ -712,23 +949,43 @@ export const queryKeys = {
     outbreaks: (filters?: Record<string, unknown>) =>
       [...queryKeys.publicHealth.all, 'outbreaks', filters ?? {}] as const,
     contactTracing: (filters?: Record<string, unknown>) =>
-      [...queryKeys.publicHealth.all, 'contact-tracing', filters ?? {}] as const,
+      [
+        ...queryKeys.publicHealth.all,
+        'contact-tracing',
+        filters ?? {},
+      ] as const,
     immunizations: (filters?: Record<string, unknown>) =>
       [...queryKeys.publicHealth.all, 'immunizations', filters ?? {}] as const,
     registries: (filters?: Record<string, unknown>) =>
       [...queryKeys.publicHealth.all, 'registries', filters ?? {}] as const,
     communityPrograms: (filters?: Record<string, unknown>) =>
-      [...queryKeys.publicHealth.all, 'community-programs', filters ?? {}] as const,
+      [
+        ...queryKeys.publicHealth.all,
+        'community-programs',
+        filters ?? {},
+      ] as const,
     maternalHealth: (filters?: Record<string, unknown>) =>
-      [...queryKeys.publicHealth.all, 'maternal-health', filters ?? {}] as const,
+      [
+        ...queryKeys.publicHealth.all,
+        'maternal-health',
+        filters ?? {},
+      ] as const,
     childHealth: (filters?: Record<string, unknown>) =>
       [...queryKeys.publicHealth.all, 'child-health', filters ?? {}] as const,
     schoolHealth: (filters?: Record<string, unknown>) =>
       [...queryKeys.publicHealth.all, 'school-health', filters ?? {}] as const,
     occupationalHealth: (filters?: Record<string, unknown>) =>
-      [...queryKeys.publicHealth.all, 'occupational-health', filters ?? {}] as const,
+      [
+        ...queryKeys.publicHealth.all,
+        'occupational-health',
+        filters ?? {},
+      ] as const,
     environmentalHealth: (filters?: Record<string, unknown>) =>
-      [...queryKeys.publicHealth.all, 'environmental-health', filters ?? {}] as const,
+      [
+        ...queryKeys.publicHealth.all,
+        'environmental-health',
+        filters ?? {},
+      ] as const,
     sdoh: (filters?: Record<string, unknown>) =>
       [...queryKeys.publicHealth.all, 'sdoh', filters ?? {}] as const,
     audit: (filters?: Record<string, unknown>) =>
@@ -736,7 +993,12 @@ export const queryKeys = {
     favorites: (userId?: string) =>
       [...queryKeys.publicHealth.all, 'favorites', userId ?? 'all'] as const,
     search: (query: string, facilityId?: string) =>
-      [...queryKeys.publicHealth.all, 'search', query, facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.publicHealth.all,
+        'search',
+        query,
+        facilityId ?? 'all',
+      ] as const,
   },
   ai: {
     all: ['ai'] as const,
@@ -782,27 +1044,67 @@ export const queryKeys = {
     enterpriseKpis: (filters?: Record<string, unknown>) =>
       [...queryKeys.executive.all, 'enterprise-kpis', filters ?? {}] as const,
     operationalMetrics: (filters?: Record<string, unknown>) =>
-      [...queryKeys.executive.all, 'operational-metrics', filters ?? {}] as const,
+      [
+        ...queryKeys.executive.all,
+        'operational-metrics',
+        filters ?? {},
+      ] as const,
     departmentScorecards: (filters?: Record<string, unknown>) =>
-      [...queryKeys.executive.all, 'department-scorecards', filters ?? {}] as const,
+      [
+        ...queryKeys.executive.all,
+        'department-scorecards',
+        filters ?? {},
+      ] as const,
     hospitalOperations: (facilityId?: string) =>
-      [...queryKeys.executive.all, 'hospital-operations', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.executive.all,
+        'hospital-operations',
+        facilityId ?? 'all',
+      ] as const,
     capacityAnalytics: (filters?: Record<string, unknown>) =>
-      [...queryKeys.executive.all, 'capacity-analytics', filters ?? {}] as const,
+      [
+        ...queryKeys.executive.all,
+        'capacity-analytics',
+        filters ?? {},
+      ] as const,
     patientFlow: (facilityId?: string) =>
-      [...queryKeys.executive.all, 'patient-flow', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.executive.all,
+        'patient-flow',
+        facilityId ?? 'all',
+      ] as const,
     revenueDashboard: (facilityId?: string) =>
-      [...queryKeys.executive.all, 'revenue-dashboard', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.executive.all,
+        'revenue-dashboard',
+        facilityId ?? 'all',
+      ] as const,
     qualityDashboard: (facilityId?: string) =>
-      [...queryKeys.executive.all, 'quality-dashboard', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.executive.all,
+        'quality-dashboard',
+        facilityId ?? 'all',
+      ] as const,
     workforceDashboard: (facilityId?: string) =>
-      [...queryKeys.executive.all, 'workforce-dashboard', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.executive.all,
+        'workforce-dashboard',
+        facilityId ?? 'all',
+      ] as const,
     populationDashboard: (facilityId?: string) =>
-      [...queryKeys.executive.all, 'population-dashboard', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.executive.all,
+        'population-dashboard',
+        facilityId ?? 'all',
+      ] as const,
     forecasts: (filters?: Record<string, unknown>) =>
       [...queryKeys.executive.all, 'forecasts', filters ?? {}] as const,
     strategicInitiatives: (filters?: Record<string, unknown>) =>
-      [...queryKeys.executive.all, 'strategic-initiatives', filters ?? {}] as const,
+      [
+        ...queryKeys.executive.all,
+        'strategic-initiatives',
+        filters ?? {},
+      ] as const,
     alerts: (filters?: Record<string, unknown>) =>
       [...queryKeys.executive.all, 'alerts', filters ?? {}] as const,
     benchmarks: (filters?: Record<string, unknown>) =>
@@ -812,7 +1114,12 @@ export const queryKeys = {
     favorites: (userId?: string) =>
       [...queryKeys.executive.all, 'favorites', userId ?? 'all'] as const,
     search: (query: string, facilityId?: string) =>
-      [...queryKeys.executive.all, 'search', query, facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.executive.all,
+        'search',
+        query,
+        facilityId ?? 'all',
+      ] as const,
   },
   iam: {
     all: ['iam'] as const,
@@ -822,8 +1129,7 @@ export const queryKeys = {
       [...queryKeys.iam.all, 'analytics', tenantId ?? 'all'] as const,
     users: (filters?: Record<string, unknown>) =>
       [...queryKeys.iam.all, 'users', filters ?? {}] as const,
-    user: (userId: string) =>
-      [...queryKeys.iam.all, 'user', userId] as const,
+    user: (userId: string) => [...queryKeys.iam.all, 'user', userId] as const,
     tenants: (filters?: Record<string, unknown>) =>
       [...queryKeys.iam.all, 'tenants', filters ?? {}] as const,
     organizations: (filters?: Record<string, unknown>) =>
@@ -872,9 +1178,19 @@ export const queryKeys = {
   documents: {
     all: ['documents'] as const,
     dashboard: (tenantId?: string, facilityId?: string) =>
-      [...queryKeys.documents.all, 'dashboard', tenantId ?? 'all', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.documents.all,
+        'dashboard',
+        tenantId ?? 'all',
+        facilityId ?? 'all',
+      ] as const,
     analytics: (tenantId?: string, facilityId?: string) =>
-      [...queryKeys.documents.all, 'analytics', tenantId ?? 'all', facilityId ?? 'all'] as const,
+      [
+        ...queryKeys.documents.all,
+        'analytics',
+        tenantId ?? 'all',
+        facilityId ?? 'all',
+      ] as const,
     list: (filters?: Record<string, unknown>) =>
       [...queryKeys.documents.all, 'list', filters ?? {}] as const,
     detail: (documentId: string) =>
@@ -894,7 +1210,11 @@ export const queryKeys = {
     ocr: (filters?: Record<string, unknown>) =>
       [...queryKeys.documents.all, 'ocr', filters ?? {}] as const,
     signatureRequests: (filters?: Record<string, unknown>) =>
-      [...queryKeys.documents.all, 'signature-requests', filters ?? {}] as const,
+      [
+        ...queryKeys.documents.all,
+        'signature-requests',
+        filters ?? {},
+      ] as const,
     signatures: (filters?: Record<string, unknown>) =>
       [...queryKeys.documents.all, 'signatures', filters ?? {}] as const,
     sharedLinks: (filters?: Record<string, unknown>) =>
@@ -931,15 +1251,18 @@ export const queryKeys = {
     webhook: (webhookId: string) =>
       [...queryKeys.apiPlatform.all, 'webhook', webhookId] as const,
     webhookDeliveries: (filters?: Record<string, unknown>) =>
-      [...queryKeys.apiPlatform.all, 'webhook-deliveries', filters ?? {}] as const,
+      [
+        ...queryKeys.apiPlatform.all,
+        'webhook-deliveries',
+        filters ?? {},
+      ] as const,
     sdkPackages: (filters?: Record<string, unknown>) =>
       [...queryKeys.apiPlatform.all, 'sdk-packages', filters ?? {}] as const,
     rateLimitPolicies: (filters?: Record<string, unknown>) =>
       [...queryKeys.apiPlatform.all, 'rate-limits', filters ?? {}] as const,
     endpoints: (filters?: Record<string, unknown>) =>
       [...queryKeys.apiPlatform.all, 'endpoints', filters ?? {}] as const,
-    apiVersions: () =>
-      [...queryKeys.apiPlatform.all, 'api-versions'] as const,
+    apiVersions: () => [...queryKeys.apiPlatform.all, 'api-versions'] as const,
     openApiSpecs: () =>
       [...queryKeys.apiPlatform.all, 'openapi-specs'] as const,
     openApiPreview: (specId: string) =>
@@ -979,8 +1302,7 @@ export const queryKeys = {
       [...queryKeys.workflows.all, 'jobs', filters ?? {}] as const,
     events: (filters?: Record<string, unknown>) =>
       [...queryKeys.workflows.all, 'events', filters ?? {}] as const,
-    eventQueues: () =>
-      [...queryKeys.workflows.all, 'event-queues'] as const,
+    eventQueues: () => [...queryKeys.workflows.all, 'event-queues'] as const,
     slas: (filters?: Record<string, unknown>) =>
       [...queryKeys.workflows.all, 'slas', filters ?? {}] as const,
     escalations: (filters?: Record<string, unknown>) =>
@@ -1013,11 +1335,19 @@ export const queryKeys = {
     departments: (filters?: Record<string, unknown>) =>
       [...queryKeys.platformAdmin.all, 'departments', filters ?? {}] as const,
     localization: (tenantId?: string) =>
-      [...queryKeys.platformAdmin.all, 'localization', tenantId ?? 'default'] as const,
+      [
+        ...queryKeys.platformAdmin.all,
+        'localization',
+        tenantId ?? 'default',
+      ] as const,
     localizations: (filters?: Record<string, unknown>) =>
       [...queryKeys.platformAdmin.all, 'localizations', filters ?? {}] as const,
     branding: (tenantId?: string) =>
-      [...queryKeys.platformAdmin.all, 'branding', tenantId ?? 'default'] as const,
+      [
+        ...queryKeys.platformAdmin.all,
+        'branding',
+        tenantId ?? 'default',
+      ] as const,
     brandingList: (filters?: Record<string, unknown>) =>
       [...queryKeys.platformAdmin.all, 'branding-list', filters ?? {}] as const,
     licenses: (filters?: Record<string, unknown>) =>
@@ -1030,10 +1360,8 @@ export const queryKeys = {
       [...queryKeys.platformAdmin.all, 'feature-flags', filters ?? {}] as const,
     jobs: (filters?: Record<string, unknown>) =>
       [...queryKeys.platformAdmin.all, 'jobs', filters ?? {}] as const,
-    workers: () =>
-      [...queryKeys.platformAdmin.all, 'workers'] as const,
-    queues: () =>
-      [...queryKeys.platformAdmin.all, 'queues'] as const,
+    workers: () => [...queryKeys.platformAdmin.all, 'workers'] as const,
+    queues: () => [...queryKeys.platformAdmin.all, 'queues'] as const,
     systemHealth: () =>
       [...queryKeys.platformAdmin.all, 'system-health'] as const,
     backups: (filters?: Record<string, unknown>) =>
@@ -1043,7 +1371,11 @@ export const queryKeys = {
     audits: (filters?: Record<string, unknown>) =>
       [...queryKeys.platformAdmin.all, 'audits', filters ?? {}] as const,
     configurations: (tenantId?: string) =>
-      [...queryKeys.platformAdmin.all, 'configurations', tenantId ?? 'default'] as const,
+      [
+        ...queryKeys.platformAdmin.all,
+        'configurations',
+        tenantId ?? 'default',
+      ] as const,
     search: (query: string, filters?: Record<string, unknown>) =>
       [...queryKeys.platformAdmin.all, 'search', query, filters ?? {}] as const,
   },
@@ -1064,7 +1396,12 @@ export const queryKeys = {
     threads: (filters?: Record<string, unknown>) =>
       [...queryKeys.messaging.all, 'threads', filters ?? {}] as const,
     chatMessages: (threadId: string, filters?: Record<string, unknown>) =>
-      [...queryKeys.messaging.all, 'chat-messages', threadId, filters ?? {}] as const,
+      [
+        ...queryKeys.messaging.all,
+        'chat-messages',
+        threadId,
+        filters ?? {},
+      ] as const,
     secureMessages: (filters?: Record<string, unknown>) =>
       [...queryKeys.messaging.all, 'secure-messages', filters ?? {}] as const,
     broadcasts: (filters?: Record<string, unknown>) =>
@@ -1079,10 +1416,8 @@ export const queryKeys = {
       [...queryKeys.messaging.all, 'campaign', campaignId] as const,
     deliveries: (filters?: Record<string, unknown>) =>
       [...queryKeys.messaging.all, 'deliveries', filters ?? {}] as const,
-    channels: () =>
-      [...queryKeys.messaging.all, 'channels'] as const,
-    integrations: () =>
-      [...queryKeys.messaging.all, 'integrations'] as const,
+    channels: () => [...queryKeys.messaging.all, 'channels'] as const,
+    integrations: () => [...queryKeys.messaging.all, 'integrations'] as const,
     search: (query: string, filters?: Record<string, unknown>) =>
       [...queryKeys.messaging.all, 'search', query, filters ?? {}] as const,
     favorites: (userId?: string) =>
@@ -1146,7 +1481,11 @@ export const queryKeys = {
     list: (userId?: string) =>
       [...queryKeys.notifications.all, 'list', userId ?? 'self'] as const,
     unreadCount: (userId?: string) =>
-      [...queryKeys.notifications.all, 'unread-count', userId ?? 'self'] as const,
+      [
+        ...queryKeys.notifications.all,
+        'unread-count',
+        userId ?? 'self',
+      ] as const,
   },
   reports: {
     all: ['reports'] as const,
@@ -1163,19 +1502,26 @@ export const queryKeys = {
     search: (filters?: Record<string, unknown>) =>
       [...queryKeys.directory.all, 'search', filters ?? {}] as const,
     detail: (id: string) => [...queryKeys.directory.all, 'detail', id] as const,
-    related: (id: string) => [...queryKeys.directory.all, 'related', id] as const,
-    stats: (userId: string) => [...queryKeys.directory.all, 'stats', userId] as const,
-    favorites: (userId: string) => [...queryKeys.directory.all, 'favorites', userId] as const,
+    related: (id: string) =>
+      [...queryKeys.directory.all, 'related', id] as const,
+    stats: (userId: string) =>
+      [...queryKeys.directory.all, 'stats', userId] as const,
+    favorites: (userId: string) =>
+      [...queryKeys.directory.all, 'favorites', userId] as const,
   },
   medicalLibrary: {
     all: ['medical-library'] as const,
     search: (filters?: Record<string, unknown>) =>
       [...queryKeys.medicalLibrary.all, 'search', filters ?? {}] as const,
-    detail: (id: string) => [...queryKeys.medicalLibrary.all, 'detail', id] as const,
-    related: (id: string) => [...queryKeys.medicalLibrary.all, 'related', id] as const,
+    detail: (id: string) =>
+      [...queryKeys.medicalLibrary.all, 'detail', id] as const,
+    related: (id: string) =>
+      [...queryKeys.medicalLibrary.all, 'related', id] as const,
     categories: () => [...queryKeys.medicalLibrary.all, 'categories'] as const,
-    stats: (userId: string) => [...queryKeys.medicalLibrary.all, 'stats', userId] as const,
-    favorites: (userId: string) => [...queryKeys.medicalLibrary.all, 'favorites', userId] as const,
+    stats: (userId: string) =>
+      [...queryKeys.medicalLibrary.all, 'stats', userId] as const,
+    favorites: (userId: string) =>
+      [...queryKeys.medicalLibrary.all, 'favorites', userId] as const,
   },
   patientRecords: {
     all: ['patient-records'] as const,
@@ -1186,7 +1532,12 @@ export const queryKeys = {
     summary: (patientId: string) =>
       [...queryKeys.patientRecords.all, 'summary', patientId] as const,
     timeline: (patientId: string, filters?: Record<string, unknown>) =>
-      [...queryKeys.patientRecords.all, 'timeline', patientId, filters ?? {}] as const,
+      [
+        ...queryKeys.patientRecords.all,
+        'timeline',
+        patientId,
+        filters ?? {},
+      ] as const,
     vitals: (patientId: string) =>
       [...queryKeys.patientRecords.all, 'vitals', patientId] as const,
     labs: (patientId: string) =>

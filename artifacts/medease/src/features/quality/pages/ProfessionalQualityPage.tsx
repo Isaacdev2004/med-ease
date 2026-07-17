@@ -20,5 +20,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalQualityPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <QualityShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <QualityShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

@@ -1,5 +1,10 @@
 import { Controller, Get, HttpCode, HttpStatus, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiServiceUnavailableResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiServiceUnavailableResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { HealthCheckService } from '@nestjs/terminus';
 import type { Response } from 'express';
 
@@ -43,10 +48,16 @@ export class HealthController {
   }
 
   @Get('ready')
-  @ApiOperation({ summary: 'Readiness probe — verifies infrastructure dependencies' })
+  @ApiOperation({
+    summary: 'Readiness probe — verifies infrastructure dependencies',
+  })
   @ApiOkResponse({ description: 'All dependencies healthy' })
-  @ApiServiceUnavailableResponse({ description: 'One or more dependencies unhealthy' })
-  async readiness(@Res({ passthrough: true }) response: Response): Promise<ReadinessResponse> {
+  @ApiServiceUnavailableResponse({
+    description: 'One or more dependencies unhealthy',
+  })
+  async readiness(
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<ReadinessResponse> {
     const checks = await this.healthService.checkAllDependencies();
     const allOk = checks.every((check) => check.status === 'ok');
 

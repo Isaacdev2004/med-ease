@@ -3,7 +3,12 @@ import { useLocation } from 'wouter';
 import { AiIntelligenceShell } from '@/features/ai-intelligence/components/AiIntelligenceShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'ai' | 'clinical-copilot' | 'predictions' | 'risk-scores' | 'clinical-summaries';
+type Segment =
+  | 'ai'
+  | 'clinical-copilot'
+  | 'predictions'
+  | 'risk-scores'
+  | 'clinical-summaries';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/clinical-copilot')) return 'clinical-copilot';
@@ -24,5 +29,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalAiIntelligencePage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <AiIntelligenceShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <AiIntelligenceShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

@@ -7,7 +7,10 @@ import {
   requireTenantId,
   runWithRequestContext,
 } from '../context';
-import { applyTenantContextFromJwt, requestContextFromJobEnvelope } from './tenant-context';
+import {
+  applyTenantContextFromJwt,
+  requestContextFromJobEnvelope,
+} from './tenant-context';
 
 describe('RequestContext', () => {
   it('creates base context for unauthenticated requests', () => {

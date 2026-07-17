@@ -11,16 +11,29 @@ export function riskLevelFromScore(score: number): Risk['level'] {
   return 'low';
 }
 
-export function assessRisk(likelihood: number, impact: number): Pick<Risk, 'riskScore' | 'level'> {
+export function assessRisk(
+  likelihood: number,
+  impact: number,
+): Pick<Risk, 'riskScore' | 'level'> {
   const riskScore = calculateRiskScore(likelihood, impact);
   return { riskScore, level: riskLevelFromScore(riskScore) };
 }
 
-export function buildHeatMapData(risks: Risk[]): { label: string; likelihood: number; impact: number; count: number }[] {
-  const cells = new Map<string, { label: string; likelihood: number; impact: number; count: number }>();
+export function buildHeatMapData(
+  risks: Risk[],
+): { label: string; likelihood: number; impact: number; count: number }[] {
+  const cells = new Map<
+    string,
+    { label: string; likelihood: number; impact: number; count: number }
+  >();
   for (const r of risks) {
     const key = `${r.category}-${r.likelihood}-${r.impact}`;
-    const cur = cells.get(key) ?? { label: r.category, likelihood: r.likelihood, impact: r.impact, count: 0 };
+    const cur = cells.get(key) ?? {
+      label: r.category,
+      likelihood: r.likelihood,
+      impact: r.impact,
+      count: 0,
+    };
     cur.count += 1;
     cells.set(key, cur);
   }
@@ -28,5 +41,7 @@ export function buildHeatMapData(risks: Risk[]): { label: string; likelihood: nu
 }
 
 export function mitigationDue(risk: Risk): boolean {
-  return new Date(risk.reviewDate) <= new Date(Date.now() + 14 * 24 * 60 * 60 * 1000);
+  return (
+    new Date(risk.reviewDate) <= new Date(Date.now() + 14 * 24 * 60 * 60 * 1000)
+  );
 }

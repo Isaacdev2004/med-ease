@@ -2,7 +2,8 @@ import type { ConsentRecord } from '@/services/iam/types';
 
 export function isConsentValid(consent: ConsentRecord): boolean {
   if (consent.status !== 'active') return false;
-  if (consent.expiresAt && new Date(consent.expiresAt).getTime() < Date.now()) return false;
+  if (consent.expiresAt && new Date(consent.expiresAt).getTime() < Date.now())
+    return false;
   return true;
 }
 

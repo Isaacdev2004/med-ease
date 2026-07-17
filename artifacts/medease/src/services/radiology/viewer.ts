@@ -1,8 +1,14 @@
-import type { RadiologyStudy, ImagingSeries, ImagingInstance } from '@/services/radiology/types';
+import type {
+  RadiologyStudy,
+  ImagingSeries,
+  ImagingInstance,
+} from '@/services/radiology/types';
 import type { ImageViewerState } from '@/services/radiology/types';
 
 /** Default viewer state — replace with OHIF/Cornerstone adapter. */
-export function createDefaultViewerState(study: RadiologyStudy): ImageViewerState {
+export function createDefaultViewerState(
+  study: RadiologyStudy,
+): ImageViewerState {
   const firstSeries = study.series[0];
   const firstInstance = firstSeries?.instances[0];
   return {
@@ -19,11 +25,17 @@ export function createDefaultViewerState(study: RadiologyStudy): ImageViewerStat
   };
 }
 
-export function getSeriesById(study: RadiologyStudy, seriesId: string): ImagingSeries | undefined {
+export function getSeriesById(
+  study: RadiologyStudy,
+  seriesId: string,
+): ImagingSeries | undefined {
   return study.series.find((s) => s.id === seriesId);
 }
 
-export function getInstanceById(study: RadiologyStudy, instanceId: string): ImagingInstance | undefined {
+export function getInstanceById(
+  study: RadiologyStudy,
+  instanceId: string,
+): ImagingInstance | undefined {
   for (const series of study.series) {
     const inst = series.instances.find((i) => i.id === instanceId);
     if (inst) return inst;

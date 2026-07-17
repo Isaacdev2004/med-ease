@@ -20,16 +20,34 @@ export default function ProfessionalCarePlansPage() {
     const section = getCarePlanSectionFromPath(location);
     if (location.includes('/tasks') || location.includes('/goals')) {
       return (
-        <PageShell title={location.includes('/tasks') ? 'Patient Tasks' : 'Patient Goals'} subtitle={`Patient ${patientId}`}>
+        <PageShell
+          title={
+            location.includes('/tasks') ? 'Patient Tasks' : 'Patient Goals'
+          }
+          subtitle={`Patient ${patientId}`}
+        >
           <CarePlanSectionContent section={section} filters={{ patientId }} />
         </PageShell>
       );
     }
     const basePath = resolveModuleBasePath(location, 'care-plan');
-    return <CarePlansShell basePath={basePath} variant="clinician" title="Patient Care Plan" patientId={patientId} />;
+    return (
+      <CarePlansShell
+        basePath={basePath}
+        variant="clinician"
+        title="Patient Care Plan"
+        patientId={patientId}
+      />
+    );
   }
 
   const segment = location.includes('/pathways') ? 'pathways' : 'care-plans';
   const basePath = resolveModuleBasePath(location, segment);
-  return <CarePlansShell basePath={basePath} variant="clinician" title={segment === 'pathways' ? 'Clinical Pathways' : 'Care Plans'} />;
+  return (
+    <CarePlansShell
+      basePath={basePath}
+      variant="clinician"
+      title={segment === 'pathways' ? 'Clinical Pathways' : 'Care Plans'}
+    />
+  );
 }

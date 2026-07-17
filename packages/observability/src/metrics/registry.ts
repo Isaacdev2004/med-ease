@@ -52,7 +52,12 @@ export function createHttpMetrics(metrics: MetricsRegistry) {
   });
 
   return {
-    recordRequest(method: string, route: string, statusCode: number, durationSeconds: number) {
+    recordRequest(
+      method: string,
+      route: string,
+      statusCode: number,
+      durationSeconds: number,
+    ) {
       const labels = {
         method,
         route,

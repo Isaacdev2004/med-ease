@@ -66,14 +66,20 @@ export function DashboardSection({ filters }: { filters?: ExecutiveFilters }) {
   const kpis = useEnterpriseKpis(filters);
   const alerts = useExecutiveAlerts(filters);
   const { exportData } = useExecutiveMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading executive dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={LayoutDashboard} title="No executive data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading executive dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={LayoutDashboard} title="No executive data" />;
   return (
     <div className="space-y-6">
       <ExecutiveDashboard dashboard={dashboard.data} />
-      <EnterpriseAlertCenter alerts={alerts.data?.items ?? dashboard.data.recentAlerts} />
+      <EnterpriseAlertCenter
+        alerts={alerts.data?.items ?? dashboard.data.recentAlerts}
+      />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(kpis.data?.items ?? dashboard.data.topKpis).slice(0, 6).map((k) => <ExecutiveKpiCard key={k.kpiId} kpi={k} />)}
+        {(kpis.data?.items ?? dashboard.data.topKpis).slice(0, 6).map((k) => (
+          <ExecutiveKpiCard key={k.kpiId} kpi={k} />
+        ))}
       </div>
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
@@ -88,7 +94,9 @@ export function DepartmentSection({ filters }: { filters?: ExecutiveFilters }) {
     <div className="space-y-6">
       {quality.data && <ClinicalQualityDashboard quality={quality.data} />}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(scorecards.data?.items ?? []).map((s) => <ScorecardPanel key={s.scorecardId} scorecard={s} />)}
+        {(scorecards.data?.items ?? []).map((s) => (
+          <ScorecardPanel key={s.scorecardId} scorecard={s} />
+        ))}
       </div>
     </div>
   );
@@ -102,12 +110,28 @@ export function OperationsSection({ filters }: { filters?: ExecutiveFilters }) {
   if (operations.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      {operations.data && <HospitalOperationsBoard operations={operations.data} />}
+      {operations.data && (
+        <HospitalOperationsBoard operations={operations.data} />
+      )}
       {revenue.data && <RevenueDashboardPanel revenue={revenue.data} />}
       {workforce.data && <WorkforceDashboardPanel workforce={workforce.data} />}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(metrics.data?.items ?? []).slice(0, 6).map((m) => (
-          <ExecutiveKpiCard key={m.metricId} kpi={{ kpiId: m.metricId, name: m.name, category: 'operational', facilityId: m.facilityId, value: m.value, target: m.benchmark, unit: m.unit, trend: m.value >= m.benchmark ? 'up' : 'down', changePercent: 0, measuredAt: m.measuredAt }} />
+          <ExecutiveKpiCard
+            key={m.metricId}
+            kpi={{
+              kpiId: m.metricId,
+              name: m.name,
+              category: 'operational',
+              facilityId: m.facilityId,
+              value: m.value,
+              target: m.benchmark,
+              unit: m.unit,
+              trend: m.value >= m.benchmark ? 'up' : 'down',
+              changePercent: 0,
+              measuredAt: m.measuredAt,
+            }}
+          />
         ))}
       </div>
     </div>
@@ -118,10 +142,19 @@ export function CapacitySection({ filters }: { filters?: ExecutiveFilters }) {
   const capacity = useCapacityAnalytics(filters);
   if (capacity.isLoading) return <LoadingView />;
   if (!capacity.data) return null;
-  return <CapacityDashboard snapshots={capacity.data.snapshots.items} aggregateOccupancy={capacity.data.aggregateOccupancy} />;
+  return (
+    <CapacityDashboard
+      snapshots={capacity.data.snapshots.items}
+      aggregateOccupancy={capacity.data.aggregateOccupancy}
+    />
+  );
 }
 
-export function PatientFlowSection({ filters }: { filters?: ExecutiveFilters }) {
+export function PatientFlowSection({
+  filters,
+}: {
+  filters?: ExecutiveFilters;
+}) {
   const flow = usePatientFlow(filters?.facilityId);
   if (flow.isLoading) return <LoadingView />;
   return flow.data ? <PatientFlowPanel flow={flow.data} /> : null;
@@ -132,37 +165,57 @@ export function ScorecardsSection({ filters }: { filters?: ExecutiveFilters }) {
   if (scorecards.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(scorecards.data?.items ?? []).map((s) => <ScorecardPanel key={s.scorecardId} scorecard={s} />)}
+      {(scorecards.data?.items ?? []).map((s) => (
+        <ScorecardPanel key={s.scorecardId} scorecard={s} />
+      ))}
     </div>
   );
 }
 
-export function EnterpriseKpisSection({ filters }: { filters?: ExecutiveFilters }) {
+export function EnterpriseKpisSection({
+  filters,
+}: {
+  filters?: ExecutiveFilters;
+}) {
   const kpis = useEnterpriseKpis(filters);
   if (kpis.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(kpis.data?.items ?? []).slice(0, 12).map((k) => <ExecutiveKpiCard key={k.kpiId} kpi={k} />)}
+      {(kpis.data?.items ?? []).slice(0, 12).map((k) => (
+        <ExecutiveKpiCard key={k.kpiId} kpi={k} />
+      ))}
     </div>
   );
 }
 
-export function BenchmarkingSection({ filters }: { filters?: ExecutiveFilters }) {
+export function BenchmarkingSection({
+  filters,
+}: {
+  filters?: ExecutiveFilters;
+}) {
   const benchmarks = useBenchmarkReports(filters);
   if (benchmarks.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(benchmarks.data?.items ?? []).slice(0, 9).map((b) => <BenchmarkPanel key={b.reportId} report={b} />)}
+      {(benchmarks.data?.items ?? []).slice(0, 9).map((b) => (
+        <BenchmarkPanel key={b.reportId} report={b} />
+      ))}
     </div>
   );
 }
 
-export function StrategicInitiativesSection({ filters }: { filters?: ExecutiveFilters }) {
+export function StrategicInitiativesSection({
+  filters,
+}: {
+  filters?: ExecutiveFilters;
+}) {
   const initiatives = useStrategicInitiatives(filters);
   if (initiatives.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(initiatives.data?.items ?? []).map((i) => <StrategicInitiativeCard key={i.initiativeId} initiative={i} />)}
+      {(initiatives.data?.items ?? []).map((i) => (
+        <StrategicInitiativeCard key={i.initiativeId} initiative={i} />
+      ))}
     </div>
   );
 }
@@ -175,18 +228,26 @@ export function AnalyticsSection({ filters }: { filters?: ExecutiveFilters }) {
   return (
     <div className="space-y-6">
       {analytics.data && <ExecutiveAnalyticsPanel analytics={analytics.data} />}
-      {population.data && <PopulationHealthDashboard population={population.data} />}
+      {population.data && (
+        <PopulationHealthDashboard population={population.data} />
+      )}
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
   );
 }
 
-export function ForecastingSection({ filters }: { filters?: ExecutiveFilters }) {
+export function ForecastingSection({
+  filters,
+}: {
+  filters?: ExecutiveFilters;
+}) {
   const forecasts = useExecutiveForecasts(filters);
   if (forecasts.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {(forecasts.data?.items ?? []).slice(0, 4).map((f) => <ForecastPanel key={f.forecastId} forecast={f} />)}
+      {(forecasts.data?.items ?? []).slice(0, 4).map((f) => (
+        <ForecastPanel key={f.forecastId} forecast={f} />
+      ))}
     </div>
   );
 }
@@ -197,25 +258,48 @@ export function AlertsSection({ filters }: { filters?: ExecutiveFilters }) {
   return <EnterpriseAlertCenter alerts={alerts.data?.items ?? []} />;
 }
 
-export function EnterpriseDashboardSection({ filters }: { filters?: ExecutiveFilters }) {
+export function EnterpriseDashboardSection({
+  filters,
+}: {
+  filters?: ExecutiveFilters;
+}) {
   return <DashboardSection filters={filters} />;
 }
 
-export function ExecutiveSectionContent({ section, filters }: { section: ExecutiveSection; filters?: ExecutiveFilters }) {
+export function ExecutiveSectionContent({
+  section,
+  filters,
+}: {
+  section: ExecutiveSection;
+  filters?: ExecutiveFilters;
+}) {
   switch (section) {
-    case 'department': return <DepartmentSection filters={filters} />;
-    case 'operations': return <OperationsSection filters={filters} />;
-    case 'capacity': return <CapacitySection filters={filters} />;
-    case 'patient-flow': return <PatientFlowSection filters={filters} />;
-    case 'scorecards': return <ScorecardsSection filters={filters} />;
+    case 'department':
+      return <DepartmentSection filters={filters} />;
+    case 'operations':
+      return <OperationsSection filters={filters} />;
+    case 'capacity':
+      return <CapacitySection filters={filters} />;
+    case 'patient-flow':
+      return <PatientFlowSection filters={filters} />;
+    case 'scorecards':
+      return <ScorecardsSection filters={filters} />;
     case 'hub':
-    case 'enterprise-dashboard': return <EnterpriseDashboardSection filters={filters} />;
-    case 'enterprise-kpis': return <EnterpriseKpisSection filters={filters} />;
-    case 'benchmarking': return <BenchmarkingSection filters={filters} />;
-    case 'strategic-initiatives': return <StrategicInitiativesSection filters={filters} />;
-    case 'analytics': return <AnalyticsSection filters={filters} />;
-    case 'forecasting': return <ForecastingSection filters={filters} />;
-    case 'alerts': return <AlertsSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'enterprise-dashboard':
+      return <EnterpriseDashboardSection filters={filters} />;
+    case 'enterprise-kpis':
+      return <EnterpriseKpisSection filters={filters} />;
+    case 'benchmarking':
+      return <BenchmarkingSection filters={filters} />;
+    case 'strategic-initiatives':
+      return <StrategicInitiativesSection filters={filters} />;
+    case 'analytics':
+      return <AnalyticsSection filters={filters} />;
+    case 'forecasting':
+      return <ForecastingSection filters={filters} />;
+    case 'alerts':
+      return <AlertsSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

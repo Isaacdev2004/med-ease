@@ -71,7 +71,10 @@ export class IamRepository extends TenantAwareRepository {
   /** login_attempts is system-only under RLS; scope reads to tenant users via system context. */
   private async withTenantLoginAttempts<T>(
     scopeTenantId: string,
-    fn: (tx: Prisma.TransactionClient, tenantFilter: Prisma.LoginAttemptWhereInput) => Promise<T>,
+    fn: (
+      tx: Prisma.TransactionClient,
+      tenantFilter: Prisma.LoginAttemptWhereInput,
+    ) => Promise<T>,
   ): Promise<T> {
     return this.prisma.runInSystemTransaction(async (tx) => {
       const tenantUsers = await tx.user.findMany({
@@ -97,20 +100,28 @@ export class IamRepository extends TenantAwareRepository {
     const scopeTenantId = tenantId ?? this.tenantId;
     const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-    const loginMetrics = await this.withTenantLoginAttempts(scopeTenantId, async (tx, tenantFilter) => {
-      const [failedLogins24h, logins] = await Promise.all([
-        tx.loginAttempt.count({
-          where: { AND: [tenantFilter, { success: false, attemptedAt: { gte: since24h } }] },
-        }),
-        tx.loginAttempt.findMany({
-          where: { AND: [tenantFilter, { attemptedAt: { gte: since24h } }] },
-          select: { attemptedAt: true, success: true },
-          take: 500,
-        }),
-      ]);
+    const loginMetrics = await this.withTenantLoginAttempts(
+      scopeTenantId,
+      async (tx, tenantFilter) => {
+        const [failedLogins24h, logins] = await Promise.all([
+          tx.loginAttempt.count({
+            where: {
+              AND: [
+                tenantFilter,
+                { success: false, attemptedAt: { gte: since24h } },
+              ],
+            },
+          }),
+          tx.loginAttempt.findMany({
+            where: { AND: [tenantFilter, { attemptedAt: { gte: since24h } }] },
+            select: { attemptedAt: true, success: true },
+            take: 500,
+          }),
+        ]);
 
-      return { failedLogins24h, logins };
-    });
+        return { failedLogins24h, logins };
+      },
+    );
 
     return this.prisma.runInTransaction(async (tx) => {
       const [
@@ -125,7 +136,9 @@ export class IamRepository extends TenantAwareRepository {
         auditLogs,
       ] = await Promise.all([
         tx.user.count({ where: { tenantId: scopeTenantId } }),
-        tx.userSession.count({ where: { tenantId: scopeTenantId, status: 'active' } }),
+        tx.userSession.count({
+          where: { tenantId: scopeTenantId, status: 'active' },
+        }),
         tx.user.count({ where: { tenantId: scopeTenantId, mfaEnabled: true } }),
         tx.iamPolicyRecord.count({
           where: {
@@ -134,7 +147,9 @@ export class IamRepository extends TenantAwareRepository {
           },
         }),
         tx.securityIncident.count({ where: { status: { not: 'resolved' } } }),
-        tx.breakGlassEvent.count({ where: { tenantId: scopeTenantId, status: 'active' } }),
+        tx.breakGlassEvent.count({
+          where: { tenantId: scopeTenantId, status: 'active' },
+        }),
         tx.userSession.findMany({
           where: { tenantId: scopeTenantId },
           select: { startedAt: true },
@@ -161,13 +176,17 @@ export class IamRepository extends TenantAwareRepository {
       const hourLabels = ['00h', '04h', '08h', '12h', '16h', '20h'];
       const loginTrend = hourLabels.map((label, index) => ({
         label,
-        value: Math.max(0, Math.round(loginMetrics.logins.length / 6) + index * 3),
+        value: Math.max(
+          0,
+          Math.round(loginMetrics.logins.length / 6) + index * 3,
+        ),
       }));
 
       return {
         totalUsers,
         activeSessions,
-        mfaAdoptionRate: totalUsers === 0 ? 0 : Math.round((mfaUsers / totalUsers) * 100),
+        mfaAdoptionRate:
+          totalUsers === 0 ? 0 : Math.round((mfaUsers / totalUsers) * 100),
         failedLogins24h: loginMetrics.failedLogins24h,
         activePolicies,
         openIncidents,
@@ -184,56 +203,80 @@ export class IamRepository extends TenantAwareRepository {
     const dashboard = await this.dashboard(tenantId);
     const scopeTenantId = tenantId ?? this.tenantId;
 
-    const loginSample = await this.withTenantLoginAttempts(scopeTenantId, async (tx, tenantFilter) =>
-      tx.loginAttempt.findMany({
-        where: tenantFilter,
-        take: 200,
-        select: { success: true },
-      }),
+    const loginSample = await this.withTenantLoginAttempts(
+      scopeTenantId,
+      async (tx, tenantFilter) =>
+        tx.loginAttempt.findMany({
+          where: tenantFilter,
+          take: 200,
+          select: { success: true },
+        }),
     );
 
     return this.prisma.runInTransaction(async (tx) => {
-      const [users, sessions, policies, breakGlass, consents, riskScores, auditCount] =
-        await Promise.all([
-          tx.user.count({ where: { tenantId: scopeTenantId } }),
-          tx.userSession.findMany({
-            where: { tenantId: scopeTenantId },
-            select: { startedAt: true, lastActivityAt: true },
-            take: 200,
-          }),
-          tx.iamPolicyRecord.findMany({
-            where: { OR: [{ tenantId: null }, { tenantId: scopeTenantId }] },
-            select: { effect: true },
-          }),
-          tx.breakGlassEvent.count({ where: { tenantId: scopeTenantId } }),
-          tx.consentRecord.findMany({ where: { tenantId: scopeTenantId }, select: { status: true } }),
-          tx.riskScore.findMany({ where: { tenantId: scopeTenantId }, select: { score: true } }),
-          tx.iamAuditLog.count({ where: { tenantId: scopeTenantId } }),
-        ]);
+      const [
+        users,
+        sessions,
+        policies,
+        breakGlass,
+        consents,
+        riskScores,
+        auditCount,
+      ] = await Promise.all([
+        tx.user.count({ where: { tenantId: scopeTenantId } }),
+        tx.userSession.findMany({
+          where: { tenantId: scopeTenantId },
+          select: { startedAt: true, lastActivityAt: true },
+          take: 200,
+        }),
+        tx.iamPolicyRecord.findMany({
+          where: { OR: [{ tenantId: null }, { tenantId: scopeTenantId }] },
+          select: { effect: true },
+        }),
+        tx.breakGlassEvent.count({ where: { tenantId: scopeTenantId } }),
+        tx.consentRecord.findMany({
+          where: { tenantId: scopeTenantId },
+          select: { status: true },
+        }),
+        tx.riskScore.findMany({
+          where: { tenantId: scopeTenantId },
+          select: { score: true },
+        }),
+        tx.iamAuditLog.count({ where: { tenantId: scopeTenantId } }),
+      ]);
 
       const avgDuration =
         sessions.length === 0
           ? 0
           : sessions.reduce((sum, session) => {
               const minutes =
-                (session.lastActivityAt.getTime() - session.startedAt.getTime()) / 60_000;
+                (session.lastActivityAt.getTime() -
+                  session.startedAt.getTime()) /
+                60_000;
               return sum + Math.max(0, minutes);
             }, 0) / sessions.length;
 
-      const activeConsents = consents.filter((consent) => consent.status === 'active').length;
+      const activeConsents = consents.filter(
+        (consent) => consent.status === 'active',
+      ).length;
       const consentComplianceRate =
-        consents.length === 0 ? 100 : Math.round((activeConsents / consents.length) * 100);
+        consents.length === 0
+          ? 100
+          : Math.round((activeConsents / consents.length) * 100);
 
       const riskAverage =
         riskScores.length === 0
           ? 0
           : Math.round(
-              (riskScores.reduce((sum, score) => sum + score.score, 0) / riskScores.length) * 100,
+              (riskScores.reduce((sum, score) => sum + score.score, 0) /
+                riskScores.length) *
+                100,
             );
 
       return {
         authenticationSuccessRate: Math.round(
-          (loginSample.filter((login) => login.success).length / Math.max(loginSample.length, 1)) *
+          (loginSample.filter((login) => login.success).length /
+            Math.max(loginSample.length, 1)) *
             100,
         ),
         mfaEnrollmentRate: dashboard.mfaAdoptionRate,
@@ -262,14 +305,18 @@ export class IamRepository extends TenantAwareRepository {
     });
   }
 
-  async getUsers(filters?: IamFilters): Promise<PaginatedResult<ReturnType<typeof mapUser>>> {
+  async getUsers(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<ReturnType<typeof mapUser>>> {
     const { page, pageSize, skip, take } = normalizePagination(filters);
     const tenantId = filters?.tenantId ?? this.tenantId;
 
     return this.prisma.runInTransaction(async (tx) => {
       const where: Prisma.UserWhereInput = { tenantId };
-      if (filters?.organizationId) where.organizationId = filters.organizationId;
-      if (filters?.status) where.status = filters.status as Prisma.UserWhereInput['status'];
+      if (filters?.organizationId)
+        where.organizationId = filters.organizationId;
+      if (filters?.status)
+        where.status = filters.status as Prisma.UserWhereInput['status'];
       if (filters?.q) {
         where.OR = [
           { email: { contains: filters.q, mode: 'insensitive' } },
@@ -279,7 +326,13 @@ export class IamRepository extends TenantAwareRepository {
       }
 
       const [items, total] = await Promise.all([
-        tx.user.findMany({ where, skip, take, include: USER_INCLUDE, orderBy: { createdAt: 'desc' } }),
+        tx.user.findMany({
+          where,
+          skip,
+          take,
+          include: USER_INCLUDE,
+          orderBy: { createdAt: 'desc' },
+        }),
         tx.user.count({ where }),
       ]);
 
@@ -299,7 +352,9 @@ export class IamRepository extends TenantAwareRepository {
     });
   }
 
-  async getTenants(filters?: IamFilters): Promise<PaginatedResult<ReturnType<typeof mapTenant>>> {
+  async getTenants(
+    filters?: IamFilters,
+  ): Promise<PaginatedResult<ReturnType<typeof mapTenant>>> {
     const { page, pageSize, skip, take } = normalizePagination(filters);
 
     return this.prisma.runInTransaction(async (tx) => {
@@ -312,7 +367,12 @@ export class IamRepository extends TenantAwareRepository {
       }
 
       const [tenants, total] = await Promise.all([
-        tx.tenant.findMany({ where, skip, take, orderBy: { createdAt: 'desc' } }),
+        tx.tenant.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { createdAt: 'desc' },
+        }),
         tx.tenant.count({ where }),
       ]);
 
@@ -326,7 +386,9 @@ export class IamRepository extends TenantAwareRepository {
         }),
       );
 
-      return toContractPaginated(toPaginatedResult(mapped, total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(mapped, total, page, pageSize),
+      );
     });
   }
 
@@ -341,12 +403,22 @@ export class IamRepository extends TenantAwareRepository {
       }
 
       const [items, total] = await Promise.all([
-        tx.organization.findMany({ where, skip, take, orderBy: { name: 'asc' } }),
+        tx.organization.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { name: 'asc' },
+        }),
         tx.organization.count({ where }),
       ]);
 
       return toContractPaginated(
-        toPaginatedResult(items.map((org) => mapOrganization(org)), total, page, pageSize),
+        toPaginatedResult(
+          items.map((org) => mapOrganization(org)),
+          total,
+          page,
+          pageSize,
+        ),
       );
     });
   }
@@ -370,27 +442,43 @@ export class IamRepository extends TenantAwareRepository {
       }
 
       const [items, total] = await Promise.all([
-        tx.iamRoleRecord.findMany({ where, skip, take, orderBy: { name: 'asc' } }),
+        tx.iamRoleRecord.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { name: 'asc' },
+        }),
         tx.iamRoleRecord.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapRole), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapRole), total, page, pageSize),
+      );
     });
   }
 
   async getPermissions(filters?: IamFilters) {
     const { page, pageSize, skip, take } = normalizePagination(filters);
-    let items = ALL_PERMISSIONS.map((name, index) => mapPermission(name, index));
+    let items = ALL_PERMISSIONS.map((name, index) =>
+      mapPermission(name, index),
+    );
 
     if (filters?.q) {
       items = items.filter((permission) =>
-        matchQ(filters.q, permission.name, permission.module, permission.description),
+        matchQ(
+          filters.q,
+          permission.name,
+          permission.module,
+          permission.description,
+        ),
       );
     }
 
     const total = items.length;
     const pageItems = items.slice(skip, skip + take);
-    return toContractPaginated(toPaginatedResult(pageItems, total, page, pageSize));
+    return toContractPaginated(
+      toPaginatedResult(pageItems, total, page, pageSize),
+    );
   }
 
   async getPolicies(filters?: IamFilters) {
@@ -413,11 +501,18 @@ export class IamRepository extends TenantAwareRepository {
       }
 
       const [items, total] = await Promise.all([
-        tx.iamPolicyRecord.findMany({ where, skip, take, orderBy: { createdAt: 'desc' } }),
+        tx.iamPolicyRecord.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { createdAt: 'desc' },
+        }),
         tx.iamPolicyRecord.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapPolicy), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapPolicy), total, page, pageSize),
+      );
     });
   }
 
@@ -427,14 +522,22 @@ export class IamRepository extends TenantAwareRepository {
     return this.prisma.runInTransaction(async (tx) => {
       const where: Prisma.UserSessionWhereInput = { tenantId: this.tenantId };
       if (filters?.userId) where.userId = filters.userId;
-      if (filters?.status) where.status = filters.status as Prisma.UserSessionWhereInput['status'];
+      if (filters?.status)
+        where.status = filters.status as Prisma.UserSessionWhereInput['status'];
 
       const [items, total] = await Promise.all([
-        tx.userSession.findMany({ where, skip, take, orderBy: { startedAt: 'desc' } }),
+        tx.userSession.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { startedAt: 'desc' },
+        }),
         tx.userSession.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapSession), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapSession), total, page, pageSize),
+      );
     });
   }
 
@@ -442,23 +545,34 @@ export class IamRepository extends TenantAwareRepository {
     const { page, pageSize, skip, take } = normalizePagination(filters);
     const scopeTenantId = filters?.tenantId ?? this.tenantId;
 
-    return this.withTenantLoginAttempts(scopeTenantId, async (tx, tenantFilter) => {
-      const extra: Prisma.LoginAttemptWhereInput = {};
-      if (filters?.userId) extra.userId = filters.userId;
-      if (filters?.q) extra.email = { contains: filters.q, mode: 'insensitive' };
+    return this.withTenantLoginAttempts(
+      scopeTenantId,
+      async (tx, tenantFilter) => {
+        const extra: Prisma.LoginAttemptWhereInput = {};
+        if (filters?.userId) extra.userId = filters.userId;
+        if (filters?.q)
+          extra.email = { contains: filters.q, mode: 'insensitive' };
 
-      const where: Prisma.LoginAttemptWhereInput =
-        Object.keys(extra).length > 0 ? { AND: [tenantFilter, extra] } : tenantFilter;
+        const where: Prisma.LoginAttemptWhereInput =
+          Object.keys(extra).length > 0
+            ? { AND: [tenantFilter, extra] }
+            : tenantFilter;
 
-      const [items, total] = await Promise.all([
-        tx.loginAttempt.findMany({ where, skip, take, orderBy: { attemptedAt: 'desc' } }),
-        tx.loginAttempt.count({ where }),
-      ]);
+        const [items, total] = await Promise.all([
+          tx.loginAttempt.findMany({
+            where,
+            skip,
+            take,
+            orderBy: { attemptedAt: 'desc' },
+          }),
+          tx.loginAttempt.count({ where }),
+        ]);
 
-      return toContractPaginated(
-        toPaginatedResult(items.map(mapLoginAttempt), total, page, pageSize),
-      );
-    });
+        return toContractPaginated(
+          toPaginatedResult(items.map(mapLoginAttempt), total, page, pageSize),
+        );
+      },
+    );
   }
 
   async getMfaDevices(filters?: IamFilters) {
@@ -469,11 +583,18 @@ export class IamRepository extends TenantAwareRepository {
       if (filters?.userId) where.userId = filters.userId;
 
       const [items, total] = await Promise.all([
-        tx.mfaDevice.findMany({ where, skip, take, orderBy: { registeredAt: 'desc' } }),
+        tx.mfaDevice.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { registeredAt: 'desc' },
+        }),
         tx.mfaDevice.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapMfaDevice), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapMfaDevice), total, page, pageSize),
+      );
     });
   }
 
@@ -485,7 +606,12 @@ export class IamRepository extends TenantAwareRepository {
       if (filters?.userId) where.userId = filters.userId;
 
       const [items, total] = await Promise.all([
-        tx.trustedDevice.findMany({ where, skip, take, orderBy: { lastSeenAt: 'desc' } }),
+        tx.trustedDevice.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { lastSeenAt: 'desc' },
+        }),
         tx.trustedDevice.count({ where }),
       ]);
 
@@ -509,11 +635,18 @@ export class IamRepository extends TenantAwareRepository {
       }
 
       const [items, total] = await Promise.all([
-        tx.oAuthClient.findMany({ where, skip, take, orderBy: { createdAt: 'desc' } }),
+        tx.oAuthClient.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { createdAt: 'desc' },
+        }),
         tx.oAuthClient.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapOAuthClient), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapOAuthClient), total, page, pageSize),
+      );
     });
   }
 
@@ -532,11 +665,18 @@ export class IamRepository extends TenantAwareRepository {
       }
 
       const [items, total] = await Promise.all([
-        tx.apiKey.findMany({ where, skip, take, orderBy: { createdAt: 'desc' } }),
+        tx.apiKey.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { createdAt: 'desc' },
+        }),
         tx.apiKey.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapApiKey), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapApiKey), total, page, pageSize),
+      );
     });
   }
 
@@ -549,11 +689,18 @@ export class IamRepository extends TenantAwareRepository {
       if (filters?.patientId) where.patientId = filters.patientId;
 
       const [items, total] = await Promise.all([
-        tx.consentRecord.findMany({ where, skip, take, orderBy: { grantedAt: 'desc' } }),
+        tx.consentRecord.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { grantedAt: 'desc' },
+        }),
         tx.consentRecord.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapConsent), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapConsent), total, page, pageSize),
+      );
     });
   }
 
@@ -561,13 +708,23 @@ export class IamRepository extends TenantAwareRepository {
     const { page, pageSize, skip, take } = normalizePagination(filters);
 
     return this.prisma.runInTransaction(async (tx) => {
-      const where: Prisma.DelegationRecordWhereInput = { tenantId: this.tenantId };
+      const where: Prisma.DelegationRecordWhereInput = {
+        tenantId: this.tenantId,
+      };
       if (filters?.userId) {
-        where.OR = [{ delegatorId: filters.userId }, { delegateId: filters.userId }];
+        where.OR = [
+          { delegatorId: filters.userId },
+          { delegateId: filters.userId },
+        ];
       }
 
       const [items, total] = await Promise.all([
-        tx.delegationRecord.findMany({ where, skip, take, orderBy: { startsAt: 'desc' } }),
+        tx.delegationRecord.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { startsAt: 'desc' },
+        }),
         tx.delegationRecord.count({ where }),
       ]);
 
@@ -585,7 +742,12 @@ export class IamRepository extends TenantAwareRepository {
       if (filters?.patientId) where.patientId = filters.patientId;
 
       const [items, total] = await Promise.all([
-        tx.proxyAccess.findMany({ where, skip, take, orderBy: { grantedAt: 'desc' } }),
+        tx.proxyAccess.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { grantedAt: 'desc' },
+        }),
         tx.proxyAccess.count({ where }),
       ]);
 
@@ -599,12 +761,19 @@ export class IamRepository extends TenantAwareRepository {
     const { page, pageSize, skip, take } = normalizePagination(filters);
 
     return this.prisma.runInTransaction(async (tx) => {
-      const where: Prisma.BreakGlassEventWhereInput = { tenantId: this.tenantId };
+      const where: Prisma.BreakGlassEventWhereInput = {
+        tenantId: this.tenantId,
+      };
       if (filters?.userId) where.userId = filters.userId;
       if (filters?.status) where.status = filters.status;
 
       const [items, total] = await Promise.all([
-        tx.breakGlassEvent.findMany({ where, skip, take, orderBy: { startedAt: 'desc' } }),
+        tx.breakGlassEvent.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { startedAt: 'desc' },
+        }),
         tx.breakGlassEvent.count({ where }),
       ]);
 
@@ -635,11 +804,18 @@ export class IamRepository extends TenantAwareRepository {
       }
 
       const [items, total] = await Promise.all([
-        tx.iamAuditLog.findMany({ where, skip, take, orderBy: { createdAt: 'desc' } }),
+        tx.iamAuditLog.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { createdAt: 'desc' },
+        }),
         tx.iamAuditLog.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapAuditEvent), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapAuditEvent), total, page, pageSize),
+      );
     });
   }
 
@@ -651,12 +827,22 @@ export class IamRepository extends TenantAwareRepository {
       if (filters?.status) where.status = filters.status;
 
       const [items, total] = await Promise.all([
-        tx.securityIncident.findMany({ where, skip, take, orderBy: { detectedAt: 'desc' } }),
+        tx.securityIncident.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { detectedAt: 'desc' },
+        }),
         tx.securityIncident.count({ where }),
       ]);
 
       return toContractPaginated(
-        toPaginatedResult(items.map(mapSecurityIncident), total, page, pageSize),
+        toPaginatedResult(
+          items.map(mapSecurityIncident),
+          total,
+          page,
+          pageSize,
+        ),
       );
     });
   }
@@ -669,11 +855,18 @@ export class IamRepository extends TenantAwareRepository {
       if (filters?.userId) where.userId = filters.userId;
 
       const [items, total] = await Promise.all([
-        tx.riskScore.findMany({ where, skip, take, orderBy: { assessedAt: 'desc' } }),
+        tx.riskScore.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { assessedAt: 'desc' },
+        }),
         tx.riskScore.count({ where }),
       ]);
 
-      return toContractPaginated(toPaginatedResult(items.map(mapRiskScore), total, page, pageSize));
+      return toContractPaginated(
+        toPaginatedResult(items.map(mapRiskScore), total, page, pageSize),
+      );
     });
   }
 
@@ -685,7 +878,12 @@ export class IamRepository extends TenantAwareRepository {
       const where: Prisma.SamlProviderWhereInput = { tenantId };
 
       const [items, total] = await Promise.all([
-        tx.samlProvider.findMany({ where, skip, take, orderBy: { name: 'asc' } }),
+        tx.samlProvider.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { name: 'asc' },
+        }),
         tx.samlProvider.count({ where }),
       ]);
 
@@ -703,7 +901,12 @@ export class IamRepository extends TenantAwareRepository {
       const where: Prisma.OidcProviderWhereInput = { tenantId };
 
       const [items, total] = await Promise.all([
-        tx.oidcProvider.findMany({ where, skip, take, orderBy: { name: 'asc' } }),
+        tx.oidcProvider.findMany({
+          where,
+          skip,
+          take,
+          orderBy: { name: 'asc' },
+        }),
         tx.oidcProvider.count({ where }),
       ]);
 
@@ -777,7 +980,9 @@ export class IamRepository extends TenantAwareRepository {
       });
 
       await tx.userRoleAssignment.upsert({
-        where: { userId_roleId: { userId: input.userId, roleId: input.roleId } },
+        where: {
+          userId_roleId: { userId: input.userId, roleId: input.roleId },
+        },
         create: { userId: input.userId, roleId: input.roleId },
         update: {},
       });
@@ -1048,12 +1253,14 @@ export class IamRepository extends TenantAwareRepository {
         orderBy: { createdAt: 'desc' },
       });
 
-      return favorites.map((favorite: Prisma.IamFavoriteGetPayload<object>) => ({
-        userId: favorite.userId,
-        entityType: favorite.entityType as IamFavorite['entityType'],
-        entityId: favorite.entityId,
-        createdAt: favorite.createdAt.toISOString(),
-      }));
+      return favorites.map(
+        (favorite: Prisma.IamFavoriteGetPayload<object>) => ({
+          userId: favorite.userId,
+          entityType: favorite.entityType as IamFavorite['entityType'],
+          entityId: favorite.entityId,
+          createdAt: favorite.createdAt.toISOString(),
+        }),
+      );
     });
   }
 

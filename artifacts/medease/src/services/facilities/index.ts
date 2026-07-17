@@ -1,8 +1,15 @@
 export { facilitiesService } from '@/services/facilities/facilities.service';
 export { facilitiesRepository } from '@/services/facilities/repository';
 export { facilitiesOfflineQueue } from '@/services/facilities/offline-sync';
-export { computeFacilitiesAnalytics, computeEquipmentUtilization } from '@/services/facilities/analytics';
-export { toFhirDevice, toFhirLocation, toFhirHealthcareService } from '@/services/facilities/mapper';
+export {
+  computeFacilitiesAnalytics,
+  computeEquipmentUtilization,
+} from '@/services/facilities/analytics';
+export {
+  toFhirDevice,
+  toFhirLocation,
+  toFhirHealthcareService,
+} from '@/services/facilities/mapper';
 export {
   buildFacilitiesDashboard,
   MOCK_FACILITY_SITES,

@@ -1,4 +1,8 @@
-import type { PatientTrend, VitalSign, VitalType } from '@/services/patient-monitoring/types';
+import type {
+  PatientTrend,
+  VitalSign,
+  VitalType,
+} from '@/services/patient-monitoring/types';
 
 function groupByDay(vitals: VitalSign[]) {
   const map = new Map<string, number[]>();
@@ -12,7 +16,9 @@ function groupByDay(vitals: VitalSign[]) {
   return map;
 }
 
-function trendDirection(values: number[]): 'improving' | 'stable' | 'deteriorating' {
+function trendDirection(
+  values: number[],
+): 'improving' | 'stable' | 'deteriorating' {
   if (values.length < 2) return 'stable';
   const first = values.slice(0, Math.ceil(values.length / 2));
   const second = values.slice(Math.ceil(values.length / 2));
@@ -23,8 +29,13 @@ function trendDirection(values: number[]): 'improving' | 'stable' | 'deteriorati
   return delta > 0 ? 'deteriorating' : 'improving';
 }
 
-export function buildDailyTrend(vitals: VitalSign[], metric: VitalType): PatientTrend {
-  const filtered = vitals.filter((v) => v.type === metric && typeof v.value === 'number');
+export function buildDailyTrend(
+  vitals: VitalSign[],
+  metric: VitalType,
+): PatientTrend {
+  const filtered = vitals.filter(
+    (v) => v.type === metric && typeof v.value === 'number',
+  );
   const grouped = groupByDay(filtered);
   const points = [...grouped.entries()].slice(-7).map(([label, values]) => ({
     label: label.slice(5),
@@ -37,30 +48,43 @@ export function buildDailyTrend(vitals: VitalSign[], metric: VitalType): Patient
     metric,
     period: 'daily',
     points,
-    average: allValues.length ? Math.round(allValues.reduce((s, v) => s + v, 0) / allValues.length) : 0,
+    average: allValues.length
+      ? Math.round(allValues.reduce((s, v) => s + v, 0) / allValues.length)
+      : 0,
     min: allValues.length ? Math.min(...allValues) : 0,
     max: allValues.length ? Math.max(...allValues) : 0,
     trend: trendDirection(allValues),
   };
 }
 
-export function buildWeeklyTrend(vitals: VitalSign[], metric: VitalType): PatientTrend {
+export function buildWeeklyTrend(
+  vitals: VitalSign[],
+  metric: VitalType,
+): PatientTrend {
   const daily = buildDailyTrend(vitals, metric);
   return { ...daily, id: `trend-weekly-${metric}`, period: 'weekly' };
 }
 
-export function buildMonthlyTrend(vitals: VitalSign[], metric: VitalType): PatientTrend {
+export function buildMonthlyTrend(
+  vitals: VitalSign[],
+  metric: VitalType,
+): PatientTrend {
   const daily = buildDailyTrend(vitals, metric);
   return { ...daily, id: `trend-monthly-${metric}`, period: 'monthly' };
 }
 
-export function buildLongitudinalTrend(vitals: VitalSign[], metric: VitalType): PatientTrend {
+export function buildLongitudinalTrend(
+  vitals: VitalSign[],
+  metric: VitalType,
+): PatientTrend {
   const daily = buildDailyTrend(vitals, metric);
   return { ...daily, id: `trend-long-${metric}`, period: 'longitudinal' };
 }
 
 export function buildVitalCorrelations(vitals: VitalSign[]) {
-  const hr = vitals.filter((v) => v.type === 'heart_rate' && typeof v.value === 'number').slice(-10);
+  const hr = vitals
+    .filter((v) => v.type === 'heart_rate' && typeof v.value === 'number')
+    .slice(-10);
   const bp = vitals.filter((v) => v.type === 'blood_pressure').slice(-10);
   return { heartRate: hr, bloodPressure: bp };
 }

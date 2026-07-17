@@ -1,15 +1,12 @@
 export type PatientStatus = 'active' | 'inactive' | 'observation';
 export type Gender = 'male' | 'female' | 'other' | 'unknown';
 export type PatientIdentifierType =
-  | 'mrn'
-  | 'national_id'
-  | 'passport'
-  | 'drivers_license'
-  | 'ssn'
-  | 'other';
+  'mrn' | 'national_id' | 'passport' | 'drivers_license' | 'ssn' | 'other';
 export type PatientContactType = 'phone' | 'email' | 'fax' | 'other';
-export type PatientAddressType = 'home' | 'work' | 'mailing' | 'temporary' | 'other';
-export type AllergySeverity = 'mild' | 'moderate' | 'severe' | 'life_threatening';
+export type PatientAddressType =
+  'home' | 'work' | 'mailing' | 'temporary' | 'other';
+export type AllergySeverity =
+  'mild' | 'moderate' | 'severe' | 'life_threatening';
 export type AllergyType = 'drug' | 'food' | 'environmental' | 'other';
 export type ExportFormat = 'csv' | 'pdf' | 'xlsx';
 

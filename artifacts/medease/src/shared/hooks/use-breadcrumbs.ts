@@ -13,7 +13,10 @@ export interface BreadcrumbItem {
   href?: string;
 }
 
-export function useBreadcrumbs(portalLabel?: string, portalBase?: string): BreadcrumbItem[] {
+export function useBreadcrumbs(
+  portalLabel?: string,
+  portalBase?: string,
+): BreadcrumbItem[] {
   const [location] = useLocation();
 
   return useMemo(() => {
@@ -26,22 +29,35 @@ export function useBreadcrumbs(portalLabel?: string, portalBase?: string): Bread
     const items: BreadcrumbItem[] = [{ label: 'Home', href: '/' }];
 
     if (portalLabel) {
-      items.push({ label: portalLabel, href: relative === '/' ? undefined : '/' });
+      items.push({
+        label: portalLabel,
+        href: relative === '/' ? undefined : '/',
+      });
     }
 
     let path = '';
     segments.forEach((segment, index) => {
       path += `/${segment}`;
       const isLast = index === segments.length - 1;
-      const fullPath = portalBase ? `${portalBase}${path}`.replace(/\/+/g, '/') : path;
+      const fullPath = portalBase
+        ? `${portalBase}${path}`.replace(/\/+/g, '/')
+        : path;
       const isPortalRoot =
         segments.length === 1 ||
-        (index === 0 && segments.length > 1 && portalBase && PORTAL_HOME_LABELS[portalBase]);
+        (index === 0 &&
+          segments.length > 1 &&
+          portalBase &&
+          PORTAL_HOME_LABELS[portalBase]);
 
       let label =
         getRouteBreadcrumbLabel(fullPath) ?? formatBreadcrumbSegment(segment);
 
-      if (isPortalRoot && portalBase && PORTAL_HOME_LABELS[portalBase] && index === 0) {
+      if (
+        isPortalRoot &&
+        portalBase &&
+        PORTAL_HOME_LABELS[portalBase] &&
+        index === 0
+      ) {
         label = PORTAL_HOME_LABELS[portalBase];
       }
 

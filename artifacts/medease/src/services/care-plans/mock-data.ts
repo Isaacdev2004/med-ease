@@ -15,15 +15,30 @@ import type {
 } from '@/services/care-plans/types';
 import { AUTH_USER_PATIENT_MAP } from '@/services/care-plans/types';
 
-const PHYSICIANS = ['Dr. Emily Chen', 'Dr. Jean-Luc Martin', 'Dr. Sophie Bernard'];
-const FACILITIES = ['Pitié-Salpêtrière', 'Hôpital Européen Georges-Pompidou', 'Hôpital Necker'];
-const CONDITIONS = ['Type 2 Diabetes', 'Hypertension', 'COPD', 'Heart Failure', 'Post-operative Recovery'];
+const PHYSICIANS = [
+  'Dr. Emily Chen',
+  'Dr. Jean-Luc Martin',
+  'Dr. Sophie Bernard',
+];
+const FACILITIES = [
+  'Pitié-Salpêtrière',
+  'Hôpital Européen Georges-Pompidou',
+  'Hôpital Necker',
+];
+const CONDITIONS = [
+  'Type 2 Diabetes',
+  'Hypertension',
+  'COPD',
+  'Heart Failure',
+  'Post-operative Recovery',
+];
 
 const PATHWAY_DEFS: ClinicalPathway[] = [
   {
     id: 'diabetes',
     name: 'Diabetes Management',
-    description: 'Evidence-based diabetes care pathway with HbA1c targets and medication titration.',
+    description:
+      'Evidence-based diabetes care pathway with HbA1c targets and medication titration.',
     milestones: [
       { id: 'm1', title: 'Baseline labs', completed: true },
       { id: 'm2', title: 'Medication optimization', completed: true },
@@ -38,7 +53,8 @@ const PATHWAY_DEFS: ClinicalPathway[] = [
   {
     id: 'hypertension',
     name: 'Hypertension Control',
-    description: 'Blood pressure management with lifestyle and pharmacologic interventions.',
+    description:
+      'Blood pressure management with lifestyle and pharmacologic interventions.',
     milestones: [
       { id: 'm1', title: 'BP baseline', completed: true },
       { id: 'm2', title: 'Home monitoring setup', completed: false },
@@ -52,7 +68,8 @@ const PATHWAY_DEFS: ClinicalPathway[] = [
   {
     id: 'heart_failure',
     name: 'Heart Failure Care',
-    description: 'Comprehensive heart failure management and readmission prevention.',
+    description:
+      'Comprehensive heart failure management and readmission prevention.',
     milestones: [
       { id: 'm1', title: 'Echo baseline', completed: true },
       { id: 'm2', title: 'Medication titration', completed: false },
@@ -85,7 +102,10 @@ const PATHWAY_DEFS: ClinicalPathway[] = [
     mandatoryTasks: ['Inhaler technique', 'Smoking cessation'],
     requiredAppointments: 3,
     requiredLabs: 1,
-    medicationProtocols: ['Bronchodilator', 'Inhaled corticosteroid if indicated'],
+    medicationProtocols: [
+      'Bronchodilator',
+      'Inhaled corticosteroid if indicated',
+    ],
     completionCriteria: 'Stable FEV1, reduced exacerbations',
   },
 ];
@@ -114,22 +134,39 @@ function riskFromIndex(index: number): RiskSeverity {
 export function generateCarePlan(index: number, patientIdx: number): CarePlan {
   const patientId = `phr-${String(patientIdx + 1).padStart(3, '0')}`;
   const condition = pick(CONDITIONS, index);
-  const pathwayId = pick(['diabetes', 'hypertension', 'copd', 'heart_failure', 'post_surgery'] as PathwayId[], index);
-  const statusPool = index % 15 === 0 ? 'completed' : index % 12 === 0 ? 'on_hold' : 'active';
+  const pathwayId = pick(
+    [
+      'diabetes',
+      'hypertension',
+      'copd',
+      'heart_failure',
+      'post_surgery',
+    ] as PathwayId[],
+    index,
+  );
+  const statusPool =
+    index % 15 === 0 ? 'completed' : index % 12 === 0 ? 'on_hold' : 'active';
 
   return {
     id: `cp-${String(index + 1).padStart(4, '0')}`,
     patientId,
-    patientName: patientIdx === 0 ? 'Sarah Jenkins' : `Patient ${patientIdx + 1}`,
+    patientName:
+      patientIdx === 0 ? 'Sarah Jenkins' : `Patient ${patientIdx + 1}`,
     title: `${condition} Care Plan`,
     description: `Comprehensive care plan for ${condition.toLowerCase()} management and coordination.`,
-    type: index % 3 === 0 ? 'chronic_disease' : index % 3 === 1 ? 'rehabilitation' : 'preventive',
+    type:
+      index % 3 === 0
+        ? 'chronic_disease'
+        : index % 3 === 1
+          ? 'rehabilitation'
+          : 'preventive',
     status: statusPool,
     pathwayId,
     primaryDiagnosis: condition,
     diagnosisCode: `ICD-E11.${index % 9}`,
     startDate: daysAgo(90 + (index % 60)),
-    endDate: statusPool === 'completed' ? daysAgo(5) : daysFromNow(180 - (index % 90)),
+    endDate:
+      statusPool === 'completed' ? daysAgo(5) : daysFromNow(180 - (index % 90)),
     reviewDate: daysFromNow(14 + (index % 30)),
     completionPercent: 40 + (index % 55),
     progressPercent: 35 + (index % 60),
@@ -143,12 +180,14 @@ export function generateCarePlan(index: number, patientIdx: number): CarePlan {
     isCollaborative: index % 4 === 0,
     templateId: index % 6 === 0 ? `tpl-${pathwayId}` : undefined,
     version: 1 + (index % 3),
-    versionHistory: [{
-      version: 1,
-      changedAt: daysAgo(30),
-      changedBy: pick(PHYSICIANS, index),
-      summary: 'Initial care plan created',
-    }],
+    versionHistory: [
+      {
+        version: 1,
+        changedAt: daysAgo(30),
+        changedBy: pick(PHYSICIANS, index),
+        summary: 'Initial care plan created',
+      },
+    ],
     linkedMedicationIds: [`med-${index % 20}`, `med-${(index + 1) % 20}`],
     linkedAppointmentIds: [`apt-${index % 30}`],
     linkedProviderIds: [`prov-00${(index % 3) + 1}`],
@@ -158,14 +197,26 @@ export function generateCarePlan(index: number, patientIdx: number): CarePlan {
 }
 
 export function generateGoals(plan: CarePlan, index: number): CareGoal[] {
-  const categories = ['clinical', 'medication', 'lifestyle', 'blood_sugar', 'blood_pressure'] as const;
+  const categories = [
+    'clinical',
+    'medication',
+    'lifestyle',
+    'blood_sugar',
+    'blood_pressure',
+  ] as const;
   return categories.slice(0, 3 + (index % 3)).map((cat, i) => ({
     id: `goal-${plan.id}-${i}`,
     carePlanId: plan.id,
     patientId: plan.patientId,
-    title: cat === 'blood_sugar' ? 'Maintain HbA1c below 7%' : cat === 'blood_pressure' ? 'BP below 130/80' : `Improve ${cat.replace('_', ' ')}`,
+    title:
+      cat === 'blood_sugar'
+        ? 'Maintain HbA1c below 7%'
+        : cat === 'blood_pressure'
+          ? 'BP below 130/80'
+          : `Improve ${cat.replace('_', ' ')}`,
     category: cat,
-    target: cat === 'medication' ? '95% adherence' : 'Achieve target within 90 days',
+    target:
+      cat === 'medication' ? '95% adherence' : 'Achieve target within 90 days',
     priority: i === 0 ? 'high' : 'medium',
     owner: plan.assignedPhysician,
     ownerId: plan.assignedPhysicianId,
@@ -178,23 +229,41 @@ export function generateGoals(plan: CarePlan, index: number): CareGoal[] {
 }
 
 export function generateTasks(plan: CarePlan, index: number): CareTask[] {
-  const types = ['medication', 'appointment', 'lab', 'education', 'monitoring'] as const;
+  const types = [
+    'medication',
+    'appointment',
+    'lab',
+    'education',
+    'monitoring',
+  ] as const;
   return Array.from({ length: 8 + (index % 6) }, (_, i) => {
     const dueOffset = i - 2;
-    const status = dueOffset < -1 ? 'overdue' : dueOffset < 0 ? 'completed' : 'pending';
+    const status =
+      dueOffset < -1 ? 'overdue' : dueOffset < 0 ? 'completed' : 'pending';
     return {
       id: `task-${plan.id}-${i}`,
       carePlanId: plan.id,
       patientId: plan.patientId,
-      title: types[i % types.length] === 'medication' ? 'Take morning medications' : types[i % types.length] === 'appointment' ? 'Follow-up appointment' : 'Complete scheduled activity',
+      title:
+        types[i % types.length] === 'medication'
+          ? 'Take morning medications'
+          : types[i % types.length] === 'appointment'
+            ? 'Follow-up appointment'
+            : 'Complete scheduled activity',
       type: types[i % types.length]!,
       priority: i === 0 ? 'urgent' : i < 3 ? 'high' : 'medium',
       owner: i % 2 === 0 ? plan.assignedPhysician : 'Sarah Jenkins',
       ownerId: i % 2 === 0 ? plan.assignedPhysicianId : 'user-patient',
       dueDate: daysFromNow(dueOffset),
       status,
-      linkedMedicationId: types[i % types.length] === 'medication' ? plan.linkedMedicationIds[0] : undefined,
-      linkedAppointmentId: types[i % types.length] === 'appointment' ? plan.linkedAppointmentIds[0] : undefined,
+      linkedMedicationId:
+        types[i % types.length] === 'medication'
+          ? plan.linkedMedicationIds[0]
+          : undefined,
+      linkedAppointmentId:
+        types[i % types.length] === 'appointment'
+          ? plan.linkedAppointmentIds[0]
+          : undefined,
       createdAt: plan.startDate,
       updatedAt: new Date().toISOString(),
     };
@@ -222,7 +291,11 @@ function generateTeam(plan: CarePlan): CareTeamMember[] {
       name: 'Marie Dupont, RN',
       role: 'nurse',
       permissions: ['read', 'write'],
-      responsibilities: ['Vital monitoring', 'Patient education', 'Task coordination'],
+      responsibilities: [
+        'Vital monitoring',
+        'Patient education',
+        'Task coordination',
+      ],
       isPrimary: false,
     },
     {
@@ -270,17 +343,28 @@ export const MOCK_CARE_PLANS: CarePlan[] = Array.from({ length: 120 }, (_, i) =>
   generateCarePlan(i, i % 40),
 );
 
-export const MOCK_GOALS: CareGoal[] = MOCK_CARE_PLANS.flatMap((p, i) => generateGoals(p, i));
+export const MOCK_GOALS: CareGoal[] = MOCK_CARE_PLANS.flatMap((p, i) =>
+  generateGoals(p, i),
+);
 
-export const MOCK_TASKS: CareTask[] = MOCK_CARE_PLANS.flatMap((p, i) => generateTasks(p, i));
+export const MOCK_TASKS: CareTask[] = MOCK_CARE_PLANS.flatMap((p, i) =>
+  generateTasks(p, i),
+);
 
-export const MOCK_TEAM: CareTeamMember[] = MOCK_CARE_PLANS.flatMap((p) => generateTeam(p));
+export const MOCK_TEAM: CareTeamMember[] = MOCK_CARE_PLANS.flatMap((p) =>
+  generateTeam(p),
+);
 
-export const MOCK_RISKS: RiskAssessment[] = MOCK_CARE_PLANS.flatMap((p, i) => generateRisks(p, i));
+export const MOCK_RISKS: RiskAssessment[] = MOCK_CARE_PLANS.flatMap((p, i) =>
+  generateRisks(p, i),
+);
 
 export const MOCK_PATHWAYS: ClinicalPathway[] = PATHWAY_DEFS;
 
-export const MOCK_ACTIVITY: CareActivityItem[] = MOCK_CARE_PLANS.slice(0, 20).flatMap((p, i) => [
+export const MOCK_ACTIVITY: CareActivityItem[] = MOCK_CARE_PLANS.slice(
+  0,
+  20,
+).flatMap((p, i) => [
   {
     id: `act-${p.id}-1`,
     type: 'task',
@@ -346,7 +430,9 @@ export function buildCareTimeline(patientId: string): CareTimelineEntry[] {
     });
   }
 
-  return entries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return entries.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+  );
 }
 
 export function getPatientIdForUser(userId: string): string | null {
@@ -354,9 +440,13 @@ export function getPatientIdForUser(userId: string): string | null {
 }
 
 export function buildDashboard(patientId: string): CarePlanDashboard {
-  const activePlan = MOCK_CARE_PLANS.find((p) => p.patientId === patientId && p.status === 'active');
+  const activePlan = MOCK_CARE_PLANS.find(
+    (p) => p.patientId === patientId && p.status === 'active',
+  );
   const tasks = MOCK_TASKS.filter((t) => t.patientId === patientId);
-  const team = activePlan ? MOCK_TEAM.filter((m) => m.carePlanId === activePlan.id) : [];
+  const team = activePlan
+    ? MOCK_TEAM.filter((m) => m.carePlanId === activePlan.id)
+    : [];
 
   return {
     patientId,
@@ -366,7 +456,9 @@ export function buildDashboard(patientId: string): CarePlanDashboard {
     progressPercent: activePlan?.progressPercent ?? 0,
     riskLevel: activePlan?.riskLevel ?? 'moderate',
     pendingTasks: tasks.filter((t) => t.status === 'pending').length,
-    upcomingTasks: tasks.filter((t) => t.status === 'pending' && new Date(t.dueDate) > new Date()).length,
+    upcomingTasks: tasks.filter(
+      (t) => t.status === 'pending' && new Date(t.dueDate) > new Date(),
+    ).length,
     completedTasks: tasks.filter((t) => t.status === 'completed').length,
     overdueTasks: tasks.filter((t) => t.status === 'overdue').length,
     missedTasks: tasks.filter((t) => t.status === 'missed').length,
@@ -378,12 +470,16 @@ export function buildDashboard(patientId: string): CarePlanDashboard {
     recentActivity: MOCK_ACTIVITY.filter((a) => {
       const plan = MOCK_CARE_PLANS.find((p) => p.id === a.carePlanId);
       return plan?.patientId === patientId;
-    }).slice(0, 5).map((a) => ({ id: a.id, title: a.title, date: a.timestamp })),
+    })
+      .slice(0, 5)
+      .map((a) => ({ id: a.id, title: a.title, date: a.timestamp })),
   };
 }
 
 export function buildProgress(patientId: string): CareProgressTracking {
-  const plan = MOCK_CARE_PLANS.find((p) => p.patientId === patientId && p.status === 'active');
+  const plan = MOCK_CARE_PLANS.find(
+    (p) => p.patientId === patientId && p.status === 'active',
+  );
   const goals = MOCK_GOALS.filter((g) => g.patientId === patientId);
   const achieved = goals.filter((g) => g.status === 'achieved').length;
 
@@ -394,16 +490,23 @@ export function buildProgress(patientId: string): CareProgressTracking {
     monthly: 72,
     quarterly: 68,
     yearly: 65,
-    goalCompletion: goals.length ? Math.round((achieved / goals.length) * 100) : 0,
+    goalCompletion: goals.length
+      ? Math.round((achieved / goals.length) * 100)
+      : 0,
     medicationCompliance: 88,
     appointmentAttendance: 92,
     clinicalImprovement: plan?.progressPercent ?? 70,
     healthScoreTrend: [
-      { label: 'Jan', value: 68 }, { label: 'Feb', value: 70 }, { label: 'Mar', value: 72 },
+      { label: 'Jan', value: 68 },
+      { label: 'Feb', value: 70 },
+      { label: 'Mar', value: 72 },
       { label: 'Apr', value: plan?.healthScore ?? 75 },
     ],
     riskTrend: [
-      { label: 'W1', value: 45 }, { label: 'W2', value: 40 }, { label: 'W3', value: 35 }, { label: 'W4', value: 30 },
+      { label: 'W1', value: 45 },
+      { label: 'W2', value: 40 },
+      { label: 'W3', value: 35 },
+      { label: 'W4', value: 30 },
     ],
   };
 }
@@ -414,20 +517,39 @@ export function buildAnalytics(): CareAnalytics {
     totalPlans: MOCK_CARE_PLANS.length,
     activePlans: active.length,
     completionRate: 78,
-    averageProgress: Math.round(active.reduce((s, p) => s + p.progressPercent, 0) / Math.max(active.length, 1)),
+    averageProgress: Math.round(
+      active.reduce((s, p) => s + p.progressPercent, 0) /
+        Math.max(active.length, 1),
+    ),
     overdueTasks: MOCK_TASKS.filter((t) => t.status === 'overdue').length,
     readmissionRiskAverage: 32,
     qualityScore: 84,
     plansByType: [
-      { label: 'Chronic', value: MOCK_CARE_PLANS.filter((p) => p.type === 'chronic_disease').length },
-      { label: 'Rehab', value: MOCK_CARE_PLANS.filter((p) => p.type === 'rehabilitation').length },
-      { label: 'Preventive', value: MOCK_CARE_PLANS.filter((p) => p.type === 'preventive').length },
+      {
+        label: 'Chronic',
+        value: MOCK_CARE_PLANS.filter((p) => p.type === 'chronic_disease')
+          .length,
+      },
+      {
+        label: 'Rehab',
+        value: MOCK_CARE_PLANS.filter((p) => p.type === 'rehabilitation')
+          .length,
+      },
+      {
+        label: 'Preventive',
+        value: MOCK_CARE_PLANS.filter((p) => p.type === 'preventive').length,
+      },
     ],
     completionByMonth: [
-      { label: 'Jan', value: 72 }, { label: 'Feb', value: 75 }, { label: 'Mar', value: 78 }, { label: 'Apr', value: 81 },
+      { label: 'Jan', value: 72 },
+      { label: 'Feb', value: 75 },
+      { label: 'Mar', value: 78 },
+      { label: 'Apr', value: 81 },
     ],
     topPathways: [
-      { label: 'Diabetes', value: 28 }, { label: 'Hypertension', value: 24 }, { label: 'Heart Failure', value: 18 },
+      { label: 'Diabetes', value: 28 },
+      { label: 'Hypertension', value: 24 },
+      { label: 'Heart Failure', value: 18 },
     ],
   };
 }

@@ -2,7 +2,13 @@ import type { ReactNode } from 'react';
 
 import { StatusBadge } from '@/shared/components/StatusBadge';
 import type { HealthcareStatus } from '@/config/design-tokens';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { cn } from '@/shared/lib/utils';
 
@@ -29,7 +35,12 @@ export function MetricCard({
   className,
 }: MetricCardProps) {
   return (
-    <Card className={cn('flex flex-col overflow-hidden hover-elevate transition-all duration-200', className)}>
+    <Card
+      className={cn(
+        'flex flex-col overflow-hidden hover-elevate transition-all duration-200',
+        className,
+      )}
+    >
       <CardHeader className="flex flex-row items-start justify-between gap-2 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">{title}</CardTitle>

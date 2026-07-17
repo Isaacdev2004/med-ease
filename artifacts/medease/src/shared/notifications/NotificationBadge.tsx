@@ -7,7 +7,11 @@ interface NotificationBadgeProps {
 }
 
 /** Sidebar and header unread badge — updates via React Query. */
-export function NotificationBadge({ count, className, max = 99 }: NotificationBadgeProps) {
+export function NotificationBadge({
+  count,
+  className,
+  max = 99,
+}: NotificationBadgeProps) {
   if (count <= 0) return null;
 
   const label = count > max ? `${max}+` : String(count);

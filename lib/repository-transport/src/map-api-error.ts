@@ -26,7 +26,11 @@ function problemMessage(data: unknown, fallback: string): string {
   return fallback;
 }
 
-function mapStatusError(status: number, data: unknown, cause: unknown): RepositoryError {
+function mapStatusError(
+  status: number,
+  data: unknown,
+  cause: unknown,
+): RepositoryError {
   const details = asProblemDetails(data) ?? data;
   const message = problemMessage(data, `Request failed with status ${status}`);
 
@@ -61,7 +65,9 @@ export function mapApiError(error: unknown): RepositoryError {
   }
 
   if (error instanceof TypeError) {
-    return new NetworkError(error.message || 'Network request failed', { cause: error });
+    return new NetworkError(error.message || 'Network request failed', {
+      cause: error,
+    });
   }
 
   if (error instanceof Error) {

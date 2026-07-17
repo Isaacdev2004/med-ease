@@ -16,8 +16,13 @@ export const CARE_PLAN_TEMPLATES: CarePlanTemplate[] = [
     name: 'Diabetes Management Template',
     type: 'chronic_disease',
     pathwayId: 'diabetes',
-    description: 'Standard diabetes care plan with HbA1c monitoring and medication adherence.',
-    defaultGoals: ['HbA1c < 7%', 'Daily glucose monitoring', 'Weight management'],
+    description:
+      'Standard diabetes care plan with HbA1c monitoring and medication adherence.',
+    defaultGoals: [
+      'HbA1c < 7%',
+      'Daily glucose monitoring',
+      'Weight management',
+    ],
     defaultTasks: ['Quarterly HbA1c', 'Annual eye exam', 'Foot examination'],
   },
   {
@@ -27,7 +32,11 @@ export const CARE_PLAN_TEMPLATES: CarePlanTemplate[] = [
     pathwayId: 'hypertension',
     description: 'Blood pressure management with lifestyle modifications.',
     defaultGoals: ['BP < 130/80', 'Reduce sodium intake', 'Regular exercise'],
-    defaultTasks: ['Home BP monitoring', 'Medication review', 'Follow-up visit'],
+    defaultTasks: [
+      'Home BP monitoring',
+      'Medication review',
+      'Follow-up visit',
+    ],
   },
   {
     id: 'tpl-post-op',
@@ -36,7 +45,11 @@ export const CARE_PLAN_TEMPLATES: CarePlanTemplate[] = [
     pathwayId: 'post_surgery',
     description: 'Structured post-surgical recovery plan.',
     defaultGoals: ['Pain control', 'Wound healing', 'Restore mobility'],
-    defaultTasks: ['Wound care', 'Physical therapy sessions', 'Pain assessment'],
+    defaultTasks: [
+      'Wound care',
+      'Physical therapy sessions',
+      'Pain assessment',
+    ],
   },
 ];
 

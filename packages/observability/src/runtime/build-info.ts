@@ -16,7 +16,9 @@ export interface RuntimeBuildInfoInput {
   migrationVersion?: string;
 }
 
-export function resolveRuntimeBuildInfo(input: RuntimeBuildInfoInput = {}): RuntimeBuildInfo {
+export function resolveRuntimeBuildInfo(
+  input: RuntimeBuildInfoInput = {},
+): RuntimeBuildInfo {
   return {
     applicationVersion:
       input.serviceVersion ??
@@ -26,8 +28,11 @@ export function resolveRuntimeBuildInfo(input: RuntimeBuildInfoInput = {}): Runt
     gitCommit: input.gitCommit ?? process.env.GIT_COMMIT ?? 'unknown',
     buildTimestamp: input.buildTimestamp ?? process.env.BUILD_TIMESTAMP ?? null,
     environment: input.environment ?? process.env.NODE_ENV ?? 'development',
-    schemaVersion: input.schemaVersion ?? process.env.SCHEMA_VERSION ?? 'foundation',
+    schemaVersion:
+      input.schemaVersion ?? process.env.SCHEMA_VERSION ?? 'foundation',
     migrationVersion:
-      input.migrationVersion ?? process.env.MIGRATION_VERSION ?? '20260716000000_foundation',
+      input.migrationVersion ??
+      process.env.MIGRATION_VERSION ??
+      '20260716000000_foundation',
   };
 }

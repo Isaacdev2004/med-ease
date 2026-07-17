@@ -19,10 +19,16 @@ export default function SettingsPage() {
       title="Settings"
       subtitle="Manage notifications, security, and display preferences."
       primaryAction={
-        <PortalActionButton label="Save all settings" successTitle="Settings saved" />
+        <PortalActionButton
+          label="Save all settings"
+          successTitle="Settings saved"
+        />
       }
     >
-      <SectionHeader title="Notifications" description="Choose how you receive alerts." />
+      <SectionHeader
+        title="Notifications"
+        description="Choose how you receive alerts."
+      />
       <div className="grid gap-4 lg:grid-cols-2">
         <PortalSettingsToggle
           id="email-alerts"
@@ -40,14 +46,25 @@ export default function SettingsPage() {
         />
       </div>
 
-      <SectionHeader title="Security" description="Authentication and session controls." />
+      <SectionHeader
+        title="Security"
+        description="Authentication and session controls."
+      />
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Account security</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
-          <PortalFormField id="current-password" label="Current password" type="password" />
-          <PortalFormField id="new-password" label="New password" type="password" />
+          <PortalFormField
+            id="current-password"
+            label="Current password"
+            type="password"
+          />
+          <PortalFormField
+            id="new-password"
+            label="New password"
+            type="password"
+          />
           <PortalSettingsToggle
             id="auto-logout"
             label="Auto logout"
@@ -58,7 +75,10 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      <SectionHeader title="Display" description="Appearance and localization." />
+      <SectionHeader
+        title="Display"
+        description="Appearance and localization."
+      />
       <div className="grid gap-4 lg:grid-cols-2">
         <PortalSettingsToggle
           id="dark-mode"
@@ -69,7 +89,11 @@ export default function SettingsPage() {
         />
         <Card>
           <CardContent className="pt-6">
-            <PortalFormField id="timezone" label="Timezone" defaultValue="America/New_York (EST)" />
+            <PortalFormField
+              id="timezone"
+              label="Timezone"
+              defaultValue="America/New_York (EST)"
+            />
           </CardContent>
         </Card>
       </div>

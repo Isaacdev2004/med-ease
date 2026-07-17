@@ -49,22 +49,46 @@ export default function NotificationsPage() {
   const selection = useRowSelection(tableState.rows.map((row) => row.id));
 
   const pinned = notifications.filter((item) => item.pinned);
-  const critical = notifications.filter((item) => item.priority === 'critical' && !item.read);
+  const critical = notifications.filter(
+    (item) => item.priority === 'critical' && !item.read,
+  );
 
   const activeFilters = useMemo(() => {
     const chips = [];
-    if (filterState.q) chips.push({ key: 'q', label: 'Search', value: filterState.q });
-    if (filterState.category) chips.push({ key: 'status', label: 'Category', value: filterState.category });
-    if (filterState.priority) chips.push({ key: 'sort', label: 'Priority', value: filterState.priority });
-    if (filterState.unreadOnly) chips.push({ key: 'dir', label: 'Filter', value: 'Unread only' });
+    if (filterState.q)
+      chips.push({ key: 'q', label: 'Search', value: filterState.q });
+    if (filterState.category)
+      chips.push({
+        key: 'status',
+        label: 'Category',
+        value: filterState.category,
+      });
+    if (filterState.priority)
+      chips.push({
+        key: 'sort',
+        label: 'Priority',
+        value: filterState.priority,
+      });
+    if (filterState.unreadOnly)
+      chips.push({ key: 'dir', label: 'Filter', value: 'Unread only' });
     return chips;
-  }, [filterState.category, filterState.priority, filterState.q, filterState.unreadOnly]);
+  }, [
+    filterState.category,
+    filterState.priority,
+    filterState.q,
+    filterState.unreadOnly,
+  ]);
 
   return (
     <DataPageLayout
       title="Notifications"
       subtitle="Alerts, reminders, and activity across your organization."
-      status={<RealtimeStatus connected={realtime.connected} offline={realtime.offline} />}
+      status={
+        <RealtimeStatus
+          connected={realtime.connected}
+          offline={realtime.offline}
+        />
+      }
       metrics={
         <>
           <StatCard
@@ -78,11 +102,7 @@ export default function NotificationsPage() {
             status="critical"
             description="Pinned until acknowledged"
           />
-          <MetricCard
-            title="Pinned"
-            value={pinned.length}
-            status="warning"
-          />
+          <MetricCard title="Pinned" value={pinned.length} status="warning" />
           <StatCard
             label="Reminders"
             value={remindersQuery.data?.length ?? 0}
@@ -122,7 +142,9 @@ export default function NotificationsPage() {
                     variant="outline"
                     onClick={() =>
                       void Promise.all(
-                        [...selection.selectedIds].map((id) => actions.onMarkRead(id)),
+                        [...selection.selectedIds].map((id) =>
+                          actions.onMarkRead(id),
+                        ),
                       )
                     }
                   >
@@ -132,7 +154,11 @@ export default function NotificationsPage() {
                     size="sm"
                     variant="outline"
                     onClick={() =>
-                      void Promise.all([...selection.selectedIds].map((id) => actions.onArchive(id)))
+                      void Promise.all(
+                        [...selection.selectedIds].map((id) =>
+                          actions.onArchive(id),
+                        ),
+                      )
                     }
                   >
                     Archive
@@ -142,7 +168,11 @@ export default function NotificationsPage() {
             />
           }
           actions={
-            <Button size="sm" variant="outline" onClick={() => void actions.markAllRead()}>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => void actions.markAllRead()}
+            >
               Mark all read
             </Button>
           }
@@ -187,7 +217,10 @@ export default function NotificationsPage() {
                   priority="critical"
                   timestamp={item.timestamp}
                   action={
-                    <Button size="sm" onClick={() => actions.onMarkRead(item.id)}>
+                    <Button
+                      size="sm"
+                      onClick={() => actions.onMarkRead(item.id)}
+                    >
                       Acknowledge
                     </Button>
                   }
@@ -199,11 +232,21 @@ export default function NotificationsPage() {
           {notificationsQuery.isLoading ? (
             <NotificationSkeleton />
           ) : notifications.length === 0 ? (
-            <NotificationEmpty onRefresh={() => void notificationsQuery.refetch()} />
+            <NotificationEmpty
+              onRefresh={() => void notificationsQuery.refetch()}
+            />
           ) : (
             <div className="space-y-6">
-              <NotificationGroup title="Pinned" notifications={pinned} {...actions} />
-              <NotificationGroup title="All Notifications" notifications={tableState.rows} {...actions} />
+              <NotificationGroup
+                title="Pinned"
+                notifications={pinned}
+                {...actions}
+              />
+              <NotificationGroup
+                title="All Notifications"
+                notifications={tableState.rows}
+                {...actions}
+              />
             </div>
           )}
         </div>

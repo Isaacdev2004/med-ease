@@ -6,7 +6,13 @@ import { MedicationsShell } from '@/features/medications/components/MedicationsS
 import { PageShell } from '@/shared/components';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-const PROFESSIONAL_SEGMENTS = ['medications', 'prescriptions', 'reconciliation', 'administration', 'analytics'] as const;
+const PROFESSIONAL_SEGMENTS = [
+  'medications',
+  'prescriptions',
+  'reconciliation',
+  'administration',
+  'analytics',
+] as const;
 
 function getPatientId(pathname: string): string | undefined {
   const segments = pathname.split('/').filter(Boolean);
@@ -14,7 +20,9 @@ function getPatientId(pathname: string): string | undefined {
   return idx >= 0 ? segments[idx + 1] : undefined;
 }
 
-function resolveProfessionalSegment(location: string): (typeof PROFESSIONAL_SEGMENTS)[number] {
+function resolveProfessionalSegment(
+  location: string,
+): (typeof PROFESSIONAL_SEGMENTS)[number] {
   for (const segment of PROFESSIONAL_SEGMENTS) {
     if (location.includes(`/${segment}`)) return segment;
   }
@@ -32,7 +40,11 @@ export default function ProfessionalPrescriptionsPage() {
     if (location.includes('/prescribe') || location.includes('/history')) {
       return (
         <PageShell
-          title={location.includes('/prescribe') ? 'Prescribe Medication' : 'Medication History'}
+          title={
+            location.includes('/prescribe')
+              ? 'Prescribe Medication'
+              : 'Medication History'
+          }
           subtitle={`Patient ${patientId}`}
         >
           <MedicationSectionContent section={section} filters={{ patientId }} />

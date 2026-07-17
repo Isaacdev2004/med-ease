@@ -47,5 +47,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminFinancePage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <FinanceShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <FinanceShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

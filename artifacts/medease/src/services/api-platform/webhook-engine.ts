@@ -1,6 +1,13 @@
-import type { DeliveryStatus, Webhook, WebhookDelivery } from '@/services/api-platform/types';
+import type {
+  DeliveryStatus,
+  Webhook,
+  WebhookDelivery,
+} from '@/services/api-platform/types';
 
-export function nextDeliveryStatus(current: DeliveryStatus, action: 'deliver' | 'fail' | 'retry'): DeliveryStatus {
+export function nextDeliveryStatus(
+  current: DeliveryStatus,
+  action: 'deliver' | 'fail' | 'retry',
+): DeliveryStatus {
   if (action === 'deliver') return 'delivered';
   if (action === 'retry') return 'retrying';
   return 'failed';
@@ -17,7 +24,9 @@ export function webhookSuccessRate(deliveries: WebhookDelivery[]): number {
 }
 
 export function pendingDeliveryCount(deliveries: WebhookDelivery[]): number {
-  return deliveries.filter((d) => d.status === 'pending' || d.status === 'retrying').length;
+  return deliveries.filter(
+    (d) => d.status === 'pending' || d.status === 'retrying',
+  ).length;
 }
 
 export function buildWebhookSignature(secret: string, payload: string): string {

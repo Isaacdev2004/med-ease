@@ -5,7 +5,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_PATIENTS, type PatientRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_PATIENTS,
+  type PatientRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 
@@ -25,7 +28,12 @@ export default function MedicalRecordsPage() {
     <PageShell
       title="Medical Records"
       subtitle="Search and open patient charts across the enterprise record index."
-      primaryAction={<PortalActionButton label="New record request" successTitle="Record request submitted" />}
+      primaryAction={
+        <PortalActionButton
+          label="New record request"
+          successTitle="Record request submitted"
+        />
+      }
     >
       <PortalMetricsGrid
         metrics={[
@@ -41,7 +49,11 @@ export default function MedicalRecordsPage() {
         data={MOCK_PATIENTS}
         getRowId={(row) => row.id}
         rowActions={() => (
-          <PortalActionButton label="Open" variant="outline" successTitle="Chart opened" />
+          <PortalActionButton
+            label="Open"
+            variant="outline"
+            successTitle="Chart opened"
+          />
         )}
       />
       <PortalListCard

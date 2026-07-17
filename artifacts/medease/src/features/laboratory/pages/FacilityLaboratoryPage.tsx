@@ -22,5 +22,11 @@ export default function FacilityLaboratoryPage() {
     results: 'Results Release',
     verification: 'Result Verification',
   };
-  return <LaboratoryShell basePath={basePath} variant="facility" title={titles[segment] ?? 'Laboratory'} />;
+  return (
+    <LaboratoryShell
+      basePath={basePath}
+      variant="facility"
+      title={titles[segment] ?? 'Laboratory'}
+    />
+  );
 }

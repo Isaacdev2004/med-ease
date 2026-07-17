@@ -38,5 +38,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminQualityPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <QualityShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <QualityShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

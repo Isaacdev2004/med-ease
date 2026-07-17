@@ -40,7 +40,9 @@ export function TransferCard({
           </p>
         </div>
         {scheduledAt ? (
-          <p className="text-xs text-muted-foreground">Scheduled {scheduledAt}</p>
+          <p className="text-xs text-muted-foreground">
+            Scheduled {scheduledAt}
+          </p>
         ) : null}
       </CardContent>
     </Card>

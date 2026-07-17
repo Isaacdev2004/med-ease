@@ -5,10 +5,15 @@ export function buildAppointmentReminder(appointment: Appointment) {
     id: `rem-${appointment.id}`,
     title: 'Appointment reminder',
     message: `${appointment.specialty} with ${appointment.provider.fullName} at ${new Date(appointment.scheduledAt).toLocaleString()}`,
-    dueAt: new Date(new Date(appointment.scheduledAt).getTime() - 24 * 60 * 60 * 1000).toISOString(),
+    dueAt: new Date(
+      new Date(appointment.scheduledAt).getTime() - 24 * 60 * 60 * 1000,
+    ).toISOString(),
     appointmentId: appointment.id,
     type: 'appointment' as const,
-    priority: appointment.priority === 'urgent' ? 'high' as const : 'normal' as const,
+    priority:
+      appointment.priority === 'urgent'
+        ? ('high' as const)
+        : ('normal' as const),
   };
 }
 

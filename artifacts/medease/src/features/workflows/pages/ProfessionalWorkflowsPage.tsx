@@ -22,5 +22,11 @@ const TITLES: Record<Segment, string> = {
 export default function ProfessionalWorkflowsPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <WorkflowShell basePath={resolveModuleBasePath(location, segment)} variant="professional" title={TITLES[segment]} />;
+  return (
+    <WorkflowShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="professional"
+      title={TITLES[segment]}
+    />
+  );
 }

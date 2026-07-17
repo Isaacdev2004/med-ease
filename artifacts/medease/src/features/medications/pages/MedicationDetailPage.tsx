@@ -2,7 +2,10 @@ import { Link, useLocation } from 'wouter';
 
 import { MedicationDetailSection } from '@/features/medications/components/MedicationSections';
 import { InteractionAlert } from '@/features/medications/components/MedicationComponents';
-import { useMedication, useMedicationInteractions } from '@/features/medications/hooks/use-medications';
+import {
+  useMedication,
+  useMedicationInteractions,
+} from '@/features/medications/hooks/use-medications';
 import { LoadingView, PageShell } from '@/shared/components';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 import { Button } from '@/shared/ui/button';
@@ -13,7 +16,14 @@ function getMedicationId(pathname: string): string | undefined {
   const idx = segments.indexOf('medications');
   if (idx === -1) return undefined;
   const candidate = segments[idx + 1];
-  const reserved = new Set(['today', 'calendar', 'history', 'refills', 'reminders', 'logs']);
+  const reserved = new Set([
+    'today',
+    'calendar',
+    'history',
+    'refills',
+    'reminders',
+    'logs',
+  ]);
   if (!candidate || reserved.has(candidate)) return undefined;
   return candidate;
 }
@@ -36,13 +46,18 @@ export default function MedicationDetailPage() {
   if (!query.data) {
     return (
       <PageShell title="Medication Details">
-        <EmptyState title="Medication not found" description="Unable to load medication details." />
+        <EmptyState
+          title="Medication not found"
+          description="Unable to load medication details."
+        />
       </PageShell>
     );
   }
 
   const relatedInteractions = (interactions.data ?? []).filter(
-    (i) => i.active && (i.source === query.data!.name || i.target === query.data!.name),
+    (i) =>
+      i.active &&
+      (i.source === query.data!.name || i.target === query.data!.name),
   );
 
   return (

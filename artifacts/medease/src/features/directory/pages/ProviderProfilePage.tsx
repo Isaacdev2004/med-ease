@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { FavoriteButton } from '@/features/directory/components/FavoriteButton';
-import { ProviderActions, ProviderHeader } from '@/features/directory/components/ProviderHeader';
+import {
+  ProviderActions,
+  ProviderHeader,
+} from '@/features/directory/components/ProviderHeader';
 import { ProviderProfile } from '@/features/directory/components/ProviderProfile';
 import {
   useFavorites,
@@ -23,7 +26,10 @@ export default function ProviderProfilePage() {
   const [location] = useLocation();
   const { user } = useAuth();
   const providerId = getProviderIdFromPath(location) ?? '';
-  const portalBase = getDirectoryBasePath(location).replace(/\/directory.*$/, '');
+  const portalBase = getDirectoryBasePath(location).replace(
+    /\/directory.*$/,
+    '',
+  );
   const backHref = `${portalBase}/directory`;
 
   const providerQuery = useProvider(providerId);
@@ -69,7 +75,10 @@ export default function ProviderProfilePage() {
   }
 
   return (
-    <PageShell title={providerQuery.data.name} subtitle="Healthcare provider profile">
+    <PageShell
+      title={providerQuery.data.name}
+      subtitle="Healthcare provider profile"
+    >
       <ProviderHeader
         provider={providerQuery.data}
         backHref={backHref}
@@ -79,7 +88,11 @@ export default function ProviderProfilePage() {
             isFavorite={isFavorite}
             canTransfer={canTransfer}
             favoriteButton={
-              <FavoriteButton providerId={providerId} isFavorite={isFavorite} size="sm" />
+              <FavoriteButton
+                providerId={providerId}
+                isFavorite={isFavorite}
+                size="sm"
+              />
             }
           />
         }

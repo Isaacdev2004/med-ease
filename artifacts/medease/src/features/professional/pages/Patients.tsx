@@ -29,9 +29,7 @@ import {
 } from '@/shared/data';
 import { PatientCard } from '@/shared/medical';
 import { Button } from '@/shared/ui/button';
-import {
-  DropdownMenuItem,
-} from '@/shared/ui/dropdown-menu';
+import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 import { Label } from '@/shared/ui/label';
 import {
   Select,
@@ -61,7 +59,8 @@ export default function PatientsPage() {
     page: filters.page,
     pageSize: filters.pageSize,
     searchQuery: filters.q,
-    getSearchText: (row) => `${row.fullName} ${row.mrn} ${row.department ?? ''}`,
+    getSearchText: (row) =>
+      `${row.fullName} ${row.mrn} ${row.department ?? ''}`,
     getSortValue: (row, column) => {
       if (column === 'name') return row.fullName;
       if (column === 'lastVisit') return row.lastVisit ?? '';
@@ -80,7 +79,9 @@ export default function PatientsPage() {
       chips.push({
         key: 'status',
         label: 'Status',
-        value: STATUS_OPTIONS.find((option) => option.value === filters.status)?.label ?? filters.status,
+        value:
+          STATUS_OPTIONS.find((option) => option.value === filters.status)
+            ?.label ?? filters.status,
       });
     }
     return chips;
@@ -104,7 +105,11 @@ export default function PatientsPage() {
     <DataPageLayout
       title="Patients"
       subtitle="Search, filter, and manage your assigned patient panel."
-      lastUpdated={query.dataUpdatedAt ? new Date(query.dataUpdatedAt).toLocaleString() : undefined}
+      lastUpdated={
+        query.dataUpdatedAt
+          ? new Date(query.dataUpdatedAt).toLocaleString()
+          : undefined
+      }
       primaryAction={
         <LoadingButton>
           <UserPlus className="mr-2 h-4 w-4" />
@@ -113,7 +118,11 @@ export default function PatientsPage() {
       }
       metrics={
         <>
-          <StatCard label="Total Patients" value={patients.length} icon={Users} />
+          <StatCard
+            label="Total Patients"
+            value={patients.length}
+            icon={Users}
+          />
           <MetricCard
             title="Active"
             value={patients.filter((row) => row.status === 'active').length}
@@ -121,7 +130,9 @@ export default function PatientsPage() {
           />
           <MetricCard
             title="Under Observation"
-            value={patients.filter((row) => row.status === 'observation').length}
+            value={
+              patients.filter((row) => row.status === 'observation').length
+            }
             status="warning"
           />
           <MetricCard
@@ -156,7 +167,10 @@ export default function PatientsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     {STATUS_OPTIONS.map((option) => (
-                      <SelectItem key={option.value || 'all'} value={option.value || 'all'}>
+                      <SelectItem
+                        key={option.value || 'all'}
+                        value={option.value || 'all'}
+                      >
                         {option.label}
                       </SelectItem>
                     ))}
@@ -232,7 +246,13 @@ export default function PatientsPage() {
           <PatientCard
             fullName={row.fullName}
             mrn={row.mrn}
-            status={row.status === 'active' ? 'stable' : row.status === 'observation' ? 'observation' : 'neutral'}
+            status={
+              row.status === 'active'
+                ? 'stable'
+                : row.status === 'observation'
+                  ? 'observation'
+                  : 'neutral'
+            }
           />
         )}
         rowActions={(row) => (
@@ -315,7 +335,9 @@ export default function PatientsPage() {
             pageSize={tableState.pageSize}
             total={tableState.total}
             onPageChange={(page) => filters.setParam('page', String(page))}
-            onPageSizeChange={(pageSize) => filters.setParam('pageSize', String(pageSize))}
+            onPageSizeChange={(pageSize) =>
+              filters.setParam('pageSize', String(pageSize))
+            }
           />
         }
       />

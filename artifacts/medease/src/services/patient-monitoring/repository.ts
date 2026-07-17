@@ -39,7 +39,12 @@ function matchesFilters<T extends { patientId: string }>(
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = (page - 1) * pageSize;
-  return { items: items.slice(start, start + pageSize), total: items.length, page, pageSize };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page,
+    pageSize,
+  };
 }
 
 class PatientMonitoringRepository {
@@ -60,26 +65,40 @@ class PatientMonitoringRepository {
       matchesFilters(v, filters ?? {}, (item) => {
         if (filters?.metric && item.type !== filters.metric) return false;
         if (filters?.context && item.context !== filters.context) return false;
-        if (filters?.q && !item.type.includes(filters.q.toLowerCase())) return false;
+        if (filters?.q && !item.type.includes(filters.q.toLowerCase()))
+          return false;
         return true;
       }),
     );
-    return paginate(filtered.sort((a, b) => b.recordedAt.localeCompare(a.recordedAt)), filters?.page, filters?.pageSize);
+    return paginate(
+      filtered.sort((a, b) => b.recordedAt.localeCompare(a.recordedAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   listObservations(filters?: MonitoringFilters) {
     const filtered = this.observations.filter((o) =>
       matchesFilters(o, filters ?? {}, (item) => {
-        if (filters?.category && item.category !== filters.category) return false;
+        if (filters?.category && item.category !== filters.category)
+          return false;
         if (filters?.context && item.context !== filters.context) return false;
         if (filters?.q) {
           const q = filters.q.toLowerCase();
-          if (!item.display.toLowerCase().includes(q) && !item.code.toLowerCase().includes(q)) return false;
+          if (
+            !item.display.toLowerCase().includes(q) &&
+            !item.code.toLowerCase().includes(q)
+          )
+            return false;
         }
         return true;
       }),
     );
-    return paginate(filtered.sort((a, b) => b.recordedAt.localeCompare(a.recordedAt)), filters?.page, filters?.pageSize);
+    return paginate(
+      filtered.sort((a, b) => b.recordedAt.localeCompare(a.recordedAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getObservation(id: string) {
@@ -120,11 +139,16 @@ class PatientMonitoringRepository {
     const filtered = this.alerts.filter((a) =>
       matchesFilters(a, filters ?? {}, (item) => {
         if (filters?.status && item.status !== filters.status) return false;
-        if (filters?.severity && item.severity !== filters.severity) return false;
+        if (filters?.severity && item.severity !== filters.severity)
+          return false;
         return true;
       }),
     );
-    return paginate(filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt)), filters?.page, filters?.pageSize);
+    return paginate(
+      filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   resolveAlert(id: string, resolvedBy?: string) {
@@ -159,7 +183,9 @@ class PatientMonitoringRepository {
   listDevices(patientId?: string) {
     if (!patientId) return this.devices;
     const assignedIds = new Set(
-      this.assignments.filter((a) => a.patientId === patientId && a.active).map((a) => a.deviceId),
+      this.assignments
+        .filter((a) => a.patientId === patientId && a.active)
+        .map((a) => a.deviceId),
     );
     return this.devices.filter((d) => assignedIds.has(d.id));
   }
@@ -246,31 +272,48 @@ class PatientMonitoringRepository {
   }
 
   getSessions(patientId?: string) {
-    return patientId ? MOCK_SESSIONS.filter((s) => s.patientId === patientId) : MOCK_SESSIONS;
+    return patientId
+      ? MOCK_SESSIONS.filter((s) => s.patientId === patientId)
+      : MOCK_SESSIONS;
   }
 
   search(query: string, patientId?: string): MonitoringSearchResult {
     const q = query.toLowerCase();
     return {
-      observations: this.observations.filter((o) =>
-        (!patientId || o.patientId === patientId) &&
-        (o.display.toLowerCase().includes(q) || o.code.toLowerCase().includes(q)),
-      ).slice(0, 20),
-      vitals: this.vitals.filter((v) =>
-        (!patientId || v.patientId === patientId) && v.type.includes(q),
-      ).slice(0, 20),
-      alerts: this.alerts.filter((a) =>
-        (!patientId || a.patientId === patientId) &&
-        (a.title.toLowerCase().includes(q) || a.message.toLowerCase().includes(q)),
-      ).slice(0, 20),
-      devices: this.devices.filter((d) => d.name.toLowerCase().includes(q)).slice(0, 10),
+      observations: this.observations
+        .filter(
+          (o) =>
+            (!patientId || o.patientId === patientId) &&
+            (o.display.toLowerCase().includes(q) ||
+              o.code.toLowerCase().includes(q)),
+        )
+        .slice(0, 20),
+      vitals: this.vitals
+        .filter(
+          (v) =>
+            (!patientId || v.patientId === patientId) && v.type.includes(q),
+        )
+        .slice(0, 20),
+      alerts: this.alerts
+        .filter(
+          (a) =>
+            (!patientId || a.patientId === patientId) &&
+            (a.title.toLowerCase().includes(q) ||
+              a.message.toLowerCase().includes(q)),
+        )
+        .slice(0, 20),
+      devices: this.devices
+        .filter((d) => d.name.toLowerCase().includes(q))
+        .slice(0, 10),
     };
   }
 
   getHistory(patientId: string) {
     return {
       vitals: this.vitals.filter((v) => v.patientId === patientId).slice(0, 50),
-      observations: this.observations.filter((o) => o.patientId === patientId).slice(0, 50),
+      observations: this.observations
+        .filter((o) => o.patientId === patientId)
+        .slice(0, 50),
       alerts: this.alerts.filter((a) => a.patientId === patientId).slice(0, 30),
     };
   }
@@ -280,7 +323,9 @@ class PatientMonitoringRepository {
   }
 
   toggleFavorite(patientId: string, observationId: string) {
-    const existing = this.favorites.find((f) => f.patientId === patientId && f.observationId === observationId);
+    const existing = this.favorites.find(
+      (f) => f.patientId === patientId && f.observationId === observationId,
+    );
     if (existing) {
       this.favorites = this.favorites.filter((f) => f.id !== existing.id);
       return { favorited: false };
@@ -294,8 +339,13 @@ class PatientMonitoringRepository {
     return { favorited: true };
   }
 
-  exportObservations(patientId: string, format: ObservationExport['format']): ObservationExport {
-    const count = this.observations.filter((o) => o.patientId === patientId).length;
+  exportObservations(
+    patientId: string,
+    format: ObservationExport['format'],
+  ): ObservationExport {
+    const count = this.observations.filter(
+      (o) => o.patientId === patientId,
+    ).length;
     return {
       id: `export-${Date.now()}`,
       patientId,
@@ -305,7 +355,11 @@ class PatientMonitoringRepository {
     };
   }
 
-  shareObservations(patientId: string, sharedWith: string, observationIds: string[]): ObservationShare {
+  shareObservations(
+    patientId: string,
+    sharedWith: string,
+    observationIds: string[],
+  ): ObservationShare {
     return {
       id: `share-${Date.now()}`,
       patientId,

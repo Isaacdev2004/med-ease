@@ -11,7 +11,11 @@ interface MedicationProfileProps {
   portalBase: string;
 }
 
-export function MedicationProfile({ medication, related, portalBase }: MedicationProfileProps) {
+export function MedicationProfile({
+  medication,
+  related,
+  portalBase,
+}: MedicationProfileProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-3">
       <div className="lg:col-span-2">
@@ -19,19 +23,35 @@ export function MedicationProfile({ medication, related, portalBase }: Medicatio
       </div>
       <div className="space-y-6">
         <Card>
-          <CardHeader><CardTitle>Medication Sidebar</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle>Medication Sidebar</CardTitle>
+          </CardHeader>
           <CardContent className="text-sm space-y-2">
-            <p><span className="font-medium">Manufacturer:</span> {medication.manufacturer ?? '—'}</p>
-            <p><span className="font-medium">Route:</span> {medication.route}</p>
-            <p><span className="font-medium">Updated:</span> {new Date(medication.updatedAt).toLocaleDateString()}</p>
+            <p>
+              <span className="font-medium">Manufacturer:</span>{' '}
+              {medication.manufacturer ?? '—'}
+            </p>
+            <p>
+              <span className="font-medium">Route:</span> {medication.route}
+            </p>
+            <p>
+              <span className="font-medium">Updated:</span>{' '}
+              {new Date(medication.updatedAt).toLocaleDateString()}
+            </p>
           </CardContent>
         </Card>
         {related.length > 0 ? (
           <Card>
-            <CardHeader><CardTitle>Related Medications</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Related Medications</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-3">
               {related.map((med) => (
-                <Link key={med.id} href={`${portalBase}/medical-library/${med.id}`} className="block text-sm font-medium hover:underline">
+                <Link
+                  key={med.id}
+                  href={`${portalBase}/medical-library/${med.id}`}
+                  className="block text-sm font-medium hover:underline"
+                >
                   {med.name}
                 </Link>
               ))}
@@ -41,7 +61,12 @@ export function MedicationProfile({ medication, related, portalBase }: Medicatio
         {related.length > 0 ? (
           <div className="grid gap-3">
             {related.slice(0, 2).map((med) => (
-              <MedicationCard key={med.id} medication={med} portalBase={portalBase} compact />
+              <MedicationCard
+                key={med.id}
+                medication={med}
+                portalBase={portalBase}
+                compact
+              />
             ))}
           </div>
         ) : null}

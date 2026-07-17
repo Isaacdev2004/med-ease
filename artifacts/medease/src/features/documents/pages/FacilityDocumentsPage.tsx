@@ -22,5 +22,11 @@ const TITLES: Record<Segment, string> = {
 export default function FacilityDocumentsPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <DocumentShell basePath={resolveModuleBasePath(location, segment)} variant="facility" title={TITLES[segment]} />;
+  return (
+    <DocumentShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="facility"
+      title={TITLES[segment]}
+    />
+  );
 }

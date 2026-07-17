@@ -1,8 +1,14 @@
 export { workforceService } from '@/services/workforce/workforce.service';
 export { workforceRepository } from '@/services/workforce/repository';
 export { workforceOfflineQueue } from '@/services/workforce/offline-sync';
-export { computeWorkforceAnalytics, computeCoverage } from '@/services/workforce/analytics';
-export { toFhirPractitioner, toFhirPractitionerRole } from '@/services/workforce/mapper';
+export {
+  computeWorkforceAnalytics,
+  computeCoverage,
+} from '@/services/workforce/analytics';
+export {
+  toFhirPractitioner,
+  toFhirPractitionerRole,
+} from '@/services/workforce/mapper';
 export {
   buildWorkforceDashboard,
   MOCK_EMPLOYEES,

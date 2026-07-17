@@ -14,19 +14,31 @@ export function useRadiologyStudies(filters?: StudyFilters) {
 }
 
 export function useRadiologyStudy(id: string | undefined) {
-  return useQuery({ ...radiologyQueries.study(id ?? ''), enabled: Boolean(id) });
+  return useQuery({
+    ...radiologyQueries.study(id ?? ''),
+    enabled: Boolean(id),
+  });
 }
 
 export function useDiagnosticReport(id: string | undefined) {
-  return useQuery({ ...radiologyQueries.report(id ?? ''), enabled: Boolean(id) });
+  return useQuery({
+    ...radiologyQueries.report(id ?? ''),
+    enabled: Boolean(id),
+  });
 }
 
 export function useStudyTimeline(patientId: string | undefined) {
-  return useQuery({ ...radiologyQueries.timeline(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...radiologyQueries.timeline(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function usePatientImaging(patientId: string | undefined) {
-  return useQuery({ ...radiologyQueries.patientImaging(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...radiologyQueries.patientImaging(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useCriticalResults(patientId?: string) {
@@ -50,22 +62,34 @@ export function useStudyAnalytics() {
 }
 
 export function useImageViewer(studyId: string | undefined) {
-  return useQuery({ ...radiologyQueries.viewer(studyId ?? ''), enabled: Boolean(studyId) });
+  return useQuery({
+    ...radiologyQueries.viewer(studyId ?? ''),
+    enabled: Boolean(studyId),
+  });
 }
 
 export function useImageAnnotations(studyId: string | undefined) {
-  return useQuery({ ...radiologyQueries.annotations(studyId ?? ''), enabled: Boolean(studyId) });
+  return useQuery({
+    ...radiologyQueries.annotations(studyId ?? ''),
+    enabled: Boolean(studyId),
+  });
 }
 
 export function useMeasurements(studyId: string | undefined) {
-  return useQuery({ ...radiologyQueries.measurements(studyId ?? ''), enabled: Boolean(studyId) });
+  return useQuery({
+    ...radiologyQueries.measurements(studyId ?? ''),
+    enabled: Boolean(studyId),
+  });
 }
 
 export function useFavorites(patientId?: string) {
   return useQuery(radiologyQueries.favorites(patientId));
 }
 
-export function useCompareStudies(studyId: string | undefined, compareId: string | undefined) {
+export function useCompareStudies(
+  studyId: string | undefined,
+  compareId: string | undefined,
+) {
   return useQuery({
     ...radiologyQueries.comparison(studyId ?? '', compareId ?? ''),
     enabled: Boolean(studyId && compareId),

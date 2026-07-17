@@ -1,4 +1,8 @@
-import { createDomainEvent, type DomainEvent, type DomainEventContext } from '../domain-event';
+import {
+  createDomainEvent,
+  type DomainEvent,
+  type DomainEventContext,
+} from '../domain-event';
 
 export const AppointmentEventType = {
   AppointmentCancelled: 'AppointmentCancelled',
@@ -7,7 +11,12 @@ export const AppointmentEventType = {
 /** Appointment domain events (reserved for future modules). */
 export const AppointmentEvents = {
   appointmentCancelled: (
-    payload: { appointmentId: string; tenantId?: string; facilityId?: string; reason?: string },
+    payload: {
+      appointmentId: string;
+      tenantId?: string;
+      facilityId?: string;
+      reason?: string;
+    },
     context?: DomainEventContext,
   ): DomainEvent =>
     createDomainEvent(AppointmentEventType.AppointmentCancelled, payload, {

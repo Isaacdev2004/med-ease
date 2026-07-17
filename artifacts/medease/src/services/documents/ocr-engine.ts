@@ -14,5 +14,7 @@ export function simulateOcr(documentId: string, pageCount: number): OCRResult {
 
 export function ocrSuccessRate(results: OCRResult[]): number {
   if (results.length === 0) return 100;
-  return Math.round((results.filter((r) => r.confidence >= 0.8).length / results.length) * 100);
+  return Math.round(
+    (results.filter((r) => r.confidence >= 0.8).length / results.length) * 100,
+  );
 }

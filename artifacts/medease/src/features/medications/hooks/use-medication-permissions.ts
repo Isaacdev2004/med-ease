@@ -16,13 +16,17 @@ export function useMedicationPermissions(): MedicationPermissions {
   const { permissions } = useAuth();
   return {
     canView: permissions.includes('medications.read'),
-    canPrescribe: permissions.includes('medications.prescribe') || permissions.includes('medications.write'),
+    canPrescribe:
+      permissions.includes('medications.prescribe') ||
+      permissions.includes('medications.write'),
     canDispense: permissions.includes('medications.dispense'),
     canAdminister: permissions.includes('medications.administer'),
     canRefill: permissions.includes('medications.refill'),
     canExport: permissions.includes('medications.export'),
     canShare: permissions.includes('medications.share'),
-    canViewAnalytics: permissions.includes('medications.analytics') || permissions.includes('reports.export'),
+    canViewAnalytics:
+      permissions.includes('medications.analytics') ||
+      permissions.includes('reports.export'),
     canAdmin: permissions.includes('medications.admin'),
   };
 }

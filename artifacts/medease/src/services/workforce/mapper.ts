@@ -6,8 +6,14 @@ export function toFhirPractitioner(employee: Employee) {
     id: employee.providerId ?? employee.employeeId,
     identifier: [{ value: employee.employeeNumber }],
     name: [{ family: employee.lastName, given: [employee.firstName] }],
-    telecom: [{ system: 'email', value: employee.email }, { system: 'phone', value: employee.phone }],
-    qualification: employee.licenses.map((l) => ({ code: { text: l.type }, identifier: [{ value: l.number }] })),
+    telecom: [
+      { system: 'email', value: employee.email },
+      { system: 'phone', value: employee.phone },
+    ],
+    qualification: employee.licenses.map((l) => ({
+      code: { text: l.type },
+      identifier: [{ value: l.number }],
+    })),
   };
 }
 
@@ -15,7 +21,9 @@ export function toFhirPractitionerRole(employee: Employee) {
   return {
     resourceType: 'PractitionerRole',
     id: `pr-${employee.employeeId}`,
-    practitioner: { reference: `Practitioner/${employee.providerId ?? employee.employeeId}` },
+    practitioner: {
+      reference: `Practitioner/${employee.providerId ?? employee.employeeId}`,
+    },
     organization: { reference: `Organization/${employee.facilityId}` },
     code: [{ text: employee.jobTitle }],
     specialty: [{ text: employee.roleName }],

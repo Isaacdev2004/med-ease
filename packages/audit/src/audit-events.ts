@@ -1,4 +1,8 @@
-import type { AuditContext, AuditDomainEvent, SecurityEventTypeName } from './audit-types';
+import type {
+  AuditContext,
+  AuditDomainEvent,
+  SecurityEventTypeName,
+} from './audit-types';
 
 type IamAuditInput = {
   action: string;
@@ -89,10 +93,18 @@ export const AuditEvents = {
     iamAuditEvent('UserCreated', input, context),
 
   accountLockedIam: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('AccountLocked', { ...input, action: 'lock_account' }, context),
+    iamAuditEvent(
+      'AccountLocked',
+      { ...input, action: 'lock_account' },
+      context,
+    ),
 
   accountUnlocked: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('AccountUnlocked', { ...input, action: 'unlock_account' }, context),
+    iamAuditEvent(
+      'AccountUnlocked',
+      { ...input, action: 'unlock_account' },
+      context,
+    ),
 
   roleAssigned: (input: IamAuditInput, context?: Partial<AuditContext>) =>
     iamAuditEvent('RoleAssigned', { ...input, action: 'assign_role' }, context),
@@ -101,7 +113,11 @@ export const AuditEvents = {
     iamAuditEvent('RoleRemoved', { ...input, action: 'remove_role' }, context),
 
   policyCreated: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('PolicyCreated', { ...input, action: 'create_policy' }, context),
+    iamAuditEvent(
+      'PolicyCreated',
+      { ...input, action: 'create_policy' },
+      context,
+    ),
 
   mfaEnabled: (input: IamAuditInput, context?: Partial<AuditContext>) =>
     iamAuditEvent('MfaEnabled', { ...input, action: 'enable_mfa' }, context),
@@ -110,28 +126,60 @@ export const AuditEvents = {
     iamAuditEvent('MfaDisabled', { ...input, action: 'disable_mfa' }, context),
 
   sessionRevoked: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('SessionRevoked', { ...input, action: 'revoke_session' }, context),
+    iamAuditEvent(
+      'SessionRevoked',
+      { ...input, action: 'revoke_session' },
+      context,
+    ),
 
   oauthClientCreated: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('OAuthClientCreated', { ...input, action: 'create_oauth_client' }, context),
+    iamAuditEvent(
+      'OAuthClientCreated',
+      { ...input, action: 'create_oauth_client' },
+      context,
+    ),
 
   apiKeyRotated: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('ApiKeyRotated', { ...input, action: 'rotate_api_key' }, context),
+    iamAuditEvent(
+      'ApiKeyRotated',
+      { ...input, action: 'rotate_api_key' },
+      context,
+    ),
 
   consentGranted: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('ConsentGranted', { ...input, action: 'grant_consent' }, context),
+    iamAuditEvent(
+      'ConsentGranted',
+      { ...input, action: 'grant_consent' },
+      context,
+    ),
 
   consentRevoked: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('ConsentRevoked', { ...input, action: 'revoke_consent' }, context),
+    iamAuditEvent(
+      'ConsentRevoked',
+      { ...input, action: 'revoke_consent' },
+      context,
+    ),
 
   accessDelegated: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('AccessDelegated', { ...input, action: 'delegate_access' }, context),
+    iamAuditEvent(
+      'AccessDelegated',
+      { ...input, action: 'delegate_access' },
+      context,
+    ),
 
   breakGlassStarted: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('BreakGlassStarted', { ...input, action: 'start_break_glass' }, context),
+    iamAuditEvent(
+      'BreakGlassStarted',
+      { ...input, action: 'start_break_glass' },
+      context,
+    ),
 
   breakGlassEnded: (input: IamAuditInput, context?: Partial<AuditContext>) =>
-    iamAuditEvent('BreakGlassEnded', { ...input, action: 'end_break_glass' }, context),
+    iamAuditEvent(
+      'BreakGlassEnded',
+      { ...input, action: 'end_break_glass' },
+      context,
+    ),
 
   entityShared: (input: IamAuditInput, context?: Partial<AuditContext>) =>
     iamAuditEvent('EntityShared', { ...input, action: 'share' }, context),

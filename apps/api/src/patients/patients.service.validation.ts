@@ -53,7 +53,9 @@ export function validateDuplicateIdentifiersInInput(
     seen.add(key);
   }
 
-  const primaryIdentifiers = identifiers.filter((identifier) => identifier.isPrimary);
+  const primaryIdentifiers = identifiers.filter(
+    (identifier) => identifier.isPrimary,
+  );
   if (primaryIdentifiers.length > 1) {
     throw new ValidationError('Only one primary identifier is allowed');
   }
@@ -124,7 +126,9 @@ export function validateAllergyInput(input: CreatePatientAllergyInput): void {
   }
 }
 
-export function validatePreferenceInput(input: CreatePatientPreferenceInput): void {
+export function validatePreferenceInput(
+  input: CreatePatientPreferenceInput,
+): void {
   if (input.language !== undefined && !input.language.trim()) {
     throw new ValidationError('Language cannot be empty');
   }

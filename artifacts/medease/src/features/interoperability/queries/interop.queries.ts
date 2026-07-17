@@ -15,37 +15,51 @@ export const interopQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   endpoints: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.endpoints(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.endpoints(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getEndpoints(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   fhirServers: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.fhirServers(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.fhirServers(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getFhirServers(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   hl7: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.hl7(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.hl7(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getHl7Messages(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   dicom: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.dicom(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.dicom(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getDicomStudies(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   cda: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.cda(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.cda(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getCdaDocuments(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   mappings: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.mappings(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.mappings(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getMappings(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   subscriptions: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.subscriptions(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.subscriptions(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getSubscriptions(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -55,27 +69,37 @@ export const interopQueries = {
     staleTime: CACHE_TIMES.default,
   }),
   jobs: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.jobs(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.jobs(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getJobs(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   webhooks: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.webhooks(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.webhooks(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getWebhooks(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   apiClients: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.apiClients(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.apiClients(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getApiClients(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   smartApps: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.smartApps(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.smartApps(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getSmartApps(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   audit: (filters?: InteropFilters) => ({
-    queryKey: queryKeys.interoperability.audit(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.interoperability.audit(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => interoperabilityService.getAudit(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

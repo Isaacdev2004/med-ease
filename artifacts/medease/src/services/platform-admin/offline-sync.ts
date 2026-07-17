@@ -2,13 +2,18 @@ type QueuedMutation = { label: string; execute: () => Promise<void> };
 
 class PlatformAdminOfflineQueue {
   private queue: QueuedMutation[] = [];
-  enqueue(item: QueuedMutation) { this.queue.push(item); }
+  enqueue(item: QueuedMutation) {
+    this.queue.push(item);
+  }
   async flush() {
     const pending = [...this.queue];
     this.queue = [];
     for (const item of pending) {
-      try { await item.execute(); }
-      catch { this.queue.unshift(item); }
+      try {
+        await item.execute();
+      } catch {
+        this.queue.unshift(item);
+      }
     }
   }
 }

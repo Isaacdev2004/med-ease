@@ -1,10 +1,16 @@
-export type AccountType = 'asset' | 'liability' | 'equity' | 'revenue' | 'expense';
-export type JournalStatus = 'draft' | 'pending_approval' | 'posted' | 'reversed';
-export type InvoiceStatus = 'draft' | 'open' | 'partial' | 'paid' | 'overdue' | 'void';
-export type PaymentStatus = 'scheduled' | 'processing' | 'completed' | 'failed' | 'cancelled';
+export type AccountType =
+  'asset' | 'liability' | 'equity' | 'revenue' | 'expense';
+export type JournalStatus =
+  'draft' | 'pending_approval' | 'posted' | 'reversed';
+export type InvoiceStatus =
+  'draft' | 'open' | 'partial' | 'paid' | 'overdue' | 'void';
+export type PaymentStatus =
+  'scheduled' | 'processing' | 'completed' | 'failed' | 'cancelled';
 export type BudgetStatus = 'draft' | 'approved' | 'active' | 'closed';
-export type AssetStatus = 'active' | 'fully_depreciated' | 'disposed' | 'impaired';
-export type ReconciliationStatus = 'pending' | 'in_progress' | 'reconciled' | 'discrepancy';
+export type AssetStatus =
+  'active' | 'fully_depreciated' | 'disposed' | 'impaired';
+export type ReconciliationStatus =
+  'pending' | 'in_progress' | 'reconciled' | 'discrepancy';
 export type FiscalPeriodStatus = 'open' | 'closed' | 'locked';
 
 export interface FinanceFilters {

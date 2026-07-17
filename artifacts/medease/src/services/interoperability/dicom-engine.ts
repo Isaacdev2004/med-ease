@@ -10,4 +10,13 @@ export function validateDicomMetadata(study: DicomStudy): boolean {
   return Boolean(study.studyInstanceUid && study.modality && study.patientId);
 }
 
-export const DICOM_MODALITIES = ['CT', 'MR', 'US', 'XR', 'NM', 'PT', 'MG', 'CR'];
+export const DICOM_MODALITIES = [
+  'CT',
+  'MR',
+  'US',
+  'XR',
+  'NM',
+  'PT',
+  'MG',
+  'CR',
+];

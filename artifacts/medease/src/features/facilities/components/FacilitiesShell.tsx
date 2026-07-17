@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { FacilitiesSectionContent } from '@/features/facilities/components/FacilitiesSections';
-import { FacilitiesTabs, getFacilitiesSectionFromPath } from '@/features/facilities/components/FacilitiesTabs';
+import {
+  FacilitiesTabs,
+  getFacilitiesSectionFromPath,
+} from '@/features/facilities/components/FacilitiesTabs';
 import { useFacilitiesPermissions } from '@/features/facilities/hooks/use-facilities-permissions';
 import type { FacilitiesFilters } from '@/services/facilities/types';
 import { PageShell } from '@/shared/components';
@@ -33,13 +36,19 @@ export function FacilitiesShell({
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view facilities data." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view facilities data."
+        />
       </PageShell>
     );
   }
 
   return (
-    <PageShell title={title} subtitle="Enterprise facilities management, biomedical engineering, CMMS, utilities, and environmental monitoring.">
+    <PageShell
+      title={title}
+      subtitle="Enterprise facilities management, biomedical engineering, CMMS, utilities, and environmental monitoring."
+    >
       <div className="space-y-6">
         <FacilitiesTabs basePath={basePath} variant={variant} />
         <FacilitiesSectionContent section={section} filters={scopedFilters} />

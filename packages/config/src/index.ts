@@ -16,7 +16,9 @@ export const opensearchConfigSchema = z.object({
 
 export type OpenSearchConfig = z.infer<typeof opensearchConfigSchema>;
 
-export function parseOpenSearchConfig(env: NodeJS.ProcessEnv): OpenSearchConfig {
+export function parseOpenSearchConfig(
+  env: NodeJS.ProcessEnv,
+): OpenSearchConfig {
   return opensearchConfigSchema.parse(env);
 }
 
@@ -104,7 +106,9 @@ export function validateConfig(env: Record<string, unknown>): MedeaseEnv {
   return parsed.data;
 }
 
-export function loadConfig(env: NodeJS.ProcessEnv = process.env): MedeaseConfig {
+export function loadConfig(
+  env: NodeJS.ProcessEnv = process.env,
+): MedeaseConfig {
   const validated = validateConfig(env);
 
   return {

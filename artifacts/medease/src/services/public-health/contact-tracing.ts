@@ -1,6 +1,8 @@
 import type { ContactTracingRecord } from '@/services/public-health/types';
 
-export function contactCompletionRate(contacts: ContactTracingRecord[]): number {
+export function contactCompletionRate(
+  contacts: ContactTracingRecord[],
+): number {
   if (contacts.length === 0) return 100;
   const cleared = contacts.filter((c) => c.status === 'cleared').length;
   return Math.round((cleared / contacts.length) * 100);

@@ -12,9 +12,20 @@ import {
   MOCK_WAITING_ROOM,
   MOCK_WHITEBOARDS,
 } from '@/services/telemedicine/mock-data';
-import { inviteParticipant, removeParticipant } from '@/services/telemedicine/participants';
-import { startRecording, stopRecording, generateTranscript } from '@/services/telemedicine/recordings';
-import { admitPatient, rejectPatient, sortWaitingQueue } from '@/services/telemedicine/waiting-room';
+import {
+  inviteParticipant,
+  removeParticipant,
+} from '@/services/telemedicine/participants';
+import {
+  startRecording,
+  stopRecording,
+  generateTranscript,
+} from '@/services/telemedicine/recordings';
+import {
+  admitPatient,
+  rejectPatient,
+  sortWaitingQueue,
+} from '@/services/telemedicine/waiting-room';
 import { startVideo, stopVideo } from '@/services/telemedicine/video';
 import { createWhiteboard } from '@/services/telemedicine/whiteboard';
 import type {
@@ -30,17 +41,28 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = (page - 1) * pageSize;
-  return { items: items.slice(start, start + pageSize), total: items.length, page, pageSize };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page,
+    pageSize,
+  };
 }
 
 function matchSession(s: TelemedicineSession, filters: TelemedicineFilters) {
   if (filters.patientId && s.patientId !== filters.patientId) return false;
-  if (filters.clinicianId && s.clinicianId !== filters.clinicianId) return false;
+  if (filters.clinicianId && s.clinicianId !== filters.clinicianId)
+    return false;
   if (filters.facilityId && s.facilityId !== filters.facilityId) return false;
   if (filters.status && s.status !== filters.status) return false;
   if (filters.q) {
     const q = filters.q.toLowerCase();
-    if (!s.patientName.toLowerCase().includes(q) && !s.clinicianName.toLowerCase().includes(q) && !s.specialty.toLowerCase().includes(q)) return false;
+    if (
+      !s.patientName.toLowerCase().includes(q) &&
+      !s.clinicianName.toLowerCase().includes(q) &&
+      !s.specialty.toLowerCase().includes(q)
+    )
+      return false;
   }
   return true;
 }
@@ -57,8 +79,14 @@ class TelemedicineRepository {
   private favorites: SessionFavorite[] = [];
 
   searchSessions(filters?: TelemedicineFilters) {
-    const filtered = this.sessions.filter((s) => matchSession(s, filters ?? {}));
-    return paginate(filtered.sort((a, b) => b.scheduledStart.localeCompare(a.scheduledStart)), filters?.page, filters?.pageSize);
+    const filtered = this.sessions.filter((s) =>
+      matchSession(s, filters ?? {}),
+    );
+    return paginate(
+      filtered.sort((a, b) => b.scheduledStart.localeCompare(a.scheduledStart)),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getSession(sessionId: string) {
@@ -68,10 +96,17 @@ class TelemedicineRepository {
   async joinSession(sessionId: string, participantId: string) {
     const session = this.getSession(sessionId);
     if (!session) return null;
-    session.status = session.status === 'scheduled' ? 'waiting' : session.status === 'waiting' ? 'in_progress' : session.status;
+    session.status =
+      session.status === 'scheduled'
+        ? 'waiting'
+        : session.status === 'waiting'
+          ? 'in_progress'
+          : session.status;
     session.actualStart = session.actualStart ?? new Date().toISOString();
     await startVideo(sessionId, session.platform, session.roomId);
-    const existing = this.participants.find((p) => p.sessionId === sessionId && p.id === participantId);
+    const existing = this.participants.find(
+      (p) => p.sessionId === sessionId && p.id === participantId,
+    );
     if (existing) existing.joinedAt = new Date().toISOString();
     return session;
   }
@@ -83,7 +118,9 @@ class TelemedicineRepository {
       session.status = 'completed';
       session.actualEnd = new Date().toISOString();
       session.duration = session.actualStart
-        ? Math.round((Date.now() - new Date(session.actualStart).getTime()) / 60000)
+        ? Math.round(
+            (Date.now() - new Date(session.actualStart).getTime()) / 60000,
+          )
         : session.duration;
     }
     await stopVideo(session.platform, session.roomId);
@@ -94,7 +131,11 @@ class TelemedicineRepository {
     return this.participants.filter((p) => p.sessionId === sessionId);
   }
 
-  inviteParticipant(sessionId: string, name: string, role: 'patient' | 'clinician' | 'interpreter') {
+  inviteParticipant(
+    sessionId: string,
+    name: string,
+    role: 'patient' | 'clinician' | 'interpreter',
+  ) {
     const p = inviteParticipant(sessionId, name, role);
     this.participants.push(p);
     return p;
@@ -108,7 +149,9 @@ class TelemedicineRepository {
   }
 
   getMessages(sessionId: string) {
-    return this.messages.filter((m) => m.sessionId === sessionId).sort((a, b) => a.sentAt.localeCompare(b.sentAt));
+    return this.messages
+      .filter((m) => m.sessionId === sessionId)
+      .sort((a, b) => a.sentAt.localeCompare(b.sentAt));
   }
 
   sendMessage(input: SendMessageInput) {
@@ -142,12 +185,15 @@ class TelemedicineRepository {
     const rec = startRecording(sessionId, consentGiven);
     this.recordings.push(rec);
     const session = this.getSession(sessionId);
-    if (session) session.recordingStatus = consentGiven ? 'recording' : 'pending_consent';
+    if (session)
+      session.recordingStatus = consentGiven ? 'recording' : 'pending_consent';
     return rec;
   }
 
   stopRecording(sessionId: string) {
-    const rec = this.recordings.find((r) => r.sessionId === sessionId && r.status === 'recording');
+    const rec = this.recordings.find(
+      (r) => r.sessionId === sessionId && r.status === 'recording',
+    );
     if (!rec) return null;
     Object.assign(rec, stopRecording(rec));
     const session = this.getSession(sessionId);
@@ -158,7 +204,10 @@ class TelemedicineRepository {
   saveClinicalNote(input: SaveClinicalNoteInput) {
     const existing = this.notes.find((n) => n.sessionId === input.sessionId);
     if (existing) {
-      Object.assign(existing, { ...input, updatedAt: new Date().toISOString() });
+      Object.assign(existing, {
+        ...input,
+        updatedAt: new Date().toISOString(),
+      });
       return existing;
     }
     const note = {
@@ -181,7 +230,9 @@ class TelemedicineRepository {
   }
 
   getWaitingRoom(sessionId?: string) {
-    const entries = sessionId ? this.waitingRoom.filter((w) => w.sessionId === sessionId) : this.waitingRoom;
+    const entries = sessionId
+      ? this.waitingRoom.filter((w) => w.sessionId === sessionId)
+      : this.waitingRoom;
     return sortWaitingQueue(entries.filter((w) => w.status === 'waiting'));
   }
 
@@ -202,7 +253,9 @@ class TelemedicineRepository {
   }
 
   getRecordings(sessionId?: string) {
-    return sessionId ? this.recordings.filter((r) => r.sessionId === sessionId) : this.recordings;
+    return sessionId
+      ? this.recordings.filter((r) => r.sessionId === sessionId)
+      : this.recordings;
   }
 
   generateTranscript(sessionId: string) {
@@ -222,10 +275,17 @@ class TelemedicineRepository {
   }
 
   getWhiteboard(sessionId: string) {
-    return this.whiteboards.find((w) => w.sessionId === sessionId) ?? createWhiteboard(sessionId, 'system');
+    return (
+      this.whiteboards.find((w) => w.sessionId === sessionId) ??
+      createWhiteboard(sessionId, 'system')
+    );
   }
 
-  toggleParticipantMedia(participantId: string, field: 'cameraOn' | 'microphoneOn', value: boolean) {
+  toggleParticipantMedia(
+    participantId: string,
+    field: 'cameraOn' | 'microphoneOn',
+    value: boolean,
+  ) {
     const p = this.participants.find((x) => x.id === participantId);
     if (!p) return null;
     p[field] = value;
@@ -242,29 +302,56 @@ class TelemedicineRepository {
   search(query: string, patientId?: string) {
     const q = query.toLowerCase();
     return {
-      sessions: this.sessions.filter((s) =>
-        (!patientId || s.patientId === patientId) &&
-        (s.patientName.toLowerCase().includes(q) || s.clinicianName.toLowerCase().includes(q) || s.meetingNumber.includes(q)),
-      ).slice(0, 20),
-      messages: this.messages.filter((m) => m.content.toLowerCase().includes(q)).slice(0, 20),
+      sessions: this.sessions
+        .filter(
+          (s) =>
+            (!patientId || s.patientId === patientId) &&
+            (s.patientName.toLowerCase().includes(q) ||
+              s.clinicianName.toLowerCase().includes(q) ||
+              s.meetingNumber.includes(q)),
+        )
+        .slice(0, 20),
+      messages: this.messages
+        .filter((m) => m.content.toLowerCase().includes(q))
+        .slice(0, 20),
     };
   }
 
-  exportVisit(sessionId: string, format: SessionExport['format']): SessionExport {
-    return { id: `exp-${Date.now()}`, sessionId, format, exportedAt: new Date().toISOString() };
+  exportVisit(
+    sessionId: string,
+    format: SessionExport['format'],
+  ): SessionExport {
+    return {
+      id: `exp-${Date.now()}`,
+      sessionId,
+      format,
+      exportedAt: new Date().toISOString(),
+    };
   }
 
   shareVisit(sessionId: string, sharedWith: string): SessionShare {
-    return { id: `share-${Date.now()}`, sessionId, sharedWith, sharedAt: new Date().toISOString() };
+    return {
+      id: `share-${Date.now()}`,
+      sessionId,
+      sharedWith,
+      sharedAt: new Date().toISOString(),
+    };
   }
 
   toggleFavorite(sessionId: string, userId: string) {
-    const existing = this.favorites.find((f) => f.sessionId === sessionId && f.userId === userId);
+    const existing = this.favorites.find(
+      (f) => f.sessionId === sessionId && f.userId === userId,
+    );
     if (existing) {
       this.favorites = this.favorites.filter((f) => f.id !== existing.id);
       return { favorited: false };
     }
-    this.favorites.push({ id: `fav-${Date.now()}`, sessionId, userId, createdAt: new Date().toISOString() });
+    this.favorites.push({
+      id: `fav-${Date.now()}`,
+      sessionId,
+      userId,
+      createdAt: new Date().toISOString(),
+    });
     return { favorited: true };
   }
 

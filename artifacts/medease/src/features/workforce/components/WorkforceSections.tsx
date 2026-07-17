@@ -56,10 +56,14 @@ export type WorkforceSection =
   | 'analytics';
 
 export function DashboardSection({ filters }: { filters?: WorkforceFilters }) {
-  const dashboard = useWorkforceDashboard(filters?.facilityId, filters?.departmentId);
+  const dashboard = useWorkforceDashboard(
+    filters?.facilityId,
+    filters?.departmentId,
+  );
   const coverage = useCoverage(filters?.departmentId);
   if (dashboard.isLoading) return <LoadingView label="Loading workforce…" />;
-  if (!dashboard.data) return <EmptyState icon={Users} title="No workforce data" />;
+  if (!dashboard.data)
+    return <EmptyState icon={Users} title="No workforce data" />;
   return (
     <div className="space-y-6">
       <WorkforceMetrics dashboard={dashboard.data} />
@@ -84,8 +88,19 @@ export function AttendanceSection({ filters }: { filters?: WorkforceFilters }) {
   const items = query.data?.items ?? [];
   return (
     <div className="space-y-6">
-      <ClockInPanel onClockIn={() => clockIn.mutate({ employeeId: empId, type: 'clock_in' })} onClockOut={() => clockOut.mutate({ employeeId: empId, type: 'clock_out' })} />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{items.slice(0, 12).map((a) => <AttendanceCard key={a.attendanceId} record={a} />)}</div>
+      <ClockInPanel
+        onClockIn={() =>
+          clockIn.mutate({ employeeId: empId, type: 'clock_in' })
+        }
+        onClockOut={() =>
+          clockOut.mutate({ employeeId: empId, type: 'clock_out' })
+        }
+      />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.slice(0, 12).map((a) => (
+          <AttendanceCard key={a.attendanceId} record={a} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -93,13 +108,29 @@ export function AttendanceSection({ filters }: { filters?: WorkforceFilters }) {
 export function TrainingSection({ filters }: { filters?: WorkforceFilters }) {
   const query = useTraining(filters);
   if (query.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(query.data?.items ?? []).slice(0, 12).map((t) => <TrainingCard key={t.trainingId} training={t} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(query.data?.items ?? []).slice(0, 12).map((t) => (
+        <TrainingCard key={t.trainingId} training={t} />
+      ))}
+    </div>
+  );
 }
 
-export function PerformanceSection({ filters }: { filters?: WorkforceFilters }) {
+export function PerformanceSection({
+  filters,
+}: {
+  filters?: WorkforceFilters;
+}) {
   const query = usePerformance(filters);
   if (query.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(query.data?.items ?? []).slice(0, 12).map((p) => <PerformanceCard key={p.reviewId} review={p} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(query.data?.items ?? []).slice(0, 12).map((p) => (
+        <PerformanceCard key={p.reviewId} review={p} />
+      ))}
+    </div>
+  );
 }
 
 export function StaffSection({ filters }: { filters?: WorkforceFilters }) {
@@ -132,8 +163,20 @@ export function LeaveSection({ filters }: { filters?: WorkforceFilters }) {
         <LeaveRequestCard
           key={l.leaveId}
           request={l}
-          onApprove={l.status === 'pending' ? () => approveLeave.mutate({ leaveId: l.leaveId, approverId: user?.id ?? 'mgr-001' }) : undefined}
-          onReject={l.status === 'pending' ? () => rejectLeave.mutate(l.leaveId) : undefined}
+          onApprove={
+            l.status === 'pending'
+              ? () =>
+                  approveLeave.mutate({
+                    leaveId: l.leaveId,
+                    approverId: user?.id ?? 'mgr-001',
+                  })
+              : undefined
+          }
+          onReject={
+            l.status === 'pending'
+              ? () => rejectLeave.mutate(l.leaveId)
+              : undefined
+          }
         />
       ))}
     </div>
@@ -144,10 +187,20 @@ export function EmployeesSection({ filters }: { filters?: WorkforceFilters }) {
   return <StaffSection filters={filters} />;
 }
 
-export function DepartmentsSection({ filters }: { filters?: WorkforceFilters }) {
+export function DepartmentsSection({
+  filters,
+}: {
+  filters?: WorkforceFilters;
+}) {
   const query = useDepartments(filters);
   if (query.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(query.data?.items ?? []).slice(0, 12).map((d) => <DepartmentCard key={d.departmentId} department={d} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(query.data?.items ?? []).slice(0, 12).map((d) => (
+        <DepartmentCard key={d.departmentId} department={d} />
+      ))}
+    </div>
+  );
 }
 
 export function OrganizationSection() {
@@ -159,14 +212,32 @@ export function OrganizationSection() {
 export function PayrollSection({ filters }: { filters?: WorkforceFilters }) {
   const query = usePayroll(filters);
   if (query.isLoading) return <LoadingView />;
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{(query.data?.items ?? []).slice(0, 9).map((p) => <PayrollSummaryCard key={p.payrollId} summary={p} />)}</div>;
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {(query.data?.items ?? []).slice(0, 9).map((p) => (
+        <PayrollSummaryCard key={p.payrollId} summary={p} />
+      ))}
+    </div>
+  );
 }
 
-export function CredentialsSection({ filters }: { filters?: WorkforceFilters }) {
+export function CredentialsSection({
+  filters,
+}: {
+  filters?: WorkforceFilters;
+}) {
   const query = useEmployees(filters);
   if (query.isLoading) return <LoadingView />;
-  const certs = (query.data?.items ?? []).flatMap((e) => e.certifications).slice(0, 12);
-  return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{certs.map((c) => <CertificationCard key={c.certificationId} cert={c} />)}</div>;
+  const certs = (query.data?.items ?? [])
+    .flatMap((e) => e.certifications)
+    .slice(0, 12);
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {certs.map((c) => (
+        <CertificationCard key={c.certificationId} cert={c} />
+      ))}
+    </div>
+  );
 }
 
 export function AnalyticsSection() {
@@ -182,22 +253,43 @@ export function AnalyticsSection() {
   );
 }
 
-export function WorkforceSectionContent({ section, filters }: { section: WorkforceSection; filters?: WorkforceFilters }) {
+export function WorkforceSectionContent({
+  section,
+  filters,
+}: {
+  section: WorkforceSection;
+  filters?: WorkforceFilters;
+}) {
   switch (section) {
-    case 'schedule': return <ScheduleSection filters={filters} />;
-    case 'attendance': return <AttendanceSection filters={filters} />;
-    case 'training': return <TrainingSection filters={filters} />;
-    case 'performance': return <PerformanceSection filters={filters} />;
-    case 'staff': return <StaffSection filters={filters} />;
-    case 'scheduling': return <SchedulingSection filters={filters} />;
-    case 'schedules': return <SchedulingSection filters={filters} />;
-    case 'leave': return <LeaveSection filters={filters} />;
-    case 'employees': return <EmployeesSection filters={filters} />;
-    case 'departments': return <DepartmentsSection filters={filters} />;
-    case 'organization': return <OrganizationSection />;
-    case 'payroll': return <PayrollSection filters={filters} />;
-    case 'credentials': return <CredentialsSection filters={filters} />;
-    case 'analytics': return <AnalyticsSection />;
-    default: return <DashboardSection filters={filters} />;
+    case 'schedule':
+      return <ScheduleSection filters={filters} />;
+    case 'attendance':
+      return <AttendanceSection filters={filters} />;
+    case 'training':
+      return <TrainingSection filters={filters} />;
+    case 'performance':
+      return <PerformanceSection filters={filters} />;
+    case 'staff':
+      return <StaffSection filters={filters} />;
+    case 'scheduling':
+      return <SchedulingSection filters={filters} />;
+    case 'schedules':
+      return <SchedulingSection filters={filters} />;
+    case 'leave':
+      return <LeaveSection filters={filters} />;
+    case 'employees':
+      return <EmployeesSection filters={filters} />;
+    case 'departments':
+      return <DepartmentsSection filters={filters} />;
+    case 'organization':
+      return <OrganizationSection />;
+    case 'payroll':
+      return <PayrollSection filters={filters} />;
+    case 'credentials':
+      return <CredentialsSection filters={filters} />;
+    case 'analytics':
+      return <AnalyticsSection />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

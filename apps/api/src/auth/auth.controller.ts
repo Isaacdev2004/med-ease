@@ -41,19 +41,35 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Authenticate with email and password' })
   @ApiOkResponse({ type: LoginResponseDto })
-  @ApiUnauthorizedResponse({ description: 'Invalid credentials or locked account' })
-  async login(@Body() dto: LoginDto, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  @ApiUnauthorizedResponse({
+    description: 'Invalid credentials or locked account',
+  })
+  async login(
+    @Body() dto: LoginDto,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     return this.authService.login(dto, res, AuthService.extractMeta(req));
   }
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Rotate refresh token and issue a new access token' })
+  @ApiOperation({
+    summary: 'Rotate refresh token and issue a new access token',
+  })
   @ApiCookieAuth(REFRESH_COOKIE_NAME)
   @ApiOkResponse({ type: RefreshResponseDto })
-  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME] as string | undefined;
-    return this.authService.refresh(refreshToken, res, AuthService.extractMeta(req));
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME] as
+      string | undefined;
+    return this.authService.refresh(
+      refreshToken,
+      res,
+      AuthService.extractMeta(req),
+    );
   }
 
   @Post('logout')
@@ -61,7 +77,8 @@ export class AuthController {
   @ApiOperation({ summary: 'Revoke the current session' })
   @ApiCookieAuth(REFRESH_COOKIE_NAME)
   async logout(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
-    const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME] as string | undefined;
+    const refreshToken = req.cookies?.[REFRESH_COOKIE_NAME] as
+      string | undefined;
     await this.authService.logout(refreshToken, AuthService.extractMeta(req));
     this.authService.clearRefreshCookie(res);
   }

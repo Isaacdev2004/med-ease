@@ -40,17 +40,33 @@ function getTabs(variant: ApiPlatformTabsProps['variant']) {
   return PROFESSIONAL_TABS;
 }
 
-export function ApiPlatformTabs({ basePath: _basePath, variant = 'professional' }: ApiPlatformTabsProps) {
+export function ApiPlatformTabs({
+  basePath: _basePath,
+  variant = 'professional',
+}: ApiPlatformTabsProps) {
   const [location] = useLocation();
   const tabs = getTabs(variant);
 
   return (
-    <nav className="flex flex-wrap gap-1 border-b pb-2" aria-label="API platform sections">
+    <nav
+      className="flex flex-wrap gap-1 border-b pb-2"
+      aria-label="API platform sections"
+    >
       {tabs.map((tab) => {
         const href = flatModuleTabHref(tab.path);
         const active = location.includes(`/${tab.path}`);
         return (
-          <Link key={tab.path} href={href} className={cn('rounded-md px-3 py-1.5 text-sm font-medium transition-colors', active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground')} aria-current={active ? 'page' : undefined}>
+          <Link
+            key={tab.path}
+            href={href}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              active
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+            )}
+            aria-current={active ? 'page' : undefined}
+          >
             {tab.label}
           </Link>
         );
@@ -74,7 +90,9 @@ const PATH_MAP: [string, ApiPlatformSection][] = [
   ['/developer', 'developer'],
 ];
 
-export function getApiPlatformSectionFromPath(pathname: string): ApiPlatformSection {
+export function getApiPlatformSectionFromPath(
+  pathname: string,
+): ApiPlatformSection {
   for (const [path, section] of PATH_MAP) {
     if (pathname.includes(path)) return section;
   }

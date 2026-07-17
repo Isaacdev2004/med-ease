@@ -3,7 +3,11 @@ import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 
 import { validateConfig } from '@medease/config';
-import { CORRELATION_ID_HEADER, REQUEST_ID_HEADER, SERVICE_NAME } from '@medease/constants';
+import {
+  CORRELATION_ID_HEADER,
+  REQUEST_ID_HEADER,
+  SERVICE_NAME,
+} from '@medease/constants';
 import { getLogBindings } from '@medease/observability';
 import { createRequestId } from '@medease/logger';
 
@@ -30,7 +34,9 @@ import { PrismaModule } from '@medease/prisma';
     }),
     LoggerModule.forRoot({
       pinoHttp: {
-        level: process.env.LOG_LEVEL ?? (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
+        level:
+          process.env.LOG_LEVEL ??
+          (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
         base: { service: SERVICE_NAME },
         genReqId: (req, res) => {
           const requestId = createRequestId(

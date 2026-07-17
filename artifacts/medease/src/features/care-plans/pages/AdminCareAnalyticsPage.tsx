@@ -19,5 +19,11 @@ export default function AdminCareAnalyticsPage() {
     'population-health': 'Population Health',
     'care-analytics': 'Care Analytics',
   };
-  return <CarePlansShell basePath={basePath} variant="admin" title={titles[segment] ?? 'Care Analytics'} />;
+  return (
+    <CarePlansShell
+      basePath={basePath}
+      variant="admin"
+      title={titles[segment] ?? 'Care Analytics'}
+    />
+  );
 }

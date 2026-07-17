@@ -60,24 +60,34 @@ export function DashboardSection({ filters }: SectionProps) {
   const dashboard = useMessagingDashboard(filters?.facilityId);
   const messages = useMessages(filters);
   const { exportData, send } = useMessagingMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading messaging dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={MessageSquare} title="No messaging data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading messaging dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={MessageSquare} title="No messaging data" />;
   return (
     <div className="space-y-6">
       <DashboardPanel dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(messages.data?.items ?? []).slice(0, 6).map((m) => <MessageCard key={m.messageId} message={m} />)}
+        {(messages.data?.items ?? []).slice(0, 6).map((m) => (
+          <MessageCard key={m.messageId} message={m} />
+        ))}
       </div>
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
       {(messages.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => send.mutate({
-          subject: 'Test Message',
-          body: 'Demo message from messaging dashboard.',
-          channel: 'in_app',
-          senderId: filters?.userId ?? 'current-user',
-          recipientId: 'user-00010',
-          facilityId: filters?.facilityId,
-        })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            send.mutate({
+              subject: 'Test Message',
+              body: 'Demo message from messaging dashboard.',
+              channel: 'in_app',
+              senderId: filters?.userId ?? 'current-user',
+              recipientId: 'user-00010',
+              facilityId: filters?.facilityId,
+            })
+          }
+        >
           Send test message (demo)
         </button>
       )}
@@ -92,7 +102,9 @@ export function InboxSection({ filters }: SectionProps) {
   return (
     <InboxPanel
       items={inbox.data?.items ?? []}
-      onMarkRead={(inboxId) => markRead.mutate({ inboxId, userId: filters?.userId ?? 'current-user' })}
+      onMarkRead={(inboxId) =>
+        markRead.mutate({ inboxId, userId: filters?.userId ?? 'current-user' })
+      }
     />
   );
 }
@@ -102,7 +114,9 @@ export function AnnouncementsSection({ filters }: SectionProps) {
   if (announcements.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(announcements.data?.items ?? []).map((a) => <AnnouncementCard key={a.announcementId} announcement={a} />)}
+      {(announcements.data?.items ?? []).map((a) => (
+        <AnnouncementCard key={a.announcementId} announcement={a} />
+      ))}
     </div>
   );
 }
@@ -114,14 +128,20 @@ export function BroadcastsSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <BroadcastPanel broadcasts={broadcasts.data?.items ?? []} />
-      <button type="button" className="text-sm text-primary underline" onClick={() => broadcast.mutate({
-        title: 'Facility Alert',
-        body: 'Demo broadcast message.',
-        channels: ['email', 'push'],
-        audience: 'All Staff',
-        facilityId: filters?.facilityId,
-        createdBy: filters?.userId ?? 'current-user',
-      })}>
+      <button
+        type="button"
+        className="text-sm text-primary underline"
+        onClick={() =>
+          broadcast.mutate({
+            title: 'Facility Alert',
+            body: 'Demo broadcast message.',
+            channels: ['email', 'push'],
+            audience: 'All Staff',
+            facilityId: filters?.facilityId,
+            createdBy: filters?.userId ?? 'current-user',
+          })
+        }
+      >
         Send broadcast (demo)
       </button>
     </div>
@@ -135,15 +155,23 @@ export function MessageTemplatesSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(templates.data?.items ?? []).map((t) => <TemplateCard key={t.templateId} template={t} />)}
+        {(templates.data?.items ?? []).map((t) => (
+          <TemplateCard key={t.templateId} template={t} />
+        ))}
       </div>
-      <button type="button" className="text-sm text-primary underline" onClick={() => createTemplate.mutate({
-        name: 'New Template',
-        subject: 'Hello {{name}}',
-        body: 'Your appointment is on {{date}}.',
-        channel: 'email',
-        category: 'clinical',
-      })}>
+      <button
+        type="button"
+        className="text-sm text-primary underline"
+        onClick={() =>
+          createTemplate.mutate({
+            name: 'New Template',
+            subject: 'Hello {{name}}',
+            body: 'Your appointment is on {{date}}.',
+            channel: 'email',
+            category: 'clinical',
+          })
+        }
+      >
         Create template (demo)
       </button>
     </div>
@@ -158,9 +186,14 @@ export function MessageCenterSection({ filters }: SectionProps) {
   if (threads.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
-      <ChatPanel threads={threads.data?.items ?? []} messages={chatMessages.data?.items ?? []} />
+      <ChatPanel
+        threads={threads.data?.items ?? []}
+        messages={chatMessages.data?.items ?? []}
+      />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(secure.data?.items ?? []).slice(0, 6).map((m) => <SecureMessageCard key={m.secureMessageId} message={m} />)}
+        {(secure.data?.items ?? []).slice(0, 6).map((m) => (
+          <SecureMessageCard key={m.secureMessageId} message={m} />
+        ))}
       </div>
     </div>
   );
@@ -171,7 +204,9 @@ export function ChannelsSection() {
   if (channels.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(channels.data ?? []).map((c) => <ChannelCard key={c.channelId} channel={c} />)}
+      {(channels.data ?? []).map((c) => (
+        <ChannelCard key={c.channelId} channel={c} />
+      ))}
     </div>
   );
 }
@@ -187,21 +222,35 @@ export function CampaignsSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(campaigns.data?.items ?? []).map((c) => <CampaignCard key={c.campaignId} campaign={c} />)}
+        {(campaigns.data?.items ?? []).map((c) => (
+          <CampaignCard key={c.campaignId} campaign={c} />
+        ))}
       </div>
       <div className="flex gap-4">
-        <button type="button" className="text-sm text-primary underline" onClick={() => createCampaign.mutate({
-          name: 'Outreach Campaign',
-          description: 'Demo multi-channel campaign.',
-          channels: ['email', 'sms'],
-          templateId: 'tpl-001',
-          audienceSize: 5000,
-          createdBy: filters?.userId ?? 'current-user',
-        })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            createCampaign.mutate({
+              name: 'Outreach Campaign',
+              description: 'Demo multi-channel campaign.',
+              channels: ['email', 'sms'],
+              templateId: 'tpl-001',
+              audienceSize: 5000,
+              createdBy: filters?.userId ?? 'current-user',
+            })
+          }
+        >
           Create campaign (demo)
         </button>
         {(campaigns.data?.items ?? [])[0] && (
-          <button type="button" className="text-sm text-primary underline" onClick={() => startCampaign.mutate(campaigns.data!.items[0]!.campaignId)}>
+          <button
+            type="button"
+            className="text-sm text-primary underline"
+            onClick={() =>
+              startCampaign.mutate(campaigns.data!.items[0]!.campaignId)
+            }
+          >
             Start first campaign (demo)
           </button>
         )}
@@ -228,24 +277,45 @@ export function IntegrationsSection() {
   if (integrations.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(integrations.data ?? []).map((i) => <IntegrationCard key={i.integrationId} integration={i} />)}
+      {(integrations.data ?? []).map((i) => (
+        <IntegrationCard key={i.integrationId} integration={i} />
+      ))}
     </div>
   );
 }
 
-export function MessagingSectionContent({ section, filters }: { section: MessagingSection; filters?: MessagingFilters; variant?: 'professional' | 'facility' | 'admin' }) {
+export function MessagingSectionContent({
+  section,
+  filters,
+}: {
+  section: MessagingSection;
+  filters?: MessagingFilters;
+  variant?: 'professional' | 'facility' | 'admin';
+}) {
   switch (section) {
-    case 'inbox': return <InboxSection filters={filters} />;
-    case 'announcements': return <AnnouncementsSection filters={filters} />;
-    case 'broadcasts': return <BroadcastsSection filters={filters} />;
-    case 'message-templates': return <MessageTemplatesSection filters={filters} />;
-    case 'message-center': return <MessageCenterSection filters={filters} />;
-    case 'channels': return <ChannelsSection />;
-    case 'templates': return <TemplatesSection filters={filters} />;
-    case 'campaigns': return <CampaignsSection filters={filters} />;
-    case 'delivery-tracking': return <DeliveryTrackingSection filters={filters} />;
-    case 'messaging-analytics': return <AnalyticsSection filters={filters} />;
-    case 'integrations': return <IntegrationsSection />;
-    default: return <DashboardSection filters={filters} />;
+    case 'inbox':
+      return <InboxSection filters={filters} />;
+    case 'announcements':
+      return <AnnouncementsSection filters={filters} />;
+    case 'broadcasts':
+      return <BroadcastsSection filters={filters} />;
+    case 'message-templates':
+      return <MessageTemplatesSection filters={filters} />;
+    case 'message-center':
+      return <MessageCenterSection filters={filters} />;
+    case 'channels':
+      return <ChannelsSection />;
+    case 'templates':
+      return <TemplatesSection filters={filters} />;
+    case 'campaigns':
+      return <CampaignsSection filters={filters} />;
+    case 'delivery-tracking':
+      return <DeliveryTrackingSection filters={filters} />;
+    case 'messaging-analytics':
+      return <AnalyticsSection filters={filters} />;
+    case 'integrations':
+      return <IntegrationsSection />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

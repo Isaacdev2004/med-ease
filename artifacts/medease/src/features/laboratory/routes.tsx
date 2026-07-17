@@ -1,9 +1,13 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const patientPage = () => import('@/features/laboratory/pages/PatientLaboratoryPage');
-const professionalPage = () => import('@/features/laboratory/pages/ProfessionalLaboratoryPage');
-const facilityPage = () => import('@/features/laboratory/pages/FacilityLaboratoryPage');
-const adminPage = () => import('@/features/laboratory/pages/AdminLaboratoryPage');
+const patientPage = () =>
+  import('@/features/laboratory/pages/PatientLaboratoryPage');
+const professionalPage = () =>
+  import('@/features/laboratory/pages/ProfessionalLaboratoryPage');
+const facilityPage = () =>
+  import('@/features/laboratory/pages/FacilityLaboratoryPage');
+const adminPage = () =>
+  import('@/features/laboratory/pages/AdminLaboratoryPage');
 
 export function createPatientLaboratoryRoutes(options: {
   analyticsPrefix: string;

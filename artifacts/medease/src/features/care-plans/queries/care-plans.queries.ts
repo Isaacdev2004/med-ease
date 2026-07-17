@@ -83,7 +83,9 @@ export const carePlanQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   population: (filters?: CarePlanFilters) => ({
-    queryKey: queryKeys.carePlans.population(filters as Record<string, unknown>),
+    queryKey: queryKeys.carePlans.population(
+      filters as Record<string, unknown>,
+    ),
     queryFn: () => carePlanService.getPopulationCare(filters),
     staleTime: CACHE_TIMES.dashboard,
   }),

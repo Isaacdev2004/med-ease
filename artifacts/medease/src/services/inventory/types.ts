@@ -20,12 +20,23 @@ export type InventoryDepartment =
   | 'biomedical'
   | 'warehouse';
 
-export type InventoryStatus = 'active' | 'low_stock' | 'out_of_stock' | 'expired' | 'recalled' | 'inactive';
+export type InventoryStatus =
+  'active' | 'low_stock' | 'out_of_stock' | 'expired' | 'recalled' | 'inactive';
 export type AssetStatus = 'operational' | 'maintenance' | 'offline' | 'retired';
-export type PurchaseOrderStatus = 'draft' | 'pending_approval' | 'approved' | 'ordered' | 'partial' | 'received' | 'cancelled';
-export type TransferStatus = 'pending' | 'in_transit' | 'completed' | 'cancelled';
-export type StockMovementType = 'receive' | 'issue' | 'transfer' | 'adjustment' | 'return' | 'count';
-export type CycleCountStatus = 'scheduled' | 'in_progress' | 'completed' | 'variance_review';
+export type PurchaseOrderStatus =
+  | 'draft'
+  | 'pending_approval'
+  | 'approved'
+  | 'ordered'
+  | 'partial'
+  | 'received'
+  | 'cancelled';
+export type TransferStatus =
+  'pending' | 'in_transit' | 'completed' | 'cancelled';
+export type StockMovementType =
+  'receive' | 'issue' | 'transfer' | 'adjustment' | 'return' | 'count';
+export type CycleCountStatus =
+  'scheduled' | 'in_progress' | 'completed' | 'variance_review';
 
 export interface InventoryItem {
   inventoryId: string;
@@ -67,7 +78,15 @@ export interface MedicalAsset {
   assetId: string;
   inventoryId?: string;
   name: string;
-  assetType: 'imaging' | 'analyzer' | 'monitor' | 'pump' | 'bed' | 'ambulance' | 'biomedical' | 'other';
+  assetType:
+    | 'imaging'
+    | 'analyzer'
+    | 'monitor'
+    | 'pump'
+    | 'bed'
+    | 'ambulance'
+    | 'biomedical'
+    | 'other';
   department: InventoryDepartment;
   serialNumber: string;
   manufacturer: string;
@@ -295,7 +314,12 @@ export interface AdjustInventoryInput {
 export interface CreatePurchaseOrderInput {
   supplierId: string;
   department: InventoryDepartment;
-  items: { sku: string; itemName: string; quantity: number; unitPrice: number }[];
+  items: {
+    sku: string;
+    itemName: string;
+    quantity: number;
+    unitPrice: number;
+  }[];
 }
 
 export interface ItemFavorite {

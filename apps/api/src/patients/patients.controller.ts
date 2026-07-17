@@ -79,12 +79,17 @@ const PATIENT_ERRORS = {
 @Controller('patients')
 @UseGuards(JwtAuthGuard)
 export class PatientsController {
-  constructor(@Inject(PatientsService) private readonly patientsService: PatientsService) {}
+  constructor(
+    @Inject(PatientsService) private readonly patientsService: PatientsService,
+  ) {}
 
   @Get()
   @RequirePermission('patients.read')
   @ApiOperation({ summary: 'List patients (paginated)' })
-  @ApiOkResponse({ description: 'Paginated patient list', type: () => PaginatedPatientsDto })
+  @ApiOkResponse({
+    description: 'Paginated patient list',
+    type: () => PaginatedPatientsDto,
+  })
   @ApiBadRequestResponse(PATIENT_ERRORS.badRequest)
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
@@ -95,7 +100,10 @@ export class PatientsController {
   @Get('search')
   @RequirePermission('patients.read')
   @ApiOperation({ summary: 'Search patients' })
-  @ApiOkResponse({ description: 'Paginated search results', type: () => PaginatedPatientsDto })
+  @ApiOkResponse({
+    description: 'Paginated search results',
+    type: () => PaginatedPatientsDto,
+  })
   @ApiBadRequestResponse(PATIENT_ERRORS.badRequest)
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
@@ -107,7 +115,10 @@ export class PatientsController {
   @RequirePermission('patients.read')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Export patients' })
-  @ApiOkResponse({ description: 'Export metadata', type: () => ExportPatientsResultDto })
+  @ApiOkResponse({
+    description: 'Export metadata',
+    type: () => ExportPatientsResultDto,
+  })
   @ApiBadRequestResponse(PATIENT_ERRORS.badRequest)
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
@@ -118,8 +129,13 @@ export class PatientsController {
   @Post('validate-merge')
   @RequirePermission('patients.write')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Validate patient merge candidates (execution deferred)' })
-  @ApiOkResponse({ description: 'Merge validation result', type: () => PatientMergeValidationResultDto })
+  @ApiOperation({
+    summary: 'Validate patient merge candidates (execution deferred)',
+  })
+  @ApiOkResponse({
+    description: 'Merge validation result',
+    type: () => PatientMergeValidationResultDto,
+  })
   @ApiBadRequestResponse(PATIENT_ERRORS.badRequest)
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
@@ -143,7 +159,10 @@ export class PatientsController {
   @Post()
   @RequirePermission('patients.write')
   @ApiOperation({ summary: 'Register a new patient' })
-  @ApiCreatedResponse({ description: 'Registered patient', type: () => PatientDto })
+  @ApiCreatedResponse({
+    description: 'Registered patient',
+    type: () => PatientDto,
+  })
   @ApiBadRequestResponse(PATIENT_ERRORS.badRequest)
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
@@ -160,7 +179,10 @@ export class PatientsController {
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
   @ApiNotFoundResponse(PATIENT_ERRORS.notFound)
-  updatePatient(@Param('patientId') patientId: string, @Body() body: UpdatePatientBodyDto) {
+  updatePatient(
+    @Param('patientId') patientId: string,
+    @Body() body: UpdatePatientBodyDto,
+  ) {
     return this.patientsService.updatePatient(patientId, body);
   }
 
@@ -195,7 +217,11 @@ export class PatientsController {
   @RequirePermission('patients.read')
   @ApiOperation({ summary: 'List patient identifiers' })
   @ApiParam({ name: 'patientId', type: String, format: 'uuid' })
-  @ApiOkResponse({ description: 'Patient identifiers', type: PatientIdentifierDto, isArray: true })
+  @ApiOkResponse({
+    description: 'Patient identifiers',
+    type: PatientIdentifierDto,
+    isArray: true,
+  })
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
   @ApiNotFoundResponse(PATIENT_ERRORS.notFound)
@@ -207,7 +233,11 @@ export class PatientsController {
   @RequirePermission('patients.read')
   @ApiOperation({ summary: 'List patient contacts' })
   @ApiParam({ name: 'patientId', type: String, format: 'uuid' })
-  @ApiOkResponse({ description: 'Patient contacts', type: PatientContactDto, isArray: true })
+  @ApiOkResponse({
+    description: 'Patient contacts',
+    type: PatientContactDto,
+    isArray: true,
+  })
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
   @ApiNotFoundResponse(PATIENT_ERRORS.notFound)
@@ -219,7 +249,11 @@ export class PatientsController {
   @RequirePermission('patients.read')
   @ApiOperation({ summary: 'List patient addresses' })
   @ApiParam({ name: 'patientId', type: String, format: 'uuid' })
-  @ApiOkResponse({ description: 'Patient addresses', type: PatientAddressDto, isArray: true })
+  @ApiOkResponse({
+    description: 'Patient addresses',
+    type: PatientAddressDto,
+    isArray: true,
+  })
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
   @ApiNotFoundResponse(PATIENT_ERRORS.notFound)
@@ -231,7 +265,11 @@ export class PatientsController {
   @RequirePermission('patients.read')
   @ApiOperation({ summary: 'List patient emergency contacts' })
   @ApiParam({ name: 'patientId', type: String, format: 'uuid' })
-  @ApiOkResponse({ description: 'Emergency contacts', type: PatientEmergencyContactDto, isArray: true })
+  @ApiOkResponse({
+    description: 'Emergency contacts',
+    type: PatientEmergencyContactDto,
+    isArray: true,
+  })
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
   @ApiNotFoundResponse(PATIENT_ERRORS.notFound)
@@ -243,7 +281,11 @@ export class PatientsController {
   @RequirePermission('patients.read')
   @ApiOperation({ summary: 'List patient allergies' })
   @ApiParam({ name: 'patientId', type: String, format: 'uuid' })
-  @ApiOkResponse({ description: 'Patient allergies', type: PatientAllergyDto, isArray: true })
+  @ApiOkResponse({
+    description: 'Patient allergies',
+    type: PatientAllergyDto,
+    isArray: true,
+  })
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
   @ApiNotFoundResponse(PATIENT_ERRORS.notFound)
@@ -255,7 +297,10 @@ export class PatientsController {
   @RequirePermission('patients.read')
   @ApiOperation({ summary: 'Get patient preferences' })
   @ApiParam({ name: 'patientId', type: String, format: 'uuid' })
-  @ApiOkResponse({ description: 'Patient preferences', type: () => PatientPreferenceDto })
+  @ApiOkResponse({
+    description: 'Patient preferences',
+    type: () => PatientPreferenceDto,
+  })
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
   @ApiNotFoundResponse(PATIENT_ERRORS.notFound)
@@ -267,12 +312,18 @@ export class PatientsController {
   @RequirePermission('patients.write')
   @ApiOperation({ summary: 'Add a patient allergy' })
   @ApiParam({ name: 'patientId', type: String, format: 'uuid' })
-  @ApiCreatedResponse({ description: 'Created allergy', type: () => PatientAllergyDto })
+  @ApiCreatedResponse({
+    description: 'Created allergy',
+    type: () => PatientAllergyDto,
+  })
   @ApiBadRequestResponse(PATIENT_ERRORS.badRequest)
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)
   @ApiNotFoundResponse(PATIENT_ERRORS.notFound)
-  addAllergy(@Param('patientId') patientId: string, @Body() body: CreatePatientAllergyBodyDto) {
+  addAllergy(
+    @Param('patientId') patientId: string,
+    @Body() body: CreatePatientAllergyBodyDto,
+  ) {
     return this.patientsService.addAllergy(patientId, body);
   }
 
@@ -280,7 +331,10 @@ export class PatientsController {
   @RequirePermission('patients.write')
   @ApiOperation({ summary: 'Create or update patient preferences' })
   @ApiParam({ name: 'patientId', type: String, format: 'uuid' })
-  @ApiOkResponse({ description: 'Patient preferences', type: () => PatientPreferenceDto })
+  @ApiOkResponse({
+    description: 'Patient preferences',
+    type: () => PatientPreferenceDto,
+  })
   @ApiBadRequestResponse(PATIENT_ERRORS.badRequest)
   @ApiUnauthorizedResponse(PATIENT_ERRORS.unauthorized)
   @ApiForbiddenResponse(PATIENT_ERRORS.forbidden)

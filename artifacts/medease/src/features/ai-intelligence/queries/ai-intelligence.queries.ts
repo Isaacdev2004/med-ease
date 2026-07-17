@@ -15,7 +15,9 @@ export const aiIntelligenceQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   predictions: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.predictions(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.predictions(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getPredictions(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -26,32 +28,44 @@ export const aiIntelligenceQueries = {
     enabled: Boolean(predictionId),
   }),
   riskScores: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.riskScores(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.riskScores(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getRiskScores(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   recommendations: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.recommendations(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.recommendations(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getRecommendations(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   copilotSessions: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.copilotSessions(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.copilotSessions(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getCopilotSessions(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   clinicalSummaries: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.clinicalSummaries(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.clinicalSummaries(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getClinicalSummaries(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   forecasts: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.forecasts(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.forecasts(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getForecasts(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   modelRegistry: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.modelRegistry(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.modelRegistry(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getModelRegistry(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
@@ -61,17 +75,23 @@ export const aiIntelligenceQueries = {
     staleTime: CACHE_TIMES.patientList,
   }),
   biasMonitoring: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.biasMonitoring(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.biasMonitoring(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getBiasMonitoring(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   explainability: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.explainability(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.explainability(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getExplainability(filters),
     staleTime: CACHE_TIMES.patientList,
   }),
   audit: (filters?: AiIntelligenceFilters) => ({
-    queryKey: queryKeys.ai.audit(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.ai.audit(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => aiIntelligenceService.getAudit(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

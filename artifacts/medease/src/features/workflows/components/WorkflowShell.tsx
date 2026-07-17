@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { WorkflowSectionContent } from '@/features/workflows/components/WorkflowSections';
-import { WorkflowTabs, getWorkflowSectionFromPath } from '@/features/workflows/components/WorkflowTabs';
+import {
+  WorkflowTabs,
+  getWorkflowSectionFromPath,
+} from '@/features/workflows/components/WorkflowTabs';
 import { useWorkflowPermissions } from '@/features/workflows/hooks/use-workflow-permissions';
 import type { WorkflowFilters } from '@/services/workflows/types';
 import { PageShell } from '@/shared/components';
@@ -26,12 +29,18 @@ export function WorkflowShell({
   const [location] = useLocation();
   const perms = useWorkflowPermissions();
   const section = getWorkflowSectionFromPath(location);
-  const scopedFilters = useMemo((): WorkflowFilters => ({ facilityId, userId }), [facilityId, userId]);
+  const scopedFilters = useMemo(
+    (): WorkflowFilters => ({ facilityId, userId }),
+    [facilityId, userId],
+  );
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view workflows." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view workflows."
+        />
       </PageShell>
     );
   }
@@ -43,7 +52,11 @@ export function WorkflowShell({
     >
       <div className="space-y-6">
         <WorkflowTabs basePath={basePath} variant={variant} />
-        <WorkflowSectionContent section={section} filters={scopedFilters} variant={variant} />
+        <WorkflowSectionContent
+          section={section}
+          filters={scopedFilters}
+          variant={variant}
+        />
       </div>
     </PageShell>
   );

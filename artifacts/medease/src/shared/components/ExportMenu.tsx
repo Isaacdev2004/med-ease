@@ -26,7 +26,11 @@ export function ExportMenu<T extends Record<string, unknown>>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm" disabled={disabled || rows.length === 0}>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={disabled || rows.length === 0}
+        >
           <Download className="mr-2 h-4 w-4" />
           Export
         </Button>

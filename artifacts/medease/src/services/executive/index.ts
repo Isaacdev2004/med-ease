@@ -1,7 +1,10 @@
 export { executiveService } from '@/services/executive/executive.service';
 export { executiveRepository } from '@/services/executive/repository';
 export { executiveOfflineQueue } from '@/services/executive/offline-sync';
-export { computeExecutiveAnalytics, buildExecutiveCommandCenter } from '@/services/executive/analytics';
+export {
+  computeExecutiveAnalytics,
+  buildExecutiveCommandCenter,
+} from '@/services/executive/analytics';
 export {
   MOCK_ENTERPRISE_KPIS,
   MOCK_DEPARTMENT_SCORECARDS,

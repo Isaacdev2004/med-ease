@@ -19,7 +19,10 @@ import type {
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
   if (typeof navigator !== 'undefined' && !navigator.onLine) {
-    workflowOfflineQueue.enqueue({ label, execute: () => execute().then(() => undefined) });
+    workflowOfflineQueue.enqueue({
+      label,
+      execute: () => execute().then(() => undefined),
+    });
     appToast.offline('Workflow update queued until you are back online.');
     return Promise.resolve(null);
   }
@@ -34,84 +37,166 @@ export function useWorkflowMutations() {
   const client = useQueryClient();
 
   const createWorkflow = useMutation({
-    mutationFn: (input: CreateWorkflowInput) => runOrQueue('Create workflow', () => workflowService.createWorkflow(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Workflow created.' }); },
+    mutationFn: (input: CreateWorkflowInput) =>
+      runOrQueue('Create workflow', () =>
+        workflowService.createWorkflow(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Workflow created.' });
+    },
   });
 
   const publishWorkflow = useMutation({
-    mutationFn: (workflowId: string) => runOrQueue('Publish workflow', () => workflowService.publishWorkflow(workflowId)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Workflow published.' }); },
+    mutationFn: (workflowId: string) =>
+      runOrQueue('Publish workflow', () =>
+        workflowService.publishWorkflow(workflowId),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Workflow published.' });
+    },
   });
 
   const startWorkflow = useMutation({
-    mutationFn: (input: StartWorkflowInput) => runOrQueue('Start workflow', () => workflowService.startWorkflow(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Workflow started.' }); },
+    mutationFn: (input: StartWorkflowInput) =>
+      runOrQueue('Start workflow', () => workflowService.startWorkflow(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Workflow started.' });
+    },
   });
 
   const pauseWorkflow = useMutation({
-    mutationFn: (instanceId: string) => runOrQueue('Pause workflow', () => workflowService.pauseWorkflow(instanceId)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Workflow paused.' }); },
+    mutationFn: (instanceId: string) =>
+      runOrQueue('Pause workflow', () =>
+        workflowService.pauseWorkflow(instanceId),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Workflow paused.' });
+    },
   });
 
   const resumeWorkflow = useMutation({
-    mutationFn: (instanceId: string) => runOrQueue('Resume workflow', () => workflowService.resumeWorkflow(instanceId)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Workflow resumed.' }); },
+    mutationFn: (instanceId: string) =>
+      runOrQueue('Resume workflow', () =>
+        workflowService.resumeWorkflow(instanceId),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Workflow resumed.' });
+    },
   });
 
   const cancelWorkflow = useMutation({
-    mutationFn: (instanceId: string) => runOrQueue('Cancel workflow', () => workflowService.cancelWorkflow(instanceId)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Workflow cancelled.' }); },
+    mutationFn: (instanceId: string) =>
+      runOrQueue('Cancel workflow', () =>
+        workflowService.cancelWorkflow(instanceId),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Workflow cancelled.' });
+    },
   });
 
   const completeTask = useMutation({
-    mutationFn: (input: CompleteTaskInput) => runOrQueue('Complete task', () => workflowService.completeTask(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Task completed.' }); },
+    mutationFn: (input: CompleteTaskInput) =>
+      runOrQueue('Complete task', () => workflowService.completeTask(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Task completed.' });
+    },
   });
 
   const assignTask = useMutation({
-    mutationFn: (input: AssignTaskInput) => runOrQueue('Assign task', () => workflowService.assignTask(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Task assigned.' }); },
+    mutationFn: (input: AssignTaskInput) =>
+      runOrQueue('Assign task', () => workflowService.assignTask(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Task assigned.' });
+    },
   });
 
   const approve = useMutation({
-    mutationFn: (input: ApproveInput) => runOrQueue('Approve', () => workflowService.approve(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Approved.' }); },
+    mutationFn: (input: ApproveInput) =>
+      runOrQueue('Approve', () => workflowService.approve(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Approved.' });
+    },
   });
 
   const reject = useMutation({
-    mutationFn: (input: RejectInput) => runOrQueue('Reject', () => workflowService.reject(input)),
-    onSuccess: () => { invalidateAll(client); appToast.info({ title: 'Rejected.' }); },
+    mutationFn: (input: RejectInput) =>
+      runOrQueue('Reject', () => workflowService.reject(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.info({ title: 'Rejected.' });
+    },
   });
 
   const escalate = useMutation({
-    mutationFn: (input: EscalateInput) => runOrQueue('Escalate', () => workflowService.escalate(input)),
-    onSuccess: () => { invalidateAll(client); appToast.warning({ title: 'Task escalated.' }); },
+    mutationFn: (input: EscalateInput) =>
+      runOrQueue('Escalate', () => workflowService.escalate(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.warning({ title: 'Task escalated.' });
+    },
   });
 
   const createRule = useMutation({
-    mutationFn: (input: CreateRuleInput) => runOrQueue('Create rule', () => workflowService.createRule(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Rule created.' }); },
+    mutationFn: (input: CreateRuleInput) =>
+      runOrQueue('Create rule', () => workflowService.createRule(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Rule created.' });
+    },
   });
 
   const scheduleWorkflow = useMutation({
-    mutationFn: (input: ScheduleWorkflowInput) => runOrQueue('Schedule workflow', () => workflowService.scheduleWorkflow(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Schedule created.' }); },
+    mutationFn: (input: ScheduleWorkflowInput) =>
+      runOrQueue('Schedule workflow', () =>
+        workflowService.scheduleWorkflow(input),
+      ),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Schedule created.' });
+    },
   });
 
   const exportData = useMutation({
-    mutationFn: (format: 'csv' | 'pdf' | 'xlsx') => runOrQueue('Export workflows', () => workflowService.exportData(format)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Export complete.' }); },
+    mutationFn: (format: 'csv' | 'pdf' | 'xlsx') =>
+      runOrQueue('Export workflows', () => workflowService.exportData(format)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Export complete.' });
+    },
   });
 
   const favorite = useMutation({
-    mutationFn: ({ userId, entityType, entityId }: { userId: string; entityType: 'workflow' | 'instance' | 'template'; entityId: string }) =>
-      runOrQueue('Favorite', () => workflowService.favorite(userId, entityType, entityId)),
+    mutationFn: ({
+      userId,
+      entityType,
+      entityId,
+    }: {
+      userId: string;
+      entityType: 'workflow' | 'instance' | 'template';
+      entityId: string;
+    }) =>
+      runOrQueue('Favorite', () =>
+        workflowService.favorite(userId, entityType, entityId),
+      ),
     onSuccess: () => invalidateAll(client),
   });
 
   const share = useMutation({
-    mutationFn: (input: ShareWorkflowInput) => runOrQueue('Share workflow', () => workflowService.share(input)),
-    onSuccess: () => { invalidateAll(client); appToast.success({ title: 'Shared successfully.' }); },
+    mutationFn: (input: ShareWorkflowInput) =>
+      runOrQueue('Share workflow', () => workflowService.share(input)),
+    onSuccess: () => {
+      invalidateAll(client);
+      appToast.success({ title: 'Shared successfully.' });
+    },
   });
 
   return {

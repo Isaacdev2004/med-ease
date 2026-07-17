@@ -1,7 +1,14 @@
-import type { ProviderAvailability, TimeSlot } from '@/services/appointments/types';
+import type {
+  ProviderAvailability,
+  TimeSlot,
+} from '@/services/appointments/types';
 import { FACILITIES, PROVIDERS } from '@/services/appointments/mock-data';
 
-function buildSlots(date: string, providerId: string, facilityId: string): TimeSlot[] {
+function buildSlots(
+  date: string,
+  providerId: string,
+  facilityId: string,
+): TimeSlot[] {
   const slots: TimeSlot[] = [];
   const base = new Date(date);
   for (let hour = 8; hour < 17; hour++) {
@@ -43,12 +50,17 @@ export function getProviderAvailability(
   };
 }
 
-export function getAllProviderAvailability(date: string, facilityId?: string): ProviderAvailability[] {
+export function getAllProviderAvailability(
+  date: string,
+  facilityId?: string,
+): ProviderAvailability[] {
   return PROVIDERS.flatMap((provider) => {
     const facilities = facilityId
       ? FACILITIES.filter((f) => f.id === facilityId)
       : FACILITIES.slice(0, 2);
-    return facilities.map((f) => getProviderAvailability(provider.id, f.id, date)!);
+    return facilities.map((f) =>
+      getProviderAvailability(provider.id, f.id, date)!,
+    );
   });
 }
 
@@ -58,5 +70,9 @@ export function getAvailableSlots(
   date: string,
 ): TimeSlot[] {
   const availability = getProviderAvailability(providerId, facilityId, date);
-  return availability?.slots.filter((s) => s.available && !availability.blockedSlots.includes(s.id)) ?? [];
+  return (
+    availability?.slots.filter(
+      (s) => s.available && !availability.blockedSlots.includes(s.id),
+    ) ?? []
+  );
 }

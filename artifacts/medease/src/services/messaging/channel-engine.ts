@@ -1,4 +1,8 @@
-import type { ChannelConfig, MessageChannel, MessageStatus } from '@/services/messaging/types';
+import type {
+  ChannelConfig,
+  MessageChannel,
+  MessageStatus,
+} from '@/services/messaging/types';
 
 export function channelHealthScore(channels: ChannelConfig[]): number {
   if (channels.length === 0) return 0;
@@ -15,7 +19,9 @@ export function channelCapacityRemaining(channel: ChannelConfig): number {
   return Math.max(0, channel.dailyLimit - channel.sentToday);
 }
 
-export function nextMessageStatus(action: 'send' | 'deliver' | 'read' | 'fail'): MessageStatus {
+export function nextMessageStatus(
+  action: 'send' | 'deliver' | 'read' | 'fail',
+): MessageStatus {
   if (action === 'send') return 'sent';
   if (action === 'deliver') return 'delivered';
   if (action === 'read') return 'read';

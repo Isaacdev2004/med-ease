@@ -111,10 +111,19 @@ export function DataTable<T>({
         </div>
       ) : null}
 
-      <ScrollArea className={cn('w-full rounded-md border', renderMobileCard && 'hidden md:block')}>
+      <ScrollArea
+        className={cn(
+          'w-full rounded-md border',
+          renderMobileCard && 'hidden md:block',
+        )}
+      >
         <Table>
           {caption ? <caption className="sr-only">{caption}</caption> : null}
-          <TableHeader className={stickyHeader ? 'sticky top-0 z-10 bg-background' : undefined}>
+          <TableHeader
+            className={
+              stickyHeader ? 'sticky top-0 z-10 bg-background' : undefined
+            }
+          >
             <TableRow>
               {selectable ? (
                 <TableHead className="w-10">
@@ -122,7 +131,9 @@ export function DataTable<T>({
                     checked={isAllSelected}
                     onCheckedChange={() => onToggleAll?.()}
                     aria-label="Select all rows"
-                    {...(isIndeterminate ? { 'data-state': 'indeterminate' } : {})}
+                    {...(isIndeterminate
+                      ? { 'data-state': 'indeterminate' }
+                      : {})}
                   />
                 </TableHead>
               ) : null}
@@ -131,7 +142,9 @@ export function DataTable<T>({
                   {column.header}
                 </TableHead>
               ))}
-              {hasActions ? <TableHead className="w-12 text-right">Actions</TableHead> : null}
+              {hasActions ? (
+                <TableHead className="w-12 text-right">Actions</TableHead>
+              ) : null}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -140,7 +153,10 @@ export function DataTable<T>({
               const selected = selectedIds?.has(rowId);
 
               return (
-                <TableRow key={rowId} data-state={selected ? 'selected' : undefined}>
+                <TableRow
+                  key={rowId}
+                  data-state={selected ? 'selected' : undefined}
+                >
                   {selectable ? (
                     <TableCell>
                       <Checkbox
@@ -159,11 +175,17 @@ export function DataTable<T>({
                     <TableCell className="text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" aria-label="Row actions">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label="Row actions"
+                          >
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">{rowActions?.(row)}</DropdownMenuContent>
+                        <DropdownMenuContent align="end">
+                          {rowActions?.(row)}
+                        </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
                   ) : null}

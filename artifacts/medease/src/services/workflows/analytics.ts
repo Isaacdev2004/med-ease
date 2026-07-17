@@ -1,1 +1,4 @@
-export { computeWorkflowAnalytics, buildWorkflowDashboard } from '@/services/workflows/mock-data';
+export {
+  computeWorkflowAnalytics,
+  buildWorkflowDashboard,
+} from '@/services/workflows/mock-data';

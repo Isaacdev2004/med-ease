@@ -1,9 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import {
-  createOptimisticMutationOptions,
-  queryKeys,
-} from '@/services/api';
+import { createOptimisticMutationOptions, queryKeys } from '@/services/api';
 import { patientService } from '@/features/patient/services/patient.service';
 import type { PatientDashboardData } from '@/features/patient/types';
 

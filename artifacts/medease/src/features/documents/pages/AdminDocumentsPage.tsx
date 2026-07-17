@@ -49,5 +49,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminDocumentsPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <DocumentShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <DocumentShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

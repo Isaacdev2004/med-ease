@@ -40,5 +40,11 @@ const TITLES: Record<Segment, string> = {
 export default function AdminReportingPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <ReportingShell basePath={resolveModuleBasePath(location, segment)} variant="admin" title={TITLES[segment]} />;
+  return (
+    <ReportingShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="admin"
+      title={TITLES[segment]}
+    />
+  );
 }

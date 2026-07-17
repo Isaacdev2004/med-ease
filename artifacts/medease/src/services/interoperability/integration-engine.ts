@@ -1,6 +1,12 @@
-import type { IntegrationJob, JobStatus, SyncState } from '@/services/interoperability/types';
+import type {
+  IntegrationJob,
+  JobStatus,
+  SyncState,
+} from '@/services/interoperability/types';
 
-export function resolveConflict(strategy: 'source_wins' | 'target_wins' | 'manual'): SyncState {
+export function resolveConflict(
+  strategy: 'source_wins' | 'target_wins' | 'manual',
+): SyncState {
   if (strategy === 'manual') return 'conflict';
   return 'success';
 }

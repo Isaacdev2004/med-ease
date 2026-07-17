@@ -3,7 +3,9 @@ import type { AuditRecord } from '@/services/quality/types';
 export function averageAuditScore(audits: AuditRecord[]): number {
   const scored = audits.filter((a) => a.score != null);
   if (!scored.length) return 0;
-  return Math.round(scored.reduce((s, a) => s + (a.score ?? 0), 0) / scored.length);
+  return Math.round(
+    scored.reduce((s, a) => s + (a.score ?? 0), 0) / scored.length,
+  );
 }
 
 export function openFindingsCount(findings: { status: string }[]): number {

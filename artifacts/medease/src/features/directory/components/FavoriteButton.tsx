@@ -30,7 +30,9 @@ export function FavoriteButton({
       aria-pressed={isFavorite}
       onClick={() => toggleFavorite.mutate(providerId)}
     >
-      <Heart className={cn('h-4 w-4', isFavorite ? 'fill-current' : undefined)} />
+      <Heart
+        className={cn('h-4 w-4', isFavorite ? 'fill-current' : undefined)}
+      />
       {size !== 'icon' ? (
         <span className="ml-2">{isFavorite ? 'Saved' : 'Save'}</span>
       ) : null}

@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_TRANSPORT_HISTORY, type TransportHistoryRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_TRANSPORT_HISTORY,
+  type TransportHistoryRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -22,7 +25,13 @@ const columns: DataTableColumn<TransportHistoryRow>[] = [
     cell: (row) => (
       <PortalStatusBadge
         label={row.outcome}
-        variant={row.outcome === 'delayed' ? 'destructive' : row.outcome === 'cancelled' ? 'secondary' : 'outline'}
+        variant={
+          row.outcome === 'delayed'
+            ? 'destructive'
+            : row.outcome === 'cancelled'
+              ? 'secondary'
+              : 'outline'
+        }
       />
     ),
   },
@@ -38,13 +47,22 @@ export default function TransportHistoryPage() {
     <PageShell
       title="History"
       subtitle="Completed transport runs and performance metrics."
-      primaryAction={<PortalActionButton label="Export history" successTitle="History exported" />}
+      primaryAction={
+        <PortalActionButton
+          label="Export history"
+          successTitle="History exported"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
         metrics={[
           { title: 'Total runs', value: history.length },
-          { title: 'On-time rate', value: `${onTimeRate}%`, status: onTimeRate >= 90 ? 'stable' : 'observation' },
+          {
+            title: 'On-time rate',
+            value: `${onTimeRate}%`,
+            status: onTimeRate >= 90 ? 'stable' : 'observation',
+          },
           { title: 'Avg. duration', value: '42 min' },
         ]}
       />

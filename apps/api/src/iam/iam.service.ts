@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { DomainEventBus, UserEvents } from '@medease/events';
 import type {
@@ -417,7 +421,11 @@ export class IamService {
     return result;
   }
 
-  favorite(userId: string, entityType: IamFavorite['entityType'], entityId: string) {
+  favorite(
+    userId: string,
+    entityType: IamFavorite['entityType'],
+    entityId: string,
+  ) {
     return this.repository.favorite(userId, entityType, entityId);
   }
 

@@ -28,21 +28,35 @@ export function MarketingLayout({ children }: MarketingLayoutProps) {
         aria-label="Marketing navigation"
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href={ROUTES.home} className="flex items-center gap-2 font-semibold">
+          <Link
+            href={ROUTES.home}
+            className="flex items-center gap-2 font-semibold"
+          >
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <span className="font-serif italic text-lg font-bold leading-none">M</span>
+              <span className="font-serif italic text-lg font-bold leading-none">
+                M
+              </span>
             </div>
             <span className="text-xl tracking-tight">{APP_NAME}</span>
           </Link>
 
           <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition-colors">
+            <a
+              href="#features"
+              className="hover:text-foreground transition-colors"
+            >
               Platform
             </a>
-            <a href="#solutions" className="hover:text-foreground transition-colors">
+            <a
+              href="#solutions"
+              className="hover:text-foreground transition-colors"
+            >
               Solutions
             </a>
-            <a href="#security" className="hover:text-foreground transition-colors">
+            <a
+              href="#security"
+              className="hover:text-foreground transition-colors"
+            >
               Security
             </a>
             <Link
@@ -92,7 +106,9 @@ export function MarketingLayout({ children }: MarketingLayoutProps) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="mb-4 flex items-center justify-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded bg-primary text-primary-foreground">
-              <span className="font-serif italic text-xs font-bold leading-none">M</span>
+              <span className="font-serif italic text-xs font-bold leading-none">
+                M
+              </span>
             </div>
             <span className="font-semibold">{APP_NAME}</span>
           </div>
@@ -100,7 +116,8 @@ export function MarketingLayout({ children }: MarketingLayoutProps) {
             The foundation for modern healthcare coordination.
           </p>
           <p className="text-xs text-muted-foreground/60">
-            © {new Date().getFullYear()} {APP_NAME} Platform. All rights reserved.
+            © {new Date().getFullYear()} {APP_NAME} Platform. All rights
+            reserved.
           </p>
         </div>
       </footer>

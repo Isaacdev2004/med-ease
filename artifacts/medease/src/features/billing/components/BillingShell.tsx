@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { BillingSectionContent } from '@/features/billing/components/BillingSections';
-import { BillingTabs, getBillingSectionFromPath } from '@/features/billing/components/BillingTabs';
+import {
+  BillingTabs,
+  getBillingSectionFromPath,
+} from '@/features/billing/components/BillingTabs';
 import { useBillingContext } from '@/features/billing/hooks/use-billing';
 import { useBillingPermissions } from '@/features/billing/hooks/use-billing-permissions';
 import type { BillingFilters } from '@/services/billing/types';
@@ -34,16 +37,33 @@ export function BillingShell({
   const section = getBillingSectionFromPath(location);
 
   const scopedFilters = useMemo((): BillingFilters => {
-    const patientId = explicitPatientId ?? (variant === 'patient' ? patientResolve.data ?? undefined : undefined);
-    const providerId = explicitProviderId ?? (variant === 'clinician' ? 'prov-001' : undefined);
-    const facilityId = explicitFacilityId ?? (variant === 'facility' ? 'fac-001' : undefined);
-    return { ...(patientId ? { patientId } : {}), ...(providerId ? { providerId } : {}), ...(facilityId ? { facilityId } : {}) };
-  }, [explicitPatientId, explicitProviderId, explicitFacilityId, patientResolve.data, variant]);
+    const patientId =
+      explicitPatientId ??
+      (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
+    const providerId =
+      explicitProviderId ?? (variant === 'clinician' ? 'prov-001' : undefined);
+    const facilityId =
+      explicitFacilityId ?? (variant === 'facility' ? 'fac-001' : undefined);
+    return {
+      ...(patientId ? { patientId } : {}),
+      ...(providerId ? { providerId } : {}),
+      ...(facilityId ? { facilityId } : {}),
+    };
+  }, [
+    explicitPatientId,
+    explicitProviderId,
+    explicitFacilityId,
+    patientResolve.data,
+    variant,
+  ]);
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view billing." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view billing."
+        />
       </PageShell>
     );
   }
@@ -63,7 +83,11 @@ export function BillingShell({
     >
       <div className="space-y-6">
         <BillingTabs basePath={basePath} variant={variant} />
-        <BillingSectionContent section={section} filters={scopedFilters} invoiceId={invoiceId} />
+        <BillingSectionContent
+          section={section}
+          filters={scopedFilters}
+          invoiceId={invoiceId}
+        />
       </div>
     </PageShell>
   );

@@ -10,7 +10,9 @@ export const telemedicineQueries = {
     staleTime: CACHE_TIMES.dashboard,
   }),
   sessions: (filters?: TelemedicineFilters) => ({
-    queryKey: queryKeys.telemedicine.sessions(filters as Record<string, unknown> | undefined),
+    queryKey: queryKeys.telemedicine.sessions(
+      filters as Record<string, unknown> | undefined,
+    ),
     queryFn: () => telemedicineService.searchSessions(filters),
     staleTime: CACHE_TIMES.patientList,
   }),

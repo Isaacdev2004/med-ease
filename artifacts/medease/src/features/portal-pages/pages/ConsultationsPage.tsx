@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_CONSULTATIONS, type ConsultationRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_CONSULTATIONS,
+  type ConsultationRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -27,13 +30,20 @@ export default function ConsultationsPage() {
   const [consultations, setConsultations] = useState(MOCK_CONSULTATIONS);
 
   const today = consultations.length;
-  const inProgress = consultations.filter((row) => row.status === 'in-progress').length;
+  const inProgress = consultations.filter(
+    (row) => row.status === 'in-progress',
+  ).length;
 
   return (
     <PageShell
       title="Consultations"
       subtitle="Specialist consults and referral follow-ups."
-      primaryAction={<PortalActionButton label="Schedule consult" successTitle="Consultation scheduled" />}
+      primaryAction={
+        <PortalActionButton
+          label="Schedule consult"
+          successTitle="Consultation scheduled"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
@@ -57,7 +67,9 @@ export default function ConsultationsPage() {
               onClick={() => {
                 setConsultations((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'completed' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'completed' as const }
+                      : item,
                   ),
                 );
               }}

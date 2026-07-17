@@ -1,7 +1,13 @@
 import { computeCdssAnalytics } from '@/services/cdss/analytics';
 import { sortAlertsByPriority } from '@/services/cdss/clinical-rules-engine';
-import { filterGuidelinesBySource, sortGuidelinesByCompliance } from '@/services/cdss/guidelines-engine';
-import { filterOrderSetsByCategory, sortOrderSetsByUsage } from '@/services/cdss/order-set-engine';
+import {
+  filterGuidelinesBySource,
+  sortGuidelinesByCompliance,
+} from '@/services/cdss/guidelines-engine';
+import {
+  filterOrderSetsByCategory,
+  sortOrderSetsByUsage,
+} from '@/services/cdss/order-set-engine';
 import { sortPreventiveByUrgency } from '@/services/cdss/preventive-care-engine';
 import { buildCalculatorResult } from '@/services/cdss/risk-calculator';
 import {
@@ -39,7 +45,12 @@ import type {
 
 function paginate<T>(items: T[], page = 1, pageSize = 25) {
   const start = ((page ?? 1) - 1) * (pageSize ?? 25);
-  return { items: items.slice(start, start + pageSize), total: items.length, page: page ?? 1, pageSize: pageSize ?? 25 };
+  return {
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page: page ?? 1,
+    pageSize: pageSize ?? 25,
+  };
 }
 
 function matchQ(q: string | undefined, ...fields: (string | undefined)[]) {
@@ -60,44 +71,81 @@ class CdssRepository {
 
   getAlerts(filters?: CdssFilters) {
     let items = this.alerts;
-    if (filters?.facilityId) items = items.filter((a) => a.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((a) => a.patientId === filters.patientId);
-    if (filters?.severity) items = items.filter((a) => a.severity === filters.severity);
-    if (filters?.status) items = items.filter((a) => a.status === filters.status);
-    if (filters?.alertType) items = items.filter((a) => a.type === filters.alertType);
-    if (filters?.q) items = items.filter((a) => matchQ(filters.q, a.title, a.patientName, a.message));
-    return paginate(sortAlertsByPriority(items), filters?.page, filters?.pageSize);
+    if (filters?.facilityId)
+      items = items.filter((a) => a.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((a) => a.patientId === filters.patientId);
+    if (filters?.severity)
+      items = items.filter((a) => a.severity === filters.severity);
+    if (filters?.status)
+      items = items.filter((a) => a.status === filters.status);
+    if (filters?.alertType)
+      items = items.filter((a) => a.type === filters.alertType);
+    if (filters?.q)
+      items = items.filter((a) =>
+        matchQ(filters.q, a.title, a.patientName, a.message),
+      );
+    return paginate(
+      sortAlertsByPriority(items),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getRecommendations(filters?: CdssFilters) {
     let items = this.recommendations;
-    if (filters?.facilityId) items = items.filter((r) => r.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((r) => r.patientId === filters.patientId);
-    if (filters?.status) items = items.filter((r) => r.status === filters.status);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.title, r.patientName));
+    if (filters?.facilityId)
+      items = items.filter((r) => r.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((r) => r.patientId === filters.patientId);
+    if (filters?.status)
+      items = items.filter((r) => r.status === filters.status);
+    if (filters?.q)
+      items = items.filter((r) => matchQ(filters.q, r.title, r.patientName));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getGuidelines(filters?: CdssFilters) {
     let items = this.guidelines;
-    if (filters?.facilityId) items = items.filter((g) => !g.facilityId || g.facilityId === filters.facilityId);
-    if (filters?.guidelineSource) items = filterGuidelinesBySource(items, filters.guidelineSource);
-    if (filters?.q) items = items.filter((g) => matchQ(filters.q, g.title, g.condition));
-    return paginate(sortGuidelinesByCompliance(items), filters?.page, filters?.pageSize);
+    if (filters?.facilityId)
+      items = items.filter(
+        (g) => !g.facilityId || g.facilityId === filters.facilityId,
+      );
+    if (filters?.guidelineSource)
+      items = filterGuidelinesBySource(items, filters.guidelineSource);
+    if (filters?.q)
+      items = items.filter((g) => matchQ(filters.q, g.title, g.condition));
+    return paginate(
+      sortGuidelinesByCompliance(items),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getOrderSets(filters?: CdssFilters) {
     let items = MOCK_ORDER_SETS;
-    if (filters?.facilityId) items = items.filter((o) => !o.facilityId || o.facilityId === filters.facilityId);
-    if (filters?.orderSetCategory) items = filterOrderSetsByCategory(items, filters.orderSetCategory);
+    if (filters?.facilityId)
+      items = items.filter(
+        (o) => !o.facilityId || o.facilityId === filters.facilityId,
+      );
+    if (filters?.orderSetCategory)
+      items = filterOrderSetsByCategory(items, filters.orderSetCategory);
     if (filters?.q) items = items.filter((o) => matchQ(filters.q, o.name));
-    return paginate(sortOrderSetsByUsage(items), filters?.page, filters?.pageSize);
+    return paginate(
+      sortOrderSetsByUsage(items),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getPathways(filters?: CdssFilters) {
     let items = MOCK_PATHWAYS;
-    if (filters?.facilityId) items = items.filter((p) => !p.facilityId || p.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.name, p.condition));
+    if (filters?.facilityId)
+      items = items.filter(
+        (p) => !p.facilityId || p.facilityId === filters.facilityId,
+      );
+    if (filters?.q)
+      items = items.filter((p) => matchQ(filters.q, p.name, p.condition));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -107,8 +155,10 @@ class CdssRepository {
 
   getDiagnostics(filters?: CdssFilters) {
     let items = MOCK_DIAGNOSTIC_SUGGESTIONS;
-    if (filters?.facilityId) items = items.filter((d) => d.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((d) => d.patientId === filters.patientId);
+    if (filters?.facilityId)
+      items = items.filter((d) => d.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((d) => d.patientId === filters.patientId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -117,38 +167,68 @@ class CdssRepository {
     const filterPatient = <T extends { patientId: string }>(items: T[]) =>
       patientId ? items.filter((i) => i.patientId === patientId) : items;
     return {
-      interactions: paginate(filterPatient(MOCK_DRUG_INTERACTIONS).slice(0, 200), filters?.page, filters?.pageSize),
-      allergies: paginate(filterPatient(MOCK_ALLERGY_ALERTS).slice(0, 200), filters?.page, filters?.pageSize),
-      contraindications: paginate(filterPatient(MOCK_CONTRAINDICATIONS).slice(0, 200), filters?.page, filters?.pageSize),
-      duplicateTherapy: paginate(filterPatient(MOCK_DUPLICATE_THERAPY).slice(0, 200), filters?.page, filters?.pageSize),
+      interactions: paginate(
+        filterPatient(MOCK_DRUG_INTERACTIONS).slice(0, 200),
+        filters?.page,
+        filters?.pageSize,
+      ),
+      allergies: paginate(
+        filterPatient(MOCK_ALLERGY_ALERTS).slice(0, 200),
+        filters?.page,
+        filters?.pageSize,
+      ),
+      contraindications: paginate(
+        filterPatient(MOCK_CONTRAINDICATIONS).slice(0, 200),
+        filters?.page,
+        filters?.pageSize,
+      ),
+      duplicateTherapy: paginate(
+        filterPatient(MOCK_DUPLICATE_THERAPY).slice(0, 200),
+        filters?.page,
+        filters?.pageSize,
+      ),
     };
   }
 
   getPreventiveCare(filters?: CdssFilters) {
     let items = MOCK_PREVENTIVE;
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
-    if (filters?.patientId) items = items.filter((p) => p.patientId === filters.patientId);
-    return paginate(sortPreventiveByUrgency(items), filters?.page, filters?.pageSize);
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
+    if (filters?.patientId)
+      items = items.filter((p) => p.patientId === filters.patientId);
+    return paginate(
+      sortPreventiveByUrgency(items),
+      filters?.page,
+      filters?.pageSize,
+    );
   }
 
   getRules(filters?: CdssFilters) {
     let items = this.rules;
-    if (filters?.facilityId) items = items.filter((r) => !r.facilityId || r.facilityId === filters.facilityId);
-    if (filters?.alertType) items = items.filter((r) => r.category === filters.alertType);
-    if (filters?.q) items = items.filter((r) => matchQ(filters.q, r.name, r.description));
+    if (filters?.facilityId)
+      items = items.filter(
+        (r) => !r.facilityId || r.facilityId === filters.facilityId,
+      );
+    if (filters?.alertType)
+      items = items.filter((r) => r.category === filters.alertType);
+    if (filters?.q)
+      items = items.filter((r) => matchQ(filters.q, r.name, r.description));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getProtocols(filters?: CdssFilters) {
     let items = this.protocols;
-    if (filters?.facilityId) items = items.filter((p) => p.facilityId === filters.facilityId);
-    if (filters?.q) items = items.filter((p) => matchQ(filters.q, p.name, p.condition));
+    if (filters?.facilityId)
+      items = items.filter((p) => p.facilityId === filters.facilityId);
+    if (filters?.q)
+      items = items.filter((p) => matchQ(filters.q, p.name, p.condition));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getEvidence(filters?: CdssFilters) {
     let items = MOCK_EVIDENCE;
-    if (filters?.q) items = items.filter((e) => matchQ(filters.q, e.title, e.summary));
+    if (filters?.q)
+      items = items.filter((e) => matchQ(filters.q, e.title, e.summary));
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
@@ -158,12 +238,15 @@ class CdssRepository {
 
   getAudit(filters?: CdssFilters) {
     let items = this.audit;
-    if (filters?.providerId) items = items.filter((a) => a.providerId === filters.providerId);
+    if (filters?.providerId)
+      items = items.filter((a) => a.providerId === filters.providerId);
     return paginate(items, filters?.page, filters?.pageSize);
   }
 
   getTimeline(facilityId?: string): CdssTimelineEvent[] {
-    const alerts = facilityId ? this.alerts.filter((a) => a.facilityId === facilityId) : this.alerts;
+    const alerts = facilityId
+      ? this.alerts.filter((a) => a.facilityId === facilityId)
+      : this.alerts;
     return alerts.slice(0, 20).map((a) => ({
       eventId: `evt-${a.alertId}`,
       timestamp: a.triggeredAt,
@@ -205,7 +288,9 @@ class CdssRepository {
   }
 
   applyRecommendation(input: ApplyRecommendationInput) {
-    const idx = this.recommendations.findIndex((r) => r.recommendationId === input.recommendationId);
+    const idx = this.recommendations.findIndex(
+      (r) => r.recommendationId === input.recommendationId,
+    );
     if (idx < 0) return null;
     this.recommendations[idx]!.status = 'accepted';
     return this.recommendations[idx];
@@ -220,7 +305,14 @@ class CdssRepository {
       status: 'draft' as const,
       facilityId: input.facilityId,
       currentVersion: 'v1.0',
-      versions: [{ versionId: `gv-${this.nextId}`, version: 'v1.0', publishedAt: new Date().toISOString(), summary: input.summary }],
+      versions: [
+        {
+          versionId: `gv-${this.nextId}`,
+          version: 'v1.0',
+          publishedAt: new Date().toISOString(),
+          summary: input.summary,
+        },
+      ],
       complianceRate: 0,
       lastReviewed: new Date().toISOString().split('T')[0]!,
     };
@@ -238,7 +330,9 @@ class CdssRepository {
   }
 
   publishProtocol(input: PublishProtocolInput) {
-    const idx = this.protocols.findIndex((p) => p.protocolId === input.protocolId);
+    const idx = this.protocols.findIndex(
+      (p) => p.protocolId === input.protocolId,
+    );
     if (idx < 0) return null;
     this.protocols[idx]!.status = 'active';
     return this.protocols[idx];
@@ -246,7 +340,12 @@ class CdssRepository {
 
   calculateRisk(input: CalculateRiskInput) {
     const calc = MOCK_CALCULATORS.find((c) => c.type === input.calculatorType);
-    return buildCalculatorResult(calc?.calculatorId ?? 'calc-001', input.calculatorType, input.inputs, input.patientId);
+    return buildCalculatorResult(
+      calc?.calculatorId ?? 'calc-001',
+      input.calculatorType,
+      input.inputs,
+      input.patientId,
+    );
   }
 
   dashboard(facilityId?: string) {
@@ -259,21 +358,38 @@ class CdssRepository {
 
   search(query: string, facilityId?: string) {
     const q = query.toLowerCase();
-    const matches = (...fields: (string | undefined)[]) => fields.some((f) => f?.toLowerCase().includes(q));
-    const scopedAlerts = this.alerts.filter((a) => !facilityId || a.facilityId === facilityId);
+    const matches = (...fields: (string | undefined)[]) =>
+      fields.some((f) => f?.toLowerCase().includes(q));
+    const scopedAlerts = this.alerts.filter(
+      (a) => !facilityId || a.facilityId === facilityId,
+    );
     return {
-      alerts: scopedAlerts.filter((a) => matches(a.title, a.patientName)).slice(0, 12),
-      guidelines: this.guidelines.filter((g) => matches(g.title, g.condition)).slice(0, 12),
+      alerts: scopedAlerts
+        .filter((a) => matches(a.title, a.patientName))
+        .slice(0, 12),
+      guidelines: this.guidelines
+        .filter((g) => matches(g.title, g.condition))
+        .slice(0, 12),
       orderSets: MOCK_ORDER_SETS.filter((o) => matches(o.name)).slice(0, 12),
-      recommendations: this.recommendations.filter((r) => matches(r.title, r.patientName)).slice(0, 12),
+      recommendations: this.recommendations
+        .filter((r) => matches(r.title, r.patientName))
+        .slice(0, 12),
     };
   }
 
   exportData(format: 'csv' | 'pdf' | 'xlsx') {
-    return { format, exportedAt: new Date().toISOString(), recordCount: this.alerts.length + this.guidelines.length };
+    return {
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: this.alerts.length + this.guidelines.length,
+    };
   }
 
-  favorite(userId: string, entityType: CdssFavorite['entityType'], entityId: string) {
+  favorite(
+    userId: string,
+    entityType: CdssFavorite['entityType'],
+    entityId: string,
+  ) {
     const fav: CdssFavorite = {
       favoriteId: `fav-${String(++this.nextId)}`,
       userId,

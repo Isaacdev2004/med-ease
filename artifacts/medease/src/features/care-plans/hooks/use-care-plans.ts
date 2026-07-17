@@ -10,11 +10,17 @@ export function useCarePlans(filters?: CarePlanFilters) {
 }
 
 export function useCarePlan(id: string | undefined) {
-  return useQuery({ ...carePlanQueries.detail(id ?? ''), enabled: Boolean(id) });
+  return useQuery({
+    ...carePlanQueries.detail(id ?? ''),
+    enabled: Boolean(id),
+  });
 }
 
 export function usePatientCarePlan(patientId: string | undefined) {
-  return useQuery({ ...carePlanQueries.patientPlan(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...carePlanQueries.patientPlan(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useCareGoals(patientId?: string, carePlanId?: string) {
@@ -26,14 +32,23 @@ export function useCareTasks(patientId?: string, carePlanId?: string) {
 }
 
 export function useCareTimeline(patientId: string | undefined) {
-  return useQuery({ ...carePlanQueries.timeline(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...carePlanQueries.timeline(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useCareTeam(carePlanId: string | undefined) {
-  return useQuery({ ...carePlanQueries.team(carePlanId ?? ''), enabled: Boolean(carePlanId) });
+  return useQuery({
+    ...carePlanQueries.team(carePlanId ?? ''),
+    enabled: Boolean(carePlanId),
+  });
 }
 
-export function useRiskAssessment(patientId: string | undefined, carePlanId?: string) {
+export function useRiskAssessment(
+  patientId: string | undefined,
+  carePlanId?: string,
+) {
   return useQuery({
     ...carePlanQueries.risks(patientId ?? '', carePlanId),
     enabled: Boolean(patientId),
@@ -41,7 +56,10 @@ export function useRiskAssessment(patientId: string | undefined, carePlanId?: st
 }
 
 export function useClinicalPathway(id?: string) {
-  return useQuery({ ...carePlanQueries.pathway(id ?? ''), enabled: Boolean(id) });
+  return useQuery({
+    ...carePlanQueries.pathway(id ?? ''),
+    enabled: Boolean(id),
+  });
 }
 
 export function useClinicalPathways() {
@@ -53,11 +71,17 @@ export function useCareAnalytics(filters?: CarePlanFilters) {
 }
 
 export function useCareDashboard(patientId: string | undefined) {
-  return useQuery({ ...carePlanQueries.dashboard(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...carePlanQueries.dashboard(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function useProgressTracking(patientId: string | undefined) {
-  return useQuery({ ...carePlanQueries.progress(patientId ?? ''), enabled: Boolean(patientId) });
+  return useQuery({
+    ...carePlanQueries.progress(patientId ?? ''),
+    enabled: Boolean(patientId),
+  });
 }
 
 export function usePopulationCare(filters?: CarePlanFilters) {

@@ -69,18 +69,25 @@ interface SectionProps {
 }
 
 export function DashboardSection({ filters }: SectionProps) {
-  const dashboard = useDocumentDashboard(filters?.tenantId, filters?.facilityId);
+  const dashboard = useDocumentDashboard(
+    filters?.tenantId,
+    filters?.facilityId,
+  );
   const docs = useDocuments(filters);
   const folders = useFolders(filters);
   const { exportData } = useDocumentMutations();
-  if (dashboard.isLoading) return <LoadingView label="Loading document dashboard…" />;
-  if (!dashboard.data) return <EmptyState icon={FileText} title="No document data" />;
+  if (dashboard.isLoading)
+    return <LoadingView label="Loading document dashboard…" />;
+  if (!dashboard.data)
+    return <EmptyState icon={FileText} title="No document data" />;
   return (
     <div className="space-y-6">
       <DocumentDashboardPanel dashboard={dashboard.data} />
       <FolderTree folders={folders.data?.items ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(docs.data?.items ?? []).slice(0, 9).map((d) => <DocumentCard key={d.documentId} document={d} />)}
+        {(docs.data?.items ?? []).slice(0, 9).map((d) => (
+          <DocumentCard key={d.documentId} document={d} />
+        ))}
       </div>
       <ActivityTimeline logs={dashboard.data.recentActivity} />
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
@@ -93,7 +100,9 @@ export function MyDocumentsSection({ filters }: SectionProps) {
   if (docs.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(docs.data?.items ?? []).slice(0, 12).map((d) => <DocumentCard key={d.documentId} document={d} />)}
+      {(docs.data?.items ?? []).slice(0, 12).map((d) => (
+        <DocumentCard key={d.documentId} document={d} />
+      ))}
     </div>
   );
 }
@@ -103,7 +112,9 @@ export function TemplatesSection({ filters }: SectionProps) {
   if (templates.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(templates.data?.items ?? []).map((t) => <TemplateCard key={t.templateId} template={t} />)}
+      {(templates.data?.items ?? []).map((t) => (
+        <TemplateCard key={t.templateId} template={t} />
+      ))}
     </div>
   );
 }
@@ -116,13 +127,27 @@ export function SignaturesSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(requests.data?.items ?? []).slice(0, 6).map((r) => <SignatureRequestCard key={r.requestId} request={r} />)}
+        {(requests.data?.items ?? []).slice(0, 6).map((r) => (
+          <SignatureRequestCard key={r.requestId} request={r} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(signatures.data?.items ?? []).slice(0, 6).map((s) => <SignatureCard key={s.signatureId} signature={s} />)}
+        {(signatures.data?.items ?? []).slice(0, 6).map((s) => (
+          <SignatureCard key={s.signatureId} signature={s} />
+        ))}
       </div>
       {(requests.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => signDocument.mutate({ requestId: requests.data!.items[0]!.requestId, signerId: requests.data!.items[0]!.signerId, method: 'digital' })}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() =>
+            signDocument.mutate({
+              requestId: requests.data!.items[0]!.requestId,
+              signerId: requests.data!.items[0]!.signerId,
+              method: 'digital',
+            })
+          }
+        >
           Sign first pending request (demo)
         </button>
       )}
@@ -137,10 +162,14 @@ export function SharedDocumentsSection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(links.data?.items ?? []).slice(0, 6).map((l) => <SharedLinkCard key={l.linkId} link={l} />)}
+        {(links.data?.items ?? []).slice(0, 6).map((l) => (
+          <SharedLinkCard key={l.linkId} link={l} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(docs.data?.items ?? []).slice(0, 6).map((d) => <DocumentCard key={d.documentId} document={d} />)}
+        {(docs.data?.items ?? []).slice(0, 6).map((d) => (
+          <DocumentCard key={d.documentId} document={d} />
+        ))}
       </div>
     </div>
   );
@@ -155,7 +184,11 @@ export function ScanningSection({ filters }: SectionProps) {
     <div className="space-y-6">
       <OCRPanel results={ocr.data?.items ?? []} />
       {(docs.data?.items ?? [])[0] && (
-        <button type="button" className="text-sm text-primary underline" onClick={() => ocrDocument.mutate(docs.data!.items[0]!.documentId)}>
+        <button
+          type="button"
+          className="text-sm text-primary underline"
+          onClick={() => ocrDocument.mutate(docs.data!.items[0]!.documentId)}
+        >
           Run OCR on first document (demo)
         </button>
       )}
@@ -168,7 +201,9 @@ export function ArchiveSection({ filters }: SectionProps) {
   if (archives.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(archives.data?.items ?? []).map((j) => <ArchiveCard key={j.jobId} job={j} />)}
+      {(archives.data?.items ?? []).map((j) => (
+        <ArchiveCard key={j.jobId} job={j} />
+      ))}
     </div>
   );
 }
@@ -182,10 +217,14 @@ export function LibrarySection({ filters }: SectionProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(folders.data?.items ?? []).slice(0, 6).map((f) => <FolderCard key={f.folderId} folder={f} />)}
+        {(folders.data?.items ?? []).slice(0, 6).map((f) => (
+          <FolderCard key={f.folderId} folder={f} />
+        ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(docs.data?.items ?? []).slice(0, 12).map((d) => <DocumentCard key={d.documentId} document={d} />)}
+        {(docs.data?.items ?? []).slice(0, 12).map((d) => (
+          <DocumentCard key={d.documentId} document={d} />
+        ))}
       </div>
       {firstDoc && <VersionTimeline versions={versions.data?.items ?? []} />}
     </div>
@@ -200,7 +239,9 @@ export function CategoriesSection({ filters }: SectionProps) {
       {(categories.data?.items ?? []).map((c) => (
         <div key={c.categoryId} className="rounded-lg border p-4 text-sm">
           <p className="font-medium">{c.name}</p>
-          <p className="text-xs text-muted-foreground">{c.module} · {c.documentCount.toLocaleString()} docs</p>
+          <p className="text-xs text-muted-foreground">
+            {c.module} · {c.documentCount.toLocaleString()} docs
+          </p>
         </div>
       ))}
     </div>
@@ -215,7 +256,10 @@ export function RecordsSection({ filters }: SectionProps) {
       <RecordsDashboard records={records.data?.items ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(records.data?.items ?? []).slice(0, 9).map((r) => (
-          <div key={r.recordId} className="rounded-lg border p-4 text-sm space-y-1">
+          <div
+            key={r.recordId}
+            className="rounded-lg border p-4 text-sm space-y-1"
+          >
             <BadgeRow label={r.classification} />
             <p className="text-xs">{r.documentId}</p>
             <p className="text-xs capitalize">{r.status}</p>
@@ -227,7 +271,11 @@ export function RecordsSection({ filters }: SectionProps) {
 }
 
 function BadgeRow({ label }: { label: string }) {
-  return <span className="inline-flex rounded-md border px-2 py-0.5 text-xs">{label}</span>;
+  return (
+    <span className="inline-flex rounded-md border px-2 py-0.5 text-xs">
+      {label}
+    </span>
+  );
 }
 
 export function RetentionSection({ filters }: SectionProps) {
@@ -235,7 +283,9 @@ export function RetentionSection({ filters }: SectionProps) {
   if (policies.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(policies.data?.items ?? []).map((p) => <RetentionPolicyCard key={p.policyId} policy={p} />)}
+      {(policies.data?.items ?? []).map((p) => (
+        <RetentionPolicyCard key={p.policyId} policy={p} />
+      ))}
     </div>
   );
 }
@@ -245,7 +295,9 @@ export function LegalHoldsSection({ filters }: SectionProps) {
   if (holds.isLoading) return <LoadingView />;
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(holds.data?.items ?? []).map((h) => <LegalHoldCard key={h.holdId} hold={h} />)}
+      {(holds.data?.items ?? []).map((h) => (
+        <LegalHoldCard key={h.holdId} hold={h} />
+      ))}
     </div>
   );
 }
@@ -256,12 +308,21 @@ export function SearchSection({ filters }: SectionProps) {
   if (results.isLoading && query.length >= 2) return <LoadingView />;
   return (
     <div className="space-y-4">
-      <Input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search documents…" />
+      <Input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search documents…"
+      />
       {query.length >= 2 && (
         <>
-          <SearchPanel query={query} count={results.data?.documents.total ?? 0} />
+          <SearchPanel
+            query={query}
+            count={results.data?.documents.total ?? 0}
+          />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {(results.data?.documents.items ?? []).slice(0, 9).map((d) => <DocumentCard key={d.documentId} document={d} />)}
+            {(results.data?.documents.items ?? []).slice(0, 9).map((d) => (
+              <DocumentCard key={d.documentId} document={d} />
+            ))}
           </div>
         </>
       )}
@@ -270,7 +331,10 @@ export function SearchSection({ filters }: SectionProps) {
 }
 
 export function AnalyticsSection({ filters }: SectionProps) {
-  const analytics = useDocumentAnalytics(filters?.tenantId, filters?.facilityId);
+  const analytics = useDocumentAnalytics(
+    filters?.tenantId,
+    filters?.facilityId,
+  );
   if (analytics.isLoading) return <LoadingView />;
   if (!analytics.data) return null;
   return <DocumentAnalyticsPanel analytics={analytics.data} />;
@@ -280,23 +344,44 @@ export function SignatureCenterSection({ filters }: SectionProps) {
   return <SignaturesSection filters={filters} />;
 }
 
-export function DocumentSectionContent({ section, filters }: { section: DocumentSection; filters?: DocumentFilters; variant?: 'professional' | 'facility' | 'admin' }) {
+export function DocumentSectionContent({
+  section,
+  filters,
+}: {
+  section: DocumentSection;
+  filters?: DocumentFilters;
+  variant?: 'professional' | 'facility' | 'admin';
+}) {
   switch (section) {
-    case 'my-documents': return <MyDocumentsSection filters={filters} />;
+    case 'my-documents':
+      return <MyDocumentsSection filters={filters} />;
     case 'templates':
-    case 'document-templates': return <TemplatesSection filters={filters} />;
+    case 'document-templates':
+      return <TemplatesSection filters={filters} />;
     case 'signatures':
-    case 'signature-center': return <SignaturesSection filters={filters} />;
-    case 'shared-documents': return <SharedDocumentsSection filters={filters} />;
-    case 'scanning': return <ScanningSection filters={filters} />;
-    case 'archive': return <ArchiveSection filters={filters} />;
-    case 'document-library': return <LibrarySection filters={filters} />;
-    case 'document-categories': return <CategoriesSection filters={filters} />;
-    case 'records-management': return <RecordsSection filters={filters} />;
-    case 'retention-policies': return <RetentionSection filters={filters} />;
-    case 'legal-holds': return <LegalHoldsSection filters={filters} />;
-    case 'document-search': return <SearchSection filters={filters} />;
-    case 'document-analytics': return <AnalyticsSection filters={filters} />;
-    default: return <DashboardSection filters={filters} />;
+    case 'signature-center':
+      return <SignaturesSection filters={filters} />;
+    case 'shared-documents':
+      return <SharedDocumentsSection filters={filters} />;
+    case 'scanning':
+      return <ScanningSection filters={filters} />;
+    case 'archive':
+      return <ArchiveSection filters={filters} />;
+    case 'document-library':
+      return <LibrarySection filters={filters} />;
+    case 'document-categories':
+      return <CategoriesSection filters={filters} />;
+    case 'records-management':
+      return <RecordsSection filters={filters} />;
+    case 'retention-policies':
+      return <RetentionSection filters={filters} />;
+    case 'legal-holds':
+      return <LegalHoldsSection filters={filters} />;
+    case 'document-search':
+      return <SearchSection filters={filters} />;
+    case 'document-analytics':
+      return <AnalyticsSection filters={filters} />;
+    default:
+      return <DashboardSection filters={filters} />;
   }
 }

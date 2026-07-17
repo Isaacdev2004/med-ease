@@ -14,8 +14,13 @@ export default function Offline() {
       <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <div className="mb-4 flex items-center gap-2">
-            <WifiOff className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
-            <h1 className="text-2xl font-bold tracking-tight">You are offline</h1>
+            <WifiOff
+              className="h-8 w-8 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <h1 className="text-2xl font-bold tracking-tight">
+              You are offline
+            </h1>
           </div>
           <p className="text-sm text-muted-foreground">
             Check your internet connection and try again.

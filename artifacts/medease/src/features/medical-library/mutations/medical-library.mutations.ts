@@ -11,7 +11,9 @@ export function useMedicalLibraryMutations() {
   const userId = user?.id ?? '';
 
   const invalidate = () => {
-    void queryClient.invalidateQueries({ queryKey: queryKeys.medicalLibrary.all });
+    void queryClient.invalidateQueries({
+      queryKey: queryKeys.medicalLibrary.all,
+    });
   };
 
   const toggleFavorite = useMutation({

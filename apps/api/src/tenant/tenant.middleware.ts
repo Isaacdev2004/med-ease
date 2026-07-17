@@ -16,7 +16,11 @@ type AuthenticatedRequest = Request & { user?: JwtAccessPayload };
 export class TenantMiddleware implements NestMiddleware {
   constructor(private readonly tenantResolver: TenantResolver) {}
 
-  use(request: AuthenticatedRequest, _response: Response, next: NextFunction): void {
+  use(
+    request: AuthenticatedRequest,
+    _response: Response,
+    next: NextFunction,
+  ): void {
     if (request.user) {
       this.tenantResolver.applyFromJwt(request.user);
     }

@@ -1,9 +1,16 @@
 import { buildAnalytics } from '@/services/care-plans/analytics';
 import { computeGoalCompletionRate } from '@/services/care-plans/goal-engine';
-import { getPatientIdForUser, buildDashboard, buildProgress } from '@/services/care-plans/mock-data';
+import {
+  getPatientIdForUser,
+  buildDashboard,
+  buildProgress,
+} from '@/services/care-plans/mock-data';
 import { carePlanRepository } from '@/services/care-plans/repository';
 import { computeOverallRisk } from '@/services/care-plans/risk-engine';
-import { categorizeTasks, sortTasksByDueDate } from '@/services/care-plans/task-engine';
+import {
+  categorizeTasks,
+  sortTasksByDueDate,
+} from '@/services/care-plans/task-engine';
 import type {
   AssignTaskInput,
   CarePlanFilters,
@@ -48,7 +55,9 @@ export const carePlanService = {
 
   async getTasks(patientId?: string, carePlanId?: string) {
     await delay();
-    return sortTasksByDueDate(carePlanRepository.getTasks(carePlanId, patientId));
+    return sortTasksByDueDate(
+      carePlanRepository.getTasks(carePlanId, patientId),
+    );
   },
 
   async getTodayTasks(patientId: string) {
@@ -110,7 +119,10 @@ export const carePlanService = {
     return {
       totalPatients: new Set(plans.map((p) => p.patientId)).size,
       activePlans: plans.filter((p) => p.status === 'active').length,
-      averageCompletion: Math.round(plans.reduce((s, p) => s + p.completionPercent, 0) / Math.max(plans.length, 1)),
+      averageCompletion: Math.round(
+        plans.reduce((s, p) => s + p.completionPercent, 0) /
+          Math.max(plans.length, 1),
+      ),
     };
   },
 

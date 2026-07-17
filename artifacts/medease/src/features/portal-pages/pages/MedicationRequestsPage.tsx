@@ -6,7 +6,10 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_MEDICATION_REQUESTS, type MedicationRequestRow } from '@/features/portal-pages/data/mock-data';
+import {
+  MOCK_MEDICATION_REQUESTS,
+  type MedicationRequestRow,
+} from '@/features/portal-pages/data/mock-data';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -22,7 +25,13 @@ const columns: DataTableColumn<MedicationRequestRow>[] = [
     cell: (row) => (
       <PortalStatusBadge
         label={row.status}
-        variant={row.status === 'rejected' ? 'destructive' : row.status === 'pending' ? 'secondary' : 'outline'}
+        variant={
+          row.status === 'rejected'
+            ? 'destructive'
+            : row.status === 'pending'
+              ? 'secondary'
+              : 'outline'
+        }
       />
     ),
   },
@@ -37,7 +46,12 @@ export default function MedicationRequestsPage() {
     <PageShell
       title="Medication Requests"
       subtitle="Review, approve, and dispense medication orders."
-      primaryAction={<PortalActionButton label="New request" successTitle="Medication request submitted" />}
+      primaryAction={
+        <PortalActionButton
+          label="New request"
+          successTitle="Medication request submitted"
+        />
+      }
     >
       <PortalMetricsGrid
         columns={3}
@@ -61,7 +75,9 @@ export default function MedicationRequestsPage() {
               onClick={() => {
                 setRequests((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'approved' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'approved' as const }
+                      : item,
                   ),
                 );
               }}
@@ -72,7 +88,9 @@ export default function MedicationRequestsPage() {
               onClick={() => {
                 setRequests((prev) =>
                   prev.map((item) =>
-                    item.id === row.id ? { ...item, status: 'dispensed' as const } : item,
+                    item.id === row.id
+                      ? { ...item, status: 'dispensed' as const }
+                      : item,
                   ),
                 );
               }}

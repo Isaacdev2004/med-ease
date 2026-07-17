@@ -1,8 +1,11 @@
 import type { RouteDefinition } from '@/config/routes/types';
 
-const patientPage = () => import('@/features/radiology/pages/PatientRadiologyPage');
-const professionalPage = () => import('@/features/radiology/pages/ProfessionalRadiologyPage');
-const facilityPage = () => import('@/features/radiology/pages/FacilityRadiologyPage');
+const patientPage = () =>
+  import('@/features/radiology/pages/PatientRadiologyPage');
+const professionalPage = () =>
+  import('@/features/radiology/pages/ProfessionalRadiologyPage');
+const facilityPage = () =>
+  import('@/features/radiology/pages/FacilityRadiologyPage');
 const adminPage = () => import('@/features/radiology/pages/AdminRadiologyPage');
 
 export function createPatientRadiologyRoutes(options: {

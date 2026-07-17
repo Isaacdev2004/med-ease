@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
 import { CdssSectionContent } from '@/features/cdss/components/CdssSections';
-import { CdssTabs, getCdssSectionFromPath } from '@/features/cdss/components/CdssTabs';
+import {
+  CdssTabs,
+  getCdssSectionFromPath,
+} from '@/features/cdss/components/CdssTabs';
 import { useCdssPermissions } from '@/features/cdss/hooks/use-cdss-permissions';
 import type { CdssFilters } from '@/services/cdss/types';
 import { PageShell } from '@/shared/components';
@@ -25,21 +28,34 @@ export function CdssShell({
   const perms = useCdssPermissions();
   const section = getCdssSectionFromPath(location, variant);
 
-  const scopedFilters = useMemo((): CdssFilters => ({ facilityId }), [facilityId]);
+  const scopedFilters = useMemo(
+    (): CdssFilters => ({ facilityId }),
+    [facilityId],
+  );
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
-        <EmptyState title="Access denied" description="You do not have permission to view clinical decision support." />
+        <EmptyState
+          title="Access denied"
+          description="You do not have permission to view clinical decision support."
+        />
       </PageShell>
     );
   }
 
   return (
-    <PageShell title={title} subtitle="Enterprise CDSS — real-time alerts, evidence-based guidelines, drug safety, order sets, risk calculators, and clinical analytics.">
+    <PageShell
+      title={title}
+      subtitle="Enterprise CDSS — real-time alerts, evidence-based guidelines, drug safety, order sets, risk calculators, and clinical analytics."
+    >
       <div className="space-y-6">
         <CdssTabs basePath={basePath} variant={variant} />
-        <CdssSectionContent section={section} filters={scopedFilters} variant={variant} />
+        <CdssSectionContent
+          section={section}
+          filters={scopedFilters}
+          variant={variant}
+        />
       </div>
     </PageShell>
   );

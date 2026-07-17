@@ -3,7 +3,12 @@ import { useLocation } from 'wouter';
 import { PublicHealthShell } from '@/features/public-health/components/PublicHealthShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-type Segment = 'public-health' | 'outbreaks' | 'contact-tracing' | 'environmental-health' | 'community-outreach';
+type Segment =
+  | 'public-health'
+  | 'outbreaks'
+  | 'contact-tracing'
+  | 'environmental-health'
+  | 'community-outreach';
 
 function resolveSegment(location: string): Segment {
   if (location.includes('/outbreaks')) return 'outbreaks';
@@ -24,5 +29,11 @@ const TITLES: Record<Segment, string> = {
 export default function FacilityPublicHealthPage() {
   const [location] = useLocation();
   const segment = resolveSegment(location);
-  return <PublicHealthShell basePath={resolveModuleBasePath(location, segment)} variant="facility" title={TITLES[segment]} />;
+  return (
+    <PublicHealthShell
+      basePath={resolveModuleBasePath(location, segment)}
+      variant="facility"
+      title={TITLES[segment]}
+    />
+  );
 }

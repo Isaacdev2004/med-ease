@@ -11,18 +11,25 @@ import pg from 'pg';
 import type { DependencyCheck } from '@medease/types';
 import { timed } from '@medease/utils';
 
-import { DEPENDENCY_METRICS, type DependencyMetrics } from '../observability/observability.module';
+import {
+  DEPENDENCY_METRICS,
+  type DependencyMetrics,
+} from '../observability/observability.module';
 import { MedeaseConfigService } from '../config/config.service';
 
 @Injectable()
 export class HealthService {
   constructor(
     private readonly configService: MedeaseConfigService,
-    @Optional() @Inject(DEPENDENCY_METRICS) private readonly dependencyMetrics?: DependencyMetrics,
+    @Optional()
+    @Inject(DEPENDENCY_METRICS)
+    private readonly dependencyMetrics?: DependencyMetrics,
   ) {}
 
   async checkPostgres(): Promise<DependencyCheck> {
-    const client = new pg.Client({ connectionString: this.configService.database.url });
+    const client = new pg.Client({
+      connectionString: this.configService.database.url,
+    });
     try {
       const { latencyMs } = await timed(async () => {
         await client.connect();
@@ -33,7 +40,8 @@ export class HealthService {
       return {
         name: 'postgresql',
         status: 'error',
-        message: error instanceof Error ? error.message : 'PostgreSQL unreachable',
+        message:
+          error instanceof Error ? error.message : 'PostgreSQL unreachable',
       };
     } finally {
       await client.end().catch(() => undefined);
@@ -81,7 +89,9 @@ export class HealthService {
 
     try {
       const { latencyMs } = await timed(async () => {
-        await client.send(new HeadBucketCommand({ Bucket: storage.bucketDocuments }));
+        await client.send(
+          new HeadBucketCommand({ Bucket: storage.bucketDocuments }),
+        );
       });
       return { name: 'minio', status: 'ok', latencyMs };
     } catch (error) {
@@ -96,9 +106,12 @@ export class HealthService {
   async checkOpenSearch(): Promise<DependencyCheck> {
     try {
       const { latencyMs } = await timed(async () => {
-        const response = await fetch(`${this.configService.opensearch.url}/_cluster/health`, {
-          signal: AbortSignal.timeout(5_000),
-        });
+        const response = await fetch(
+          `${this.configService.opensearch.url}/_cluster/health`,
+          {
+            signal: AbortSignal.timeout(5_000),
+          },
+        );
         if (!response.ok) {
           throw new Error(`OpenSearch returned ${response.status}`);
         }
@@ -112,7 +125,8 @@ export class HealthService {
       return {
         name: 'opensearch',
         status: 'error',
-        message: error instanceof Error ? error.message : 'OpenSearch unreachable',
+        message:
+          error instanceof Error ? error.message : 'OpenSearch unreachable',
       };
     }
   }
@@ -146,7 +160,10 @@ export class PostgresHealthIndicator extends HealthIndicator {
   async isHealthy(key: string): Promise<HealthIndicatorResult> {
     const check = await this.healthService.checkPostgres();
     if (check.status !== 'ok') {
-      throw new HealthCheckError('PostgreSQL check failed', this.getStatus(key, false, check));
+      throw new HealthCheckError(
+        'PostgreSQL check failed',
+        this.getStatus(key, false, check),
+      );
     }
     return this.getStatus(key, true, { latencyMs: check.latencyMs });
   }
@@ -161,7 +178,10 @@ export class RedisHealthIndicator extends HealthIndicator {
   async isHealthy(key: string): Promise<HealthIndicatorResult> {
     const check = await this.healthService.checkRedis();
     if (check.status !== 'ok') {
-      throw new HealthCheckError('Redis check failed', this.getStatus(key, false, check));
+      throw new HealthCheckError(
+        'Redis check failed',
+        this.getStatus(key, false, check),
+      );
     }
     return this.getStatus(key, true, { latencyMs: check.latencyMs });
   }
@@ -176,7 +196,10 @@ export class MinioHealthIndicator extends HealthIndicator {
   async isHealthy(key: string): Promise<HealthIndicatorResult> {
     const check = await this.healthService.checkMinio();
     if (check.status !== 'ok') {
-      throw new HealthCheckError('MinIO check failed', this.getStatus(key, false, check));
+      throw new HealthCheckError(
+        'MinIO check failed',
+        this.getStatus(key, false, check),
+      );
     }
     return this.getStatus(key, true, { latencyMs: check.latencyMs });
   }
@@ -191,7 +214,10 @@ export class OpenSearchHealthIndicator extends HealthIndicator {
   async isHealthy(key: string): Promise<HealthIndicatorResult> {
     const check = await this.healthService.checkOpenSearch();
     if (check.status !== 'ok') {
-      throw new HealthCheckError('OpenSearch check failed', this.getStatus(key, false, check));
+      throw new HealthCheckError(
+        'OpenSearch check failed',
+        this.getStatus(key, false, check),
+      );
     }
     return this.getStatus(key, true, { latencyMs: check.latencyMs });
   }

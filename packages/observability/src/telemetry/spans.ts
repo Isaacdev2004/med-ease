@@ -1,8 +1,21 @@
-import { context, propagation, trace, SpanStatusCode, type Span } from '@opentelemetry/api';
+import {
+  context,
+  propagation,
+  trace,
+  SpanStatusCode,
+  type Span,
+} from '@opentelemetry/api';
 
-import { getRequestContext, runWithRequestContext, type RequestContext } from '../context';
+import {
+  getRequestContext,
+  runWithRequestContext,
+  type RequestContext,
+} from '../context';
 
-export function getActiveTraceContext(): Pick<RequestContext, 'traceId' | 'spanId'> {
+export function getActiveTraceContext(): Pick<
+  RequestContext,
+  'traceId' | 'spanId'
+> {
   const span = trace.getActiveSpan();
   if (!span) {
     return {};
@@ -32,13 +45,17 @@ export function enrichContext(base: Partial<RequestContext>): RequestContext {
   };
 }
 
-export function injectTraceHeaders(headers: Record<string, string>): Record<string, string> {
+export function injectTraceHeaders(
+  headers: Record<string, string>,
+): Record<string, string> {
   const carrier: Record<string, string> = { ...headers };
   propagation.inject(context.active(), carrier);
   return carrier;
 }
 
-export function extractTraceContext(headers: Record<string, string | string[] | undefined>) {
+export function extractTraceContext(
+  headers: Record<string, string | string[] | undefined>,
+) {
   const carrier: Record<string, string> = {};
   for (const [key, value] of Object.entries(headers)) {
     if (typeof value === 'string') {
@@ -62,7 +79,14 @@ export async function runWithSpan<T>(
     }
 
     const current = getRequestContext();
-    const merged = enrichContext(current ?? { requestId: '', correlationId: '', roles: [], permissions: [] });
+    const merged = enrichContext(
+      current ?? {
+        requestId: '',
+        correlationId: '',
+        roles: [],
+        permissions: [],
+      },
+    );
 
     try {
       return await runWithRequestContext(merged, () => fn(span));

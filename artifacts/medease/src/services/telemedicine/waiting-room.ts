@@ -1,7 +1,12 @@
 import type { WaitingRoomEntry } from '@/services/telemedicine/types';
 
 export function admitPatient(entry: WaitingRoomEntry): WaitingRoomEntry {
-  return { ...entry, status: 'admitted', admittedAt: new Date().toISOString(), estimatedWaitMinutes: 0 };
+  return {
+    ...entry,
+    status: 'admitted',
+    admittedAt: new Date().toISOString(),
+    estimatedWaitMinutes: 0,
+  };
 }
 
 export function rejectPatient(entry: WaitingRoomEntry): WaitingRoomEntry {

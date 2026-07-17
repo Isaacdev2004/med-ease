@@ -27,7 +27,9 @@ export function mapPatientStatus(status: string): PatientStatus {
   }
 }
 
-export function mapGender(gender: string | null | undefined): Gender | undefined {
+export function mapGender(
+  gender: string | null | undefined,
+): Gender | undefined {
   if (!gender) return undefined;
   switch (gender) {
     case 'male':
@@ -78,7 +80,9 @@ export function mapPatientIdentifier(
   };
 }
 
-export function mapPatientContact(contact: Prisma.PatientContactGetPayload<object>): PatientContact {
+export function mapPatientContact(
+  contact: Prisma.PatientContactGetPayload<object>,
+): PatientContact {
   return {
     contactId: contact.id,
     tenantId: contact.tenantId,
@@ -91,7 +95,9 @@ export function mapPatientContact(contact: Prisma.PatientContactGetPayload<objec
   };
 }
 
-export function mapPatientAddress(address: Prisma.PatientAddressGetPayload<object>): PatientAddress {
+export function mapPatientAddress(
+  address: Prisma.PatientAddressGetPayload<object>,
+): PatientAddress {
   return {
     addressId: address.id,
     tenantId: address.tenantId,
@@ -125,7 +131,9 @@ export function mapPatientEmergencyContact(
   };
 }
 
-export function mapPatientAllergy(allergy: Prisma.PatientAllergyGetPayload<object>): PatientAllergy {
+export function mapPatientAllergy(
+  allergy: Prisma.PatientAllergyGetPayload<object>,
+): PatientAllergy {
   return {
     allergyId: allergy.id,
     tenantId: allergy.tenantId,

@@ -1,6 +1,11 @@
-import type { SpecimenRecord, SpecimenStatus } from '@/services/laboratory/types';
+import type {
+  SpecimenRecord,
+  SpecimenStatus,
+} from '@/services/laboratory/types';
 
-export function sortSpecimensByDate(specimens: SpecimenRecord[]): SpecimenRecord[] {
+export function sortSpecimensByDate(
+  specimens: SpecimenRecord[],
+): SpecimenRecord[] {
   return [...specimens].sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
   );

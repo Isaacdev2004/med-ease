@@ -3,9 +3,18 @@ import { useLocation } from 'wouter';
 import { MedicationsShell } from '@/features/medications/components/MedicationsShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
 
-const PHARMACY_SEGMENTS = ['medications', 'dispensing', 'refills', 'interactions', 'inventory', 'prescriptions'] as const;
+const PHARMACY_SEGMENTS = [
+  'medications',
+  'dispensing',
+  'refills',
+  'interactions',
+  'inventory',
+  'prescriptions',
+] as const;
 
-function resolvePharmacySegment(location: string): (typeof PHARMACY_SEGMENTS)[number] {
+function resolvePharmacySegment(
+  location: string,
+): (typeof PHARMACY_SEGMENTS)[number] {
   for (const segment of PHARMACY_SEGMENTS) {
     if (location.includes(`/${segment}`)) return segment;
   }

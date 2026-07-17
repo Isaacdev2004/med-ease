@@ -72,8 +72,12 @@ try {
     shell: true,
   });
 } catch {
-  console.error('\nCompose failed. Run `docker compose ps` from docker/ for details.');
+  console.error(
+    '\nCompose failed. Run `docker compose ps` from docker/ for details.',
+  );
   process.exit(1);
 }
 
-console.log('\nBootstrap complete. Run `pnpm docker:ps` or `pnpm docker:verify` to check health.');
+console.log(
+  '\nBootstrap complete. Run `pnpm docker:ps` or `pnpm docker:verify` to check health.',
+);

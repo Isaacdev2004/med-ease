@@ -1,1 +1,4 @@
-export { computeMessagingAnalytics, buildMessagingDashboard } from '@/services/messaging/mock-data';
+export {
+  computeMessagingAnalytics,
+  buildMessagingDashboard,
+} from '@/services/messaging/mock-data';

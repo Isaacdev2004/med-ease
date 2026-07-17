@@ -23,16 +23,26 @@ export default function Landing() {
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
             The premium enterprise platform bridging hospitals, professionals,
-            pharmacies, transport, and patients into a single, cohesive ecosystem.
+            pharmacies, transport, and patients into a single, cohesive
+            ecosystem.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">
-            <Button size="lg" className="w-full sm:w-auto h-12 px-8 text-base shadow-lg" asChild>
+            <Button
+              size="lg"
+              className="w-full sm:w-auto h-12 px-8 text-base shadow-lg"
+              asChild
+            >
               <Link href={ROUTES.register}>
                 Request Enterprise Demo <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto h-12 px-8 text-base" asChild>
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full sm:w-auto h-12 px-8 text-base"
+              asChild
+            >
               <Link href={ROUTES.login}>Patient Portal Login</Link>
             </Button>
           </div>
@@ -48,7 +58,9 @@ export default function Landing() {
             <h3 className="text-xl font-bold font-serif italic">Mount Sinai</h3>
             <h3 className="text-xl font-bold">Mayo Clinic</h3>
             <h3 className="text-xl font-bold tracking-tighter">NYU Langone</h3>
-            <h3 className="text-xl font-bold uppercase tracking-widest">Kaiser</h3>
+            <h3 className="text-xl font-bold uppercase tracking-widest">
+              Kaiser
+            </h3>
           </div>
         </div>
       </section>
@@ -56,20 +68,47 @@ export default function Landing() {
       <section id="solutions" className="py-24 md:py-32">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">One platform. Every role.</h2>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              One platform. Every role.
+            </h2>
             <p className="mt-4 text-lg text-muted-foreground">
-              Med'ease provides tailored, secure environments for every participant in the care journey.
+              Med'ease provides tailored, secure environments for every
+              participant in the care journey.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { role: 'Patients', desc: 'Access records, book appointments, and manage medications.', path: ROUTES.patient.root },
-              { role: 'Professionals', desc: 'Manage schedules, review charts, and communicate securely.', path: ROUTES.professional.root },
-              { role: 'Facilities', desc: 'Monitor bed capacity and operational analytics in real-time.', path: ROUTES.facility.root },
-              { role: 'Pharmacies', desc: 'Process prescriptions and flag interactions automatically.', path: ROUTES.pharmacy.root },
-              { role: 'Medical Transport', desc: 'Live-track fleet logistics and emergency dispatches.', path: ROUTES.transport.root },
-              { role: 'Administrators', desc: 'Control permissions, audit logs, and system health.', path: ROUTES.admin.root },
+              {
+                role: 'Patients',
+                desc: 'Access records, book appointments, and manage medications.',
+                path: ROUTES.patient.root,
+              },
+              {
+                role: 'Professionals',
+                desc: 'Manage schedules, review charts, and communicate securely.',
+                path: ROUTES.professional.root,
+              },
+              {
+                role: 'Facilities',
+                desc: 'Monitor bed capacity and operational analytics in real-time.',
+                path: ROUTES.facility.root,
+              },
+              {
+                role: 'Pharmacies',
+                desc: 'Process prescriptions and flag interactions automatically.',
+                path: ROUTES.pharmacy.root,
+              },
+              {
+                role: 'Medical Transport',
+                desc: 'Live-track fleet logistics and emergency dispatches.',
+                path: ROUTES.transport.root,
+              },
+              {
+                role: 'Administrators',
+                desc: 'Control permissions, audit logs, and system health.',
+                path: ROUTES.admin.root,
+              },
             ].map((item) => (
               <Link key={item.path} href={item.path}>
                 <div className="group relative rounded-2xl border bg-card p-8 hover-elevate transition-all cursor-pointer h-full flex flex-col">
@@ -77,7 +116,9 @@ export default function Landing() {
                     <h3 className="text-xl font-semibold">{item.role}</h3>
                     <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </div>
-                  <p className="text-muted-foreground leading-relaxed flex-1">{item.desc}</p>
+                  <p className="text-muted-foreground leading-relaxed flex-1">
+                    {item.desc}
+                  </p>
                 </div>
               </Link>
             ))}
