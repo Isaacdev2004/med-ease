@@ -112,7 +112,7 @@ jobs:
       - name: Generate SBOM (CycloneDX)
         run: |
           mkdir -p ci-artifacts
-          pnpm dlx @cyclonedx/cyclonedx-npm --output-file ci-artifacts/sbom.json --output-format JSON
+          pnpm dlx pnpm@11 --pm-on-fail=ignore sbom --sbom-format cyclonedx --lockfile-only --out ci-artifacts/sbom.json
 
       - name: Upload SBOM
         uses: actions/upload-artifact@v4
