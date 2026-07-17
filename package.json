@@ -10,7 +10,7 @@
     "dev": "pnpm --filter @workspace/medease run dev",
     "dev:api": "pnpm --filter @medease/api run dev",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
-    "build:libs": "pnpm -r --filter \"./packages/**\" --if-present run build",
+    "build:libs": "pnpm -r --filter \"./packages/**\" --filter \"./lib/**\" --if-present run build",
     "build:web": "pnpm --filter @workspace/medease run build",
     "typecheck:libs": "tsc --build",
     "pretypecheck": "pnpm prisma:validate && pnpm prisma:generate",
