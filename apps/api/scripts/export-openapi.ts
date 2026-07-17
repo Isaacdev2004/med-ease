@@ -77,7 +77,13 @@ async function exportOpenApi(): Promise<void> {
     '../../../lib/api-spec/openapi.yaml',
   );
 
-  writeFileSync(outputPath, stringify(document));
+  writeFileSync(
+    outputPath,
+    stringify(document, {
+      singleQuote: true,
+      lineWidth: 0,
+    }),
+  );
   await app.close();
 
   console.log(`OpenAPI spec written to ${outputPath}`);
