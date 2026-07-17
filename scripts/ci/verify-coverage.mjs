@@ -3,6 +3,9 @@
  * Enforces coverage gates for packages with unit tests.
  * Default package gate: line coverage >= 80%.
  * Critical source files: line coverage >= 90%.
+ *
+ * Requires workspace packages to be built first (`pnpm build:libs`) so runtime
+ * exports resolve to dist/ during tsx test execution.
  */
 import { spawnSync } from 'node:child_process';
 
