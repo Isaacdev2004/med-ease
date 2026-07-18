@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
+import path from 'node:path';
 import { LoggerModule } from 'nestjs-pino';
 
 import { validateConfig } from '@medease/config';
@@ -30,6 +31,10 @@ import { PrismaModule } from '@medease/prisma';
     NestConfigModule.forRoot({
       isGlobal: true,
       cache: true,
+      envFilePath: [
+        path.resolve(process.cwd(), '.env'),
+        path.resolve(process.cwd(), '../../.env'),
+      ],
       validate: validateConfig,
     }),
     LoggerModule.forRoot({

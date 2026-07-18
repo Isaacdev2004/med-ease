@@ -1,3 +1,4 @@
+import './load-root-env';
 import './instrumentation';
 import 'reflect-metadata';
 

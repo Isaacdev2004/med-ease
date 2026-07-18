@@ -121,9 +121,9 @@ export async function getAuditQueueDepth() {
   });
   try {
     const [wait, active, delayed] = await Promise.all([
-      redis.llen('bull:medease:audit:wait'),
-      redis.llen('bull:medease:audit:active'),
-      redis.zcard('bull:medease:audit:delayed'),
+      redis.llen('bull:medease-audit:wait'),
+      redis.llen('bull:medease-audit:active'),
+      redis.zcard('bull:medease-audit:delayed'),
     ]);
     return { wait, active, delayed, total: wait + active + delayed };
   } finally {
