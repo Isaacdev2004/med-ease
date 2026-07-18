@@ -8,7 +8,7 @@
   "scripts": {
     "preinstall": "node scripts/preinstall.cjs",
     "dev": "pnpm --filter @workspace/medease run dev",
-    "dev:api": "pnpm --filter @medease/api run dev",
+    "dev:api": "pnpm --filter @medease/api run dev:stable",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "build:libs": "pnpm -r --filter \"./packages/**\" --filter \"./lib/**\" --if-present run build",
     "build:web": "pnpm --filter @workspace/medease run build",
