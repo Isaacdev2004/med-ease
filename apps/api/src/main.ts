@@ -71,7 +71,9 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup(API_DOCS_PATH, app, document);
+  SwaggerModule.setup(API_DOCS_PATH, app, document, {
+    useGlobalPrefix: true,
+  });
 
   await app.listen(port);
 

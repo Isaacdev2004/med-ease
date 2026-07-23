@@ -69,17 +69,19 @@ class PatientsRepository implements PatientsRepositoryContract {
   }
 
   async createPatient(input: CreatePatientInput) {
+    const { createdBy: _createdBy, ...body } = input;
     const dto = await this.transport.post(
       getPatientsControllerRegisterPatientUrl(),
-      { body: input },
+      { body },
     );
     return mapPatientDto(dto);
   }
 
   async updatePatient(patientId: string, input: UpdatePatientInput) {
+    const { updatedBy: _updatedBy, ...body } = input;
     const dto = await this.transport.patch(
       getPatientsControllerUpdatePatientUrl(patientId),
-      { body: input },
+      { body },
     );
     return mapPatientDto(dto);
   }

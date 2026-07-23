@@ -16,7 +16,7 @@ function optional(name: string, fallback: string): string {
 
 export function loadWorkerConfig() {
   return {
-    port: Number(optional('PORT', '3001')),
+    port: Number(optional('WORKER_PORT', optional('PORT', '3001'))),
     nodeEnv: optional('NODE_ENV', 'development'),
     redisUrl: required('REDIS_URL'),
     concurrency: Number(optional('WORKER_CONCURRENCY', '5')),

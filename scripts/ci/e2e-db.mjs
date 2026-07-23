@@ -2,6 +2,7 @@
 /**
  * Direct database assertions for E2E certification (audit persistence, queue drain proof).
  */
+import './load-root-env.mjs';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
@@ -76,7 +77,7 @@ export async function waitForPatientAuditLog(
        FROM audit.audit_logs
        WHERE resource_type = $1
          AND (patient_id = $2::uuid OR resource_id = $2::uuid)
-         AND action = $3::audit."AuditAction"
+         AND action = $3::audit.audit_action
        ORDER BY created_at DESC
        LIMIT 1`,
       [resourceType, patientId, auditAction],
@@ -97,7 +98,7 @@ export async function countPatientAuditLogs(patientId, auditAction) {
      FROM audit.audit_logs
      WHERE resource_type = 'patient'
        AND (patient_id = $1::uuid OR resource_id = $1::uuid)
-       AND action = $2::audit."AuditAction"`,
+       AND action = $2::audit.audit_action`,
     [patientId, auditAction],
   );
   return rows[0]?.count ?? 0;
@@ -112,7 +113,7 @@ export async function waitForSecurityEvent(
     const rows = await queryRows(
       `SELECT id, event_type, user_id, tenant_id, created_at
        FROM audit.security_events
-       WHERE event_type = $1::audit."SecurityEventType"
+       WHERE event_type = $1::audit.security_event_type
        ORDER BY created_at DESC
        LIMIT 1`,
       [eventType],

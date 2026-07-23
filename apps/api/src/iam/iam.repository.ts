@@ -29,6 +29,13 @@ import {
 } from '@medease/prisma';
 import { newId } from '@medease/uuid';
 
+const UUID_LIKE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function optionalIdFilter(q: string): { id: string } | null {
+  return UUID_LIKE.test(q) ? { id: q } : null;
+}
+
 import {
   generateClientSecret,
   matchQ,
@@ -318,10 +325,11 @@ export class IamRepository extends TenantAwareRepository {
       if (filters?.status)
         where.status = filters.status as Prisma.UserWhereInput['status'];
       if (filters?.q) {
+        const idMatch = optionalIdFilter(filters.q);
         where.OR = [
           { email: { contains: filters.q, mode: 'insensitive' } },
           { fullName: { contains: filters.q, mode: 'insensitive' } },
-          { id: filters.q },
+          ...(idMatch ? [idMatch] : []),
         ];
       }
 

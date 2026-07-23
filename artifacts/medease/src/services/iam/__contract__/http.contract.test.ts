@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { before, describe, it } from 'node:test';
+import { describe, it } from 'node:test';
 
 import { setAuthTokenGetter, setBaseUrl } from '@workspace/api-client-react';
 
@@ -43,23 +43,24 @@ if (!API_BASE) {
     });
   });
 } else {
-  before(async () => {
-    setBaseUrl(API_BASE);
-    const token = await loginAccessToken();
-    setAuthTokenGetter(async () => token);
-  });
+  setBaseUrl(API_BASE);
+  const token =
+    process.env.CONTRACT_TEST_BEARER_TOKEN ?? (await loginAccessToken());
+  setAuthTokenGetter(async () => token);
 
-  iamRepositoryContract({
-    name: 'http',
-    repository: iamRepository,
-    fixtures: {
-      ...iamContractFixtures,
-      tenantId: iamContractFixtures.demoTenantId,
-      organizationId: iamContractFixtures.demoOrganizationId,
-      roleId: iamContractFixtures.demoRoleId,
-      existingUserId: '01930000-0000-7000-8000-000000000101',
-      existingUserEmail: iamContractFixtures.demoAdminEmail,
-      searchQuery: 'admin',
-    },
+  describe('http IAM repository contract', () => {
+    iamRepositoryContract({
+      name: 'http',
+      repository: iamRepository,
+      fixtures: {
+        ...iamContractFixtures,
+        tenantId: iamContractFixtures.demoTenantId,
+        organizationId: iamContractFixtures.demoOrganizationId,
+        roleId: iamContractFixtures.demoRoleId,
+        existingUserId: '01930000-0000-7000-8000-000000000101',
+        existingUserEmail: iamContractFixtures.demoAdminEmail,
+        searchQuery: 'admin',
+      },
+    });
   });
 }

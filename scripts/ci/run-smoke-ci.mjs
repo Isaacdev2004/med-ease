@@ -6,6 +6,7 @@
 
  */
 
+import './load-root-env.mjs';
 import { spawn, spawnSync } from 'node:child_process';
 
 import { join } from 'node:path';
@@ -51,7 +52,7 @@ const worker = startService(
   join(root, 'apps/worker'),
   'dist/main.js',
   {
-    PORT: process.env.WORKER_PORT ?? '3001',
+    WORKER_PORT: process.env.WORKER_PORT ?? '3001',
   },
 );
 

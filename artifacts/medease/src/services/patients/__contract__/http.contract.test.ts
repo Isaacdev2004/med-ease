@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { before, describe, it } from 'node:test';
+import { describe, it } from 'node:test';
 
 import { setAuthTokenGetter, setBaseUrl } from '@workspace/api-client-react';
 
@@ -43,18 +43,19 @@ if (!API_BASE) {
     });
   });
 } else {
-  before(async () => {
-    setBaseUrl(API_BASE);
-    const token = await loginAccessToken();
-    setAuthTokenGetter(async () => token);
-  });
+  setBaseUrl(API_BASE);
+  const token =
+    process.env.CONTRACT_TEST_BEARER_TOKEN ?? (await loginAccessToken());
+  setAuthTokenGetter(async () => token);
 
-  patientsRepositoryContract({
-    name: 'http',
-    repository: patientsRepository,
-    fixtures: {
-      ...patientsContractFixtures,
-      tenantId: patientsContractFixtures.demoTenantId,
-    },
+  describe('http Patients repository contract', () => {
+    patientsRepositoryContract({
+      name: 'http',
+      repository: patientsRepository,
+      fixtures: {
+        ...patientsContractFixtures,
+        tenantId: patientsContractFixtures.demoTenantId,
+      },
+    });
   });
 }

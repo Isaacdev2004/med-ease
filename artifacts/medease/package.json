@@ -9,7 +9,7 @@
     "preview": "vite preview --config vite.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test:contract:mock": "tsx --test src/services/iam/__contract__/mock.contract.test.ts src/services/patients/__contract__/mock.contract.test.ts",
-    "test:contract:http": "tsx --test src/services/iam/__contract__/http.contract.test.ts src/services/patients/__contract__/http.contract.test.ts"
+    "test:contract:http": "tsx --test --test-concurrency=1 src/services/iam/__contract__/http.contract.test.ts src/services/patients/__contract__/http.contract.test.ts"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.10.0",

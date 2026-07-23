@@ -1,3 +1,4 @@
+import './load-root-env.js';
 import './instrumentation.js';
 import { bootstrapWorker } from './bootstrap.js';
 

@@ -18,6 +18,13 @@ const DEFAULT_JSON_ACCEPT = 'application/json, application/problem+json';
 let _baseUrl: string | null = null;
 let _authTokenGetter: AuthTokenGetter | null = null;
 
+function readRuntimeEnv(name: string): string | undefined {
+  const env = (
+    globalThis as { process?: { env?: Record<string, string | undefined> } }
+  ).process?.env;
+  return env?.[name];
+}
+
 /**
  * Set a base URL that is prepended to every relative request URL
  * (i.e. paths that start with `/`).
@@ -63,13 +70,24 @@ function isUrl(input: RequestInfo | URL): input is URL {
   return typeof URL !== 'undefined' && input instanceof URL;
 }
 
+function getEffectiveBaseUrl(): string | null {
+  if (_baseUrl) {
+    return _baseUrl;
+  }
+  const fromEnv =
+    readRuntimeEnv('CONTRACT_TEST_API_URL') ??
+    readRuntimeEnv('VITE_API_BASE_URL');
+  return fromEnv ? fromEnv.replace(/\/+$/, '') : null;
+}
+
 function applyBaseUrl(input: RequestInfo | URL): RequestInfo | URL {
-  if (!_baseUrl) return input;
+  const baseUrl = getEffectiveBaseUrl();
+  if (!baseUrl) return input;
   const url = resolveUrl(input);
   // Only prepend to relative paths (starting with /)
   if (!url.startsWith('/')) return input;
 
-  const absolute = `${_baseUrl}${url}`;
+  const absolute = `${baseUrl}${url}`;
   if (typeof input === 'string') return absolute;
   if (isUrl(input)) return new URL(absolute);
   return new Request(absolute, input as Request);
@@ -364,8 +382,14 @@ export async function customFetch<T = unknown>(
 
   // Attach bearer token when an auth getter is configured and no
   // Authorization header has been explicitly provided.
-  if (_authTokenGetter && !headers.has('authorization')) {
-    const token = await _authTokenGetter();
+  if (!headers.has('authorization')) {
+    let token: string | null = null;
+    if (_authTokenGetter) {
+      token = (await _authTokenGetter()) ?? null;
+    }
+    if (!token) {
+      token = readRuntimeEnv('CONTRACT_TEST_BEARER_TOKEN') ?? null;
+    }
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }

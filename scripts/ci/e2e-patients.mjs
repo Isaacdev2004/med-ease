@@ -111,7 +111,6 @@ async function main() {
       dateOfBirth: '1991-04-18',
       gender: 'other',
       status: 'active',
-      createdBy: DEMO_ADMIN_ID,
       identifiers: [{ type: 'mrn', value: mrn, isPrimary: true }],
       preferences: { language: 'en', maritalStatus: 'single' },
     }),
@@ -167,7 +166,6 @@ async function main() {
       mrn,
       fullName: 'Duplicate MRN Patient',
       dateOfBirth: '1990-01-01',
-      createdBy: DEMO_ADMIN_ID,
     }),
   });
   if (duplicateResponse.status !== 409) {
@@ -262,7 +260,6 @@ async function main() {
       mrn: `MRN-DENIED-${Date.now()}`,
       fullName: 'Should Fail',
       dateOfBirth: '1990-01-01',
-      createdBy: patientLogin.user?.id ?? DEMO_ADMIN_ID,
     }),
   });
   if (deniedResponse.status !== 403) {
