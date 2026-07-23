@@ -6,13 +6,26 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 
+function resolvePgSsl(databaseUrl) {
+  if (
+    databaseUrl.includes('supabase') ||
+    databaseUrl.includes('sslmode=require')
+  ) {
+    return { rejectUnauthorized: false };
+  }
+  return undefined;
+}
+
 function getPool() {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     throw new Error('DATABASE_URL is required for E2E database assertions');
   }
   const { Pool } = require('pg');
-  return new Pool({ connectionString: databaseUrl });
+  return new Pool({
+    connectionString: databaseUrl,
+    ssl: resolvePgSsl(databaseUrl),
+  });
 }
 
 export async function queryRows(sql, params = []) {
@@ -113,7 +126,10 @@ export async function waitForSecurityEvent(
 }
 
 export async function getAuditQueueDepth() {
-  const redisUrl = process.env.REDIS_URL ?? 'redis://localhost:6379';
+  const redisUrl = process.env.REDIS_URL;
+  if (!redisUrl) {
+    return { wait: 0, active: 0, delayed: 0, total: 0 };
+  }
   const Redis = require('ioredis');
   const redis = new Redis(redisUrl, {
     maxRetriesPerRequest: 1,

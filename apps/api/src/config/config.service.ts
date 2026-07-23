@@ -27,8 +27,8 @@ export class MedeaseConfigService {
     return this.config.redis;
   }
 
-  get storage() {
-    return this.config.storage;
+  get supabase() {
+    return this.config.supabase;
   }
 
   get security() {

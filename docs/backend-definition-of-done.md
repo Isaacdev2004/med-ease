@@ -110,7 +110,7 @@ A backend module is **done** only when **all** items below are satisfied.
 
 Before any domain module (08.5+), the platform layer must satisfy:
 
-- [ ] PostgreSQL 16 running via Docker Compose
+- [ ] Supabase PostgreSQL connected (pooler + direct URLs)
 - [ ] Prisma multi-schema bootstrap migrated
 - [ ] NestJS 11 app boots with ConfigModule + validation
 - [ ] Redis connected (cache + session)

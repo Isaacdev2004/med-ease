@@ -14,7 +14,7 @@ import type { LivenessResponse, ReadinessResponse } from '@medease/types';
 import { Public } from '../authorization/decorators/require-permission.decorator';
 import {
   HealthService,
-  MinioHealthIndicator,
+  StorageHealthIndicator,
   OpenSearchHealthIndicator,
   PostgresHealthIndicator,
   RedisHealthIndicator,
@@ -31,7 +31,7 @@ export class HealthController {
     private readonly healthCheckService: HealthCheckService,
     private readonly postgresIndicator: PostgresHealthIndicator,
     private readonly redisIndicator: RedisHealthIndicator,
-    private readonly minioIndicator: MinioHealthIndicator,
+    private readonly storageIndicator: StorageHealthIndicator,
     private readonly opensearchIndicator: OpenSearchHealthIndicator,
   ) {}
 
@@ -65,7 +65,7 @@ export class HealthController {
       await this.healthCheckService.check([
         () => this.postgresIndicator.isHealthy('postgresql'),
         () => this.redisIndicator.isHealthy('redis'),
-        () => this.minioIndicator.isHealthy('minio'),
+        () => this.storageIndicator.isHealthy('storage'),
         () => this.opensearchIndicator.isHealthy('opensearch'),
       ]);
     }

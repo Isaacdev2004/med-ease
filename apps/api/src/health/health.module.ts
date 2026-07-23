@@ -4,7 +4,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { HealthController } from './health.controller';
 import {
   HealthService,
-  MinioHealthIndicator,
+  StorageHealthIndicator,
   OpenSearchHealthIndicator,
   PostgresHealthIndicator,
   RedisHealthIndicator,
@@ -17,7 +17,7 @@ import {
     HealthService,
     PostgresHealthIndicator,
     RedisHealthIndicator,
-    MinioHealthIndicator,
+    StorageHealthIndicator,
     OpenSearchHealthIndicator,
   ],
 })

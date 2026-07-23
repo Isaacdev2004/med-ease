@@ -8,10 +8,17 @@ import { observabilityConfigSchema } from './observability.config';
 import { queueConfigSchema } from './queue.config';
 import { redisConfigSchema } from './redis.config';
 import { securityConfigSchema } from './security.config';
-import { storageConfigSchema } from './storage.config';
+import { supabaseConfigSchema } from './supabase.config';
+
+export { supabaseConfigSchema, parseSupabaseConfig } from './supabase.config';
+export {
+  storageConfigSchema,
+  parseStorageConfig,
+  type StorageConfig,
+} from './storage.config';
 
 export const opensearchConfigSchema = z.object({
-  OPENSEARCH_URL: z.string().url(),
+  OPENSEARCH_URL: z.string().url().optional(),
 });
 
 export type OpenSearchConfig = z.infer<typeof opensearchConfigSchema>;
@@ -25,7 +32,7 @@ export function parseOpenSearchConfig(
 export const medeaseEnvSchema = appConfigSchema
   .merge(databaseConfigSchema)
   .merge(redisConfigSchema)
-  .merge(storageConfigSchema)
+  .merge(supabaseConfigSchema)
   .merge(securityConfigSchema)
   .merge(authConfigSchema)
   .merge(queueConfigSchema)
@@ -44,18 +51,17 @@ export interface MedeaseConfig {
   };
   database: {
     url: MedeaseEnv['DATABASE_URL'];
+    directUrl?: MedeaseEnv['DIRECT_URL'];
   };
   redis: {
     url: MedeaseEnv['REDIS_URL'];
   };
-  storage: {
-    endpoint: MedeaseEnv['MINIO_ENDPOINT'];
-    port: MedeaseEnv['MINIO_PORT'];
-    useSsl: MedeaseEnv['MINIO_USE_SSL'];
-    accessKey: MedeaseEnv['MINIO_ACCESS_KEY'];
-    secretKey: MedeaseEnv['MINIO_SECRET_KEY'];
-    bucketDocuments: MedeaseEnv['MINIO_BUCKET_DOCUMENTS'];
-    bucketExports: MedeaseEnv['MINIO_BUCKET_EXPORTS'];
+  supabase: {
+    url: MedeaseEnv['SUPABASE_URL'];
+    anonKey: MedeaseEnv['SUPABASE_ANON_KEY'];
+    serviceRoleKey: MedeaseEnv['SUPABASE_SERVICE_ROLE_KEY'];
+    bucketDocuments: MedeaseEnv['SUPABASE_STORAGE_BUCKET_DOCUMENTS'];
+    bucketExports: MedeaseEnv['SUPABASE_STORAGE_BUCKET_EXPORTS'];
   };
   security: {
     corsOrigin: MedeaseEnv['CORS_ORIGIN'];
@@ -80,8 +86,8 @@ export interface MedeaseConfig {
     port: MedeaseEnv['MAIL_PORT'];
     from: MedeaseEnv['MAIL_FROM'];
   };
-  opensearch: {
-    url: MedeaseEnv['OPENSEARCH_URL'];
+  opensearch?: {
+    url: NonNullable<MedeaseEnv['OPENSEARCH_URL']>;
   };
   observability: {
     otelEnabled: MedeaseEnv['OTEL_ENABLED'];
@@ -120,18 +126,17 @@ export function loadConfig(
     },
     database: {
       url: validated.DATABASE_URL,
+      directUrl: validated.DIRECT_URL,
     },
     redis: {
       url: validated.REDIS_URL,
     },
-    storage: {
-      endpoint: validated.MINIO_ENDPOINT,
-      port: validated.MINIO_PORT,
-      useSsl: validated.MINIO_USE_SSL,
-      accessKey: validated.MINIO_ACCESS_KEY,
-      secretKey: validated.MINIO_SECRET_KEY,
-      bucketDocuments: validated.MINIO_BUCKET_DOCUMENTS,
-      bucketExports: validated.MINIO_BUCKET_EXPORTS,
+    supabase: {
+      url: validated.SUPABASE_URL,
+      anonKey: validated.SUPABASE_ANON_KEY,
+      serviceRoleKey: validated.SUPABASE_SERVICE_ROLE_KEY,
+      bucketDocuments: validated.SUPABASE_STORAGE_BUCKET_DOCUMENTS,
+      bucketExports: validated.SUPABASE_STORAGE_BUCKET_EXPORTS,
     },
     security: {
       corsOrigin: validated.CORS_ORIGIN,
@@ -156,9 +161,9 @@ export function loadConfig(
       port: validated.MAIL_PORT,
       from: validated.MAIL_FROM,
     },
-    opensearch: {
-      url: validated.OPENSEARCH_URL,
-    },
+    opensearch: validated.OPENSEARCH_URL
+      ? { url: validated.OPENSEARCH_URL }
+      : undefined,
     observability: {
       otelEnabled: validated.OTEL_ENABLED,
       otlpEndpoint: validated.OTEL_EXPORTER_OTLP_ENDPOINT,

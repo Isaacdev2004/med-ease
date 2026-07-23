@@ -13,7 +13,7 @@ import { stringify } from 'yaml';
 import { HealthController } from '../src/health/health.controller';
 import {
   HealthService,
-  MinioHealthIndicator,
+  StorageHealthIndicator,
   OpenSearchHealthIndicator,
   PostgresHealthIndicator,
   RedisHealthIndicator,
@@ -34,7 +34,7 @@ const noop = async () => ({ status: 'ok' });
     { provide: HealthCheckService, useValue: { check: noop } },
     { provide: PostgresHealthIndicator, useValue: { isHealthy: noop } },
     { provide: RedisHealthIndicator, useValue: { isHealthy: noop } },
-    { provide: MinioHealthIndicator, useValue: { isHealthy: noop } },
+    { provide: StorageHealthIndicator, useValue: { isHealthy: noop } },
     { provide: OpenSearchHealthIndicator, useValue: { isHealthy: noop } },
   ],
 })

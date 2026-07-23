@@ -14,7 +14,6 @@
     "openapi:export": "node --import tsx scripts/export-openapi.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.888.0",
     "@medease/audit": "workspace:*",
     "@medease/auth": "workspace:*",
     "@medease/events": "workspace:*",
@@ -26,6 +25,7 @@
     "@medease/observability": "workspace:*",
     "@medease/queue": "workspace:*",
     "@medease/prisma": "workspace:*",
+    "@medease/storage": "workspace:*",
     "@medease/types": "workspace:*",
     "@medease/utils": "workspace:*",
     "@medease/uuid": "workspace:*",

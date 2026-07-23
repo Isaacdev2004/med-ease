@@ -13,24 +13,23 @@ concurrency:
 env:
   NODE_VERSION: '22'
   PNPM_VERSION: '10.12.4'
-  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/medease
-  REDIS_URL: redis://localhost:6379
-  MINIO_ENDPOINT: localhost
-  MINIO_PORT: '9000'
-  MINIO_USE_SSL: 'false'
-  MINIO_ACCESS_KEY: medease
-  MINIO_SECRET_KEY: medease_minio_dev
-  MINIO_BUCKET_DOCUMENTS: medease-documents
-  MINIO_BUCKET_EXPORTS: medease-exports
-  OPENSEARCH_URL: http://localhost:9200
-  MAIL_HOST: localhost
-  MAIL_PORT: '1025'
-  MAIL_FROM: noreply@medease.local
+  CI: 'true'
+  DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
+  DIRECT_URL: ${{ secrets.SUPABASE_DIRECT_URL }}
+  REDIS_URL: ${{ secrets.REDIS_URL }}
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+  SUPABASE_STORAGE_BUCKET_DOCUMENTS: medease-documents
+  SUPABASE_STORAGE_BUCKET_EXPORTS: medease-exports
   WORKER_QUEUE_NAME: medease-health-check
   JWT_SECRET: dev-only-secret-minimum-thirty-two-characters-long
   AUTH_COOKIE_SECURE: false
   API_PORT: '3000'
   WORKER_PORT: '3001'
+  MAIL_HOST: localhost
+  MAIL_PORT: '1025'
+  MAIL_FROM: noreply@medease.local
 
 jobs:
   verify:
@@ -128,50 +127,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  docker:
-    name: Containers
-    runs-on: ubuntu-latest
-    needs: verify
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Validate Compose file
-        run: docker compose -f docker/compose.yml -f docker/compose.override.yml config
-
-      - name: Build API image
-        run: docker build -f apps/api/Dockerfile .
-
-      - name: Build Worker image
-        run: docker build -f apps/worker/Dockerfile .
-
   smoke:
     name: Platform Smoke
     runs-on: ubuntu-latest
     needs: verify
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: medease
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      redis:
-        image: redis:7-alpine
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4

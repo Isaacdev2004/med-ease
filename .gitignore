@@ -51,6 +51,5 @@ Thumbs.db
 
 # Local environment (never commit secrets)
 .env
-docker/.env
 database/.env
 packages/prisma/src/generated/
