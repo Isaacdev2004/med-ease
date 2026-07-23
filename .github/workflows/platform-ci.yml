@@ -15,7 +15,7 @@ env:
   PNPM_VERSION: '10.12.4'
   CI: 'true'
   DATABASE_URL: ${{ secrets.SUPABASE_DATABASE_URL }}
-  DIRECT_URL: ${{ secrets.SUPABASE_DIRECT_URL }}
+  DIRECT_URL: ${{ secrets.SUPABASE_DIRECT_URL || secrets.SUPABASE_DATABASE_URL }}
   REDIS_URL: ${{ secrets.REDIS_URL }}
   SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
   SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
@@ -152,6 +152,17 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Configure Supabase database URLs
+        run: |
+          if [ -z "${DATABASE_URL}" ]; then
+            echo "::error::Missing repository secret SUPABASE_DATABASE_URL. See docs/GITHUB-SECRETS.md"
+            exit 1
+          fi
+          if [ -z "${DIRECT_URL}" ]; then
+            echo "DIRECT_URL=${DATABASE_URL}" >> "$GITHUB_ENV"
+            echo "DIRECT_URL was empty; using DATABASE_URL for Prisma migrate deploy"
+          fi
 
       - name: Prisma generate
         run: pnpm prisma:generate

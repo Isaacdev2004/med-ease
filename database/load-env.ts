@@ -4,9 +4,15 @@ import path from 'node:path';
 /** Database package root — Prisma CLI and seed run with cwd = database/. */
 const databaseRoot = process.cwd();
 
+function envValue(name: string): string | undefined {
+  const value = process.env[name]?.trim();
+  return value ? value : undefined;
+}
+
 function ensureDirectUrlFallback(): void {
-  if (!process.env.DIRECT_URL && process.env.DATABASE_URL) {
-    process.env.DIRECT_URL = process.env.DATABASE_URL;
+  const databaseUrl = envValue('DATABASE_URL');
+  if (!envValue('DIRECT_URL') && databaseUrl) {
+    process.env.DIRECT_URL = databaseUrl;
   }
 }
 
