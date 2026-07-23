@@ -4,14 +4,14 @@ Platform CI connects directly to Supabase and managed Redis. Configure these rep
 
 ## Required secrets
 
-| Secret                      | Description                                                                        |
-| --------------------------- | ---------------------------------------------------------------------------------- |
-| `SUPABASE_DATABASE_URL`     | Session pooler URL (`?sslmode=require`) — used by API runtime, seed, and E2E tests |
+| Secret                      | Description                                                                                                                              |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `SUPABASE_DATABASE_URL`     | Session pooler URL (`?sslmode=require`) — used by API runtime, seed, and E2E tests                                                       |
 | `SUPABASE_DIRECT_URL`       | Direct connection URL (`db.*.supabase.co:5432`) — used by `prisma migrate deploy`. If omitted, CI falls back to `SUPABASE_DATABASE_URL`. |
-| `SUPABASE_URL`              | Project URL, e.g. `https://fpoxkbfyfiltrcwnkcrk.supabase.co`                       |
-| `SUPABASE_ANON_KEY`         | Supabase anon/public API key                                                       |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only)                                       |
-| `REDIS_URL`                 | Managed Redis URL (e.g. Upstash `rediss://...`) for BullMQ audit queue             |
+| `SUPABASE_URL`              | Project URL, e.g. `https://fpoxkbfyfiltrcwnkcrk.supabase.co`                                                                             |
+| `SUPABASE_ANON_KEY`         | Supabase anon/public API key                                                                                                             |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (server-side only)                                                                                             |
+| `REDIS_URL`                 | Managed Redis URL (e.g. Upstash `rediss://...`) for BullMQ audit queue                                                                   |
 
 ## Optional overrides
 
