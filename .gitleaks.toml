@@ -1,0 +1,23 @@
+title = "Med-Ease gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documented dev placeholders and removed Docker env templates"
+paths = [
+  '''(?:^|/)\.env\.example$''',
+  '''(?:^|/)database/\.env\.example$''',
+  '''(?:^|/)docker/\.env\.example$''',
+  '''(?:^|/)docs/GITHUB-SECRETS\.md$''',
+  '''(?:^|/)docs/SUPABASE-MIGRATION\.md$''',
+  '''(?:^|/)README\.md$''',
+  '''(?:^|/)\.github/workflows/platform-ci\.yml$''',
+]
+regexes = [
+  '''dev-only-secret-minimum-thirty-two-characters-long''',
+  '''medease_dev_password''',
+  '''medease_minio_dev''',
+  '''medease_pgadmin_dev''',
+  '''medease_grafana_dev''',
+]

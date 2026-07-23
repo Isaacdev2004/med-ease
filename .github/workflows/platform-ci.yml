@@ -35,6 +35,10 @@ jobs:
   verify:
     name: Verify
     runs-on: ubuntu-latest
+    env:
+      # Validate/generate must not depend on Supabase secrets (smoke job uses real URLs).
+      DATABASE_URL: postgresql://ci:ci@127.0.0.1:5432/postgres?sslmode=disable
+      DIRECT_URL: postgresql://ci:ci@127.0.0.1:5432/postgres?sslmode=disable
     steps:
       - name: Checkout
         uses: actions/checkout@v4

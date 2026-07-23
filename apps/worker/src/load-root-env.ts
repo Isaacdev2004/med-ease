@@ -12,9 +12,9 @@ function loadEnvFile(envPath: string): void {
     if (separator === -1) continue;
     const key = trimmed.slice(0, separator).trim();
     const value = trimmed.slice(separator + 1).trim();
-      if (key && process.env[key] === undefined) {
-        process.env[key] = value;
-      }
+    if (key && process.env[key] === undefined) {
+      process.env[key] = value;
+    }
   }
 }
 
