@@ -44,6 +44,7 @@ export interface AuthUser {
   fullName: string;
   avatar?: string;
   role: UserRole;
+  tenantId: string;
   organizationId: string;
   permissions: string[];
   locale: string;

@@ -387,6 +387,7 @@ export class AuthService {
     fullName: string;
     avatarUrl: string | null;
     role: string;
+    tenantId: string;
     organizationId: string;
     locale: string;
     timezone: string;
@@ -400,6 +401,7 @@ export class AuthService {
       fullName: user.fullName,
       avatar: user.avatarUrl ?? undefined,
       role,
+      tenantId: user.tenantId,
       organizationId: user.organizationId,
       permissions: getPermissionsForRole(role),
       locale: user.locale,

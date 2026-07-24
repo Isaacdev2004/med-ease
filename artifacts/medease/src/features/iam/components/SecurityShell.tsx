@@ -9,6 +9,7 @@ import {
 import { useIamPermissions } from '@/features/iam/hooks/use-iam-permissions';
 import type { IamFilters } from '@/services/iam/types';
 import { PageShell } from '@/shared/components';
+import { useScopedTenantId } from '@/shared/hooks/use-scoped-tenant-id';
 import { EmptyState } from '@/shared/ui/empty-state';
 
 interface SecurityShellProps {
@@ -23,16 +24,20 @@ export function SecurityShell({
   basePath,
   variant = 'professional',
   title = 'Enterprise Identity & Security',
-  tenantId = 'tenant-001',
+  tenantId: tenantIdProp,
   userId,
 }: SecurityShellProps) {
   const [location] = useLocation();
   const perms = useIamPermissions();
   const section = getIamSectionFromPath(location);
-  const scopedFilters = useMemo(
-    (): IamFilters => ({ tenantId, userId }),
-    [tenantId, userId],
-  );
+  const authTenantId = useScopedTenantId();
+  const tenantId = tenantIdProp ?? authTenantId;
+  const scopedFilters = useMemo((): IamFilters => {
+    const filters: IamFilters = {};
+    if (tenantId) filters.tenantId = tenantId;
+    if (userId) filters.userId = userId;
+    return filters;
+  }, [tenantId, userId]);
 
   if (!perms.canView) {
     return (

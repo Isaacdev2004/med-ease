@@ -27,6 +27,7 @@ export interface AuthUserDto {
   fullName: string;
   avatar?: string;
   role: IdentityRole;
+  tenantId: string;
   organizationId: string;
   permissions: string[];
   locale: string;

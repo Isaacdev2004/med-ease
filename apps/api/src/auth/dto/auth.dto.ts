@@ -40,6 +40,9 @@ export class AuthUserResponseDto {
   role!: string;
 
   @ApiProperty()
+  tenantId!: string;
+
+  @ApiProperty()
   organizationId!: string;
 
   @ApiProperty({ type: [String] })
