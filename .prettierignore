@@ -5,6 +5,7 @@ pnpm-lock.yaml
 coverage
 ci-artifacts
 **/generated/**
+artifacts/mockup-sandbox/src/.generated/**
 .local
 .agents
 attached_assets

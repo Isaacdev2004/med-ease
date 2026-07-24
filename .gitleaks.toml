@@ -3,7 +3,7 @@ title = "Med-Ease gitleaks config"
 [extend]
 useDefault = true
 
-[allowlist]
+[[allowlists]]
 description = "Documented dev placeholders and removed Docker env templates"
 paths = [
   '''(?:^|/)\.env\.example$''',
