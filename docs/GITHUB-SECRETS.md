@@ -2,6 +2,23 @@
 
 Platform CI connects directly to Supabase and managed Redis. Configure these repository secrets under **Settings → Secrets and variables → Actions**.
 
+## Where to add secrets
+
+1. Open **https://github.com/Isaacdev2004/med-ease/settings/secrets/actions**
+2. Click **New repository secret** (not "Environment secrets")
+3. Use the **exact** names in the table below — the workflow reads `SUPABASE_DATABASE_URL`, not `DATABASE_URL`
+
+| Copy from local `database/.env` | GitHub secret name (must match exactly) |
+| ------------------------------- | --------------------------------------- |
+| `DATABASE_URL`                  | `SUPABASE_DATABASE_URL`                 |
+| `DIRECT_URL` (optional)         | `SUPABASE_DIRECT_URL`                   |
+| `SUPABASE_URL`                  | `SUPABASE_URL`                          |
+| `SUPABASE_ANON_KEY`             | `SUPABASE_ANON_KEY`                     |
+| `SUPABASE_SERVICE_ROLE_KEY`     | `SUPABASE_SERVICE_ROLE_KEY`             |
+| `REDIS_URL` from root `.env`    | `REDIS_URL`                             |
+
+After saving all secrets, re-run the failed workflow (Actions → failed run → **Re-run all jobs**).
+
 ## Required secrets
 
 | Secret                      | Description                                                                                                                              |
