@@ -78,7 +78,7 @@ Vercel reads `artifacts/medease/vercel.json`, which installs and builds from the
 | Root Directory | **`artifacts/medease`**                                                             |
 | Framework      | Other (auto from `vercel.json`)                                                     |
 | Install        | `cd ../.. && pnpm install --frozen-lockfile`                                        |
-| Build          | `cd ../.. && pnpm run build:libs && pnpm --filter @workspace/medease run build`     |
+| Build          | `pnpm run vercel-build` (builds frontend workspace libs only — no Prisma)          |
 | Output         | `dist` (inside `artifacts/medease`)                                                 |
 
 Alternatively, leave Root Directory empty and use the repo-root `vercel.json` (`pnpm run vercel-build`).
@@ -127,6 +127,7 @@ Refresh tokens are stored in `sessionStorage` / `localStorage` (remember me), no
 | -------------------------------- | ------------------------------------------------------------- |
 | CORS error in browser            | Set `CORS_ORIGIN` on Render to exact Vercel URL               |
 | `build:libs` not found on Vercel | Set Root Directory to **`artifacts/medease`**, not `apps/api` |
+| Prisma build fails on Vercel     | Frontend uses `build:web-libs` (contracts only), not full `build:libs` |
 | Login works locally, not in prod | Check `VITE_API_BASE_URL` at **build** time on Vercel         |
 | 401 on all API calls             | Confirm JWT_SECRET matches; re-login after deploy             |
 | Worker audit lag                 | Verify worker service running and `REDIS_URL` shared with API |
