@@ -69,14 +69,19 @@ Separate **Web Service**:
 
 ## 3. Vercel — Frontend
 
-Connect the repo and use root `vercel.json`, or configure manually:
+Connect the repo and set **Root Directory** to `artifacts/medease` (not `apps/api`).
 
-| Setting   | Value                               |
-| --------- | ----------------------------------- |
-| Framework | Other                               |
-| Install   | `pnpm install --frozen-lockfile`    |
-| Build     | `pnpm build:libs && pnpm build:web` |
-| Output    | `artifacts/medease/dist`            |
+Vercel reads `artifacts/medease/vercel.json`, which installs and builds from the monorepo root.
+
+| Setting        | Value                                                                               |
+| -------------- | ----------------------------------------------------------------------------------- |
+| Root Directory | **`artifacts/medease`**                                                             |
+| Framework      | Other (auto from `vercel.json`)                                                     |
+| Install        | `cd ../.. && pnpm install --frozen-lockfile`                                        |
+| Build          | `cd ../.. && pnpm run build:libs && pnpm --filter @workspace/medease run build`     |
+| Output         | `dist` (inside `artifacts/medease`)                                                 |
+
+Alternatively, leave Root Directory empty and use the repo-root `vercel.json` (`pnpm run vercel-build`).
 
 ### Required environment variables (Vercel)
 
@@ -121,6 +126,7 @@ Refresh tokens are stored in `sessionStorage` / `localStorage` (remember me), no
 | Symptom                          | Fix                                                           |
 | -------------------------------- | ------------------------------------------------------------- |
 | CORS error in browser            | Set `CORS_ORIGIN` on Render to exact Vercel URL               |
+| `build:libs` not found on Vercel | Set Root Directory to **`artifacts/medease`**, not `apps/api` |
 | Login works locally, not in prod | Check `VITE_API_BASE_URL` at **build** time on Vercel         |
 | 401 on all API calls             | Confirm JWT_SECRET matches; re-login after deploy             |
 | Worker audit lag                 | Verify worker service running and `REDIS_URL` shared with API |

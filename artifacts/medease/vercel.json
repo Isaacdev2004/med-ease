@@ -1,9 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "buildCommand": "pnpm run vercel-build",
-  "devCommand": "pnpm --filter @workspace/medease run dev",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "outputDirectory": "artifacts/medease/dist",
+  "outputDirectory": "dist",
   "framework": null,
   "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }]
 }

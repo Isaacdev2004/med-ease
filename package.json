@@ -14,6 +14,7 @@
     "build:api": "pnpm build:libs && pnpm --filter @medease/api run build",
     "build:worker": "pnpm build:libs && pnpm --filter @medease/worker run build",
     "build:web": "pnpm --filter @workspace/medease run build",
+    "vercel-build": "pnpm run build:libs && pnpm run build:web",
     "typecheck:libs": "tsc --build",
     "pretypecheck": "pnpm prisma:validate && pnpm prisma:generate",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./apps/**\" --filter \"./packages/**\" --filter \"./database\" --filter \"./scripts\" --if-present run typecheck",

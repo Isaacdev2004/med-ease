@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite --config vite.config.ts",
     "build": "vite build --config vite.config.ts",
+    "build:libs": "pnpm -C ../.. run build:libs",
+    "build:web": "pnpm run build",
+    "vercel-build": "pnpm run build:libs && pnpm run build:web",
     "preview": "vite preview --config vite.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test:contract:mock": "tsx --test src/services/iam/__contract__/mock.contract.test.ts src/services/patients/__contract__/mock.contract.test.ts",
