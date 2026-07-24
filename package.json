@@ -23,6 +23,8 @@
     "prisma:format": "pnpm --filter @medease/database run format",
     "prisma:migrate:deploy": "pnpm --filter @medease/database run migrate:deploy",
     "prisma:migrate:dev": "pnpm --filter @medease/database run migrate:dev",
+    "prisma:migrate:status": "pnpm --filter @medease/database run migrate:status",
+    "prisma:seed": "pnpm --filter @medease/database run seed",
     "test": "pnpm --filter @medease/queue run test && pnpm --filter @medease/auth run test",
     "test:coverage": "node scripts/ci/verify-coverage.mjs",
     "ci:smoke": "node scripts/ci/run-smoke-ci.mjs"

@@ -7,14 +7,25 @@ import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 
-function resolvePgSsl(databaseUrl) {
-  if (
-    databaseUrl.includes('supabase') ||
-    databaseUrl.includes('sslmode=require')
-  ) {
-    return { rejectUnauthorized: false };
+function pgClientOptions(connectionString) {
+  const isLocal =
+    connectionString.includes('localhost') ||
+    connectionString.includes('127.0.0.1');
+
+  if (isLocal) {
+    return { connectionString };
   }
-  return undefined;
+
+  let url = connectionString;
+  if (!url.includes('uselibpqcompat=')) {
+    const separator = url.includes('?') ? '&' : '?';
+    url = `${url}${separator}uselibpqcompat=true`;
+  }
+
+  return {
+    connectionString: url,
+    ssl: { rejectUnauthorized: false },
+  };
 }
 
 function getPool() {
@@ -23,10 +34,7 @@ function getPool() {
     throw new Error('DATABASE_URL is required for E2E database assertions');
   }
   const { Pool } = require('pg');
-  return new Pool({
-    connectionString: databaseUrl,
-    ssl: resolvePgSsl(databaseUrl),
-  });
+  return new Pool(pgClientOptions(databaseUrl));
 }
 
 export async function queryRows(sql, params = []) {

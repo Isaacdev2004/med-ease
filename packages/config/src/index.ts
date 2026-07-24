@@ -11,6 +11,7 @@ import { securityConfigSchema } from './security.config';
 import { supabaseConfigSchema } from './supabase.config';
 
 export { supabaseConfigSchema, parseSupabaseConfig } from './supabase.config';
+export { pgClientOptions, type PgClientOptions } from './postgres-client';
 export {
   storageConfigSchema,
   parseStorageConfig,

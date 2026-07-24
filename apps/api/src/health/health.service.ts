@@ -10,6 +10,7 @@ import pg from 'pg';
 import { createStorageClient } from '@medease/storage';
 import type { DependencyCheck } from '@medease/types';
 import { timed } from '@medease/utils';
+import { pgClientOptions } from '@medease/config';
 
 import {
   DEPENDENCY_METRICS,
@@ -27,12 +28,9 @@ export class HealthService {
   ) {}
 
   async checkPostgres(): Promise<DependencyCheck> {
-    const client = new pg.Client({
-      connectionString: this.configService.database.url,
-      ssl: this.configService.database.url.includes('supabase')
-        ? { rejectUnauthorized: false }
-        : undefined,
-    });
+    const client = new pg.Client(
+      pgClientOptions(this.configService.database.url),
+    );
     try {
       const { latencyMs } = await timed(async () => {
         await client.connect();
