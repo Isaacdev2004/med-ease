@@ -108,7 +108,9 @@ console.log('');
 console.log('  1. Open the secrets URL above');
 console.log('  2. Click "New repository secret"');
 console.log('  3. Name = GitHub secret name (e.g. SUPABASE_DATABASE_URL)');
-console.log('  4. Secret = matching line from database/.env (full value after =)');
+console.log(
+  '  4. Secret = matching line from database/.env (full value after =)',
+);
 console.log('  5. Repeat for all 6 secrets');
 console.log('  6. Actions → Re-run all jobs');
 console.log('');
