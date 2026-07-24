@@ -22,6 +22,9 @@ describeIf('RLS tenant isolation', () => {
   const orgB = newId();
 
   before(async () => {
+    // Supabase postgres is superuser and bypasses RLS; use medease_app for assertions.
+    await prisma.$executeRaw`SET ROLE medease_app`;
+
     await runInSystemTransaction(prisma, async (tx) => {
       await tx.tenant.createMany({
         data: [
@@ -52,6 +55,7 @@ describeIf('RLS tenant isolation', () => {
       await tx.organization.deleteMany({ where: { id: { in: [orgA, orgB] } } });
       await tx.tenant.deleteMany({ where: { id: { in: [tenantA, tenantB] } } });
     });
+    await prisma.$executeRaw`RESET ROLE`;
     await prisma.$disconnect();
   });
 
