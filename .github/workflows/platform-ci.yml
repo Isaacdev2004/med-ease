@@ -215,6 +215,9 @@ jobs:
       - name: Prisma generate
         run: pnpm prisma:generate
 
+      - name: Build workspace libraries
+        run: pnpm build:libs
+
       - name: Apply database migrations
         run: pnpm prisma:migrate:deploy
 
