@@ -119,6 +119,13 @@ export class AuthService {
     return result.loginResult;
   }
 
+  resolveRefreshToken(
+    cookieToken: string | undefined,
+    bodyToken: string | undefined,
+  ): string | undefined {
+    return bodyToken?.trim() || cookieToken;
+  }
+
   async refresh(
     refreshToken: string | undefined,
     res: Response,
@@ -189,6 +196,7 @@ export class AuthService {
     return {
       accessToken: access.token,
       expiresAt: access.expiresAt,
+      refreshToken: newRefreshToken,
     };
   }
 
@@ -330,6 +338,7 @@ export class AuthService {
           accessToken: access.token,
           expiresAt: access.expiresAt,
           rememberMe,
+          refreshToken,
         },
         organization: {
           id: user.organization.id,

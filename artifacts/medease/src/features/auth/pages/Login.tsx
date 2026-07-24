@@ -2,7 +2,9 @@ import { Link, useLocation } from 'wouter';
 import { Shield } from 'lucide-react';
 
 import { ROUTES } from '@/config/routes';
+import { env } from '@/config/env';
 import { DEMO_CREDENTIALS_HINT } from '@/services/auth/demo-users';
+import { useApiAuth } from '@/services/auth/auth-service';
 import { useAuth } from '@/services/auth/auth-context';
 import {
   loginSchema,
@@ -23,7 +25,7 @@ export default function Login() {
   const { login, error, clearError, authState } = useAuth();
 
   const form = useZodForm<LoginFormValues>(loginSchema, {
-    email: 'patient@medease.health',
+    email: useApiAuth ? 'admin@medease.health' : 'patient@medease.health',
     password: 'demo',
     rememberMe: false,
   });
@@ -98,7 +100,11 @@ export default function Login() {
           HIPAA Compliant Secure Portal
         </div>
         <p className="text-xs text-center text-muted-foreground">
-          {DEMO_CREDENTIALS_HINT}
+          {useApiAuth
+            ? env.isDev
+              ? 'Development: sign in with seeded users (e.g. admin@medease.health / demo).'
+              : 'Sign in with your organization credentials.'
+            : DEMO_CREDENTIALS_HINT}
         </p>
         <p className="text-sm text-center text-muted-foreground">
           New to Med&apos;ease?{' '}

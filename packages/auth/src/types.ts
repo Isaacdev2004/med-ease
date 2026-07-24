@@ -45,6 +45,8 @@ export interface AuthSessionDto {
   accessToken: string;
   expiresAt: number;
   rememberMe?: boolean;
+  /** Present for SPA clients (Vercel + Render); store securely client-side. */
+  refreshToken?: string;
 }
 
 export interface LoginResultDto {

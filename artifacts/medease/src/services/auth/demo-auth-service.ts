@@ -13,7 +13,6 @@ import {
 } from '@/services/auth/demo-users';
 import {
   clearStoredSession,
-  persistSessionRef,
   readStoredSessionRef,
 } from '@/services/auth/session-storage';
 import type { AuthService, StoredSessionRef } from '@/services/auth/types';
@@ -28,14 +27,6 @@ function createSession(rememberMe?: boolean): AuthSession {
     refreshToken: crypto.randomUUID(),
     expiresAt: Date.now() + ttl,
     rememberMe,
-  };
-}
-
-function toStoredRef(userId: string, session: AuthSession): StoredSessionRef {
-  return {
-    userId,
-    expiresAt: session.expiresAt,
-    rememberMe: session.rememberMe,
   };
 }
 
@@ -114,7 +105,3 @@ export const demoAuthService: AuthService = {
     return buildResult(account, false);
   },
 };
-
-export function persistAuthSession(userId: string, session: AuthSession): void {
-  persistSessionRef(toStoredRef(userId, session));
-}

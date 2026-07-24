@@ -32,7 +32,16 @@ pnpm dev
 
 # Start the NestJS API (http://localhost:3000)
 pnpm dev:api
+
+# Wire frontend to API (one-time)
+cp artifacts/medease/.env.example artifacts/medease/.env.local
 ```
+
+Sign in at http://localhost:5173 with seeded user `admin@medease.health` / `demo`.
+
+## Production deployment
+
+Deploy the **frontend to Vercel** and **API + worker to Render**. See [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
 ## Supabase Setup
 

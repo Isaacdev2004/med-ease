@@ -17,7 +17,7 @@ import { env } from '@/config/env';
 import { PORTAL_PATHS, type PortalId } from '@/config/routes';
 import { trackAuthEvent } from '@/services/auth/audit-events';
 import { authService } from '@/services/auth/auth-service';
-import { persistAuthSession } from '@/services/auth/demo-auth-service';
+import { persistAuthSession } from '@/services/auth/auth-persistence';
 import { clearAuthCache } from '@/services/auth/clear-auth-cache';
 import { toFriendlyAuthError } from '@/services/auth/types';
 import type {
@@ -194,6 +194,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await authService.signIn(credentials);
       applyAuthResult(result, setUser, setSession, setOrganization);
+      persistAuthSession(result.user.id, result.session);
       setAuthState(navigator.onLine ? 'authenticated' : 'offline');
       trackAuthEvent('login', { rememberMe: Boolean(credentials.rememberMe) });
       return PORTAL_PATHS[getPortalForRole(result.user.role)];

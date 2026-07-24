@@ -78,6 +78,11 @@ export class AuthSessionResponseDto {
 
   @ApiPropertyOptional()
   rememberMe?: boolean;
+
+  @ApiPropertyOptional({
+    description: 'Refresh token for SPA clients when cookies are unavailable cross-origin',
+  })
+  refreshToken?: string;
 }
 
 export class LoginResponseDto {
@@ -97,4 +102,14 @@ export class RefreshResponseDto {
 
   @ApiProperty()
   expiresAt!: number;
+
+  @ApiPropertyOptional()
+  refreshToken?: string;
+}
+
+export class RefreshTokenBodyDto {
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  refreshToken?: string;
 }

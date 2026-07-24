@@ -1,0 +1,64 @@
+# Render blueprint — Med-Ease API + Worker
+# Docs: docs/DEPLOYMENT.md
+
+services:
+  - type: web
+    name: medease-api
+    runtime: node
+    plan: starter
+    region: frankfurt
+    buildCommand: >-
+      pnpm install --frozen-lockfile &&
+      pnpm prisma:generate &&
+      pnpm build:libs &&
+      pnpm --filter @medease/api run build
+    preDeployCommand: pnpm prisma:migrate:deploy
+    startCommand: node apps/api/dist/main.js
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: AUTH_COOKIE_SECURE
+        value: 'true'
+      - key: OTEL_ENABLED
+        value: 'false'
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
+
+  - type: web
+    name: medease-worker
+    runtime: node
+    plan: starter
+    region: frankfurt
+    buildCommand: >-
+      pnpm install --frozen-lockfile &&
+      pnpm prisma:generate &&
+      pnpm build:libs &&
+      pnpm --filter @medease/worker run build
+    startCommand: node apps/worker/dist/main.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: OTEL_ENABLED
+        value: 'false'
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false

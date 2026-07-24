@@ -9,6 +9,8 @@ export interface StoredSessionRef {
   userId: string;
   expiresAt: number;
   rememberMe?: boolean;
+  accessToken?: string;
+  refreshToken?: string;
 }
 
 export interface AuthService {
