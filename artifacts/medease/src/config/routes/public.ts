@@ -19,10 +19,24 @@ function marketingPage(title: string, path: string): GlobalRouteDefinition {
 export const publicRoutes: GlobalRouteDefinition[] = [
   {
     path: ROUTES.home,
-    title: 'Home',
+    title: "Med'ease — Hub de coordination territoriale de santé",
     layout: 'marketing',
     public: true,
     lazy: () => import('@/features/marketing/pages/Landing'),
+  },
+  {
+    path: ROUTES.connexion,
+    title: 'Connexion',
+    layout: 'none',
+    public: true,
+    lazy: () => import('@/features/marketing/pages/ConnexionRedirect'),
+  },
+  {
+    path: ROUTES.preInscription,
+    title: 'Pré-inscription',
+    layout: 'none',
+    public: true,
+    lazy: () => import('@/features/marketing/pages/PreInscriptionRedirect'),
   },
   marketingPage('About', ROUTES.about),
   marketingPage('Features', ROUTES.features),

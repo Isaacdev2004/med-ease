@@ -21,6 +21,7 @@ import { AuthorizationModule } from './authorization/authorization.module';
 import { MedeaseConfigModule } from './config/config.module';
 import { TenantModule } from './tenant/tenant.module';
 import { HealthModule } from './health/health.module';
+import { MarketingModule } from './marketing/marketing.module';
 import { MedeaseLoggerModule } from './logger/logger.module';
 import { ObservabilityModule } from './observability/observability.module';
 import { PlatformObservabilityModule } from './observability/platform-observability.module';
@@ -78,6 +79,7 @@ import { PrismaModule } from '@medease/prisma';
     MedeaseLoggerModule,
     PrismaModule,
     HealthModule,
+    MarketingModule,
     PlatformObservabilityModule,
   ],
 })
