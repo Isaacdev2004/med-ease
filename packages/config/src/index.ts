@@ -86,6 +86,9 @@ export interface MedeaseConfig {
     host: MedeaseEnv['MAIL_HOST'];
     port: MedeaseEnv['MAIL_PORT'];
     from: MedeaseEnv['MAIL_FROM'];
+    user?: MedeaseEnv['MAIL_USER'];
+    pass?: MedeaseEnv['MAIL_PASS'];
+    marketingLeadsNotifyEmail?: MedeaseEnv['MARKETING_LEADS_NOTIFY_EMAIL'];
   };
   opensearch?: {
     url: NonNullable<MedeaseEnv['OPENSEARCH_URL']>;
@@ -161,6 +164,9 @@ export function loadConfig(
       host: validated.MAIL_HOST,
       port: validated.MAIL_PORT,
       from: validated.MAIL_FROM,
+      user: validated.MAIL_USER,
+      pass: validated.MAIL_PASS,
+      marketingLeadsNotifyEmail: validated.MARKETING_LEADS_NOTIFY_EMAIL,
     },
     opensearch: validated.OPENSEARCH_URL
       ? { url: validated.OPENSEARCH_URL }
