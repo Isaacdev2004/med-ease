@@ -119,6 +119,344 @@ const DEMO_PATIENTS: PatientSeed[] = [
   },
 ];
 
+const DEMO_FACILITY_PARIS = '01930000-0000-7000-8000-000000000201';
+const DEMO_FACILITY_LYON = '01930000-0000-7000-8000-000000000202';
+const DEMO_FACILITY_TOUR = '01930000-0000-7000-8000-000000000203';
+
+const DEMO_PROVIDER_MARTIN = '01930000-0000-7000-8000-000000000501';
+const DEMO_PROVIDER_BERNARD = '01930000-0000-7000-8000-000000000502';
+
+function scheduleDaysFromNow(days: number, hour = 9, minute = 0): Date {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  d.setHours(hour, minute, 0, 0);
+  return d;
+}
+
+function patientRef(patientId: string) {
+  const patient = DEMO_PATIENTS.find((p) => p.id === patientId);
+  if (!patient) {
+    throw new Error(`Unknown demo patient: ${patientId}`);
+  }
+  return patient;
+}
+
+type AppointmentSeed = {
+  id: string;
+  patientId: string;
+  providerId: string;
+  providerFullName: string;
+  providerSpecialty: string;
+  providerDepartment: string;
+  facilityId: string;
+  facilityName: string;
+  facilityAddress: string;
+  scheduledAt: Date;
+  durationMinutes: number;
+  status:
+    | 'scheduled'
+    | 'confirmed'
+    | 'checked_in'
+    | 'in_progress'
+    | 'completed'
+    | 'cancelled'
+    | 'no_show';
+  visitType: string;
+  specialty: string;
+  department: string;
+  room: string;
+  reason: string;
+  insurance: string;
+  priority: 'routine' | 'urgent' | 'emergency';
+  checkInStatus: string;
+  queuePosition?: number;
+  telehealthLink?: string;
+  notes?: string;
+};
+
+/** Demo schedule — today, upcoming, and past appointments for buyer walkthrough. */
+function buildDemoAppointments() {
+  return [
+    {
+      id: '01930000-0000-7000-8000-000000000601',
+      patientId: DEMO_PATIENTS[0]!.id,
+      providerId: DEMO_PHYSICIAN_ID,
+      providerFullName: 'Dr. Emily Chen',
+      providerSpecialty: 'Cardiology',
+      providerDepartment: 'Cardiology',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      facilityAddress: "47 Blvd de l'Hôpital, Paris",
+      scheduledAt: scheduleDaysFromNow(0, 9, 0),
+      durationMinutes: 30,
+      status: 'checked_in',
+      visitType: 'in_person',
+      specialty: 'Cardiology',
+      department: 'Cardiology',
+      room: 'Room 104',
+      reason: 'Follow-up visit',
+      insurance: 'AXA Santé',
+      priority: 'routine',
+      checkInStatus: 'checked_in',
+      queuePosition: 1,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000602',
+      patientId: DEMO_PATIENTS[1]!.id,
+      providerId: DEMO_PROVIDER_MARTIN,
+      providerFullName: 'Dr. Jean-Luc Martin',
+      providerSpecialty: 'General Practice',
+      providerDepartment: 'Internal Medicine',
+      facilityId: DEMO_FACILITY_LYON,
+      facilityName: 'Hôpital Édouard Herriot',
+      facilityAddress: "5 Place d'Arsonval, Lyon",
+      scheduledAt: scheduleDaysFromNow(0, 10, 30),
+      durationMinutes: 20,
+      status: 'confirmed',
+      visitType: 'in_person',
+      specialty: 'General Practice',
+      department: 'Internal Medicine',
+      room: 'Room 210',
+      reason: 'Annual check-up',
+      insurance: 'Mutuelle Générale',
+      priority: 'routine',
+      checkInStatus: 'not_checked_in',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000603',
+      patientId: DEMO_PATIENTS[2]!.id,
+      providerId: DEMO_PROVIDER_BERNARD,
+      providerFullName: 'Dr. Sophie Bernard',
+      providerSpecialty: 'Neurology',
+      providerDepartment: 'Neurology',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      facilityAddress: "47 Blvd de l'Hôpital, Paris",
+      scheduledAt: scheduleDaysFromNow(0, 14, 0),
+      durationMinutes: 45,
+      status: 'in_progress',
+      visitType: 'in_person',
+      specialty: 'Neurology',
+      department: 'Neurology',
+      room: 'Room 318',
+      reason: 'Specialist consultation',
+      insurance: 'Harmonie Mutuelle',
+      priority: 'urgent',
+      checkInStatus: 'with_provider',
+      queuePosition: 2,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000604',
+      patientId: DEMO_PATIENTS[3]!.id,
+      providerId: DEMO_PHYSICIAN_ID,
+      providerFullName: 'Dr. Emily Chen',
+      providerSpecialty: 'Cardiology',
+      providerDepartment: 'Cardiology',
+      facilityId: DEMO_FACILITY_TOUR,
+      facilityName: 'Clinique Pasteur',
+      facilityAddress: '45 Avenue de Lombez, Toulouse',
+      scheduledAt: scheduleDaysFromNow(0, 16, 0),
+      durationMinutes: 30,
+      status: 'scheduled',
+      visitType: 'telemedicine',
+      specialty: 'Telemedicine',
+      department: 'Virtual Care',
+      room: 'Virtual',
+      reason: 'Telehealth consult',
+      insurance: 'CNAM',
+      priority: 'routine',
+      checkInStatus: 'not_checked_in',
+      telehealthLink: 'https://telehealth.medease.health/session/demo-604',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000605',
+      patientId: DEMO_PATIENTS[4]!.id,
+      providerId: DEMO_PROVIDER_MARTIN,
+      providerFullName: 'Dr. Jean-Luc Martin',
+      providerSpecialty: 'General Practice',
+      providerDepartment: 'Internal Medicine',
+      facilityId: DEMO_FACILITY_LYON,
+      facilityName: 'Hôpital Édouard Herriot',
+      facilityAddress: "5 Place d'Arsonval, Lyon",
+      scheduledAt: scheduleDaysFromNow(1, 9, 30),
+      durationMinutes: 30,
+      status: 'scheduled',
+      visitType: 'in_person',
+      specialty: 'General Practice',
+      department: 'Internal Medicine',
+      room: 'Room 112',
+      reason: 'Medication review',
+      insurance: 'AXA Santé',
+      priority: 'routine',
+      checkInStatus: 'not_checked_in',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000606',
+      patientId: DEMO_PATIENTS[5]!.id,
+      providerId: DEMO_PHYSICIAN_ID,
+      providerFullName: 'Dr. Emily Chen',
+      providerSpecialty: 'Cardiology',
+      providerDepartment: 'Cardiology',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      facilityAddress: "47 Blvd de l'Hôpital, Paris",
+      scheduledAt: scheduleDaysFromNow(2, 11, 0),
+      durationMinutes: 45,
+      status: 'confirmed',
+      visitType: 'in_person',
+      specialty: 'Cardiology',
+      department: 'Cardiology',
+      room: 'Room 105',
+      reason: 'Chest pain evaluation',
+      insurance: 'Mutuelle Générale',
+      priority: 'urgent',
+      checkInStatus: 'not_checked_in',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000607',
+      patientId: DEMO_PATIENTS[6]!.id,
+      providerId: DEMO_PROVIDER_BERNARD,
+      providerFullName: 'Dr. Sophie Bernard',
+      providerSpecialty: 'Neurology',
+      providerDepartment: 'Neurology',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      facilityAddress: "47 Blvd de l'Hôpital, Paris",
+      scheduledAt: scheduleDaysFromNow(3, 15, 0),
+      durationMinutes: 30,
+      status: 'scheduled',
+      visitType: 'in_person',
+      specialty: 'Neurology',
+      department: 'Neurology',
+      room: 'Room 320',
+      reason: 'Chronic disease management',
+      insurance: 'Harmonie Mutuelle',
+      priority: 'routine',
+      checkInStatus: 'not_checked_in',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000608',
+      patientId: DEMO_PATIENTS[7]!.id,
+      providerId: DEMO_PROVIDER_MARTIN,
+      providerFullName: 'Dr. Jean-Luc Martin',
+      providerSpecialty: 'General Practice',
+      providerDepartment: 'Internal Medicine',
+      facilityId: DEMO_FACILITY_TOUR,
+      facilityName: 'Clinique Pasteur',
+      facilityAddress: '45 Avenue de Lombez, Toulouse',
+      scheduledAt: scheduleDaysFromNow(5, 10, 0),
+      durationMinutes: 30,
+      status: 'confirmed',
+      visitType: 'telemedicine',
+      specialty: 'Telemedicine',
+      department: 'Virtual Care',
+      room: 'Virtual',
+      reason: 'Post-operative review',
+      insurance: 'CNAM',
+      priority: 'routine',
+      checkInStatus: 'not_checked_in',
+      telehealthLink: 'https://telehealth.medease.health/session/demo-608',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000609',
+      patientId: DEMO_PATIENTS[0]!.id,
+      providerId: DEMO_PHYSICIAN_ID,
+      providerFullName: 'Dr. Emily Chen',
+      providerSpecialty: 'Cardiology',
+      providerDepartment: 'Cardiology',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      facilityAddress: "47 Blvd de l'Hôpital, Paris",
+      scheduledAt: scheduleDaysFromNow(-1, 9, 0),
+      durationMinutes: 30,
+      status: 'completed',
+      visitType: 'in_person',
+      specialty: 'Cardiology',
+      department: 'Cardiology',
+      room: 'Room 104',
+      reason: 'Follow-up visit',
+      insurance: 'AXA Santé',
+      priority: 'routine',
+      checkInStatus: 'with_provider',
+      notes: 'Patient stable. Continue current regimen.',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000610',
+      patientId: DEMO_PATIENTS[1]!.id,
+      providerId: DEMO_PROVIDER_MARTIN,
+      providerFullName: 'Dr. Jean-Luc Martin',
+      providerSpecialty: 'General Practice',
+      providerDepartment: 'Internal Medicine',
+      facilityId: DEMO_FACILITY_LYON,
+      facilityName: 'Hôpital Édouard Herriot',
+      facilityAddress: "5 Place d'Arsonval, Lyon",
+      scheduledAt: scheduleDaysFromNow(-3, 14, 0),
+      durationMinutes: 20,
+      status: 'completed',
+      visitType: 'in_person',
+      specialty: 'General Practice',
+      department: 'Internal Medicine',
+      room: 'Room 208',
+      reason: 'Lab work review',
+      insurance: 'Mutuelle Générale',
+      priority: 'routine',
+      checkInStatus: 'with_provider',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000611',
+      patientId: DEMO_PATIENTS[2]!.id,
+      providerId: DEMO_PROVIDER_BERNARD,
+      providerFullName: 'Dr. Sophie Bernard',
+      providerSpecialty: 'Neurology',
+      providerDepartment: 'Neurology',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      facilityAddress: "47 Blvd de l'Hôpital, Paris",
+      scheduledAt: scheduleDaysFromNow(-5, 11, 30),
+      durationMinutes: 45,
+      status: 'cancelled',
+      visitType: 'in_person',
+      specialty: 'Neurology',
+      department: 'Neurology',
+      room: 'Room 315',
+      reason: 'Specialist consultation',
+      insurance: 'Harmonie Mutuelle',
+      priority: 'routine',
+      checkInStatus: 'not_checked_in',
+      notes: 'Cancelled by patient — rescheduled for next week.',
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000612',
+      patientId: DEMO_PATIENTS[3]!.id,
+      providerId: DEMO_PHYSICIAN_ID,
+      providerFullName: 'Dr. Emily Chen',
+      providerSpecialty: 'Cardiology',
+      providerDepartment: 'Cardiology',
+      facilityId: DEMO_FACILITY_TOUR,
+      facilityName: 'Clinique Pasteur',
+      facilityAddress: '45 Avenue de Lombez, Toulouse',
+      scheduledAt: scheduleDaysFromNow(-7, 8, 30),
+      durationMinutes: 30,
+      status: 'no_show',
+      visitType: 'in_person',
+      specialty: 'Cardiology',
+      department: 'Cardiology',
+      room: 'Room 101',
+      reason: 'Routine ECG',
+      insurance: 'CNAM',
+      priority: 'routine',
+      checkInStatus: 'not_checked_in',
+    },
+  ].map((row) => {
+    const patient = patientRef(row.patientId);
+    return {
+      ...row,
+      patientFullName: patient.fullName,
+      patientMrn: patient.mrn,
+    };
+  });
+}
+
 /** Clinical seeds — demo patients aligned with professional portal mock panel. */
 export const clinicalSeed: SeedModule = {
   name: 'clinical',
@@ -302,6 +640,69 @@ export const clinicalSeed: SeedModule = {
           },
           update: {},
         });
+
+        for (const appointment of buildDemoAppointments()) {
+          await tx.appointment.upsert({
+            where: { id: appointment.id },
+            create: {
+              id: appointment.id,
+              tenantId: DEMO_TENANT_ID,
+              facilityId: appointment.facilityId,
+              patientId: appointment.patientId,
+              providerId: appointment.providerId,
+              scheduledAt: appointment.scheduledAt,
+              durationMinutes: appointment.durationMinutes,
+              status: appointment.status,
+              visitType: appointment.visitType,
+              referralId: null,
+              telehealthLink: appointment.telehealthLink,
+              notes: appointment.notes,
+              fhirResourceId: appointment.id,
+              specialty: appointment.specialty,
+              department: appointment.department,
+              room: appointment.room,
+              reason: appointment.reason,
+              insurance: appointment.insurance,
+              priority: appointment.priority,
+              checkInStatus: appointment.checkInStatus,
+              queuePosition: appointment.queuePosition,
+              followUpRequired: false,
+              isRecurring: false,
+              patientFullName: appointment.patientFullName,
+              patientMrn: appointment.patientMrn,
+              providerFullName: appointment.providerFullName,
+              providerSpecialty: appointment.providerSpecialty,
+              providerDepartment: appointment.providerDepartment,
+              facilityName: appointment.facilityName,
+              facilityAddress: appointment.facilityAddress,
+              createdBy: DEMO_ADMIN_ID,
+            },
+            update: {
+              scheduledAt: appointment.scheduledAt,
+              durationMinutes: appointment.durationMinutes,
+              status: appointment.status,
+              visitType: appointment.visitType,
+              telehealthLink: appointment.telehealthLink,
+              notes: appointment.notes,
+              specialty: appointment.specialty,
+              department: appointment.department,
+              room: appointment.room,
+              reason: appointment.reason,
+              insurance: appointment.insurance,
+              priority: appointment.priority,
+              checkInStatus: appointment.checkInStatus,
+              queuePosition: appointment.queuePosition,
+              patientFullName: appointment.patientFullName,
+              patientMrn: appointment.patientMrn,
+              providerFullName: appointment.providerFullName,
+              providerSpecialty: appointment.providerSpecialty,
+              providerDepartment: appointment.providerDepartment,
+              facilityName: appointment.facilityName,
+              facilityAddress: appointment.facilityAddress,
+              updatedBy: DEMO_ADMIN_ID,
+            },
+          });
+        }
       });
     } finally {
       await prisma.$disconnect();
