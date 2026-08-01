@@ -1218,6 +1218,411 @@ paths:
       security: *a4
       summary: Create or update patient preferences
       tags: *a5
+  /appointments:
+    get:
+      operationId: AppointmentsController_search
+      parameters: []
+      responses:
+        '200':
+          description: Paginated appointment list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAppointmentsDto'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: &a6
+        - bearer: []
+      summary: Search appointments (paginated)
+      tags: &a7
+        - appointments
+    post:
+      operationId: AppointmentsController_book
+      parameters: []
+      responses:
+        '201':
+          description: Booked appointment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentDto'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: *a6
+      summary: Book a new appointment
+      tags: *a7
+  /appointments/all:
+    get:
+      operationId: AppointmentsController_getAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppointmentDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: *a6
+      summary: List all appointments matching filters
+      tags: *a7
+  /appointments/upcoming:
+    get:
+      operationId: AppointmentsController_getUpcoming
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppointmentDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: *a6
+      summary: List upcoming appointments
+      tags: *a7
+  /appointments/past:
+    get:
+      operationId: AppointmentsController_getPast
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppointmentDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: *a6
+      summary: List past appointments
+      tags: *a7
+  /appointments/today:
+    get:
+      operationId: AppointmentsController_getToday
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppointmentDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: *a6
+      summary: List today appointments
+      tags: *a7
+  /appointments/telemedicine:
+    get:
+      operationId: AppointmentsController_getTelemedicine
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppointmentDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: *a6
+      summary: List telemedicine appointments
+      tags: *a7
+  /appointments/waitlist:
+    get:
+      operationId: AppointmentsController_getWaitlist
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WaitlistEntryDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: *a6
+      summary: Get appointment waitlist
+      tags: *a7
+  /appointments/queue:
+    get:
+      operationId: AppointmentsController_getQueue
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QueueEntryDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+      security: *a6
+      summary: Get check-in queue for today
+      tags: *a7
+  /appointments/{appointmentId}:
+    get:
+      operationId: AppointmentsController_getById
+      parameters:
+        - name: appointmentId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Appointment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+        '404':
+          description: Appointment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+      security: *a6
+      summary: Get appointment by id
+      tags: *a7
+  /appointments/{appointmentId}/reschedule:
+    post:
+      operationId: AppointmentsController_reschedule
+      parameters:
+        - name: appointmentId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Rescheduled appointment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentDto'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+        '404':
+          description: Appointment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+      security: *a6
+      summary: Reschedule an appointment
+      tags: *a7
+  /appointments/{appointmentId}/cancel:
+    post:
+      operationId: AppointmentsController_cancel
+      parameters:
+        - name: appointmentId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Cancelled appointment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentDto'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+        '404':
+          description: Appointment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+      security: *a6
+      summary: Cancel an appointment
+      tags: *a7
+  /appointments/{appointmentId}/check-in:
+    post:
+      operationId: AppointmentsController_checkIn
+      parameters:
+        - name: appointmentId
+          required: true
+          in: path
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: Checked-in appointment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppointmentDto'
+        '400':
+          description: Validation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+        '401':
+          description: |-
+            Authentication required
+
+            Authentication required
+        '403':
+          description: |-
+            Insufficient permissions
+
+            Insufficient permissions
+        '404':
+          description: Appointment not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorResponseDto'
+      security: *a6
+      summary: Check in to an appointment
+      tags: *a7
 info:
   title: Api
   description: Med-Ease enterprise healthcare platform API
@@ -1323,25 +1728,12 @@ components:
     ApiErrorResponseDto:
       type: object
       properties:
-        status:
-          type: string
-          example: error
-        statusCode:
-          type: number
         message:
           type: string
-          description: Error message or validation errors
-        path:
+        code:
           type: string
-        timestamp:
-          type: string
-          format: date-time
       required:
-        - status
-        - statusCode
         - message
-        - path
-        - timestamp
     ExportPatientsResultDto:
       type: object
       properties:
@@ -1628,6 +2020,248 @@ components:
         - language
         - createdAt
         - updatedAt
+    AppointmentPatientDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        mrn:
+          type: string
+      required:
+        - id
+        - fullName
+        - mrn
+    AppointmentProviderDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fullName:
+          type: string
+        specialty:
+          type: string
+        department:
+          type: string
+      required:
+        - id
+        - fullName
+        - specialty
+        - department
+    AppointmentFacilityDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+      required:
+        - id
+        - name
+        - address
+    AppointmentDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        patient:
+          $ref: '#/components/schemas/AppointmentPatientDto'
+        provider:
+          $ref: '#/components/schemas/AppointmentProviderDto'
+        facility:
+          $ref: '#/components/schemas/AppointmentFacilityDto'
+        department:
+          type: string
+        specialty:
+          type: string
+        room:
+          type: string
+        scheduledAt:
+          type: string
+          format: date-time
+        durationMinutes:
+          type: number
+        status:
+          type: string
+          enum:
+            - scheduled
+            - confirmed
+            - checked_in
+            - in_progress
+            - completed
+            - cancelled
+            - no_show
+        visitType:
+          type: string
+          enum:
+            - in_person
+            - telemedicine
+            - home_care
+            - laboratory
+            - radiology
+            - pharmacy
+            - follow_up
+        priority:
+          type: string
+          enum:
+            - routine
+            - urgent
+            - emergency
+        insurance:
+          type: string
+        reason:
+          type: string
+        clinicalNotes:
+          type: string
+        followUpRequired:
+          type: boolean
+        referralId:
+          type: string
+          format: uuid
+        checkInStatus:
+          type: string
+          enum:
+            - not_checked_in
+            - checked_in
+            - in_waiting_room
+            - with_provider
+        queuePosition:
+          type: number
+        telehealthLink:
+          type: string
+        isRecurring:
+          type: boolean
+        recurringPattern:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - patient
+        - provider
+        - facility
+        - department
+        - specialty
+        - room
+        - scheduledAt
+        - durationMinutes
+        - status
+        - visitType
+        - priority
+        - insurance
+        - reason
+        - followUpRequired
+        - checkInStatus
+        - isRecurring
+        - createdAt
+        - updatedAt
+    PaginatedAppointmentsDto:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppointmentDto'
+        total:
+          type: number
+        page:
+          type: number
+        pageSize:
+          type: number
+      required:
+        - items
+        - total
+        - page
+        - pageSize
+    WaitlistEntryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        patientId:
+          type: string
+          format: uuid
+        patientName:
+          type: string
+        providerId:
+          type: string
+          format: uuid
+        providerName:
+          type: string
+        specialty:
+          type: string
+        requestedDate:
+          type: string
+          format: date-time
+        priority:
+          type: string
+          enum:
+            - routine
+            - urgent
+            - emergency
+        addedAt:
+          type: string
+          format: date-time
+        position:
+          type: number
+      required:
+        - id
+        - patientId
+        - patientName
+        - providerId
+        - providerName
+        - specialty
+        - requestedDate
+        - priority
+        - addedAt
+        - position
+    QueueEntryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        appointmentId:
+          type: string
+          format: uuid
+        patientName:
+          type: string
+        providerName:
+          type: string
+        position:
+          type: number
+        estimatedWaitMinutes:
+          type: number
+        checkInStatus:
+          type: string
+          enum:
+            - not_checked_in
+            - checked_in
+            - in_waiting_room
+            - with_provider
+        checkedInAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - appointmentId
+        - patientName
+        - providerName
+        - position
+        - estimatedWaitMinutes
+        - checkInStatus
     HealthStatus:
       type: object
       properties:

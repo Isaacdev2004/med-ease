@@ -744,3 +744,547 @@ export const PatientsControllerUpdatePreferencesResponse = zod.object({
 })
 
 
+/**
+ * @summary Search appointments (paginated)
+ */
+export const AppointmentsControllerSearchResponse = zod.object({
+  "items": zod.array(zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})),
+  "total": zod.number(),
+  "page": zod.number(),
+  "pageSize": zod.number()
+})
+
+
+/**
+ * @summary Book a new appointment
+ */
+export const AppointmentsControllerBookResponse = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary List all appointments matching filters
+ */
+export const AppointmentsControllerGetAllResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const AppointmentsControllerGetAllResponse = zod.array(AppointmentsControllerGetAllResponseItem)
+
+
+/**
+ * @summary List upcoming appointments
+ */
+export const AppointmentsControllerGetUpcomingResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const AppointmentsControllerGetUpcomingResponse = zod.array(AppointmentsControllerGetUpcomingResponseItem)
+
+
+/**
+ * @summary List past appointments
+ */
+export const AppointmentsControllerGetPastResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const AppointmentsControllerGetPastResponse = zod.array(AppointmentsControllerGetPastResponseItem)
+
+
+/**
+ * @summary List today appointments
+ */
+export const AppointmentsControllerGetTodayResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const AppointmentsControllerGetTodayResponse = zod.array(AppointmentsControllerGetTodayResponseItem)
+
+
+/**
+ * @summary List telemedicine appointments
+ */
+export const AppointmentsControllerGetTelemedicineResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+export const AppointmentsControllerGetTelemedicineResponse = zod.array(AppointmentsControllerGetTelemedicineResponseItem)
+
+
+/**
+ * @summary Get appointment waitlist
+ */
+export const AppointmentsControllerGetWaitlistResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "patientId": zod.string().uuid(),
+  "patientName": zod.string(),
+  "providerId": zod.string().uuid(),
+  "providerName": zod.string(),
+  "specialty": zod.string(),
+  "requestedDate": zod.coerce.date(),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "addedAt": zod.coerce.date(),
+  "position": zod.number()
+})
+export const AppointmentsControllerGetWaitlistResponse = zod.array(AppointmentsControllerGetWaitlistResponseItem)
+
+
+/**
+ * @summary Get check-in queue for today
+ */
+export const AppointmentsControllerGetQueueResponseItem = zod.object({
+  "id": zod.string().uuid(),
+  "appointmentId": zod.string().uuid(),
+  "patientName": zod.string(),
+  "providerName": zod.string(),
+  "position": zod.number(),
+  "estimatedWaitMinutes": zod.number(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "checkedInAt": zod.coerce.date().optional()
+})
+export const AppointmentsControllerGetQueueResponse = zod.array(AppointmentsControllerGetQueueResponseItem)
+
+
+/**
+ * @summary Get appointment by id
+ */
+export const AppointmentsControllerGetByIdParams = zod.object({
+  "appointmentId": zod.coerce.string().uuid()
+})
+
+export const AppointmentsControllerGetByIdResponse = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Reschedule an appointment
+ */
+export const AppointmentsControllerRescheduleParams = zod.object({
+  "appointmentId": zod.coerce.string().uuid()
+})
+
+export const AppointmentsControllerRescheduleResponse = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Cancel an appointment
+ */
+export const AppointmentsControllerCancelParams = zod.object({
+  "appointmentId": zod.coerce.string().uuid()
+})
+
+export const AppointmentsControllerCancelResponse = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+
+/**
+ * @summary Check in to an appointment
+ */
+export const AppointmentsControllerCheckInParams = zod.object({
+  "appointmentId": zod.coerce.string().uuid()
+})
+
+export const AppointmentsControllerCheckInResponse = zod.object({
+  "id": zod.string().uuid(),
+  "patient": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "mrn": zod.string()
+}),
+  "provider": zod.object({
+  "id": zod.string().uuid(),
+  "fullName": zod.string(),
+  "specialty": zod.string(),
+  "department": zod.string()
+}),
+  "facility": zod.object({
+  "id": zod.string().uuid(),
+  "name": zod.string(),
+  "address": zod.string()
+}),
+  "department": zod.string(),
+  "specialty": zod.string(),
+  "room": zod.string(),
+  "scheduledAt": zod.coerce.date(),
+  "durationMinutes": zod.number(),
+  "status": zod.enum(['scheduled', 'confirmed', 'checked_in', 'in_progress', 'completed', 'cancelled', 'no_show']),
+  "visitType": zod.enum(['in_person', 'telemedicine', 'home_care', 'laboratory', 'radiology', 'pharmacy', 'follow_up']),
+  "priority": zod.enum(['routine', 'urgent', 'emergency']),
+  "insurance": zod.string(),
+  "reason": zod.string(),
+  "clinicalNotes": zod.string().optional(),
+  "followUpRequired": zod.boolean(),
+  "referralId": zod.string().uuid().optional(),
+  "checkInStatus": zod.enum(['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider']),
+  "queuePosition": zod.number().optional(),
+  "telehealthLink": zod.string().optional(),
+  "isRecurring": zod.boolean(),
+  "recurringPattern": zod.string().optional(),
+  "createdAt": zod.coerce.date(),
+  "updatedAt": zod.coerce.date()
+})
+
+

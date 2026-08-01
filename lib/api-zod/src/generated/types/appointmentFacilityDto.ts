@@ -6,7 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface ApiErrorResponseDto {
-  message: string;
-  code?: string;
+export interface AppointmentFacilityDto {
+  id: string;
+  name: string;
+  address: string;
 }

@@ -1,50 +1,43 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import type {
-  Appointment,
-  AppointmentListResult,
-  QueueEntry,
-  WaitlistEntry,
-} from '@medease/appointments-contract';
-
 export class AppointmentPatientDto {
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'uuid' })
   id!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   fullName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   mrn!: string;
 }
 
 export class AppointmentProviderDto {
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'uuid' })
   id!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   fullName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   specialty!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   department!: string;
 }
 
 export class AppointmentFacilityDto {
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'uuid' })
   id!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   name!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   address!: string;
 }
 
-export class AppointmentDto implements Appointment {
-  @ApiProperty()
+export class AppointmentDto {
+  @ApiProperty({ type: String, format: 'uuid' })
   id!: string;
 
   @ApiProperty({ type: () => AppointmentPatientDto })
@@ -56,143 +49,193 @@ export class AppointmentDto implements Appointment {
   @ApiProperty({ type: () => AppointmentFacilityDto })
   facility!: AppointmentFacilityDto;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   department!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   specialty!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   room!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'date-time' })
   scheduledAt!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number })
   durationMinutes!: number;
 
-  @ApiProperty()
-  status!: Appointment['status'];
+  @ApiProperty({
+    type: String,
+    enum: [
+      'scheduled',
+      'confirmed',
+      'checked_in',
+      'in_progress',
+      'completed',
+      'cancelled',
+      'no_show',
+    ],
+  })
+  status!:
+    | 'scheduled'
+    | 'confirmed'
+    | 'checked_in'
+    | 'in_progress'
+    | 'completed'
+    | 'cancelled'
+    | 'no_show';
 
-  @ApiProperty()
-  visitType!: Appointment['visitType'];
+  @ApiProperty({
+    type: String,
+    enum: [
+      'in_person',
+      'telemedicine',
+      'home_care',
+      'laboratory',
+      'radiology',
+      'pharmacy',
+      'follow_up',
+    ],
+  })
+  visitType!:
+    | 'in_person'
+    | 'telemedicine'
+    | 'home_care'
+    | 'laboratory'
+    | 'radiology'
+    | 'pharmacy'
+    | 'follow_up';
 
-  @ApiProperty()
-  priority!: Appointment['priority'];
+  @ApiProperty({ type: String, enum: ['routine', 'urgent', 'emergency'] })
+  priority!: 'routine' | 'urgent' | 'emergency';
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   insurance!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   reason!: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: String })
   clinicalNotes?: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Boolean })
   followUpRequired!: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: String, format: 'uuid' })
   referralId?: string;
 
-  @ApiProperty()
-  checkInStatus!: Appointment['checkInStatus'];
+  @ApiProperty({
+    type: String,
+    enum: ['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider'],
+  })
+  checkInStatus!:
+    | 'not_checked_in'
+    | 'checked_in'
+    | 'in_waiting_room'
+    | 'with_provider';
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: Number })
   queuePosition?: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: String })
   telehealthLink?: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Boolean })
   isRecurring!: boolean;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: String })
   recurringPattern?: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'date-time' })
   createdAt!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'date-time' })
   updatedAt!: string;
 }
 
-export class PaginatedAppointmentsDto implements AppointmentListResult {
+export class PaginatedAppointmentsDto {
   @ApiProperty({ type: () => AppointmentDto, isArray: true })
   items!: AppointmentDto[];
 
-  @ApiProperty()
+  @ApiProperty({ type: Number })
   total!: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number })
   page!: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number })
   pageSize!: number;
 }
 
-export class QueueEntryDto implements QueueEntry {
-  @ApiProperty()
+export class QueueEntryDto {
+  @ApiProperty({ type: String, format: 'uuid' })
   id!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'uuid' })
   appointmentId!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   patientName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   providerName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number })
   position!: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number })
   estimatedWaitMinutes!: number;
 
-  @ApiProperty()
-  checkInStatus!: QueueEntry['checkInStatus'];
+  @ApiProperty({
+    type: String,
+    enum: ['not_checked_in', 'checked_in', 'in_waiting_room', 'with_provider'],
+  })
+  checkInStatus!:
+    | 'not_checked_in'
+    | 'checked_in'
+    | 'in_waiting_room'
+    | 'with_provider';
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: String, format: 'date-time' })
   checkedInAt?: string;
 }
 
-export class WaitlistEntryDto implements WaitlistEntry {
-  @ApiProperty()
+export class WaitlistEntryDto {
+  @ApiProperty({ type: String, format: 'uuid' })
   id!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'uuid' })
   patientId!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   patientName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'uuid' })
   providerId!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   providerName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   specialty!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'date-time' })
   requestedDate!: string;
 
-  @ApiProperty()
-  priority!: WaitlistEntry['priority'];
+  @ApiProperty({ type: String, enum: ['routine', 'urgent', 'emergency'] })
+  priority!: 'routine' | 'urgent' | 'emergency';
 
-  @ApiProperty()
+  @ApiProperty({ type: String, format: 'date-time' })
   addedAt!: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number })
   position!: number;
 }
 
 export class ApiErrorResponseDto {
-  @ApiProperty()
+  @ApiProperty({ type: String })
   message!: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: String })
   code?: string;
 }

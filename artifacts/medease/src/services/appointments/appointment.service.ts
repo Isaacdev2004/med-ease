@@ -15,6 +15,7 @@ import { appointmentRepository } from '@/services/appointments/repository';
 import { validateBookingSlot } from '@/services/appointments/scheduler';
 import type {
   AppointmentAnalytics,
+  ApiAppointmentFilters,
   AppointmentFilters,
   BookAppointmentInput,
   CalendarViewMode,
@@ -29,18 +30,37 @@ function delay(ms = DELAY_MS) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+const API_STATUSES = new Set([
+  'scheduled',
+  'confirmed',
+  'checked_in',
+  'in_progress',
+  'completed',
+  'cancelled',
+  'no_show',
+]);
+
+function toApiFilters(filters?: AppointmentFilters): ApiAppointmentFilters | undefined {
+  if (!filters) return undefined;
+  const { status, ...rest } = filters;
+  if (status && !API_STATUSES.has(status)) {
+    return rest;
+  }
+  return filters as ApiAppointmentFilters;
+}
+
 function computeAnalytics(
-  appointments: ReturnType<typeof appointmentRepository.getAll>,
+  appointments: Awaited<ReturnType<typeof appointmentRepository.getAll>>,
+  today: Awaited<ReturnType<typeof appointmentRepository.getToday>>,
+  upcoming: Awaited<ReturnType<typeof appointmentRepository.getUpcoming>>,
+  queue: Awaited<ReturnType<typeof appointmentRepository.getQueue>>,
 ): AppointmentAnalytics {
-  const today = appointmentRepository.getToday();
-  const upcoming = appointmentRepository.getUpcoming();
   const completed = appointments.filter((a) => a.status === 'completed');
   const cancelled = appointments.filter((a) => a.status === 'cancelled');
   const noShows = appointments.filter((a) => a.status === 'no_show');
   const telemedicine = appointments.filter(
     (a) => a.visitType === 'telemedicine',
   );
-  const queue = appointmentRepository.getQueue();
 
   const dailyMap = new Map<string, number>();
   for (let i = 6; i >= 0; i--) {
@@ -132,12 +152,12 @@ export const appointmentService = {
 
   async search(filters?: AppointmentFilters) {
     await delay();
-    return appointmentRepository.search(filters);
+    return appointmentRepository.search(toApiFilters(filters));
   },
 
   async list(filters?: AppointmentFilters) {
     await delay();
-    return appointmentRepository.getAll(filters);
+    return appointmentRepository.getAll(toApiFilters(filters));
   },
 
   async getById(id: string) {
@@ -147,17 +167,17 @@ export const appointmentService = {
 
   async getUpcoming(filters?: AppointmentFilters) {
     await delay();
-    return appointmentRepository.getUpcoming(filters);
+    return appointmentRepository.getUpcoming(toApiFilters(filters));
   },
 
   async getPast(filters?: AppointmentFilters) {
     await delay();
-    return appointmentRepository.getPast(filters);
+    return appointmentRepository.getPast(toApiFilters(filters));
   },
 
   async getToday(filters?: AppointmentFilters) {
     await delay(100);
-    return appointmentRepository.getToday(filters);
+    return appointmentRepository.getToday(toApiFilters(filters));
   },
 
   async getCalendar(
@@ -166,7 +186,7 @@ export const appointmentService = {
     mode: CalendarViewMode = 'month',
   ) {
     await delay();
-    const appointments = appointmentRepository.getAll(filters);
+    const appointments = await appointmentRepository.getAll(toApiFilters(filters));
     const events = appointmentsToEvents(appointments);
     if (mode === 'month')
       return { events, grid: buildMonthGrid(referenceDate, events), mode };
@@ -212,15 +232,12 @@ export const appointmentService = {
 
   async reschedule(input: RescheduleAppointmentInput) {
     await delay(250);
-    return appointmentRepository.reschedule(
-      input.appointmentId,
-      input.scheduledAt,
-    );
+    return appointmentRepository.reschedule(input.appointmentId, input);
   },
 
   async cancel(input: CancelAppointmentInput) {
     await delay(250);
-    return appointmentRepository.cancel(input.appointmentId);
+    return appointmentRepository.cancel(input.appointmentId, input);
   },
 
   async checkIn(input: CheckInInput) {
@@ -235,16 +252,23 @@ export const appointmentService = {
 
   async getQueue(filters?: AppointmentFilters) {
     await delay(100);
-    return appointmentRepository.getQueue(filters);
+    return appointmentRepository.getQueue(toApiFilters(filters));
   },
 
   async getTelemedicine(filters?: AppointmentFilters) {
     await delay();
-    return appointmentRepository.getTelemedicine(filters);
+    return appointmentRepository.getTelemedicine(toApiFilters(filters));
   },
 
   async getAnalytics(filters?: AppointmentFilters) {
     await delay();
-    return computeAnalytics(appointmentRepository.getAll(filters));
+    const apiFilters = toApiFilters(filters);
+    const [appointments, today, upcoming, queue] = await Promise.all([
+      appointmentRepository.getAll(apiFilters),
+      appointmentRepository.getToday(apiFilters),
+      appointmentRepository.getUpcoming(apiFilters),
+      appointmentRepository.getQueue(apiFilters),
+    ]);
+    return computeAnalytics(appointments, today, upcoming, queue);
   },
 };

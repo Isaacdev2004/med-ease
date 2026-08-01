@@ -7,11 +7,20 @@
  */
 
 export * from './apiErrorResponseDto';
+export * from './appointmentDto';
+export * from './appointmentDtoCheckInStatus';
+export * from './appointmentDtoPriority';
+export * from './appointmentDtoStatus';
+export * from './appointmentDtoVisitType';
+export * from './appointmentFacilityDto';
+export * from './appointmentPatientDto';
+export * from './appointmentProviderDto';
 export * from './exportPatientsResultDto';
 export * from './exportPatientsResultDtoFormat';
 export * from './healthCheckResponse';
 export * from './healthStatus';
 export * from './jsonObject';
+export * from './paginatedAppointmentsDto';
 export * from './paginatedPatientsDto';
 export * from './patientAddressDto';
 export * from './patientAddressDtoType';
@@ -29,3 +38,7 @@ export * from './patientIdentifierDtoType';
 export * from './patientMergeValidationResultDto';
 export * from './patientPreferenceDto';
 export * from './patientPreferenceDtoCommunication';
+export * from './queueEntryDto';
+export * from './queueEntryDtoCheckInStatus';
+export * from './waitlistEntryDto';
+export * from './waitlistEntryDtoPriority';

@@ -52,6 +52,7 @@
     "@vitejs/plugin-react": "catalog:",
     "@workspace/api-client-react": "workspace:*",
     "@workspace/repository-transport": "workspace:*",
+    "@medease/appointments-contract": "workspace:*",
     "@medease/iam-contract": "workspace:*",
     "@medease/patients-contract": "workspace:*",
     "@medease/repository-contract-test": "workspace:*",

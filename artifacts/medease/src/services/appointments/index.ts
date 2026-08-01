@@ -30,6 +30,7 @@ export {
   buildCancellationNotification,
 } from '@/services/appointments/notifications';
 export { appointmentRepository } from '@/services/appointments/repository';
+export { appointmentMockRepository } from '@/services/appointments/repository.mock';
 export {
   MOCK_APPOINTMENTS,
   MOCK_WAITLIST,

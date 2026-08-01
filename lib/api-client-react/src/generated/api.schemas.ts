@@ -52,12 +52,8 @@ export interface PaginatedPatientsDto {
 }
 
 export interface ApiErrorResponseDto {
-  status: string;
-  statusCode: number;
-  /** Error message or validation errors */
   message: string;
-  path: string;
-  timestamp: string;
+  code?: string;
 }
 
 export type ExportPatientsResultDtoFormat = typeof ExportPatientsResultDtoFormat[keyof typeof ExportPatientsResultDtoFormat];
@@ -212,6 +208,147 @@ export interface PatientPreferenceDto {
   communication?: PatientPreferenceDtoCommunication;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface AppointmentPatientDto {
+  id: string;
+  fullName: string;
+  mrn: string;
+}
+
+export interface AppointmentProviderDto {
+  id: string;
+  fullName: string;
+  specialty: string;
+  department: string;
+}
+
+export interface AppointmentFacilityDto {
+  id: string;
+  name: string;
+  address: string;
+}
+
+export type AppointmentDtoStatus = typeof AppointmentDtoStatus[keyof typeof AppointmentDtoStatus];
+
+
+export const AppointmentDtoStatus = {
+  scheduled: 'scheduled',
+  confirmed: 'confirmed',
+  checked_in: 'checked_in',
+  in_progress: 'in_progress',
+  completed: 'completed',
+  cancelled: 'cancelled',
+  no_show: 'no_show',
+} as const;
+
+export type AppointmentDtoVisitType = typeof AppointmentDtoVisitType[keyof typeof AppointmentDtoVisitType];
+
+
+export const AppointmentDtoVisitType = {
+  in_person: 'in_person',
+  telemedicine: 'telemedicine',
+  home_care: 'home_care',
+  laboratory: 'laboratory',
+  radiology: 'radiology',
+  pharmacy: 'pharmacy',
+  follow_up: 'follow_up',
+} as const;
+
+export type AppointmentDtoPriority = typeof AppointmentDtoPriority[keyof typeof AppointmentDtoPriority];
+
+
+export const AppointmentDtoPriority = {
+  routine: 'routine',
+  urgent: 'urgent',
+  emergency: 'emergency',
+} as const;
+
+export type AppointmentDtoCheckInStatus = typeof AppointmentDtoCheckInStatus[keyof typeof AppointmentDtoCheckInStatus];
+
+
+export const AppointmentDtoCheckInStatus = {
+  not_checked_in: 'not_checked_in',
+  checked_in: 'checked_in',
+  in_waiting_room: 'in_waiting_room',
+  with_provider: 'with_provider',
+} as const;
+
+export interface AppointmentDto {
+  id: string;
+  patient: AppointmentPatientDto;
+  provider: AppointmentProviderDto;
+  facility: AppointmentFacilityDto;
+  department: string;
+  specialty: string;
+  room: string;
+  scheduledAt: string;
+  durationMinutes: number;
+  status: AppointmentDtoStatus;
+  visitType: AppointmentDtoVisitType;
+  priority: AppointmentDtoPriority;
+  insurance: string;
+  reason: string;
+  clinicalNotes?: string;
+  followUpRequired: boolean;
+  referralId?: string;
+  checkInStatus: AppointmentDtoCheckInStatus;
+  queuePosition?: number;
+  telehealthLink?: string;
+  isRecurring: boolean;
+  recurringPattern?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PaginatedAppointmentsDto {
+  items: AppointmentDto[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export type WaitlistEntryDtoPriority = typeof WaitlistEntryDtoPriority[keyof typeof WaitlistEntryDtoPriority];
+
+
+export const WaitlistEntryDtoPriority = {
+  routine: 'routine',
+  urgent: 'urgent',
+  emergency: 'emergency',
+} as const;
+
+export interface WaitlistEntryDto {
+  id: string;
+  patientId: string;
+  patientName: string;
+  providerId: string;
+  providerName: string;
+  specialty: string;
+  requestedDate: string;
+  priority: WaitlistEntryDtoPriority;
+  addedAt: string;
+  position: number;
+}
+
+export type QueueEntryDtoCheckInStatus = typeof QueueEntryDtoCheckInStatus[keyof typeof QueueEntryDtoCheckInStatus];
+
+
+export const QueueEntryDtoCheckInStatus = {
+  not_checked_in: 'not_checked_in',
+  checked_in: 'checked_in',
+  in_waiting_room: 'in_waiting_room',
+  with_provider: 'with_provider',
+} as const;
+
+export interface QueueEntryDto {
+  id: string;
+  appointmentId: string;
+  patientName: string;
+  providerName: string;
+  position: number;
+  estimatedWaitMinutes: number;
+  checkInStatus: QueueEntryDtoCheckInStatus;
+  checkedInAt?: string;
 }
 
 export interface HealthStatus {

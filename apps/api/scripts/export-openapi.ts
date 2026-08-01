@@ -22,14 +22,17 @@ import { IamController } from '../src/iam/iam.controller';
 import { IamService } from '../src/iam/iam.service';
 import { PatientsController } from '../src/patients/patients.controller';
 import { PatientsService } from '../src/patients/patients.service';
+import { AppointmentsController } from '../src/appointments/appointments.controller';
+import { AppointmentsService } from '../src/appointments/appointments.service';
 
 const noop = async () => ({ status: 'ok' });
 
 @Module({
-  controllers: [HealthController, IamController, PatientsController],
+  controllers: [HealthController, IamController, PatientsController, AppointmentsController],
   providers: [
     { provide: IamService, useValue: {} },
     { provide: PatientsService, useValue: {} },
+    { provide: AppointmentsService, useValue: {} },
     { provide: HealthService, useValue: { check: noop } },
     { provide: HealthCheckService, useValue: { check: noop } },
     { provide: PostgresHealthIndicator, useValue: { isHealthy: noop } },
