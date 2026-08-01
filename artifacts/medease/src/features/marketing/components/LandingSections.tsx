@@ -2,7 +2,9 @@ import { ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Link } from 'wouter';
 
 import { useMarketingCta } from '@/features/marketing/components/MarketingCtaProvider';
+import { MarketingEyebrow } from '@/features/marketing/components/MarketingEyebrow';
 import { MarketingSection } from '@/features/marketing/components/MarketingSection';
+import { audienceNavLinks } from '@/features/marketing/content/audience-pages-fr';
 import {
   landingDualCta,
   landingFaq,
@@ -24,12 +26,12 @@ import {
 import { cn } from '@/shared/lib/utils';
 
 const foundationToneClass = {
-  blue: 'border-sky-200 bg-sky-50/80 dark:border-sky-900 dark:bg-sky-950/30',
+  blue: 'border-sky-200/80 bg-gradient-to-br from-sky-50 to-white dark:border-sky-900 dark:from-sky-950/40 dark:to-background',
   green:
-    'border-emerald-200 bg-emerald-50/80 dark:border-emerald-900 dark:bg-emerald-950/30',
+    'border-emerald-200/80 bg-gradient-to-br from-emerald-50 to-white dark:border-emerald-900 dark:from-emerald-950/40 dark:to-background',
   amber:
-    'border-amber-200 bg-amber-50/80 dark:border-amber-900 dark:bg-amber-950/30',
-  rose: 'border-rose-200 bg-rose-50/80 dark:border-rose-900 dark:bg-rose-950/30',
+    'border-amber-200/80 bg-gradient-to-br from-amber-50 to-white dark:border-amber-900 dark:from-amber-950/40 dark:to-background',
+  rose: 'border-rose-200/80 bg-gradient-to-br from-rose-50 to-white dark:border-rose-900 dark:from-rose-950/40 dark:to-background',
 };
 
 export function HeroSection() {
@@ -38,29 +40,26 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative overflow-hidden pt-20 pb-20 md:pt-32 md:pb-32"
+      className="marketing-hero-bg relative overflow-hidden pt-24 pb-20 md:pt-36 md:pb-28"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+      <div className="marketing-hero-grid pointer-events-none absolute inset-0 opacity-60" />
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-        <div className="mb-8 inline-flex items-center rounded-full border bg-muted/50 px-3 py-1 text-sm font-medium backdrop-blur-sm">
-          <span className="mr-2 flex h-2 w-2 rounded-full bg-primary" />
-          Hub de coordination territoriale de santé
-        </div>
+        <MarketingEyebrow label="Hub de coordination territoriale de santé" />
 
-        <h1 className="mx-auto max-w-5xl text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
+        <h1 className="mx-auto max-w-5xl text-4xl font-extrabold tracking-tight sm:text-6xl lg:text-7xl lg:leading-[1.05]">
           {landingHero.title}
         </h1>
         <p className="mx-auto mt-6 max-w-3xl text-lg text-muted-foreground sm:text-xl leading-relaxed">
           {landingHero.subtitle}
         </p>
-        <p className="mx-auto mt-4 max-w-2xl text-sm text-muted-foreground">
+        <p className="mx-auto mt-4 max-w-2xl text-sm text-muted-foreground/90">
           {landingHero.ctaSubtext}
         </p>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <Button
             size="lg"
-            className="h-12 px-8 text-base shadow-lg"
+            className="h-12 px-8 text-base shadow-lg shadow-primary/20"
             onClick={() => openCta('discover')}
           >
             {landingHero.ctaLabel}
@@ -69,17 +68,25 @@ export function HeroSection() {
           <Button
             size="lg"
             variant="outline"
-            className="h-12 px-8 text-base"
+            className="h-12 border-primary/20 bg-background/80 px-8 text-base backdrop-blur-sm"
             onClick={() => openCta('hub')}
           >
             {landingHero.secondaryCtaLabel}
           </Button>
         </div>
 
-        <div className="mt-8">
-          <Button variant="link" asChild>
+        <div className="mt-8 flex flex-col items-center gap-6">
+          <Button variant="link" asChild className="text-primary">
             <Link href={ROUTES.connexion}>Accéder à mon espace</Link>
           </Button>
+
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {audienceNavLinks.map((link) => (
+              <Link key={link.path} href={link.path} className="marketing-audience-chip">
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -88,10 +95,15 @@ export function HeroSection() {
 
 export function ProblemSection() {
   return (
-    <MarketingSection id="problem" title={landingProblem.title} tone="muted">
-      <div className="grid gap-10 md:grid-cols-2">
-        <div>
-          <h3 className="mb-4 text-lg font-semibold">Aujourd&apos;hui</h3>
+    <MarketingSection
+      id="problem"
+      eyebrow="Le constat"
+      title={landingProblem.title}
+      tone="muted"
+    >
+      <div className="grid gap-8 md:grid-cols-2">
+        <div className="marketing-card p-6 md:p-8">
+          <h3 className="mb-4 text-lg font-semibold text-foreground">Aujourd&apos;hui</h3>
           <ul className="space-y-3 text-muted-foreground">
             {landingProblem.today.map((item) => (
               <li key={item} className="flex gap-3">
@@ -101,8 +113,8 @@ export function ProblemSection() {
             ))}
           </ul>
         </div>
-        <div>
-          <h3 className="mb-4 text-lg font-semibold">Résultat</h3>
+        <div className="marketing-card border-destructive/20 p-6 md:p-8">
+          <h3 className="mb-4 text-lg font-semibold text-foreground">Résultat</h3>
           <ul className="space-y-3 text-muted-foreground">
             {landingProblem.result.map((item) => (
               <li key={item} className="flex gap-3">
@@ -121,17 +133,15 @@ export function SolutionSection() {
   return (
     <MarketingSection
       id="solution"
+      eyebrow="La réponse Med'ease"
       title={landingSolution.title}
       subtitle={landingSolution.intro}
     >
       <div className="grid gap-6 md:grid-cols-2">
         {landingSolution.questions.map((item) => (
-          <div
-            key={item.question}
-            className="rounded-2xl border bg-card p-6 shadow-sm"
-          >
-            <h3 className="text-lg font-semibold">{item.question}</h3>
-            <p className="mt-3 text-muted-foreground leading-relaxed">
+          <div key={item.question} className="marketing-card p-6 md:p-7">
+            <h3 className="text-lg font-semibold leading-snug">{item.question}</h3>
+            <p className="mt-3 leading-relaxed text-muted-foreground">
               {item.answer}
             </p>
           </div>
@@ -145,6 +155,7 @@ export function FoundationsSection() {
   return (
     <MarketingSection
       id="foundations"
+      eyebrow="Les fondations"
       title={landingFoundations.title}
       subtitle={landingFoundations.tagline}
       tone="accent"
@@ -154,7 +165,7 @@ export function FoundationsSection() {
           <div
             key={card.title}
             className={cn(
-              'rounded-2xl border p-6 shadow-sm',
+              'marketing-card border p-6 md:p-7',
               foundationToneClass[card.tone],
             )}
           >
@@ -171,7 +182,11 @@ export function FoundationsSection() {
 
 export function ImpactSection() {
   return (
-    <MarketingSection id="impact" title={landingImpact.title}>
+    <MarketingSection
+      id="impact"
+      eyebrow="Impact mesurable"
+      title={landingImpact.title}
+    >
       <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
         <ul className="space-y-4">
           {landingImpact.items.map((item) => (
@@ -181,7 +196,7 @@ export function ImpactSection() {
             </li>
           ))}
         </ul>
-        <div className="rounded-2xl border bg-muted/40 p-6 text-sm leading-relaxed text-muted-foreground">
+        <div className="marketing-card border-primary/15 bg-primary/5 p-6 text-sm leading-relaxed text-muted-foreground">
           {landingImpact.sovereignty}
         </div>
       </div>
@@ -193,12 +208,13 @@ export function WhyNowSection() {
   return (
     <MarketingSection
       id="why-now"
+      eyebrow="Pourquoi maintenant"
       title={landingWhyNow.title}
       subtitle={landingWhyNow.subtitle}
       tone="muted"
     >
-      <div className="grid gap-8 lg:grid-cols-3">
-        <div className="rounded-2xl border bg-card p-6">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="marketing-card p-6">
           <h3 className="font-semibold">Urgences saturées</h3>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             {landingWhyNow.urgency.map((item) => (
@@ -206,7 +222,7 @@ export function WhyNowSection() {
             ))}
           </ul>
         </div>
-        <div className="rounded-2xl border bg-card p-6">
+        <div className="marketing-card p-6">
           <h3 className="font-semibold">Coordination fragmentée</h3>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             {landingWhyNow.coordination.map((item) => (
@@ -214,7 +230,7 @@ export function WhyNowSection() {
             ))}
           </ul>
         </div>
-        <div className="rounded-2xl border bg-card p-6">
+        <div className="marketing-card p-6">
           <h3 className="font-semibold">Chaque jour</h3>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             {landingWhyNow.daily.map((item) => (
@@ -231,9 +247,9 @@ export function DualCtaSection() {
   const { openCta } = useMarketingCta();
 
   return (
-    <MarketingSection id="cta" tone="accent">
+    <MarketingSection id="cta" eyebrow="Rejoignez le mouvement" tone="accent">
       <div className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border bg-card p-8">
+        <div className="marketing-cta-panel">
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">
             Établissement
           </p>
@@ -241,14 +257,14 @@ export function DualCtaSection() {
             Rejoignez les établissements pilotes
           </h3>
           <Button
-            className="mt-6"
+            className="mt-6 shadow-sm"
             size="lg"
             onClick={() => openCta(landingDualCta.establishment.ctaId)}
           >
             {landingDualCta.establishment.label}
           </Button>
         </div>
-        <div className="rounded-2xl border bg-card p-8">
+        <div className="marketing-cta-panel">
           <p className="text-sm font-semibold uppercase tracking-widest text-primary">
             Patient
           </p>
@@ -271,11 +287,11 @@ export function DualCtaSection() {
 
 export function FaqSection() {
   return (
-    <MarketingSection id="faq" title={landingFaq.title}>
+    <MarketingSection id="faq" eyebrow="FAQ" title={landingFaq.title}>
       <Accordion type="single" collapsible className="mx-auto max-w-3xl">
         {landingFaq.items.map((item) => (
           <AccordionItem key={item.question} value={item.question}>
-            <AccordionTrigger>{item.question}</AccordionTrigger>
+            <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
             <AccordionContent>{item.answer}</AccordionContent>
           </AccordionItem>
         ))}
@@ -288,11 +304,12 @@ export function SecuritySection() {
   return (
     <MarketingSection
       id="security"
-      title="Confiance & sécurité"
+      eyebrow="Confiance & sécurité"
+      title="Données de santé protégées"
       subtitle="Hébergement HDS, conformité RGPD et traçabilité pour protéger les données de santé."
       tone="muted"
     >
-      <div className="mx-auto max-w-3xl text-center text-muted-foreground leading-relaxed">
+      <div className="mx-auto max-w-3xl rounded-2xl border border-primary/15 bg-card p-8 text-center leading-relaxed text-muted-foreground shadow-sm">
         Med&apos;ease est conçue pour la santé : authentification multi-profils,
         isolation multi-tenant, audit des accès et interopérabilité avec vos
         systèmes existants.

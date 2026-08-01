@@ -28,13 +28,13 @@ export function AudiencePageView({ pageId }: AudiencePageViewProps) {
 
   return (
     <>
-      <section className="relative overflow-hidden pt-20 pb-16 md:pt-28 md:pb-20">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+      <section className="marketing-hero-bg relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-20">
+        <div className="marketing-hero-grid pointer-events-none absolute inset-0 opacity-50" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-6 inline-flex items-center rounded-full border bg-muted/50 px-3 py-1 text-sm font-medium backdrop-blur-sm">
+          <div className="mb-6 inline-flex items-center rounded-full border border-primary/20 bg-card/80 px-3 py-1 text-sm font-medium backdrop-blur-sm">
             {page.hero.badge}
           </div>
-          <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mx-auto max-w-4xl text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
             {page.hero.title}
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
@@ -42,7 +42,7 @@ export function AudiencePageView({ pageId }: AudiencePageViewProps) {
           </p>
           <Button
             size="lg"
-            className="mt-10 h-12 px-8 text-base shadow-lg"
+            className="mt-10 h-12 px-8 text-base shadow-lg shadow-primary/20"
             onClick={() => openCta(page.hero.ctaId)}
           >
             {page.hero.ctaLabel}
