@@ -102,6 +102,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@medease/appointments-contract':
+        specifier: workspace:*
+        version: link:../../packages/appointments-contract
       '@medease/audit':
         specifier: workspace:*
         version: link:../../packages/audit
@@ -810,6 +813,12 @@ importers:
       tsx:
         specifier: 'catalog:'
         version: 4.23.0
+
+  packages/appointments-contract:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
 
   packages/audit:
     dependencies:

@@ -22,6 +22,7 @@
     "@medease/iam-contract": "workspace:*",
     "@medease/logger": "workspace:*",
     "@medease/observability": "workspace:*",
+    "@medease/appointments-contract": "workspace:*",
     "@medease/patients-contract": "workspace:*",
     "@medease/prisma": "workspace:*",
     "@medease/queue": "workspace:*",

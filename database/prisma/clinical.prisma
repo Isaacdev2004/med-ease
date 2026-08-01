@@ -27,6 +27,7 @@ model Patient {
   emergencyContacts PatientEmergencyContact[]
   allergies         PatientAllergy[]
   preferences       PatientPreference?
+  appointments      Appointment[]
 
   @@unique([tenantId, mrn])
   @@index([tenantId, status])
@@ -151,5 +152,52 @@ model PatientPreference {
 
   @@index([tenantId])
   @@map("patient_preferences")
+  @@schema("clinical")
+}
+
+model Appointment {
+  id                 String            @id @db.Uuid
+  tenantId           String            @map("tenant_id") @db.Uuid
+  facilityId         String            @map("facility_id") @db.Uuid
+  patientId          String            @map("patient_id") @db.Uuid
+  providerId         String            @map("provider_id") @db.Uuid
+  scheduledAt        DateTime          @map("scheduled_at") @db.Timestamptz(3)
+  durationMinutes    Int               @default(30) @map("duration_minutes")
+  status             AppointmentStatus @default(scheduled)
+  visitType          String            @map("visit_type")
+  referralId         String?           @map("referral_id") @db.Uuid
+  telehealthLink     String?           @map("telehealth_link")
+  notes              String?
+  fhirResourceId     String            @map("fhir_resource_id") @db.Uuid
+  specialty          String?
+  department         String?
+  room               String?
+  reason             String?
+  insurance          String?
+  priority           String            @default("routine")
+  checkInStatus      String            @default("not_checked_in") @map("check_in_status")
+  queuePosition      Int?              @map("queue_position")
+  followUpRequired   Boolean           @default(false) @map("follow_up_required")
+  isRecurring        Boolean           @default(false) @map("is_recurring")
+  recurringPattern   String?           @map("recurring_pattern")
+  patientFullName    String            @map("patient_full_name")
+  patientMrn         String            @map("patient_mrn")
+  providerFullName   String            @map("provider_full_name")
+  providerSpecialty  String?           @map("provider_specialty")
+  providerDepartment String?           @map("provider_department")
+  facilityName       String            @map("facility_name")
+  facilityAddress    String?           @map("facility_address")
+  createdBy          String            @map("created_by") @db.Uuid
+  updatedBy          String?           @map("updated_by") @db.Uuid
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  version            Int               @default(1)
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, facilityId, scheduledAt])
+  @@index([tenantId, providerId, scheduledAt])
+  @@index([tenantId, patientId, scheduledAt(sort: Desc)])
+  @@map("appointments")
   @@schema("clinical")
 }
