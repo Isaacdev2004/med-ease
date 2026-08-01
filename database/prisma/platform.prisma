@@ -13,3 +13,18 @@ model SeedRun {
   @@map("seed_runs")
   @@schema("platform")
 }
+
+/// Public website CTA lead capture (no tenant scope).
+model MarketingLead {
+  id        String   @id @db.Uuid
+  ctaId     String   @map("cta_id") @db.VarChar(64)
+  email     String?  @db.VarChar(320)
+  fields    Json     @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([ctaId])
+  @@index([email])
+  @@index([createdAt(sort: Desc)])
+  @@map("marketing_leads")
+  @@schema("platform")
+}
