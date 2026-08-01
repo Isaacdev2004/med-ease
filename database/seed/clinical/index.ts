@@ -447,7 +447,7 @@ function buildDemoAppointments() {
       priority: 'routine',
       checkInStatus: 'not_checked_in',
     },
-  ].map((row) => {
+  ].map((row): AppointmentSeed & { patientFullName: string; patientMrn: string } => {
     const patient = patientRef(row.patientId);
     return {
       ...row,
