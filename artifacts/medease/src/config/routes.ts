@@ -379,6 +379,8 @@ export const PORTAL_PATHS: Record<PortalId, string> = {
 export const AUTH_ROUTES = [
   ROUTES.login,
   ROUTES.register,
+  ROUTES.connexion,
+  ROUTES.preInscription,
   ROUTES.forgotPassword,
   ROUTES.resetPassword,
   ROUTES.verifyEmail,

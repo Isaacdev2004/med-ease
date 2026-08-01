@@ -25,20 +25,6 @@ export const publicRoutes: GlobalRouteDefinition[] = [
     lazy: () => import('@/features/marketing/pages/Landing'),
   },
   {
-    path: ROUTES.connexion,
-    title: 'Connexion',
-    layout: 'none',
-    public: true,
-    lazy: () => import('@/features/marketing/pages/ConnexionRedirect'),
-  },
-  {
-    path: ROUTES.preInscription,
-    title: 'Pré-inscription',
-    layout: 'none',
-    public: true,
-    lazy: () => import('@/features/marketing/pages/PreInscriptionRedirect'),
-  },
-  {
     path: ROUTES.patients,
     title: "Med'ease Patients | Carnet de santé numérique",
     layout: 'marketing',

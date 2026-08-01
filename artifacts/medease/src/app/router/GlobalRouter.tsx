@@ -1,20 +1,21 @@
-import { AuthLayout } from '@/app/layouts/AuthLayout';
+import { AuthLayout, type AuthLayoutCopy } from '@/app/layouts/AuthLayout';
 import { MarketingLayout } from '@/app/layouts/MarketingLayout';
 import { LazyRouteFromDefinition } from '@/app/router/LazyRoute';
 import { PublicGuard, PublicOnlyGuard } from '@/app/guards';
 import { ROUTES } from '@/config/routes';
 import { isPortalLoginPath } from '@/config/routes/portal-login';
+import { frenchAuthCopy } from '@/features/marketing/content/auth-fr';
 import type { GlobalRouteDefinition } from '@/config/routes/types';
 import { useDocumentTitle } from '@/shared/hooks/use-document-title';
 import { useRouteFocus } from '@/shared/hooks/use-route-focus';
 
-const AUTH_LAYOUT_COPY: Partial<
-  Record<string, { title: string; subtitle: string }>
-> = {
+const AUTH_LAYOUT_COPY: Partial<Record<string, AuthLayoutCopy>> = {
   [ROUTES.register]: {
     title: 'Create your account',
     subtitle: "Join the Med'ease healthcare network.",
   },
+  [ROUTES.connexion]: frenchAuthCopy.connexion.layout,
+  [ROUTES.preInscription]: frenchAuthCopy.preInscription.layout,
   [ROUTES.forgotPassword]: {
     title: 'Reset your password',
     subtitle: "We'll send a secure link to your registered email.",
@@ -36,6 +37,8 @@ const AUTH_LAYOUT_COPY: Partial<
 const PUBLIC_AUTH_ONLY = new Set<string>([
   ROUTES.login,
   ROUTES.register,
+  ROUTES.connexion,
+  ROUTES.preInscription,
   ROUTES.forgotPassword,
   ROUTES.resetPassword,
   ROUTES.verifyEmail,
@@ -63,6 +66,11 @@ function GlobalRoutePage({ route }: { route: GlobalRouteDefinition }) {
       <AuthLayout
         title={copy?.title ?? route.title}
         subtitle={copy?.subtitle ?? route.description}
+        heroTitle={copy?.heroTitle}
+        heroSubtitle={copy?.heroSubtitle}
+        complianceBadge={copy?.complianceBadge}
+        supportLabel={copy?.supportLabel}
+        supportLink={copy?.supportLink}
       >
         {content}
       </AuthLayout>

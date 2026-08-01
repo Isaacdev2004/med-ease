@@ -36,6 +36,20 @@ export const authRoutes: GlobalRouteDefinition[] = [
       })),
   },
   {
+    path: ROUTES.connexion,
+    title: 'Connexion',
+    layout: 'auth',
+    public: true,
+    lazy: () => import('@/features/marketing/pages/ConnexionPage'),
+  },
+  {
+    path: ROUTES.preInscription,
+    title: 'Pré-inscription',
+    layout: 'auth',
+    public: true,
+    lazy: () => import('@/features/marketing/pages/PreInscriptionPage'),
+  },
+  {
     path: ROUTES.forgotPassword,
     title: 'Forgot Password',
     layout: 'auth',

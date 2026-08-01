@@ -5,10 +5,18 @@ import { Shield } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 import { APP_NAME } from '@/config/constants';
 
-interface AuthLayoutProps {
+export interface AuthLayoutCopy {
+  title: string;
+  subtitle: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  complianceBadge?: string;
+  supportLabel?: string;
+  supportLink?: string;
+}
+
+interface AuthLayoutProps extends Partial<AuthLayoutCopy> {
   children: ReactNode;
-  title?: string;
-  subtitle?: string;
 }
 
 /** Authentication layout — centered form, split welcome panel on desktop. */
@@ -16,6 +24,11 @@ export function AuthLayout({
   children,
   title = `Welcome to ${APP_NAME}`,
   subtitle = 'Secure access to the enterprise healthcare network.',
+  heroTitle = 'Healthcare coordination, synchronized.',
+  heroSubtitle = 'One secure platform connecting patients, professionals, facilities, pharmacies, and transport providers.',
+  complianceBadge = 'HIPAA Compliant · SOC2 Type II',
+  supportLabel = 'Need help?',
+  supportLink = 'Contact support',
 }: AuthLayoutProps) {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
@@ -33,27 +46,24 @@ export function AuthLayout({
         </Link>
 
         <div className="space-y-4 max-w-md">
-          <h2 className="text-3xl font-bold tracking-tight">
-            Healthcare coordination, synchronized.
-          </h2>
+          <h2 className="text-3xl font-bold tracking-tight">{heroTitle}</h2>
           <p className="text-primary-foreground/80 text-lg leading-relaxed">
-            One secure platform connecting patients, professionals, facilities,
-            pharmacies, and transport providers.
+            {heroSubtitle}
           </p>
           <div className="flex items-center gap-2 text-sm font-medium bg-primary-foreground/10 rounded-full px-4 py-2 w-fit">
             <Shield className="h-4 w-4" />
-            HIPAA Compliant · SOC2 Type II
+            {complianceBadge}
           </div>
         </div>
 
         <p className="text-sm text-primary-foreground/60">
-          Need help?{' '}
-          <a
-            href="#"
+          {supportLabel}{' '}
+          <Link
+            href={ROUTES.contact}
             className="underline underline-offset-4 hover:text-primary-foreground"
           >
-            Contact support
-          </a>
+            {supportLink}
+          </Link>
         </p>
       </div>
 
