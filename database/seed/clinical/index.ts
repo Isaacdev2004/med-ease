@@ -176,7 +176,7 @@ type AppointmentSeed = {
 
 /** Demo schedule — today, upcoming, and past appointments for buyer walkthrough. */
 function buildDemoAppointments() {
-  return [
+  return ([
     {
       id: '01930000-0000-7000-8000-000000000601',
       patientId: DEMO_PATIENTS[0]!.id,
@@ -447,7 +447,7 @@ function buildDemoAppointments() {
       priority: 'routine',
       checkInStatus: 'not_checked_in',
     },
-  ].map((row): AppointmentSeed & { patientFullName: string; patientMrn: string } => {
+  ] as AppointmentSeed[]).map((row): AppointmentSeed & { patientFullName: string; patientMrn: string } => {
     const patient = patientRef(row.patientId);
     return {
       ...row,
