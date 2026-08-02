@@ -108,21 +108,25 @@ export default function Dashboard() {
                 </Card>
               )}
 
-              <SectionHeader title="Active Medications" />
-              <div className="grid gap-4 md:grid-cols-2">
-                {data.medications.map((medication) => (
-                  <MedicationCard
-                    key={medication.id}
-                    name={medication.name}
-                    dosage={medication.dosage}
-                    frequency={medication.schedule}
-                    prescribedBy="Emily Chen"
-                    status="active"
-                    refillsRemaining={medication.refillsRemaining}
-                    instructions={medication.schedule}
-                  />
-                ))}
-              </div>
+              {data.medications.length > 0 ? (
+                <>
+                  <SectionHeader title="Active Medications" />
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {data.medications.map((medication) => (
+                      <MedicationCard
+                        key={medication.id}
+                        name={medication.name}
+                        dosage={medication.dosage}
+                        frequency={medication.schedule}
+                        prescribedBy="Emily Chen"
+                        status="active"
+                        refillsRemaining={medication.refillsRemaining}
+                        instructions={medication.schedule}
+                      />
+                    ))}
+                  </div>
+                </>
+              ) : null}
             </div>
 
             <ChartPanel
