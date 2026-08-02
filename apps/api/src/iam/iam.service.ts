@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -21,6 +22,7 @@ import type {
 } from '@medease/iam-contract';
 
 import { RequestContextService } from '../tenant/request-context.service';
+import { InviteService } from '../auth/invite.service';
 import { IamRepository } from './iam.repository';
 
 @Injectable()
@@ -29,6 +31,7 @@ export class IamService {
     private readonly repository: IamRepository,
     private readonly requestContext: RequestContextService,
     private readonly eventBus: DomainEventBus,
+    private readonly inviteService: InviteService,
   ) {}
 
   private resolveTenantId(tenantId?: string): string {
@@ -176,10 +179,40 @@ export class IamService {
   }
 
   async inviteUser(input: InviteUserInput) {
-    return this.createUser({
-      ...input,
-      displayName: input.email.split('@')[0] ?? 'Invited User',
-    });
+    this.assertTenantScope(input.tenantId);
+
+    const email = input.email.trim().toLowerCase();
+    const existing = await this.repository.findUserByEmail(
+      input.tenantId,
+      email,
+    );
+
+    if (existing) {
+      if (existing.status === 'pending') {
+        await this.inviteService.sendInviteForUser(
+          existing.userId,
+          this.requestContext.get()?.userId,
+        );
+        return existing;
+      }
+      throw new ConflictException('A user with this email already exists.');
+    }
+
+    const user = await this.repository.inviteUser({ ...input, email });
+    await this.inviteService.sendInviteForUser(
+      user.userId,
+      this.requestContext.get()?.userId,
+    );
+
+    await this.eventBus.publish(
+      UserEvents.userCreated({
+        resourceType: 'user',
+        resourceId: user.userId,
+        tenantId: input.tenantId,
+      }),
+    );
+
+    return user;
   }
 
   async lockAccount(userId: string) {

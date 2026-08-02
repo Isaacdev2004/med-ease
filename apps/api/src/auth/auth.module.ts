@@ -11,6 +11,8 @@ import { MedeaseConfigModule } from '../config/config.module';
 import { MedeaseConfigService } from '../config/config.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { InviteMailService } from './invite-mail.service';
+import { InviteService } from './invite.service';
 import { RefreshTokenStore } from './refresh-token.store';
 import { SecurityEventService } from './security-event.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -42,6 +44,8 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
   controllers: [AuthController],
   providers: [
     AuthService,
+    InviteService,
+    InviteMailService,
     SecurityEventService,
     JwtStrategy,
     JwtAuthGuard,
@@ -57,6 +61,6 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
       },
     },
   ],
-  exports: [AuthService, JwtModule, PassportModule, JwtAuthGuard],
+  exports: [AuthService, InviteService, JwtModule, PassportModule, JwtAuthGuard],
 })
 export class AuthModule {}

@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -25,12 +26,16 @@ import { REFRESH_COOKIE_NAME } from '@medease/auth';
 import { Public } from '../authorization/decorators/require-permission.decorator';
 import { AuthService } from './auth.service';
 import {
+  AcceptInviteDto,
+  InvitePreviewQueryDto,
+  InvitePreviewResponseDto,
   LoginDto,
   LoginResponseDto,
   RefreshResponseDto,
   RefreshTokenBodyDto,
 } from './dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { InviteService } from './invite.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { JwtAccessPayload } from '@medease/auth';
 
@@ -39,7 +44,10 @@ import type { JwtAccessPayload } from '@medease/auth';
 @Public()
 @UseGuards(ThrottlerGuard)
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly inviteService: InviteService,
+  ) {}
 
   @Post('login')
   @Throttle({ auth: { limit: 10, ttl: 60_000 } })
@@ -104,5 +112,25 @@ export class AuthController {
   @ApiOkResponse({ type: LoginResponseDto })
   async me(@CurrentUser() user: JwtAccessPayload) {
     return this.authService.getMe(user.sub);
+  }
+
+  @Get('invite')
+  @Throttle({ auth: { limit: 20, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Preview a pending invite by token' })
+  @ApiOkResponse({ type: InvitePreviewResponseDto })
+  previewInvite(@Query() query: InvitePreviewQueryDto) {
+    return this.inviteService.previewInvite(query.token);
+  }
+
+  @Post('accept-invite')
+  @Throttle({ auth: { limit: 10, ttl: 60_000 } })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Accept an invite and set account password' })
+  async acceptInvite(@Body() dto: AcceptInviteDto) {
+    await this.inviteService.acceptInvite(
+      dto.token,
+      dto.password,
+      dto.fullName,
+    );
   }
 }

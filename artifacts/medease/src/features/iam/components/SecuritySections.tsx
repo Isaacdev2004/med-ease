@@ -26,6 +26,7 @@ import {
   UserCard,
   ZeroTrustDashboard,
 } from '@/features/iam/components/SecurityComponents';
+import { InviteUserDialog } from '@/features/iam/components/InviteUserDialog';
 import {
   useApiKeys,
   useAuditEvents,
@@ -188,10 +189,15 @@ export function UsersSection({ filters }: SectionProps) {
   const users = useUsers(filters);
   if (users.isLoading) return <LoadingView />;
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(users.data?.items ?? []).slice(0, 12).map((u) => (
-        <UserCard key={u.userId} user={u} />
-      ))}
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <InviteUserDialog filters={filters} />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {(users.data?.items ?? []).slice(0, 12).map((u) => (
+          <UserCard key={u.userId} user={u} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -227,6 +233,9 @@ export function IdentitySection({ filters }: SectionProps) {
   if (users.isLoading) return <LoadingView />;
   return (
     <div className="space-y-6">
+      <div className="flex justify-end">
+        <InviteUserDialog filters={filters} />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(users.data?.items ?? []).slice(0, 9).map((u) => (
           <UserCard key={u.userId} user={u} />

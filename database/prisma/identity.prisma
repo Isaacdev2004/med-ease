@@ -28,6 +28,7 @@ model User {
   roleAssignments UserRoleAssignment[]
   mfaDevices   MfaDevice[]
   trustedDevices TrustedDevice[]
+  invites      UserInvite[]
 
   @@unique([tenantId, email])
   @@index([organizationId])
@@ -70,5 +71,22 @@ model LoginAttempt {
 
   @@index([email, attemptedAt(sort: Desc)])
   @@map("login_attempts")
+  @@schema("identity")
+}
+
+model UserInvite {
+  id          String    @id @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  tokenHash   String    @map("token_hash")
+  expiresAt   DateTime  @map("expires_at")
+  usedAt      DateTime? @map("used_at")
+  invitedById String?   @map("invited_by_id") @db.Uuid
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("user_invites")
   @@schema("identity")
 }

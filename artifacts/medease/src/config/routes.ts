@@ -17,6 +17,7 @@ export const ROUTES = {
   notFound: '/404',
   login: '/login',
   register: '/register',
+  acceptInvite: '/accept-invite',
   forgotPassword: '/forgot-password',
   resetPassword: '/reset-password',
   verifyEmail: '/verify-email',
@@ -379,6 +380,7 @@ export const PORTAL_PATHS: Record<PortalId, string> = {
 export const AUTH_ROUTES = [
   ROUTES.login,
   ROUTES.register,
+  ROUTES.acceptInvite,
   ROUTES.connexion,
   ROUTES.preInscription,
   ROUTES.forgotPassword,

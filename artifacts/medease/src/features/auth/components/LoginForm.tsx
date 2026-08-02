@@ -138,15 +138,17 @@ export function LoginForm({
         {hint ? (
           <p className="text-xs text-center text-muted-foreground">{hint}</p>
         ) : null}
-        <p className="text-sm text-center text-muted-foreground">
-          {copy.noAccountLabel}{' '}
-          <Link
-            href={registerHref}
-            className="text-primary font-medium hover:underline"
-          >
-            {copy.createAccountLabel}
-          </Link>
-        </p>
+        {!useApiAuth ? (
+          <p className="text-sm text-center text-muted-foreground">
+            {copy.noAccountLabel}{' '}
+            <Link
+              href={registerHref}
+              className="text-primary font-medium hover:underline"
+            >
+              {copy.createAccountLabel}
+            </Link>
+          </p>
+        ) : null}
       </div>
     </>
   );

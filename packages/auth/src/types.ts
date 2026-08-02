@@ -61,6 +61,9 @@ export const AUTH_ERROR_CODES = {
   session_expired: 'session_expired',
   account_disabled: 'account_disabled',
   account_locked: 'account_locked',
+  account_pending: 'account_pending',
+  invite_invalid: 'invite_invalid',
+  invite_expired: 'invite_expired',
   too_many_requests: 'too_many_requests',
 } as const;
 

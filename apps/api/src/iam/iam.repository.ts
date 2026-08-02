@@ -360,6 +360,16 @@ export class IamRepository extends TenantAwareRepository {
     });
   }
 
+  async findUserByEmail(tenantId: string, email: string) {
+    return this.prisma.runInTransaction(async (tx) => {
+      const user = await tx.user.findFirst({
+        where: { tenantId, email: email.trim().toLowerCase() },
+        include: USER_INCLUDE,
+      });
+      return user ? mapUser(user) : null;
+    });
+  }
+
   async getTenants(
     filters?: IamFilters,
   ): Promise<PaginatedResult<ReturnType<typeof mapTenant>>> {

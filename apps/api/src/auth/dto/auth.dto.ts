@@ -116,3 +116,39 @@ export class RefreshTokenBodyDto {
   @IsString()
   refreshToken?: string;
 }
+
+export class AcceptInviteDto {
+  @ApiProperty()
+  @IsString()
+  @MinLength(1)
+  token!: string;
+
+  @ApiProperty({ minLength: 12 })
+  @IsString()
+  @MinLength(12)
+  password!: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MinLength(1)
+  fullName?: string;
+}
+
+export class InvitePreviewResponseDto {
+  @ApiProperty()
+  email!: string;
+
+  @ApiProperty()
+  fullName!: string;
+
+  @ApiProperty()
+  expiresAt!: string;
+}
+
+export class InvitePreviewQueryDto {
+  @ApiProperty()
+  @IsString()
+  @MinLength(1)
+  token!: string;
+}

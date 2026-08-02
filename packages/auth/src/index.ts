@@ -13,7 +13,9 @@ export {
 } from './types';
 
 export {
+  generateInviteToken,
   generateRefreshToken,
+  hashInviteToken,
   hashPassword,
   hashRefreshToken,
   verifyPassword,

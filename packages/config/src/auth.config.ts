@@ -12,6 +12,8 @@ export const authConfigSchema = z.object({
     .default('false')
     .transform((value) => value === 'true'),
   AUTH_COOKIE_DOMAIN: z.string().optional(),
+  /** Hours until an invite link expires (default 72). */
+  AUTH_INVITE_EXPIRY_HOURS: z.coerce.number().int().positive().default(72),
 });
 
 export type AuthConfig = z.infer<typeof authConfigSchema>;

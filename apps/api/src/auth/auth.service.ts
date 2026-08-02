@@ -64,6 +64,11 @@ export class AuthService {
       throw AuthHttpException.accountDisabled();
     }
 
+    if (user.status === 'pending') {
+      await this.recordFailedLogin(user.id, email, 'account_pending', meta);
+      throw AuthHttpException.accountPending();
+    }
+
     if (
       user.status === 'locked' ||
       (user.lockedUntil && user.lockedUntil > new Date())

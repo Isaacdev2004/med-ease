@@ -39,6 +39,19 @@ export const forgotPasswordSchema = z.object({
 
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
+export const acceptInviteSchema = z
+  .object({
+    fullName: z.string().optional(),
+    password: passwordField(),
+    confirmPassword: requiredString('Password confirmation'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match.',
+    path: ['confirmPassword'],
+  });
+
+export type AcceptInviteFormValues = z.infer<typeof acceptInviteSchema>;
+
 export const emergencyContactSchema = z.object({
   name: requiredString('Contact name'),
   relationship: requiredString('Relationship'),

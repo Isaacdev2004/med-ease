@@ -49,6 +49,7 @@ export interface MedeaseConfig {
     port: MedeaseEnv['PORT'];
     apiPrefix: MedeaseEnv['API_PREFIX'];
     corsOrigin: MedeaseEnv['CORS_ORIGIN'];
+    publicUrl?: MedeaseEnv['APP_PUBLIC_URL'];
   };
   database: {
     url: MedeaseEnv['DATABASE_URL'];
@@ -77,6 +78,7 @@ export interface MedeaseConfig {
     lockoutMinutes: MedeaseEnv['AUTH_LOCKOUT_MINUTES'];
     cookieSecure: MedeaseEnv['AUTH_COOKIE_SECURE'];
     cookieDomain?: MedeaseEnv['AUTH_COOKIE_DOMAIN'];
+    inviteExpiryHours: MedeaseEnv['AUTH_INVITE_EXPIRY_HOURS'];
   };
   queue: {
     redisUrl: MedeaseEnv['REDIS_URL'];
@@ -127,6 +129,7 @@ export function loadConfig(
       port: validated.PORT,
       apiPrefix: validated.API_PREFIX,
       corsOrigin: validated.CORS_ORIGIN,
+      publicUrl: validated.APP_PUBLIC_URL,
     },
     database: {
       url: validated.DATABASE_URL,
@@ -155,6 +158,7 @@ export function loadConfig(
       lockoutMinutes: validated.AUTH_LOCKOUT_MINUTES,
       cookieSecure: validated.AUTH_COOKIE_SECURE,
       cookieDomain: validated.AUTH_COOKIE_DOMAIN,
+      inviteExpiryHours: validated.AUTH_INVITE_EXPIRY_HOURS,
     },
     queue: {
       redisUrl: validated.REDIS_URL,

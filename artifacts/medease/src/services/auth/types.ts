@@ -32,6 +32,11 @@ export const AUTH_ERROR_MESSAGES: Record<string, string> = {
   session_expired: 'Your session has expired. Please sign in again.',
   account_disabled:
     'Your account has been disabled. Contact your administrator.',
+  account_pending:
+    'Your account is pending activation. Check your email for an invite link.',
+  invite_invalid: 'This invitation link is invalid or has already been used.',
+  invite_expired:
+    'This invitation link has expired. Ask your administrator to send a new invite.',
   insufficient_permissions:
     'You do not have permission to perform this action.',
   organization_unavailable:

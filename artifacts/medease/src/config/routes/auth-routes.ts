@@ -36,6 +36,16 @@ export const authRoutes: GlobalRouteDefinition[] = [
       })),
   },
   {
+    path: ROUTES.acceptInvite,
+    title: 'Accept Invitation',
+    layout: 'auth',
+    public: true,
+    lazy: () =>
+      import('@/features/auth/pages/AcceptInvite').then((mod) => ({
+        default: mod.default,
+      })),
+  },
+  {
     path: ROUTES.connexion,
     title: 'Connexion',
     layout: 'auth',
