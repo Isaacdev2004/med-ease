@@ -54,6 +54,7 @@
     "@workspace/repository-transport": "workspace:*",
     "@medease/appointments-contract": "workspace:*",
     "@medease/iam-contract": "workspace:*",
+    "@medease/medications-contract": "workspace:*",
     "@medease/patients-contract": "workspace:*",
     "@medease/repository-contract-test": "workspace:*",
     "class-variance-authority": "catalog:",

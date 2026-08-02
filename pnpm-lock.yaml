@@ -126,6 +126,9 @@ importers:
       '@medease/logger':
         specifier: workspace:*
         version: link:../../packages/logger
+      '@medease/medications-contract':
+        specifier: workspace:*
+        version: link:../../packages/medications-contract
       '@medease/observability':
         specifier: workspace:*
         version: link:../../packages/observability
@@ -369,6 +372,9 @@ importers:
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
+      '@medease/medications-contract':
+        specifier: workspace:*
+        version: link:../../packages/medications-contract
       '@medease/patients-contract':
         specifier: workspace:*
         version: link:../../packages/patients-contract
@@ -923,6 +929,12 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 25.9.5
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/medications-contract:
+    devDependencies:
       typescript:
         specifier: ~5.9.3
         version: 5.9.3

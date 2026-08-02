@@ -1,7 +1,14 @@
 export type MedicationStatus =
   'active' | 'completed' | 'paused' | 'cancelled' | 'future';
 export type PrescriptionStatus =
-  'draft' | 'active' | 'expired' | 'cancelled' | 'renewed' | 'pending';
+  | 'draft'
+  | 'active'
+  | 'expired'
+  | 'cancelled'
+  | 'renewed'
+  | 'pending'
+  | 'completed'
+  | 'on_hold';
 export type DoseLogStatus =
   'taken' | 'skipped' | 'late' | 'partial' | 'vomited' | 'rescheduled';
 export type InteractionSeverity = 'critical' | 'high' | 'moderate' | 'low';
@@ -368,4 +375,7 @@ export interface PauseMedicationInput {
 
 export const AUTH_USER_PATIENT_MAP: Record<string, string> = {
   'user-patient': 'phr-001',
+  // Demo patient user (seed) → Sarah Jenkins clinical patient
+  '01930000-0000-7000-8000-000000000106':
+    '01930000-0000-7000-8000-000000000301',
 };

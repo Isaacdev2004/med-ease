@@ -28,6 +28,8 @@ model Patient {
   allergies         PatientAllergy[]
   preferences       PatientPreference?
   appointments      Appointment[]
+  prescriptions     Prescription[]
+  medications       PatientMedication[]
 
   @@unique([tenantId, mrn])
   @@index([tenantId, status])
@@ -199,5 +201,214 @@ model Appointment {
   @@index([tenantId, providerId, scheduledAt])
   @@index([tenantId, patientId, scheduledAt(sort: Desc)])
   @@map("appointments")
+  @@schema("clinical")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Medications / Virtual Pill Organizer (Epic 3 / P0)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Prescription {
+  id                      String             @id @db.Uuid
+  tenantId                String             @map("tenant_id") @db.Uuid
+  patientId               String             @map("patient_id") @db.Uuid
+  prescriptionNumber      String             @map("prescription_number")
+  patientName             String             @map("patient_name")
+  medicationName          String             @map("medication_name")
+  genericName             String             @map("generic_name")
+  brandName               String?            @map("brand_name")
+  strength                String
+  medicationClass         String             @default("") @map("medication_class")
+  medicationType          String             @default("") @map("medication_type")
+  manufacturer            String?
+  controlledSubstance     Boolean            @default(false) @map("controlled_substance")
+  dose                    String
+  frequency               String
+  route                   MedicationRoute    @default(oral)
+  durationDays            Int                @map("duration_days")
+  startDate               DateTime           @map("start_date") @db.Date
+  endDate                 DateTime?          @map("end_date") @db.Date
+  validityDays            Int                @default(90) @map("validity_days")
+  expiresAt               DateTime           @map("expires_at") @db.Timestamptz(3)
+  status                  PrescriptionStatus @default(active)
+  refillCount             Int                @default(0) @map("refill_count")
+  refillsRemaining        Int                @default(0) @map("refills_remaining")
+  prescribingPhysician    String             @map("prescribing_physician")
+  prescribingPhysicianId  String             @map("prescribing_physician_id") @db.Uuid
+  dispensingPharmacy      String?            @map("dispensing_pharmacy")
+  dispensingPharmacyId    String?            @map("dispensing_pharmacy_id") @db.Uuid
+  instructions            String             @default("")
+  warnings                String[]           @default([])
+  contraindications       String[]           @default([])
+  isRecurring             Boolean            @default(false) @map("is_recurring")
+  carePlanId              String?            @map("care_plan_id") @db.Uuid
+  diagnosisCode           String?            @map("diagnosis_code")
+  appointmentId           String?            @map("appointment_id") @db.Uuid
+  facilityId              String?            @map("facility_id") @db.Uuid
+  fhirResourceId          String             @map("fhir_resource_id") @db.Uuid
+  createdBy               String             @map("created_by") @db.Uuid
+  updatedBy               String?            @map("updated_by") @db.Uuid
+  createdAt               DateTime           @default(now()) @map("created_at")
+  updatedAt               DateTime           @updatedAt @map("updated_at")
+  version                 Int                @default(1)
+
+  patient       Patient             @relation(fields: [patientId], references: [id])
+  medications   PatientMedication[]
+  refillRequests RefillRequest[]
+
+  @@unique([tenantId, prescriptionNumber])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, status])
+  @@map("prescriptions")
+  @@schema("clinical")
+}
+
+model PatientMedication {
+  id                     String           @id @db.Uuid
+  tenantId               String           @map("tenant_id") @db.Uuid
+  prescriptionId         String           @map("prescription_id") @db.Uuid
+  patientId              String           @map("patient_id") @db.Uuid
+  name                   String
+  genericName            String           @map("generic_name")
+  brandName              String?          @map("brand_name")
+  strength               String
+  medicationClass        String           @default("") @map("medication_class")
+  medicationType         String           @default("") @map("medication_type")
+  manufacturer           String?
+  controlledSubstance    Boolean          @default(false) @map("controlled_substance")
+  status                 MedicationStatus @default(active)
+  dose                   String
+  frequency              String
+  route                  MedicationRoute  @default(oral)
+  startDate              DateTime         @map("start_date") @db.Date
+  endDate                DateTime?        @map("end_date") @db.Date
+  remainingDays          Int?             @map("remaining_days")
+  instructions           String           @default("")
+  warnings               String[]         @default([])
+  contraindications      String[]         @default([])
+  sideEffects            String[]         @default([])
+  storage                String?
+  prescribingPhysician   String           @map("prescribing_physician")
+  dispensingPharmacy     String?          @map("dispensing_pharmacy")
+  refillCount            Int              @default(0) @map("refill_count")
+  refillsRemaining       Int              @default(0) @map("refills_remaining")
+  adherencePercent       Float            @default(100) @map("adherence_percent")
+  condition              String?
+  carePlanId             String?          @map("care_plan_id") @db.Uuid
+  libraryMedicationId    String?          @map("library_medication_id") @db.Uuid
+  createdBy              String           @map("created_by") @db.Uuid
+  updatedBy              String?          @map("updated_by") @db.Uuid
+  createdAt              DateTime         @default(now()) @map("created_at")
+  updatedAt              DateTime         @updatedAt @map("updated_at")
+  version                Int              @default(1)
+
+  patient      Patient        @relation(fields: [patientId], references: [id])
+  prescription Prescription   @relation(fields: [prescriptionId], references: [id])
+  doses        MedicationDose[]
+  doseLogs     DoseLog[]
+  reminders    MedicationReminder[]
+  refillRequests RefillRequest[]
+
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, prescriptionId])
+  @@map("patient_medications")
+  @@schema("clinical")
+}
+
+model MedicationDose {
+  id             String              @id @db.Uuid
+  tenantId       String              @map("tenant_id") @db.Uuid
+  medicationId   String              @map("medication_id") @db.Uuid
+  patientId      String              @map("patient_id") @db.Uuid
+  medicationName String              @map("medication_name")
+  scheduledAt    DateTime            @map("scheduled_at") @db.Timestamptz(3)
+  slot           ScheduleSlot        @default(morning)
+  dose           String
+  status         ScheduledDoseStatus @default(pending)
+  instructions   String?
+
+  medication PatientMedication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  doseLogs   DoseLog[]
+
+  @@index([tenantId, patientId, scheduledAt])
+  @@index([tenantId, medicationId, scheduledAt])
+  @@map("medication_doses")
+  @@schema("clinical")
+}
+
+model DoseLog {
+  id              String        @id @db.Uuid
+  tenantId        String        @map("tenant_id") @db.Uuid
+  medicationId    String        @map("medication_id") @db.Uuid
+  patientId       String        @map("patient_id") @db.Uuid
+  scheduledDoseId String?       @map("scheduled_dose_id") @db.Uuid
+  status          DoseLogStatus
+  loggedAt        DateTime      @map("logged_at") @db.Timestamptz(3)
+  notes           String?
+  symptoms        String?
+  sideEffects     String?       @map("side_effects")
+  mood            String?
+  painScore       Int?          @map("pain_score")
+  bloodSugar      Float?        @map("blood_sugar")
+  bloodPressure   String?       @map("blood_pressure")
+  temperature     Float?
+  weight          Float?
+
+  medication    PatientMedication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  scheduledDose MedicationDose?   @relation(fields: [scheduledDoseId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, patientId, loggedAt(sort: Desc)])
+  @@index([tenantId, medicationId, loggedAt(sort: Desc)])
+  @@map("dose_logs")
+  @@schema("clinical")
+}
+
+model MedicationReminder {
+  id           String   @id @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  medicationId String   @map("medication_id") @db.Uuid
+  patientId    String   @map("patient_id") @db.Uuid
+  type         String
+  channel      String   @default("in_app")
+  title        String
+  message      String
+  dueAt        DateTime @map("due_at") @db.Timestamptz(3)
+  active       Boolean  @default(true)
+
+  medication PatientMedication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, patientId, dueAt])
+  @@index([tenantId, active, dueAt])
+  @@map("medication_reminders")
+  @@schema("clinical")
+}
+
+model RefillRequest {
+  id               String              @id @db.Uuid
+  tenantId         String              @map("tenant_id") @db.Uuid
+  prescriptionId   String              @map("prescription_id") @db.Uuid
+  medicationId     String              @map("medication_id") @db.Uuid
+  patientId        String              @map("patient_id") @db.Uuid
+  patientName      String              @map("patient_name")
+  medicationName   String              @map("medication_name")
+  pharmacyId       String              @map("pharmacy_id") @db.Uuid
+  pharmacyName     String              @map("pharmacy_name")
+  status           RefillRequestStatus @default(pending)
+  remainingTablets Int?                @map("remaining_tablets")
+  daysLeft         Int?                @map("days_left")
+  requestedAt      DateTime            @default(now()) @map("requested_at") @db.Timestamptz(3)
+  expectedDate     DateTime?           @map("expected_date") @db.Date
+  autoRefill       Boolean             @default(false) @map("auto_refill")
+  createdBy        String              @map("created_by") @db.Uuid
+  updatedBy        String?             @map("updated_by") @db.Uuid
+  createdAt        DateTime            @default(now()) @map("created_at")
+  updatedAt        DateTime            @updatedAt @map("updated_at")
+
+  prescription Prescription     @relation(fields: [prescriptionId], references: [id])
+  medication   PatientMedication @relation(fields: [medicationId], references: [id])
+
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, prescriptionId])
+  @@map("refill_requests")
   @@schema("clinical")
 }

@@ -160,12 +160,85 @@ enum AllergyType {
 }
 
 enum PrescriptionStatus {
+  draft
   active
-  completed
+  expired
   cancelled
+  renewed
+  pending
+  completed
   on_hold
 
   @@map("prescription_status")
+  @@schema("clinical")
+}
+
+enum MedicationStatus {
+  active
+  completed
+  paused
+  cancelled
+  future
+
+  @@map("medication_status")
+  @@schema("clinical")
+}
+
+enum MedicationRoute {
+  oral
+  topical
+  injection
+  inhalation
+  sublingual
+  other
+
+  @@map("medication_route")
+  @@schema("clinical")
+}
+
+enum ScheduleSlot {
+  morning
+  afternoon
+  evening
+  night
+  custom
+  prn
+
+  @@map("schedule_slot")
+  @@schema("clinical")
+}
+
+enum ScheduledDoseStatus {
+  pending
+  taken
+  missed
+  late
+  skipped
+
+  @@map("scheduled_dose_status")
+  @@schema("clinical")
+}
+
+enum DoseLogStatus {
+  taken
+  skipped
+  late
+  partial
+  vomited
+  rescheduled
+
+  @@map("dose_log_status")
+  @@schema("clinical")
+}
+
+enum RefillRequestStatus {
+  pending
+  approved
+  rejected
+  dispensed
+  partial
+
+  @@map("refill_request_status")
   @@schema("clinical")
 }
 

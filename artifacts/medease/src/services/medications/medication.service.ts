@@ -54,10 +54,8 @@ export const medicationService = {
 
   async getTodayMedications(patientId: string) {
     await delay(100);
-    return getTodayDoses(
-      medicationRepository.getSchedule(patientId),
-      patientId,
-    );
+    const schedule = await medicationRepository.getSchedule(patientId);
+    return getTodayDoses(schedule, patientId);
   },
 
   async getSchedule(patientId?: string) {
@@ -67,10 +65,8 @@ export const medicationService = {
 
   async getUpcomingMedications(patientId: string) {
     await delay();
-    return getUpcomingDoses(
-      medicationRepository.getSchedule(patientId),
-      patientId,
-    );
+    const schedule = await medicationRepository.getSchedule(patientId);
+    return getUpcomingDoses(schedule, patientId);
   },
 
   async getHistory(patientId: string) {
@@ -95,33 +91,35 @@ export const medicationService = {
 
   async getInteractions(patientId: string) {
     await delay(150);
-    const meds = medicationRepository.getAllMedications({ patientId });
+    const meds = await medicationRepository.getAllMedications({ patientId });
     return checkMedicationInteractions(patientId, meds);
   },
 
   async getAdherence(patientId: string) {
     await delay();
-    return computeAdherence(
-      patientId,
+    const [logs, schedule, meds] = await Promise.all([
       medicationRepository.getLogs(patientId),
       medicationRepository.getSchedule(patientId),
       medicationRepository.getAllMedications({ patientId }),
-    );
+    ]);
+    return computeAdherence(patientId, logs, schedule, meds);
   },
 
   async getDashboard(patientId: string): Promise<MedicationDashboard> {
     await delay();
     const today = await this.getTodayMedications(patientId);
-    const meds = medicationRepository.getAllMedications({
-      patientId,
-      status: 'active',
-    });
-    const adherence = await this.getAdherence(patientId);
-    const interactions = await this.getInteractions(patientId);
-    const refills = medicationRepository
-      .getRefills(patientId)
-      .filter((r) => r.status === 'pending');
-    const timeline = medicationRepository.getTimeline(patientId);
+    const [meds, adherence, interactions, refills, timeline] =
+      await Promise.all([
+        medicationRepository.getAllMedications({
+          patientId,
+          status: 'active',
+        }),
+        this.getAdherence(patientId),
+        this.getInteractions(patientId),
+        medicationRepository.getRefills(patientId),
+        medicationRepository.getTimeline(patientId),
+      ]);
+    const pendingRefills = refills.filter((r) => r.status === 'pending');
 
     return {
       patientId,
@@ -130,7 +128,7 @@ export const medicationService = {
       pending: today.filter((d) => d.status === 'pending').length,
       missed: today.filter((d) => d.status === 'missed').length,
       upcoming: today.filter((d) => d.status === 'pending').length,
-      refillAlerts: refills.length,
+      refillAlerts: pendingRefills.length,
       interactionAlerts: interactions.filter((i) => i.active).length,
       prescriptionAlerts: meds.filter((m) => (m.remainingDays ?? 99) < 7)
         .length,
@@ -142,16 +140,16 @@ export const medicationService = {
 
   async getCalendar(patientId: string, referenceDate = new Date()) {
     await delay();
-    return buildMedicationCalendar(
-      medicationRepository.getSchedule(patientId),
-      referenceDate,
-    );
+    const schedule = await medicationRepository.getSchedule(patientId);
+    return buildMedicationCalendar(schedule, referenceDate);
   },
 
   async getAnalytics(filters?: MedicationFilters) {
     await delay();
-    const prescriptions = medicationRepository.listPrescriptions(filters);
-    const medications = medicationRepository.getAllMedications(filters);
+    const [prescriptions, medications] = await Promise.all([
+      medicationRepository.listPrescriptions(filters),
+      medicationRepository.getAllMedications(filters),
+    ]);
     return computeMedicationAnalytics(prescriptions, medications);
   },
 

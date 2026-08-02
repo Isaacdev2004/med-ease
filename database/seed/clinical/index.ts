@@ -125,6 +125,7 @@ const DEMO_FACILITY_TOUR = '01930000-0000-7000-8000-000000000203';
 
 const DEMO_PROVIDER_MARTIN = '01930000-0000-7000-8000-000000000501';
 const DEMO_PROVIDER_BERNARD = '01930000-0000-7000-8000-000000000502';
+const DEMO_PHARMACY_ID = '01930000-0000-7000-8000-000000000701';
 
 function scheduleDaysFromNow(days: number, hour = 9, minute = 0): Date {
   const d = new Date();
@@ -173,6 +174,213 @@ type AppointmentSeed = {
   telehealthLink?: string;
   notes?: string;
 };
+
+type DemoMedicationSeed = {
+  prescriptionId: string;
+  medicationId: string;
+  reminderId: string;
+  prescriptionNumber: string;
+  patientId: string;
+  patientName: string;
+  name: string;
+  genericName: string;
+  brandName?: string;
+  strength: string;
+  medicationClass: string;
+  medicationType: string;
+  dose: string;
+  frequency: string;
+  route: 'oral' | 'inhalation' | 'injection';
+  durationDays: number;
+  startDate: Date;
+  endDate: Date;
+  expiresAt: Date;
+  refillCount: number;
+  refillsRemaining: number;
+  remainingDays: number;
+  adherencePercent: number;
+  prescribingPhysician: string;
+  dispensingPharmacy: string;
+  instructions: string;
+  warnings: string[];
+  contraindications: string[];
+  sideEffects: string[];
+  storage: string;
+  condition: string;
+  doses: Array<{
+    id: string;
+    scheduledAt: Date;
+    slot: 'morning' | 'afternoon' | 'evening' | 'night';
+    status: 'pending' | 'taken' | 'missed' | 'late' | 'skipped';
+  }>;
+};
+
+/** Demo medications — Sarah Jenkins pill organizer for buyer walkthrough. */
+function buildDemoMedications(): DemoMedicationSeed[] {
+  const sarah = DEMO_PATIENTS[0]!;
+  const startDate = new Date();
+  startDate.setHours(0, 0, 0, 0);
+  const endDate = new Date(startDate);
+  endDate.setDate(endDate.getDate() + 90);
+  const expiresAt = new Date(startDate);
+  expiresAt.setDate(expiresAt.getDate() + 90);
+
+  return [
+    {
+      prescriptionId: '01930000-0000-7000-8000-000000000801',
+      medicationId: '01930000-0000-7000-8000-000000000811',
+      reminderId: '01930000-0000-7000-8000-000000000821',
+      prescriptionNumber: 'RX-DEMO-801',
+      patientId: sarah.id,
+      patientName: sarah.fullName,
+      name: 'Lisinopril',
+      genericName: 'Lisinopril',
+      brandName: 'Zestril',
+      strength: '10 mg',
+      medicationClass: 'ACE inhibitor',
+      medicationType: 'tablet',
+      dose: '10 mg',
+      frequency: 'Once daily',
+      route: 'oral',
+      durationDays: 90,
+      startDate,
+      endDate,
+      expiresAt,
+      refillCount: 3,
+      refillsRemaining: 2,
+      remainingDays: 45,
+      adherencePercent: 92,
+      prescribingPhysician: 'Dr. Emily Chen',
+      dispensingPharmacy: 'MedEase Pharmacy Paris',
+      instructions: 'Take in the morning with water.',
+      warnings: ['May cause dizziness'],
+      contraindications: ['Pregnancy'],
+      sideEffects: ['Cough', 'Dizziness'],
+      storage: 'Room temperature',
+      condition: 'Hypertension',
+      doses: [
+        {
+          id: '01930000-0000-7000-8000-000000000831',
+          scheduledAt: scheduleDaysFromNow(0, 8, 0),
+          slot: 'morning',
+          status: 'pending',
+        },
+        {
+          id: '01930000-0000-7000-8000-000000000832',
+          scheduledAt: scheduleDaysFromNow(1, 8, 0),
+          slot: 'morning',
+          status: 'pending',
+        },
+      ],
+    },
+    {
+      prescriptionId: '01930000-0000-7000-8000-000000000802',
+      medicationId: '01930000-0000-7000-8000-000000000812',
+      reminderId: '01930000-0000-7000-8000-000000000822',
+      prescriptionNumber: 'RX-DEMO-802',
+      patientId: sarah.id,
+      patientName: sarah.fullName,
+      name: 'Metformin',
+      genericName: 'Metformin hydrochloride',
+      brandName: 'Glucophage',
+      strength: '500 mg',
+      medicationClass: 'Biguanide',
+      medicationType: 'tablet',
+      dose: '500 mg',
+      frequency: 'Twice daily',
+      route: 'oral',
+      durationDays: 90,
+      startDate,
+      endDate,
+      expiresAt,
+      refillCount: 5,
+      refillsRemaining: 4,
+      remainingDays: 60,
+      adherencePercent: 88,
+      prescribingPhysician: 'Dr. Emily Chen',
+      dispensingPharmacy: 'MedEase Pharmacy Paris',
+      instructions: 'Take with meals morning and evening.',
+      warnings: ['Monitor kidney function'],
+      contraindications: ['Severe renal impairment'],
+      sideEffects: ['Nausea', 'GI upset'],
+      storage: 'Room temperature',
+      condition: 'Type 2 diabetes',
+      doses: [
+        {
+          id: '01930000-0000-7000-8000-000000000833',
+          scheduledAt: scheduleDaysFromNow(0, 8, 0),
+          slot: 'morning',
+          status: 'pending',
+        },
+        {
+          id: '01930000-0000-7000-8000-000000000834',
+          scheduledAt: scheduleDaysFromNow(0, 20, 0),
+          slot: 'evening',
+          status: 'pending',
+        },
+        {
+          id: '01930000-0000-7000-8000-000000000835',
+          scheduledAt: scheduleDaysFromNow(1, 8, 0),
+          slot: 'morning',
+          status: 'pending',
+        },
+        {
+          id: '01930000-0000-7000-8000-000000000836',
+          scheduledAt: scheduleDaysFromNow(1, 20, 0),
+          slot: 'evening',
+          status: 'pending',
+        },
+      ],
+    },
+    {
+      prescriptionId: '01930000-0000-7000-8000-000000000803',
+      medicationId: '01930000-0000-7000-8000-000000000813',
+      reminderId: '01930000-0000-7000-8000-000000000823',
+      prescriptionNumber: 'RX-DEMO-803',
+      patientId: sarah.id,
+      patientName: sarah.fullName,
+      name: 'Atorvastatin',
+      genericName: 'Atorvastatin',
+      brandName: 'Lipitor',
+      strength: '20 mg',
+      medicationClass: 'Statin',
+      medicationType: 'tablet',
+      dose: '20 mg',
+      frequency: 'Once daily at night',
+      route: 'oral',
+      durationDays: 90,
+      startDate,
+      endDate,
+      expiresAt,
+      refillCount: 3,
+      refillsRemaining: 3,
+      remainingDays: 70,
+      adherencePercent: 95,
+      prescribingPhysician: 'Dr. Emily Chen',
+      dispensingPharmacy: 'MedEase Pharmacy Paris',
+      instructions: 'Take at bedtime.',
+      warnings: ['Report unexplained muscle pain'],
+      contraindications: ['Active liver disease'],
+      sideEffects: ['Muscle pain'],
+      storage: 'Room temperature',
+      condition: 'Hyperlipidemia',
+      doses: [
+        {
+          id: '01930000-0000-7000-8000-000000000837',
+          scheduledAt: scheduleDaysFromNow(0, 22, 0),
+          slot: 'night',
+          status: 'pending',
+        },
+        {
+          id: '01930000-0000-7000-8000-000000000838',
+          scheduledAt: scheduleDaysFromNow(1, 22, 0),
+          slot: 'night',
+          status: 'pending',
+        },
+      ],
+    },
+  ];
+}
 
 /** Demo schedule — today, upcoming, and past appointments for buyer walkthrough. */
 function buildDemoAppointments() {
@@ -700,6 +908,138 @@ export const clinicalSeed: SeedModule = {
               facilityName: appointment.facilityName,
               facilityAddress: appointment.facilityAddress,
               updatedBy: DEMO_ADMIN_ID,
+            },
+          });
+        }
+
+        // Sarah Jenkins — active meds + today's pill-organizer doses
+        for (const med of buildDemoMedications()) {
+          await tx.prescription.upsert({
+            where: { id: med.prescriptionId },
+            create: {
+              id: med.prescriptionId,
+              tenantId: DEMO_TENANT_ID,
+              patientId: med.patientId,
+              prescriptionNumber: med.prescriptionNumber,
+              patientName: med.patientName,
+              medicationName: med.name,
+              genericName: med.genericName,
+              brandName: med.brandName,
+              strength: med.strength,
+              medicationClass: med.medicationClass,
+              medicationType: med.medicationType,
+              controlledSubstance: false,
+              dose: med.dose,
+              frequency: med.frequency,
+              route: med.route,
+              durationDays: med.durationDays,
+              startDate: med.startDate,
+              endDate: med.endDate,
+              expiresAt: med.expiresAt,
+              status: 'active',
+              refillCount: med.refillCount,
+              refillsRemaining: med.refillsRemaining,
+              prescribingPhysician: med.prescribingPhysician,
+              prescribingPhysicianId: DEMO_PHYSICIAN_ID,
+              dispensingPharmacy: med.dispensingPharmacy,
+              dispensingPharmacyId: DEMO_PHARMACY_ID,
+              instructions: med.instructions,
+              warnings: med.warnings,
+              contraindications: med.contraindications,
+              fhirResourceId: med.prescriptionId,
+              createdBy: DEMO_ADMIN_ID,
+            },
+            update: {
+              status: 'active',
+              refillsRemaining: med.refillsRemaining,
+              instructions: med.instructions,
+              updatedBy: DEMO_ADMIN_ID,
+            },
+          });
+
+          await tx.patientMedication.upsert({
+            where: { id: med.medicationId },
+            create: {
+              id: med.medicationId,
+              tenantId: DEMO_TENANT_ID,
+              prescriptionId: med.prescriptionId,
+              patientId: med.patientId,
+              name: med.name,
+              genericName: med.genericName,
+              brandName: med.brandName,
+              strength: med.strength,
+              medicationClass: med.medicationClass,
+              medicationType: med.medicationType,
+              controlledSubstance: false,
+              status: 'active',
+              dose: med.dose,
+              frequency: med.frequency,
+              route: med.route,
+              startDate: med.startDate,
+              endDate: med.endDate,
+              remainingDays: med.remainingDays,
+              instructions: med.instructions,
+              warnings: med.warnings,
+              contraindications: med.contraindications,
+              sideEffects: med.sideEffects,
+              storage: med.storage,
+              prescribingPhysician: med.prescribingPhysician,
+              dispensingPharmacy: med.dispensingPharmacy,
+              refillCount: med.refillCount,
+              refillsRemaining: med.refillsRemaining,
+              adherencePercent: med.adherencePercent,
+              condition: med.condition,
+              createdBy: DEMO_ADMIN_ID,
+            },
+            update: {
+              status: 'active',
+              remainingDays: med.remainingDays,
+              adherencePercent: med.adherencePercent,
+              updatedBy: DEMO_ADMIN_ID,
+            },
+          });
+
+          for (const dose of med.doses) {
+            await tx.medicationDose.upsert({
+              where: { id: dose.id },
+              create: {
+                id: dose.id,
+                tenantId: DEMO_TENANT_ID,
+                medicationId: med.medicationId,
+                patientId: med.patientId,
+                medicationName: med.name,
+                scheduledAt: dose.scheduledAt,
+                slot: dose.slot,
+                dose: med.dose,
+                status: dose.status,
+                instructions: med.instructions,
+              },
+              update: {
+                scheduledAt: dose.scheduledAt,
+                status: dose.status,
+              },
+            });
+          }
+
+          await tx.medicationReminder.upsert({
+            where: { id: med.reminderId },
+            create: {
+              id: med.reminderId,
+              tenantId: DEMO_TENANT_ID,
+              medicationId: med.medicationId,
+              patientId: med.patientId,
+              type: 'dose',
+              channel: 'in_app',
+              title: `Take ${med.name}`,
+              message: `${med.dose} — ${med.instructions}`,
+              dueAt: med.doses[0]?.scheduledAt ?? new Date(),
+              active: true,
+            },
+            update: {
+              title: `Take ${med.name}`,
+              message: `${med.dose} — ${med.instructions}`,
+              dueAt: med.doses[0]?.scheduledAt ?? new Date(),
+              active: true,
             },
           });
         }

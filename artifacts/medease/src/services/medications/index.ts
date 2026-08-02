@@ -30,6 +30,8 @@ export {
   toFhirMedicationSchedule,
 } from '@/services/medications/mapper';
 export { medicationRepository } from '@/services/medications/repository';
+export { medicationMockRepository } from '@/services/medications/repository.mock';
+export { medicationHttpRepository } from '@/services/medications/repository.http';
 export { buildTimeline } from '@/services/medications/timeline';
 export {
   MOCK_MEDICATIONS,
