@@ -5,7 +5,7 @@ import { cn } from '@/shared/lib/utils';
 
 interface MarketingSectionProps {
   id?: string;
-  title?: string;
+  title?: ReactNode;
   subtitle?: string;
   eyebrow?: string;
   children: ReactNode;

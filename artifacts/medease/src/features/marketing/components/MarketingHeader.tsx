@@ -3,7 +3,7 @@ import { Moon, Sun, Monitor, Menu } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 import { useMarketingCtaOptional } from '@/features/marketing/components/MarketingCtaProvider';
-import { audienceNavLinks } from '@/features/marketing/content/audience-pages-fr';
+import { landingNav } from '@/features/marketing/content/landing-fr';
 import { marketingAssets } from '@/features/marketing/content/marketing-assets';
 import { ROUTES } from '@/config/routes';
 import { APP_NAME } from '@/config/constants';
@@ -13,23 +13,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from '@/shared/ui/dropdown-menu';
 import { cn } from '@/shared/lib/utils';
-
-const homeAnchorLinks = [
-  { href: '/#audiences', label: 'Pour qui' },
-  { href: '/#solution', label: 'Solution' },
-  { href: '/#foundations', label: 'Fondations' },
-  { href: '/#why-now', label: 'Pourquoi' },
-  { href: '/#faq', label: 'FAQ' },
-];
 
 export function MarketingHeader() {
   const { setTheme } = useTheme();
   const cta = useMarketingCtaOptional();
   const [location] = useLocation();
-  const isHome = location === ROUTES.home;
 
   return (
     <nav
@@ -46,30 +36,29 @@ export function MarketingHeader() {
           <span className="text-xl tracking-tight">{APP_NAME}</span>
         </Link>
 
-        <div className="hidden items-center gap-1 text-sm font-medium text-muted-foreground xl:flex">
-          {isHome
-            ? homeAnchorLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-lg px-3 py-2 transition-colors hover:bg-muted hover:text-foreground"
-                >
-                  {link.label}
-                </a>
-              ))
-            : null}
-          {audienceNavLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              className={cn(
-                'rounded-lg px-3 py-2 transition-colors hover:bg-muted hover:text-foreground',
-                location === link.path && 'bg-primary/10 text-primary',
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="hidden items-center gap-0.5 text-sm font-medium text-muted-foreground xl:flex">
+          {landingNav.map((link) =>
+            link.kind === 'route' ? (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'rounded-lg px-2.5 py-2 transition-colors hover:bg-muted hover:text-foreground',
+                  location === link.href && 'bg-primary/10 text-primary',
+                )}
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <a
+                key={link.href}
+                href={link.href}
+                className="rounded-lg px-2.5 py-2 transition-colors hover:bg-muted hover:text-foreground"
+              >
+                {link.label}
+              </a>
+            ),
+          )}
         </div>
 
         <div className="flex items-center gap-2">
@@ -80,17 +69,17 @@ export function MarketingHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              {audienceNavLinks.map((link) => (
-                <DropdownMenuItem key={link.path} asChild>
-                  <Link href={link.path}>{link.label}</Link>
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuSeparator />
-              {homeAnchorLinks.map((link) => (
-                <DropdownMenuItem key={link.href} asChild>
-                  <a href={link.href}>{link.label}</a>
-                </DropdownMenuItem>
-              ))}
+              {landingNav.map((link) =>
+                link.kind === 'route' ? (
+                  <DropdownMenuItem key={link.href} asChild>
+                    <Link href={link.href}>{link.label}</Link>
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem key={link.href} asChild>
+                    <a href={link.href}>{link.label}</a>
+                  </DropdownMenuItem>
+                ),
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -118,10 +107,10 @@ export function MarketingHeader() {
             <Link href={ROUTES.connexion}>Connexion</Link>
           </Button>
           <Button
-            className="hidden md:inline-flex shadow-sm"
+            className="marketing-primary-cta hidden md:inline-flex"
             onClick={() => cta?.openCta('hub')}
           >
-            Explorer le Hub
+            Contact
           </Button>
         </div>
       </div>

@@ -5,20 +5,33 @@ export const landingSeo = {
     "Med'ease fluidifie le parcours de soins : gestion des lits hospitaliers, désengorgement des urgences, coordination patients et professionnels.",
 };
 
+export const landingNav = [
+  { href: '/notre-vision', label: 'Notre Vision', kind: 'route' as const },
+  { href: '/#comment', label: 'Comment ça marche', kind: 'anchor' as const },
+  { href: '/#solution', label: 'Notre Solution', kind: 'anchor' as const },
+  { href: '/#impact', label: 'Impact & Valeurs', kind: 'anchor' as const },
+  { href: '/#faq', label: 'Foire aux Questions', kind: 'anchor' as const },
+  { href: '/#partenaires', label: 'Partenaires', kind: 'anchor' as const },
+];
+
 export const landingHero = {
-  brand: "Med'ease",
+  eyebrow: 'Une solution pour tous les acteurs',
   titleLead: 'Le Hub de santé qui',
   titleAccent: 'reconnecte',
   titleTrail: 'la ville et l’hôpital.',
   subtitle:
     "Med'ease est un hub de coordination territoriale de santé qui synchronise patients, établissements, professionnels de santé, transports et soins de proximité en temps réel pour une prise en charge à 360°.",
   ctaLabel: 'Découvrir la Santé autrement',
+  stats: [
+    { value: '+80%', label: 'de fluidité sur les parcours coordonnés' },
+    { value: '85%', label: 'des équipes gagnent du temps médical' },
+  ],
 };
 
 export const landingProblem = {
   title:
     'Un système de santé fragmenté, des urgences saturées, une coordination complexe',
-  today: [
+  items: [
     'Manque de visibilité sur les lits disponibles en temps réel',
     'Parcours de soins désorganisé',
     'Coordination inter-établissements limitée',
@@ -26,121 +39,70 @@ export const landingProblem = {
     'Transport sanitaire peu synchronisé',
     'Charge administrative croissante pour les professionnels',
   ],
-  result: [
-    'Saturation hospitalière',
-    'Désengorgement difficile des urgences',
-    'Retards d’admission',
-    'Perte d’informations cliniques',
-    'Stress pour les patients et les équipes',
-    'Perte de chance de survie',
-  ],
-};
-
-export const landingAudiences = {
-  patient: {
-    eyebrow: 'Patient & Aidant',
-    title: 'Votre santé, entre de bonnes mains.',
-    features: [
-      {
-        title: 'Pilulier virtuel',
-        description: 'Suivi des traitements et rappels d’observance.',
-      },
-      {
-        title: 'Mes rendez-vous',
-        description: 'Agenda centralisé, confirmations et rappels.',
-      },
-      {
-        title: 'Mon carnet de santé',
-        description: 'Documents, résultats et ordonnances au même endroit.',
-      },
-      {
-        title: 'Autour de moi',
-        description: 'Médecins, pharmacies et urgences à proximité.',
-      },
-    ],
-    values: ['Souveraineté', 'Partage maîtrisé', 'Simplicité', 'Sérénité'],
-    ctaLabel: 'Reprendre le contrôle de mon parcours',
-    ctaId: 'patient' as const,
-  },
-  professional: {
-    eyebrow: 'Professionnel',
-    title: 'Moins d’administratif, plus de temps pour soigner.',
-    features: [
-      {
-        title: 'Gain de temps',
-        description: 'Jusqu’à 40 % de tâches administratives en moins.',
-      },
-      {
-        title: 'Sécurité',
-        description: 'Messagerie professionnelle et données hébergées HDS.',
-      },
-      {
-        title: 'Interopérabilité',
-        description: 'Connexion aux outils métiers (DMP, DPI).',
-      },
-      {
-        title: 'Collaboration',
-        description: 'Parcours coordonnés pour les équipes de soins.',
-      },
-    ],
-    values: [
-      'Vue patient 360°',
-      'Parcours fluides',
-      'Échanges sécurisés',
-      'Zéro double saisie',
-    ],
-    ctaLabel: 'Rejoindre les professionnels pilotes',
-    ctaId: 'professional' as const,
-  },
 };
 
 export const landingSolution = {
-  title: 'Une plateforme de coordination territoriale et sécurisée',
+  titleLead: 'Une plateforme de coordination',
+  titleAccent: 'territoriale & sécurisée',
   intro:
     "Med'ease centralise et connecte patients, aidants, professionnels de santé, établissements, pharmacies et transporteurs sanitaires.",
-  actors: [
-    { label: 'Patients', tone: 'patient' as const },
-    { label: 'Aidants', tone: 'patient' as const },
-    { label: 'Professionnels', tone: 'pro' as const },
-    { label: 'Établissements', tone: 'facility' as const },
-    { label: 'Pharmacies', tone: 'pharmacy' as const },
-    { label: 'Transporteurs', tone: 'transport' as const },
+  modules: [
+    {
+      title: 'Missions de coordination',
+      description: 'Orientations, demandes et priorisation en temps réel.',
+      tone: 'green' as const,
+    },
+    {
+      title: 'Urgences',
+      description: 'Fluidifier les flux et réduire les goulots d’étranglement.',
+      tone: 'rose' as const,
+    },
+    {
+      title: 'Parcours de soins',
+      description: 'E-parcours connecté de la ville à l’hôpital.',
+      tone: 'blue' as const,
+    },
+    {
+      title: 'Suivi & pilotage',
+      description: 'Tableaux de bord, KPI et alertes territoriales.',
+      tone: 'sky' as const,
+    },
   ],
-  features: [
+};
+
+export const landingFaq = {
+  title: "Comment se place Med'ease dans cet écosystème ?",
+  items: [
     {
-      title: 'Pilulier virtuel',
-      description:
-        'Suivi des traitements en temps réel et observance médicamenteuse.',
+      question: "Comment Med'ease aide à désengorger les urgences ?",
+      answer:
+        'En facilitant l’accès aux lits d’aval, en optimisant la gestion hospitalisation numérique et en améliorant l’orientation patient.',
     },
     {
-      title: 'Gestion des lits',
-      description:
-        'Vision temps réel des capacités et facilitation des admissions.',
+      question: 'Comment fonctionne la gestion des lits ?',
+      answer:
+        'Les établissements mettent à jour leurs capacités en temps réel. Les demandes d’admission sont centralisées et priorisées.',
     },
     {
-      title: 'E-parcours connecté',
-      description:
-        'De domicile à clinique : un parcours partagé et traçable.',
+      question: "Med'ease est-elle conforme RGPD et HDS ?",
+      answer:
+        'Oui. Les données de santé sont sécurisées, hébergées en conformité HDS et protégées selon les normes européennes.',
     },
     {
-      title: 'Transport sanitaire',
-      description: 'Planification et suivi en temps réel des transports.',
+      question: 'La plateforme est-elle compatible avec les systèmes hospitaliers ?',
+      answer:
+        "Med'ease est conçue pour être interopérable avec les logiciels hospitaliers existants (HL7 FHIR, DPI, DMP).",
     },
     {
-      title: 'Dossier & échanges sécurisés',
-      description:
-        'Partage documentaire et messagerie santé avec traçabilité.',
-    },
-    {
-      title: 'Tableaux de bord & KPI',
-      description:
-        'Occupation, flux d’admission et indicateurs de fluidité.',
+      question: 'Combien de temps prend la mise en place ?',
+      answer:
+        'Les établissements pilotes démarrent en quelques semaines : paramétrage, formation courte des équipes, puis montée en charge progressive.',
     },
   ],
 };
 
 export const landingFoundations = {
-  title: "Les fondations de Med'ease",
+  title: "Les Fondations de Med'ease",
   tagline: 'Fluidifier — Sécuriser — Optimiser — Humaniser',
   cards: [
     {
@@ -181,45 +143,56 @@ export const landingImpact = {
     'Amélioration de la satisfaction patient',
     'Réduction des appels aux urgences',
   ],
-  sovereignty:
-    "Med'ease contribue à la souveraineté numérique en santé : plateforme sécurisée et interopérable — nous ne remplaçons pas les outils existants, nous les connectons.",
+  metrics: [
+    { value: '+21%', label: 'passages urgences / an', tone: 'teal' as const },
+    { value: '04:35', label: 'attente moyenne urgences', tone: 'navy' as const },
+    { value: '93%', label: 'parcours mieux coordonnés', tone: 'blue' as const },
+    { value: '350', label: 'établissements adressables', tone: 'indigo' as const },
+  ],
+  chartLabel: 'Évolution de la fluidité des parcours (indicative)',
+  chartBars: [42, 55, 61, 70, 78, 88],
 };
 
 export const landingWhyNow = {
-  title: 'Pourquoi maintenant ?',
-  subtitle: 'Le système de santé atteint ses limites.',
+  title: 'Le système de santé atteint ses limites.',
+  subtitle: 'Chaque jour, des patients attendent, des équipes s’épuisent, des décisions sont retardées.',
   waitTime: {
     value: '04:35',
     label: 'Temps d’attente moyen aux urgences',
   },
-  urgency: [
+  facts: [
     '+21 millions de passages aux urgences chaque année en France',
-    'Temps d’attente moyen : jusqu’à 4 à 5 heures, parfois plus',
     'Près de 30 000 lits d’hospitalisation complète supprimés en 10 ans',
-    'Plus de 100 000 lits hospitaliers supprimés en 20 ans',
-  ],
-  coordination: [
     'Jusqu’à 30 % du temps des soignants perdu en tâches administratives',
-    'Des milliers de lits immobilisés chaque jour faute de coordination',
-    'Des délais d’admission allongés, des parcours ralentis',
   ],
-  daily: [
-    'Des patients attendent',
-    'Des équipes s’épuisent',
-    'Des décisions sont retardées',
+  audiences: [
+    {
+      title: 'Patient & Aidant',
+      description: 'Carnet de santé, pilulier et parcours clarifié.',
+      href: '/patients',
+    },
+    {
+      title: 'Professionnel',
+      description: 'Moins d’administratif, plus de temps pour soigner.',
+      href: '/professionnels',
+    },
+    {
+      title: 'Établissement',
+      description: 'Pilotage des lits, urgences et flux territoriaux.',
+      href: '/etablissements',
+    },
   ],
 };
 
-export const landingTrust = {
-  title: 'Établissements, confiance & sécurité',
-  subtitle:
-    'Pilotage territorial, interopérabilité HL7 FHIR et souveraineté numérique pour les données de santé.',
-  badges: [
+export const landingPartners = {
+  title: 'Un écosystème ouvert et interopérable',
+  items: [
     'HDS',
     'CNIL / RGPD',
     'ISO 27001',
     'ANS',
     'SESAM-Vitale',
+    'HL7 FHIR',
     'OVHcloud',
   ],
 };
@@ -233,32 +206,6 @@ export const landingDualCta = {
     label: 'Reprendre le contrôle de mon parcours de soins',
     ctaId: 'patient' as const,
   },
-};
-
-export const landingFaq = {
-  title: 'Questions fréquentes',
-  items: [
-    {
-      question: "Comment Med'ease aide à désengorger les urgences ?",
-      answer:
-        'En facilitant l’accès aux lits d’aval, en optimisant la gestion hospitalisation numérique et en améliorant l’orientation patient.',
-    },
-    {
-      question: 'Comment fonctionne la gestion des lits ?',
-      answer:
-        'Les établissements mettent à jour leurs capacités en temps réel. Les demandes d’admission sont centralisées et priorisées.',
-    },
-    {
-      question: "Med'ease est-elle conforme RGPD et HDS ?",
-      answer:
-        'Oui. Les données de santé sont sécurisées, hébergées en conformité HDS et protégées selon les normes européennes.',
-    },
-    {
-      question: 'La plateforme est-elle compatible avec les systèmes hospitaliers ?',
-      answer:
-        "Med'ease est conçue pour être interopérable avec les logiciels hospitaliers existants (HL7 FHIR, DPI, DMP).",
-    },
-  ],
 };
 
 export const ctaConfirmationMessage =

@@ -4,19 +4,17 @@ import { Link } from 'wouter';
 import { useMarketingCta } from '@/features/marketing/components/MarketingCtaProvider';
 import { MarketingSection } from '@/features/marketing/components/MarketingSection';
 import {
-  landingAudiences,
   landingDualCta,
   landingFaq,
   landingFoundations,
   landingHero,
   landingImpact,
+  landingPartners,
   landingProblem,
   landingSolution,
-  landingTrust,
   landingWhyNow,
 } from '@/features/marketing/content/landing-fr';
 import { marketingAssets } from '@/features/marketing/content/marketing-assets';
-import { ROUTES } from '@/config/routes';
 import { Button } from '@/shared/ui/button';
 import {
   Accordion,
@@ -27,20 +25,24 @@ import {
 import { cn } from '@/shared/lib/utils';
 
 const foundationToneClass = {
-  blue: 'border-sky-200/70 bg-gradient-to-br from-sky-50/90 to-transparent',
-  green:
-    'border-emerald-200/70 bg-gradient-to-br from-emerald-50/90 to-transparent',
-  amber:
-    'border-amber-200/70 bg-gradient-to-br from-amber-50/80 to-transparent',
-  rose: 'border-rose-200/70 bg-gradient-to-br from-rose-50/80 to-transparent',
+  blue: 'border-sky-200/70 bg-white/90',
+  green: 'border-emerald-200/70 bg-white/90',
+  amber: 'border-amber-200/70 bg-white/90',
+  rose: 'border-rose-200/70 bg-white/90',
 };
 
-const actorToneClass = {
-  patient: 'bg-emerald-500/15 text-emerald-800 border-emerald-500/25',
-  pro: 'bg-sky-500/15 text-sky-900 border-sky-500/25',
-  facility: 'bg-rose-500/15 text-rose-900 border-rose-500/25',
-  pharmacy: 'bg-lime-500/15 text-lime-900 border-lime-500/25',
-  transport: 'bg-indigo-500/15 text-indigo-900 border-indigo-500/25',
+const moduleToneClass = {
+  green: 'border-emerald-200 bg-emerald-50/80',
+  rose: 'border-rose-200 bg-rose-50/80',
+  blue: 'border-sky-200 bg-sky-50/80',
+  sky: 'border-cyan-200 bg-cyan-50/70',
+};
+
+const metricToneClass = {
+  teal: 'bg-[#0b8f9e] text-white',
+  navy: 'bg-[#0b3d66] text-white',
+  blue: 'bg-[#1a6fb5] text-white',
+  indigo: 'bg-[#3d4f8f] text-white',
 };
 
 export function HeroSection() {
@@ -49,45 +51,25 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="marketing-hero-bleed relative flex min-h-[100svh] items-end overflow-hidden pb-16 pt-28 md:items-center md:pb-24 md:pt-24"
+      className="marketing-hero-bleed relative overflow-hidden pb-10 pt-28 md:pb-16 md:pt-32"
     >
-      <img
-        src={marketingAssets.hero}
-        alt=""
-        aria-hidden
-        className="marketing-hero-photo absolute inset-0 h-full w-full object-cover object-[68%_center]"
-      />
-      <div className="marketing-hero-scrim absolute inset-0" />
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-8 lg:px-8">
+        <div className="marketing-reveal relative z-10 max-w-xl">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#0b8f9e]">
+            {landingHero.eyebrow}
+          </p>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="marketing-reveal max-w-xl md:max-w-2xl">
-          <div className="mb-8 flex items-center gap-3">
-            <img
-              src={marketingAssets.logoMark}
-              alt=""
-              className="h-14 w-14 rounded-2xl shadow-lg shadow-teal-900/20 md:h-16 md:w-16"
-            />
-            <div>
-              <p className="font-[family-name:var(--marketing-display)] text-3xl font-extrabold tracking-tight text-[#0b3d66] md:text-4xl">
-                {landingHero.brand}
-              </p>
-              <p className="text-sm font-medium text-[#0b3d66]/70">
-                Hub de coordination territoriale
-              </p>
-            </div>
-          </div>
-
-          <h1 className="font-[family-name:var(--marketing-display)] text-4xl font-extrabold tracking-tight text-[#072a47] sm:text-5xl lg:text-[3.35rem] lg:leading-[1.08]">
+          <h1 className="font-[family-name:var(--marketing-display)] text-4xl font-extrabold tracking-tight text-[#072a47] sm:text-5xl lg:text-[3.15rem] lg:leading-[1.08]">
             {landingHero.titleLead}{' '}
             <span className="marketing-accent-word">{landingHero.titleAccent}</span>{' '}
             {landingHero.titleTrail}
           </h1>
 
-          <p className="mt-5 max-w-lg text-base leading-relaxed text-[#1a445f]/85 sm:text-lg">
+          <p className="mt-5 text-base leading-relaxed text-[#1a445f]/85 sm:text-lg">
             {landingHero.subtitle}
           </p>
 
-          <div className="mt-9">
+          <div className="mt-8">
             <Button
               size="lg"
               className="marketing-primary-cta h-12 px-8 text-base"
@@ -97,7 +79,28 @@ export function HeroSection() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
+
+          <div className="mt-10 flex flex-wrap gap-8 border-t border-[#0b3d66]/10 pt-8">
+            {landingHero.stats.map((stat) => (
+              <div key={stat.value}>
+                <p className="font-[family-name:var(--marketing-display)] text-3xl font-extrabold text-[#0b3d66]">
+                  {stat.value}
+                </p>
+                <p className="mt-1 max-w-[11rem] text-xs leading-snug text-[#1a445f]/70">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
+
+        <figure className="marketing-reveal-delay relative mx-auto w-full max-w-2xl lg:max-w-none">
+          <img
+            src={marketingAssets.hero}
+            alt="Hub Med'ease reconnectant ville et hôpital"
+            className="marketing-hero-photo w-full object-contain drop-shadow-xl"
+          />
+        </figure>
       </div>
     </section>
   );
@@ -105,152 +108,32 @@ export function HeroSection() {
 
 export function ProblemSection() {
   return (
-    <MarketingSection
-      id="problem"
-      eyebrow="Le constat"
-      title={landingProblem.title}
-      tone="muted"
+    <section
+      id="comment"
+      className="marketing-problem-band py-20 text-white md:py-28"
     >
-      <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-        <div className="marketing-reveal-delay space-y-8">
-          <div>
-            <h3 className="mb-4 text-lg font-semibold text-foreground">
-              Aujourd&apos;hui
-            </h3>
-            <ul className="space-y-3 text-muted-foreground">
-              {landingProblem.today.map((item) => (
-                <li key={item} className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#e85d4c]" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="mb-4 text-lg font-semibold text-foreground">
-              Résultat
-            </h3>
-            <ul className="space-y-3 text-muted-foreground">
-              {landingProblem.result.map((item) => (
-                <li key={item} className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#0b8f9e]" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div className="marketing-reveal">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:leading-tight">
+            {landingProblem.title}
+          </h2>
+          <ul className="mt-8 space-y-3 text-white/75">
+            {landingProblem.items.map((item) => (
+              <li key={item} className="flex gap-3">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#e85d4c]" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <figure className="marketing-media-frame overflow-hidden">
+        <figure className="overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl shadow-black/30">
           <img
             src={marketingAssets.hubEcosystem}
-            alt="Système fragmenté versus hub Med'ease synchronisé"
-            className="h-full w-full object-cover object-top"
+            alt="Système de santé fragmenté versus hub synchronisé"
+            className="w-full object-cover object-bottom"
             loading="lazy"
           />
         </figure>
-      </div>
-    </MarketingSection>
-  );
-}
-
-export function AudienceDualSection() {
-  const { openCta } = useMarketingCta();
-  const { patient, professional } = landingAudiences;
-
-  return (
-    <section id="audiences" className="overflow-hidden py-20 md:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 max-w-3xl">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-[#0b8f9e]">
-            Pour qui
-          </p>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.5rem]">
-            Patients, aidants et professionnels — un même hub
-          </h2>
-        </div>
-
-        <figure className="marketing-media-frame mb-14 overflow-hidden">
-          <img
-            src={marketingAssets.patientPro}
-            alt="Espace patient et espace professionnel Med'ease"
-            className="w-full object-cover object-center"
-            loading="lazy"
-          />
-        </figure>
-
-        <div className="grid gap-12 lg:grid-cols-2">
-          <div className="space-y-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-700">
-              {patient.eyebrow}
-            </p>
-            <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              {patient.title}
-            </h3>
-            <ul className="space-y-4">
-              {patient.features.map((feature) => (
-                <li key={feature.title}>
-                  <p className="font-semibold text-foreground">{feature.title}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </li>
-              ))}
-            </ul>
-            <p className="text-sm text-muted-foreground">
-              {patient.values.join(' · ')}
-            </p>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-emerald-600/30 text-emerald-900 hover:bg-emerald-50"
-              onClick={() => openCta(patient.ctaId)}
-            >
-              {patient.ctaLabel}
-            </Button>
-            <p className="text-sm">
-              <Link href={ROUTES.patients} className="text-primary hover:underline">
-                En savoir plus pour les patients
-              </Link>
-            </p>
-          </div>
-
-          <div className="space-y-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-sky-800">
-              {professional.eyebrow}
-            </p>
-            <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              {professional.title}
-            </h3>
-            <ul className="space-y-4">
-              {professional.features.map((feature) => (
-                <li key={feature.title}>
-                  <p className="font-semibold text-foreground">{feature.title}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </li>
-              ))}
-            </ul>
-            <p className="text-sm text-muted-foreground">
-              {professional.values.join(' · ')}
-            </p>
-            <Button
-              size="lg"
-              className="marketing-primary-cta"
-              onClick={() => openCta(professional.ctaId)}
-            >
-              {professional.ctaLabel}
-            </Button>
-            <p className="text-sm">
-              <Link
-                href={ROUTES.professionnels}
-                className="text-primary hover:underline"
-              >
-                En savoir plus pour les professionnels
-              </Link>
-            </p>
-          </div>
-        </div>
       </div>
     </section>
   );
@@ -260,122 +143,92 @@ export function SolutionSection() {
   return (
     <MarketingSection
       id="solution"
-      eyebrow="La solution"
-      title={landingSolution.title}
+      eyebrow="Notre Solution"
+      title={
+        <>
+          {landingSolution.titleLead}{' '}
+          <span className="text-[#0b8f9e]">{landingSolution.titleAccent}</span>
+        </>
+      }
       subtitle={landingSolution.intro}
     >
-      <div className="mb-10 flex flex-wrap justify-center gap-2">
-        {landingSolution.actors.map((actor) => (
-          <span
-            key={actor.label}
+      <figure className="marketing-media-frame mb-10 overflow-hidden">
+        <img
+          src={marketingAssets.solutionFoundations}
+          alt="Modules de la plateforme Med'ease"
+          className="w-full object-cover object-top"
+          loading="lazy"
+        />
+      </figure>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {landingSolution.modules.map((module) => (
+          <div
+            key={module.title}
             className={cn(
-              'rounded-full border px-3 py-1 text-xs font-semibold',
-              actorToneClass[actor.tone],
+              'rounded-2xl border p-5',
+              moduleToneClass[module.tone],
             )}
           >
-            {actor.label}
-          </span>
-        ))}
-      </div>
-
-      <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-        {landingSolution.features.map((feature) => (
-          <div key={feature.title} className="border-t border-border/70 pt-5">
-            <h3 className="text-lg font-semibold leading-snug">{feature.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              {feature.description}
+            <h3 className="font-semibold">{module.title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {module.description}
             </p>
           </div>
         ))}
       </div>
+    </MarketingSection>
+  );
+}
+
+export function FaqSection() {
+  return (
+    <MarketingSection id="faq" eyebrow="FAQ" title={landingFaq.title}>
+      <Accordion type="single" collapsible className="mx-auto max-w-3xl">
+        {landingFaq.items.map((item) => (
+          <AccordionItem key={item.question} value={item.question}>
+            <AccordionTrigger className="text-left">
+              {item.question}
+            </AccordionTrigger>
+            <AccordionContent>{item.answer}</AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </MarketingSection>
   );
 }
 
 export function FoundationsSection() {
   return (
-    <MarketingSection
-      id="foundations"
-      eyebrow="Les fondations"
-      title={landingFoundations.title}
-      subtitle={landingFoundations.tagline}
-      tone="accent"
-    >
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        {landingFoundations.cards.map((card) => (
-          <div
-            key={card.title}
-            className={cn(
-              'rounded-2xl border p-6 md:p-7',
-              foundationToneClass[card.tone],
-            )}
-          >
-            <h3 className="text-xl font-semibold">{card.title}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              {card.description}
-            </p>
-          </div>
-        ))}
-      </div>
-    </MarketingSection>
-  );
-}
-
-export function WhyNowSection() {
-  return (
     <section
-      id="why-now"
-      className="marketing-why-now py-20 text-white md:py-28"
+      id="foundations"
+      className="marketing-foundations-band py-20 md:py-28"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-14 max-w-3xl text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-teal-300/90">
-            Pourquoi maintenant
-          </p>
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            {landingWhyNow.title}
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            {landingFoundations.title}
           </h2>
-          <p className="mt-4 text-lg text-white/70">{landingWhyNow.subtitle}</p>
+          <p className="mt-4 text-lg text-white/75">
+            {landingFoundations.tagline}
+          </p>
         </div>
-
-        <div className="mb-14 flex justify-center">
-          <div className="marketing-wait-ring text-center">
-            <p className="font-[family-name:var(--marketing-display)] text-5xl font-extrabold tracking-tight md:text-6xl">
-              {landingWhyNow.waitTime.value}
-            </p>
-            <p className="mt-2 max-w-[12rem] text-xs font-medium uppercase tracking-wider text-white/65">
-              {landingWhyNow.waitTime.label}
-            </p>
-          </div>
-        </div>
-
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div>
-            <h3 className="font-semibold text-teal-200">Urgences saturées</h3>
-            <ul className="mt-4 space-y-2 text-sm text-white/70">
-              {landingWhyNow.urgency.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-semibold text-teal-200">
-              Coordination fragmentée
-            </h3>
-            <ul className="mt-4 space-y-2 text-sm text-white/70">
-              {landingWhyNow.coordination.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-semibold text-teal-200">Chaque jour</h3>
-            <ul className="mt-4 space-y-2 text-sm text-white/70">
-              {landingWhyNow.daily.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          {landingFoundations.cards.map((card) => (
+            <div
+              key={card.title}
+              className={cn(
+                'rounded-2xl border p-6 shadow-lg shadow-teal-950/10',
+                foundationToneClass[card.tone],
+              )}
+            >
+              <h3 className="text-xl font-semibold text-[#072a47]">
+                {card.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-[#1a445f]/75">
+                {card.description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -383,13 +236,15 @@ export function WhyNowSection() {
 }
 
 export function ImpactSection() {
+  const maxBar = Math.max(...landingImpact.chartBars);
+
   return (
     <MarketingSection
       id="impact"
-      eyebrow="Impact mesurable"
+      eyebrow="Impact & Valeurs"
       title={landingImpact.title}
     >
-      <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+      <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start">
         <ul className="space-y-4">
           {landingImpact.items.map((item) => (
             <li key={item} className="flex items-start gap-3">
@@ -398,38 +253,128 @@ export function ImpactSection() {
             </li>
           ))}
         </ul>
-        <p className="border-l-4 border-[#0b8f9e] pl-5 text-sm leading-relaxed text-muted-foreground md:text-base">
-          {landingImpact.sovereignty}
-        </p>
+
+        <div className="space-y-6">
+          <div className="grid grid-cols-2 gap-3">
+            {landingImpact.metrics.map((metric) => (
+              <div
+                key={metric.label}
+                className={cn(
+                  'rounded-2xl p-5 shadow-md',
+                  metricToneClass[metric.tone],
+                )}
+              >
+                <p className="font-[family-name:var(--marketing-display)] text-3xl font-extrabold">
+                  {metric.value}
+                </p>
+                <p className="mt-1 text-xs font-medium text-white/80">
+                  {metric.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {landingImpact.chartLabel}
+            </p>
+            <div className="flex h-32 items-end gap-2">
+              {landingImpact.chartBars.map((value, index) => (
+                <div
+                  key={`${value}-${index}`}
+                  className="flex-1 rounded-t-md bg-gradient-to-t from-[#0b3d66] to-[#0b8f9e]"
+                  style={{ height: `${(value / maxBar) * 100}%` }}
+                  title={String(value)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </MarketingSection>
   );
 }
 
-export function TrustSection() {
+export function WhyNowSection() {
+  return (
+    <section id="why-now" className="py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-10 max-w-3xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+            {landingWhyNow.title}
+          </h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            {landingWhyNow.subtitle}
+          </p>
+        </div>
+
+        <div className="marketing-why-now overflow-hidden rounded-3xl p-6 text-white md:p-10">
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+            <div className="flex flex-col items-center gap-6 lg:items-start">
+              <div className="marketing-wait-ring text-center">
+                <p className="font-[family-name:var(--marketing-display)] text-5xl font-extrabold tracking-tight md:text-6xl">
+                  {landingWhyNow.waitTime.value}
+                </p>
+                <p className="mt-2 max-w-[12rem] text-xs font-medium uppercase tracking-wider text-white/65">
+                  {landingWhyNow.waitTime.label}
+                </p>
+              </div>
+              <ul className="space-y-2 text-sm text-white/70">
+                {landingWhyNow.facts.map((fact) => (
+                  <li key={fact}>{fact}</li>
+                ))}
+              </ul>
+            </div>
+            <figure className="overflow-hidden rounded-2xl border border-white/10">
+              <img
+                src={marketingAssets.etablissementConfiance}
+                alt="Tableau de bord territorial et limites du système de santé"
+                className="w-full object-cover object-top"
+                loading="lazy"
+              />
+            </figure>
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
+          {landingWhyNow.audiences.map((audience) => (
+            <Link
+              key={audience.title}
+              href={audience.href}
+              className="group rounded-2xl border border-border bg-card p-6 transition hover:border-[#0b8f9e]/40 hover:shadow-md"
+            >
+              <h3 className="text-lg font-semibold group-hover:text-[#0b8f9e]">
+                {audience.title}
+              </h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {audience.description}
+              </p>
+              <p className="mt-4 text-sm font-medium text-[#0b8f9e]">
+                En savoir plus →
+              </p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function PartnersSection() {
   return (
     <MarketingSection
-      id="security"
-      eyebrow="Confiance & sécurité"
-      title={landingTrust.title}
-      subtitle={landingTrust.subtitle}
+      id="partenaires"
+      eyebrow="Partenaires"
+      title={landingPartners.title}
       tone="muted"
     >
-      <figure className="marketing-media-frame mb-10 overflow-hidden">
-        <img
-          src={marketingAssets.etablissementConfiance}
-          alt="Pilotage territorial et souveraineté numérique Med'ease"
-          className="w-full object-cover object-top"
-          loading="lazy"
-        />
-      </figure>
       <div className="flex flex-wrap justify-center gap-3">
-        {landingTrust.badges.map((badge) => (
+        {landingPartners.items.map((item) => (
           <span
-            key={badge}
-            className="rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold tracking-wide text-foreground"
+            key={item}
+            className="rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold tracking-wide"
           >
-            {badge}
+            {item}
           </span>
         ))}
       </div>
@@ -479,24 +424,21 @@ export function DualCtaSection() {
   );
 }
 
-export function FaqSection() {
-  return (
-    <MarketingSection id="faq" eyebrow="FAQ" title={landingFaq.title}>
-      <Accordion type="single" collapsible className="mx-auto max-w-3xl">
-        {landingFaq.items.map((item) => (
-          <AccordionItem key={item.question} value={item.question}>
-            <AccordionTrigger className="text-left">
-              {item.question}
-            </AccordionTrigger>
-            <AccordionContent>{item.answer}</AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
-    </MarketingSection>
-  );
-}
-
 /** Kept for audience/vision pages that still import SecuritySection. */
 export function SecuritySection() {
-  return <TrustSection />;
+  return (
+    <MarketingSection
+      id="security"
+      eyebrow="Confiance & sécurité"
+      title="Données de santé protégées"
+      subtitle="Hébergement HDS, conformité RGPD et traçabilité pour protéger les données de santé."
+      tone="muted"
+    >
+      <div className="mx-auto max-w-3xl text-center leading-relaxed text-muted-foreground">
+        Med&apos;ease est conçue pour la santé : authentification multi-profils,
+        isolation multi-tenant, audit des accès et interopérabilité avec vos
+        systèmes existants.
+      </div>
+    </MarketingSection>
+  );
 }

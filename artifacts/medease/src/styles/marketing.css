@@ -16,41 +16,25 @@
 }
 
 .marketing-hero-bleed {
-  background: linear-gradient(135deg, #e8f6fa 0%, #f7fbfd 45%, #dceef5 100%);
+  background: linear-gradient(180deg, #f4fafc 0%, #ffffff 55%, #f7fbfd 100%);
 }
 
 .marketing-hero-photo {
   animation: marketing-hero-drift 28s ease-in-out infinite alternate;
 }
 
-.marketing-hero-scrim {
+.marketing-problem-band {
   background:
-    linear-gradient(
-      105deg,
-      rgba(247, 251, 253, 0.96) 0%,
-      rgba(247, 251, 253, 0.88) 34%,
-      rgba(247, 251, 253, 0.35) 58%,
-      rgba(247, 251, 253, 0.08) 100%
+    radial-gradient(
+      800px circle at 85% 20%,
+      rgba(232, 93, 76, 0.18),
+      transparent 50%
     ),
-    linear-gradient(180deg, rgba(232, 246, 250, 0.35) 0%, transparent 40%);
+    linear-gradient(160deg, #061a2b 0%, #0a2438 60%, #071824 100%);
 }
 
-@media (max-width: 768px) {
-  .marketing-hero-scrim {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(247, 251, 253, 0.92) 0%,
-        rgba(247, 251, 253, 0.82) 42%,
-        rgba(247, 251, 253, 0.55) 70%,
-        rgba(247, 251, 253, 0.2) 100%
-      );
-  }
-
-  .marketing-hero-photo {
-    object-position: 75% center;
-    opacity: 0.55;
-  }
+.marketing-foundations-band {
+  background: linear-gradient(135deg, #0b8f9e 0%, #1a6fb5 55%, #0b3d66 100%);
 }
 
 .marketing-accent-word {
