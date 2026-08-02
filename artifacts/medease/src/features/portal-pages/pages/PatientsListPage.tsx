@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 
 import {
   PortalActionButton,
@@ -6,10 +6,12 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
+import type { PatientRow } from '@/features/portal-pages/data/mock-data';
 import {
-  MOCK_PATIENTS,
-  type PatientRow,
-} from '@/features/portal-pages/data/mock-data';
+  mapPatientsToPortalRows,
+  useArchivePatient,
+  usePatients,
+} from '@/features/patients';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
@@ -32,9 +34,16 @@ const columns: DataTableColumn<PatientRow>[] = [
 ];
 
 export default function PatientsListPage() {
-  const [patients, setPatients] = useState(MOCK_PATIENTS);
+  const query = usePatients({ page: 1, pageSize: 100 });
+  const archivePatient = useArchivePatient();
+
+  const patients = useMemo(
+    () => mapPatientsToPortalRows(query.data?.items ?? []),
+    [query.data?.items],
+  );
 
   const critical = patients.filter((row) => row.status === 'critical').length;
+  const active = patients.filter((row) => row.status !== 'discharged').length;
 
   return (
     <PageShell
@@ -49,10 +58,14 @@ export default function PatientsListPage() {
     >
       <PortalMetricsGrid
         metrics={[
-          { title: 'Active patients', value: patients.length },
+          { title: 'Active patients', value: active },
           { title: 'Critical', value: critical, status: 'critical' },
-          { title: 'New today', value: 3, status: 'stable' },
-          { title: 'Discharges planned', value: 7 },
+          {
+            title: 'Total on record',
+            value: query.data?.total ?? patients.length,
+            status: 'stable',
+          },
+          { title: 'Discharges planned', value: 0 },
         ]}
       />
 
@@ -67,15 +80,8 @@ export default function PatientsListPage() {
           <>
             <DropdownMenuItem>View chart</DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => {
-                setPatients((prev) =>
-                  prev.map((item) =>
-                    item.id === row.id
-                      ? { ...item, status: 'discharged' as const }
-                      : item,
-                  ),
-                );
-              }}
+              disabled={archivePatient.isPending}
+              onClick={() => archivePatient.mutate(row.id)}
             >
               Initiate discharge
             </DropdownMenuItem>

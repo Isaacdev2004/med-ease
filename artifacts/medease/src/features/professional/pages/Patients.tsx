@@ -49,7 +49,10 @@ const STATUS_OPTIONS = [
 
 export default function PatientsPage() {
   const filters = useUrlFilters();
-  const query = usePatients({ status: filters.status || undefined });
+  const query = usePatients({
+    status: filters.status || undefined,
+    q: filters.q || undefined,
+  });
   const patients = query.data ?? [];
 
   const tableState = useTableState<ProfessionalPatientSummary>({

@@ -6,9 +6,10 @@ export const professionalQueries = {
   patients: (filters?: Record<string, unknown>) => ({
     queryKey: queryKeys.patients.list(filters),
     queryFn: () =>
-      professionalService.listPatients(
-        filters?.status ? { status: String(filters.status) } : undefined,
-      ),
+      professionalService.listPatients({
+        status: filters?.status ? String(filters.status) : undefined,
+        q: filters?.q ? String(filters.q) : undefined,
+      }),
     staleTime: CACHE_TIMES.patientList,
   }),
 };

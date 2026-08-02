@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import {
   PortalActionButton,
   PortalDataTableSection,
@@ -5,10 +7,8 @@ import {
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import {
-  MOCK_PATIENTS,
-  type PatientRow,
-} from '@/features/portal-pages/data/mock-data';
+import type { PatientRow } from '@/features/portal-pages/data/mock-data';
+import { mapPatientsToPortalRows, usePatients } from '@/features/patients';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 
@@ -24,6 +24,13 @@ const columns: DataTableColumn<PatientRow>[] = [
 ];
 
 export default function MedicalRecordsPage() {
+  const query = usePatients({ page: 1, pageSize: 100 });
+
+  const patients = useMemo(
+    () => mapPatientsToPortalRows(query.data?.items ?? []),
+    [query.data?.items],
+  );
+
   return (
     <PageShell
       title="Medical Records"
@@ -37,16 +44,24 @@ export default function MedicalRecordsPage() {
     >
       <PortalMetricsGrid
         metrics={[
-          { title: 'Active charts', value: '12,480', status: 'stable' },
-          { title: 'Pending merges', value: '14', status: 'observation' },
-          { title: 'Records updated today', value: '326', status: 'stable' },
+          {
+            title: 'Active charts',
+            value: String(query.data?.total ?? patients.length),
+            status: 'stable',
+          },
+          { title: 'Pending merges', value: '0', status: 'observation' },
+          {
+            title: 'Records loaded',
+            value: String(patients.length),
+            status: 'stable',
+          },
         ]}
       />
       <PortalDataTableSection
         title="Patient charts"
         description="Recently accessed medical records."
         columns={columns}
-        data={MOCK_PATIENTS}
+        data={patients}
         getRowId={(row) => row.id}
         rowActions={() => (
           <PortalActionButton
@@ -58,11 +73,11 @@ export default function MedicalRecordsPage() {
       />
       <PortalListCard
         title="Recent activity"
-        items={MOCK_PATIENTS.slice(0, 3).map((p) => ({
-          id: p.id,
-          primary: p.name,
-          secondary: `MRN ${p.mrn} · ${p.ward}`,
-          badge: p.status,
+        items={patients.slice(0, 3).map((patient) => ({
+          id: patient.id,
+          primary: patient.name,
+          secondary: `MRN ${patient.mrn} · ${patient.ward}`,
+          badge: patient.status,
         }))}
       />
     </PageShell>

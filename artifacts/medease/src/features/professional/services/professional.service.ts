@@ -39,14 +39,18 @@ function mapPatientSummary(patient: {
 export const professionalService = {
   async listPatients(filters?: {
     status?: string;
+    q?: string;
   }): Promise<ProfessionalPatientSummary[]> {
-    const result = await patientsService.listPatients({
+    const baseFilters = {
       status: filters?.status as PatientStatus | undefined,
-
       page: 1,
-
       pageSize: 100,
-    });
+    };
+
+    const query = filters?.q?.trim();
+    const result = query
+      ? await patientsService.searchPatients({ ...baseFilters, q: query })
+      : await patientsService.listPatients(baseFilters);
 
     return result.items.map(mapPatientSummary);
   },
