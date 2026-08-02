@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Calendar } from 'lucide-react';
+import { Calendar, FlaskConical } from 'lucide-react';
 
 import {
   usePatientDashboard,
@@ -12,10 +12,15 @@ import {
   StatusBadge,
 } from '@/shared/components';
 import { QueryStateView } from '@/shared/data/QueryStateView';
-import { SparklineChart, ChartPanel } from '@/shared/charts';
 import { AppointmentCard, MedicationCard } from '@/shared/medical';
 import { Button } from '@/shared/ui/button';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
 
 function DashboardSkeleton() {
@@ -29,14 +34,6 @@ function DashboardSkeleton() {
     </div>
   );
 }
-
-const demoTrend = [
-  { label: 'Mon', value: 72 },
-  { label: 'Tue', value: 74 },
-  { label: 'Wed', value: 71 },
-  { label: 'Thu', value: 73 },
-  { label: 'Fri', value: 70 },
-];
 
 export default function Dashboard() {
   const dashboardQuery = usePatientDashboard();
@@ -55,7 +52,11 @@ export default function Dashboard() {
           title={`Welcome back, ${data.greetingName}`}
           subtitle="Here's your health summary for today."
           status={<StatusBadge status="stable" label="Stable" />}
-          lastUpdated={format(new Date(), 'PPp')}
+          lastUpdated={
+            dashboardQuery.dataUpdatedAt
+              ? format(new Date(dashboardQuery.dataUpdatedAt), 'PPp')
+              : undefined
+          }
           primaryAction={<Button>Book Appointment</Button>}
         >
           <div className="grid gap-6 lg:grid-cols-3">
@@ -129,15 +130,21 @@ export default function Dashboard() {
               ) : null}
             </div>
 
-            <ChartPanel
-              title="Recent Test Results"
-              description={data.recentTestLabel}
-            >
-              <SparklineChart data={demoTrend} />
-              <Button variant="link" className="px-0 mt-4 h-auto">
-                View full report →
-              </Button>
-            </ChartPanel>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <FlaskConical className="h-5 w-5" aria-hidden="true" />
+                  Recent Test Results
+                </CardTitle>
+                <CardDescription>{data.recentTestLabel}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Lab results from your care team will appear here once
+                  available.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </PageShell>
       )}

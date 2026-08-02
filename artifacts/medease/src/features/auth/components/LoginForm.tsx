@@ -2,7 +2,6 @@ import { Link, useLocation } from 'wouter';
 import { Shield } from 'lucide-react';
 
 import { env } from '@/config/env';
-import { DEMO_CREDENTIALS_HINT } from '@/services/auth/demo-users';
 import { useApiAuth } from '@/services/auth/auth-service';
 import { useAuth } from '@/services/auth/auth-context';
 import {
@@ -48,9 +47,14 @@ export function LoginForm({
   const [, setLocation] = useLocation();
   const { login, error, clearError, authState } = useAuth();
 
+  const useDevDefaults = env.isDev;
   const form = useZodForm<LoginFormValues>(loginSchema, {
-    email: useApiAuth ? 'admin@medease.health' : 'patient@medease.health',
-    password: 'demo',
+    email: useDevDefaults
+      ? useApiAuth
+        ? 'admin@medease.health'
+        : 'patient@medease.health'
+      : '',
+    password: useDevDefaults ? 'demo' : '',
     rememberMe: false,
   });
 
@@ -68,7 +72,9 @@ export function LoginForm({
     ? env.isDev
       ? copy.devHint
       : copy.prodHint
-    : copy.mockHint;
+    : env.isDev
+      ? copy.mockHint
+      : null;
 
   return (
     <>
@@ -129,7 +135,9 @@ export function LoginForm({
           <Shield className="w-3.5 h-3.5 mr-1.5 text-primary" />
           {copy.complianceHint}
         </div>
-        <p className="text-xs text-center text-muted-foreground">{hint}</p>
+        {hint ? (
+          <p className="text-xs text-center text-muted-foreground">{hint}</p>
+        ) : null}
         <p className="text-sm text-center text-muted-foreground">
           {copy.noAccountLabel}{' '}
           <Link
