@@ -1,5 +1,5 @@
-import { AudiencePageView } from '@/features/marketing/components/AudiencePageView';
+import { EstablishmentAudiencePageView } from '@/features/marketing/components/EstablishmentAudiencePageView';
 
 export default function EstablishmentAudiencePage() {
-  return <AudiencePageView pageId="establishment" />;
+  return <EstablishmentAudiencePageView />;
 }

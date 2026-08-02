@@ -1,5 +1,5 @@
-import { AudiencePageView } from '@/features/marketing/components/AudiencePageView';
+import { PatientAudiencePageView } from '@/features/marketing/components/PatientAudiencePageView';
 
 export default function PatientAudiencePage() {
-  return <AudiencePageView pageId="patient" />;
+  return <PatientAudiencePageView />;
 }

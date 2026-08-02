@@ -1,10 +1,9 @@
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useEffect } from 'react';
 
-import { SecuritySection } from '@/features/marketing/components/LandingSections';
 import { useMarketingCta } from '@/features/marketing/components/MarketingCtaProvider';
-import { MarketingSection } from '@/features/marketing/components/MarketingSection';
 import { conciergePage } from '@/features/marketing/content/audience-pages-fr';
+import { marketingAssets } from '@/features/marketing/content/marketing-assets';
 import { useDocumentTitle } from '@/shared/hooks/use-document-title';
 import { Button } from '@/shared/ui/button';
 
@@ -22,106 +21,144 @@ export function ConciergePageView() {
 
   return (
     <>
-      <section className="marketing-hero-bg relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-20">
-        <div className="marketing-hero-grid pointer-events-none absolute inset-0 opacity-50" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="mb-6 inline-flex items-center rounded-full border border-primary/20 bg-card/80 px-3 py-1 text-sm font-medium backdrop-blur-sm">
-            Conciergerie médicale
+      <section className="marketing-foundations-band overflow-hidden pb-16 pt-28 md:pb-24 md:pt-32">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8">
+          <div className="marketing-reveal">
+            <span className="inline-flex rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white backdrop-blur-sm">
+              {conciergePage.hero.badge}
+            </span>
+            <h1 className="mt-5 font-[family-name:var(--marketing-display)] text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:leading-[1.08]">
+              {conciergePage.hero.title}
+            </h1>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/85 sm:text-lg">
+              {conciergePage.hero.subtitle}
+            </p>
+            <Button
+              size="lg"
+              className="mt-8 h-12 bg-white px-8 text-[#0b8f9e] hover:bg-white/90"
+              onClick={() => openCta(conciergePage.hero.ctaId)}
+            >
+              {conciergePage.hero.ctaLabel}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </div>
-          <h1 className="mx-auto max-w-4xl text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-            {conciergePage.hero.title}
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-            {conciergePage.hero.subtitle}
+          <figure className="marketing-reveal-delay mx-auto w-full max-w-md overflow-hidden rounded-2xl border border-white/15 shadow-2xl shadow-teal-950/30 lg:max-w-none">
+            <img
+              src={marketingAssets.notreVision}
+              alt="Réseau de coordination santé Med'ease"
+              className="w-full object-cover"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-16">
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <h2 className="text-2xl font-bold tracking-tight text-[#072a47] sm:text-3xl">
+            {conciergePage.transition.title}
+          </h2>
+          <p className="mt-4 text-muted-foreground">
+            {conciergePage.transition.subtitle}
+          </p>
+        </div>
+      </section>
+
+      <section id="expertises" className="border-y border-border/60 bg-muted/30 py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#0b8f9e]">
+              {conciergePage.expertiseGroups.eyebrow}
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              {conciergePage.expertiseGroups.title}
+            </h2>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {conciergePage.expertiseGroups.items.map((group) => (
+              <div
+                key={group.title}
+                className="rounded-2xl border border-sky-100 bg-sky-50/60 p-6"
+              >
+                <div className="mb-4 h-10 w-10 rounded-lg bg-[#0b8f9e]/15" />
+                <h3 className="text-lg font-semibold text-[#072a47]">
+                  {group.title}
+                </h3>
+                <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+                  {group.items.map((item) => (
+                    <li key={item} className="flex gap-2">
+                      <span className="text-[#0b8f9e]">•</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-3">
+            {conciergePage.journey.map((step) => (
+              <div
+                key={step.phase}
+                className="rounded-2xl border border-border bg-card px-5 py-4"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wider text-[#0b8f9e]">
+                  {step.phase}
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="coordination" className="py-20 md:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mb-12 max-w-3xl text-center">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[#0b8f9e]">
+              {conciergePage.differentiators.eyebrow}
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+              {conciergePage.differentiators.title}
+            </h2>
+          </div>
+          <div className="grid gap-5 md:grid-cols-3">
+            {conciergePage.differentiators.items.map((item) => (
+              <div
+                key={item.title}
+                className="marketing-foundations-band rounded-2xl p-6 text-white shadow-lg"
+              >
+                <div className="mb-4 h-10 w-10 rounded-lg bg-white/15" />
+                <h3 className="text-lg font-semibold">{item.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/85">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="marketing-foundations-band py-16 md:py-20">
+        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
+          <h2 className="font-[family-name:var(--marketing-display)] text-3xl font-bold text-white sm:text-4xl">
+            {conciergePage.closing.title}
+          </h2>
+          <p className="mt-5 text-lg text-white/85">{conciergePage.closing.body}</p>
+          <p className="mt-4 text-sm font-medium text-white/90">
+            {conciergePage.closing.tagline}
           </p>
           <Button
             size="lg"
-            className="mt-10 h-12 px-8 text-base shadow-lg"
+            className="mt-8 h-12 bg-white px-8 text-[#0b8f9e] hover:bg-white/90"
             onClick={() => openCta(conciergePage.hero.ctaId)}
           >
-            {conciergePage.hero.ctaLabel}
+            {conciergePage.closing.ctaLabel}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
       </section>
-
-      <MarketingSection
-        id="expertises"
-        title="Nos expertises"
-        subtitle="Parce qu'un parcours de soins ne commence pas à l'hôpital."
-        tone="muted"
-      >
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {conciergePage.expertiseGroups.map((group) => (
-            <div key={group.title} className="rounded-2xl border bg-card p-6">
-              <h3 className="text-lg font-semibold">{group.title}</h3>
-              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                {group.items.map((item) => (
-                  <li key={item} className="flex gap-2">
-                    <span className="text-primary">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </MarketingSection>
-
-      <MarketingSection id="parcours" title="Votre parcours, étape par étape">
-        <div className="grid gap-6 md:grid-cols-3">
-          {conciergePage.journey.map((step, index) => (
-            <div
-              key={step.phase}
-              className="rounded-2xl border bg-card p-6 text-center"
-            >
-              <p className="text-sm font-semibold uppercase tracking-widest text-primary">
-                Étape {index + 1}
-              </p>
-              <h3 className="mt-3 text-lg font-semibold">{step.phase}</h3>
-              <p className="mt-3 text-muted-foreground">{step.description}</p>
-            </div>
-          ))}
-        </div>
-      </MarketingSection>
-
-      <MarketingSection
-        title="Bien plus qu'une assistance administrative"
-        tone="accent"
-      >
-        <div className="grid gap-6 md:grid-cols-3">
-          {conciergePage.differentiators.map((item) => (
-            <div key={item.title} className="rounded-2xl border bg-card p-6">
-              <h3 className="text-lg font-semibold">{item.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {item.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </MarketingSection>
-
-      <MarketingSection id="services" title="Accompagnement personnalisé en santé">
-        <ul className="mx-auto grid max-w-2xl gap-4 sm:grid-cols-2">
-          {conciergePage.services.map((service) => (
-            <li key={service} className="flex items-center gap-3">
-              <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
-              <span className="text-muted-foreground">{service}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mx-auto mt-10 max-w-3xl text-center text-lg leading-relaxed text-muted-foreground">
-          {conciergePage.closing}
-        </p>
-        <div className="mt-10 flex justify-center">
-          <Button size="lg" onClick={() => openCta(conciergePage.hero.ctaId)}>
-            {conciergePage.hero.ctaLabel}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </MarketingSection>
-
-      <SecuritySection />
     </>
   );
 }

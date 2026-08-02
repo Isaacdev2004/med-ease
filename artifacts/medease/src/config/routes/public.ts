@@ -59,12 +59,25 @@ export const publicRoutes: GlobalRouteDefinition[] = [
     public: true,
     lazy: () => import('@/features/marketing/pages/ConciergePage'),
   },
+  {
+    path: ROUTES.confianceSecurite,
+    title: "Med'ease | Confiance & Sécurité",
+    layout: 'marketing',
+    public: true,
+    lazy: () => import('@/features/marketing/pages/TrustSecurityPage'),
+  },
   marketingPage('About', ROUTES.about),
   marketingPage('Features', ROUTES.features),
   marketingPage('Contact', ROUTES.contact),
   marketingPage('Privacy Policy', ROUTES.privacy),
   marketingPage('Terms of Service', ROUTES.terms),
-  marketingPage('Help Center', ROUTES.help),
+  {
+    path: ROUTES.help,
+    title: "Med'ease | Centre d'aide",
+    layout: 'marketing',
+    public: true,
+    lazy: () => import('@/features/marketing/pages/HelpCenterPage'),
+  },
   marketingPage('System Status', ROUTES.status),
 ];
 

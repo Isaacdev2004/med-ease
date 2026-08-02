@@ -1,5 +1,5 @@
-import { AudiencePageView } from '@/features/marketing/components/AudiencePageView';
+import { ProfessionalAudiencePageView } from '@/features/marketing/components/ProfessionalAudiencePageView';
 
 export default function ProfessionalAudiencePage() {
-  return <AudiencePageView pageId="professional" />;
+  return <ProfessionalAudiencePageView />;
 }

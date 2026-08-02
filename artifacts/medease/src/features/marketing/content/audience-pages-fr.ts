@@ -291,61 +291,65 @@ export const visionPage = {
 
 export const conciergePage = {
   seo: {
-    title: "Med'ease Conciergerie | Coordination santé personnalisée",
+    title: "Med'ease Coordinateur Santé | Conciergerie médicale",
     description:
-        'Une seule demande, des centaines de démarches simplifiées. Votre compagnon de coordination avant, pendant et après votre prise en charge.',
+      'Une seule demande, des centaines de démarches simplifiées. Votre coordinateur santé avant, pendant et après votre prise en charge.',
   },
   hero: {
+    badge: 'Votre Coordinateur Santé',
     title: 'Une seule demande. Des centaines de démarches simplifiées.',
     subtitle:
-      'Votre compagnon de coordination avant, pendant et après votre prise en charge.',
-    ctaLabel: 'Découvrir la Conciergerie médicale',
+      'Votre compagnon de coordination orchestre chaque étape du parcours — administrative, médicale, sociale et logistique.',
+    ctaLabel: 'Découvrir la conciergerie médicale',
     ctaId: 'concierge' as const,
   },
-  expertiseGroups: [
-    {
-      title: 'Admission',
-      items: [
-        'Préparation des dossiers',
-        'Admission EHPAD',
-        'Résidence autonomie',
-        'USLD',
-        'SSR',
-        'HAD',
-      ],
-    },
-    {
-      title: 'Coordination',
-      items: [
-        'Gestion des admissions',
-        'Organisation des sorties',
-        'Coordination Ville-Hôpital',
-        'Transport sanitaire',
-        'Lien avec les professionnels',
-      ],
-    },
-    {
-      title: 'Accompagnement',
-      items: [
-        'Préparation intervention',
-        'Organisation des soins',
-        'Recherche de solutions',
-        'Orientation',
-        'Conseils personnalisés',
-      ],
-    },
-    {
-      title: 'Assistance administrative',
-      items: [
-        'Documents',
-        'Assurances',
-        'Organismes',
-        'Sécurité sociale',
-        'Mutuelles',
-        'Constitution des dossiers',
-      ],
-    },
-  ],
+  transition: {
+    title: 'Parce qu’un parcours de soins ne commence pas à l’hôpital.',
+    subtitle:
+      'Nous préparons, coordonnons et accompagnons avant, pendant et après votre prise en charge.',
+  },
+  expertiseGroups: {
+    eyebrow: 'Nos expertises',
+    title: "Ce que Med'ease coordonne pour vous",
+    items: [
+      {
+        title: 'Admission',
+        items: [
+          'Préparation des dossiers',
+          'Admission EHPAD / SSR / HAD',
+          'Lien avec les cliniques',
+          'Suivi des entrées',
+        ],
+      },
+      {
+        title: 'Coordination',
+        items: [
+          'Organisation des soins à domicile',
+          'Coordination pluridisciplinaire',
+          'Transport sanitaire',
+          'Lien ville–hôpital',
+        ],
+      },
+      {
+        title: 'Accompagnement',
+        items: [
+          'Parcours personnalisés',
+          'Suivi et orientation',
+          'Soutien aux aidants',
+          'Conseils adaptés',
+        ],
+      },
+      {
+        title: 'Assistance administrative',
+        items: [
+          'Documents et dossiers',
+          'Sécurité sociale / mutuelles',
+          'Assurances',
+          'Démarches organismes',
+        ],
+      },
+    ],
+  },
   journey: [
     {
       phase: 'Avant votre prise en charge',
@@ -360,35 +364,39 @@ export const conciergePage = {
       description: 'Le parcours continue.',
     },
   ],
-  differentiators: [
-    {
-      title: 'Coordination intelligente',
-      description: 'Chaque acteur est synchronisé.',
-    },
-    {
-      title: 'Accompagnement personnalisé',
-      description: 'Chaque patient bénéficie d\'un parcours adapté à ses besoins.',
-    },
-    {
-      title: 'IA décisionnelle',
-      description:
-        'L\'intelligence artificielle identifie les prochaines actions, réduit les oublis et accompagne les professionnels dans leurs décisions opérationnelles.',
-    },
-  ],
-  services: [
-    'Aide aux aidants',
-    'Orientation parcours complexe',
-    'Logistique sanitaire',
-    'Assistance administrative',
-  ],
-  closing:
-    'Que votre besoin soit administratif, médical, social ou logistique, Med\'ease orchestre chaque étape afin que rien ne soit oublié.',
+  differentiators: {
+    eyebrow: "Bien plus qu'une assistance administrative",
+    title: 'La coordination intelligente au service de chacun',
+    items: [
+      {
+        title: 'Coordination intelligente',
+        description: 'Chaque acteur du parcours est synchronisé autour de vous.',
+      },
+      {
+        title: 'Accompagnement personnalisé',
+        description:
+          'Chaque patient bénéficie d’un parcours adapté à ses besoins.',
+      },
+      {
+        title: 'IA décisionnelle',
+        description:
+          'L’IA identifie les prochaines actions, réduit les oublis et éclaire les décisions.',
+      },
+    ],
+  },
+  closing: {
+    title: 'Chaque parcours est unique. Notre coordination aussi.',
+    body: 'Que votre besoin soit administratif, médical, social ou logistique, Med\'ease orchestre chaque étape afin que rien ne soit oublié.',
+    tagline: "Med'ease, premier hub de Coordination Territoriale de Santé.",
+    ctaLabel: 'Découvrir la conciergerie médicale',
+  },
 };
 
 export const audienceNavLinks = [
-  { path: '/patients', label: 'Patients' },
+  { path: '/patients', label: 'Patients & Aidants' },
   { path: '/professionnels', label: 'Professionnels' },
   { path: '/etablissements', label: 'Établissements' },
   { path: '/notre-vision', label: 'Notre vision' },
-  { path: '/conciergerie', label: 'Conciergerie' },
+  { path: '/conciergerie', label: 'Coordinateur Santé' },
+  { path: '/confiance-securite', label: 'Confiance & Sécurité' },
 ] as const;

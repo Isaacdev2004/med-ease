@@ -7,11 +7,16 @@ export const landingSeo = {
 
 export const landingNav = [
   { href: '/notre-vision', label: 'Notre Vision', kind: 'route' as const },
-  { href: '/#comment', label: 'Comment ça marche', kind: 'anchor' as const },
-  { href: '/#solution', label: 'Notre Solution', kind: 'anchor' as const },
-  { href: '/#impact', label: 'Impact & Valeurs', kind: 'anchor' as const },
-  { href: '/#faq', label: 'Foire aux Questions', kind: 'anchor' as const },
-  { href: '/#partenaires', label: 'Partenaires', kind: 'anchor' as const },
+  { href: '/patients', label: 'Patients & Aidants', kind: 'route' as const },
+  { href: '/professionnels', label: 'Professionnels', kind: 'route' as const },
+  { href: '/etablissements', label: 'Établissements', kind: 'route' as const },
+  { href: '/conciergerie', label: 'Coordinateur Santé', kind: 'route' as const },
+  {
+    href: '/confiance-securite',
+    label: 'Confiance & Sécurité',
+    kind: 'route' as const,
+  },
+  { href: '/help', label: "Centre d'aide", kind: 'route' as const },
 ];
 
 export const landingHero = {
