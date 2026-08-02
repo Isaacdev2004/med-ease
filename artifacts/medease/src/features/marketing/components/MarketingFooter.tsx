@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 
 import { audienceNavLinks } from '@/features/marketing/content/audience-pages-fr';
+import { marketingAssets } from '@/features/marketing/content/marketing-assets';
 import { ROUTES } from '@/config/routes';
 import { APP_NAME } from '@/config/constants';
 
@@ -18,11 +19,11 @@ export function MarketingFooter() {
         <div className="grid gap-10 md:grid-cols-[1.2fr_1fr]">
           <div>
             <div className="mb-4 flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <span className="font-serif text-sm font-bold italic leading-none">
-                  M
-                </span>
-              </div>
+              <img
+                src={marketingAssets.logoMark}
+                alt=""
+                className="h-8 w-8 rounded-lg"
+              />
               <span className="text-lg font-semibold text-white">{APP_NAME}</span>
             </div>
             <p className="max-w-md text-sm leading-relaxed text-white/70">

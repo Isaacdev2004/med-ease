@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes';
 
 import { useMarketingCtaOptional } from '@/features/marketing/components/MarketingCtaProvider';
 import { audienceNavLinks } from '@/features/marketing/content/audience-pages-fr';
+import { marketingAssets } from '@/features/marketing/content/marketing-assets';
 import { ROUTES } from '@/config/routes';
 import { APP_NAME } from '@/config/constants';
 import { Button } from '@/shared/ui/button';
@@ -17,9 +18,10 @@ import {
 import { cn } from '@/shared/lib/utils';
 
 const homeAnchorLinks = [
+  { href: '/#audiences', label: 'Pour qui' },
   { href: '/#solution', label: 'Solution' },
   { href: '/#foundations', label: 'Fondations' },
-  { href: '/#impact', label: 'Impact' },
+  { href: '/#why-now', label: 'Pourquoi' },
   { href: '/#faq', label: 'FAQ' },
 ];
 
@@ -36,9 +38,11 @@ export function MarketingHeader() {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link href={ROUTES.home} className="flex items-center gap-2.5 font-semibold">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <span className="font-serif text-lg font-bold italic leading-none">M</span>
-          </div>
+          <img
+            src={marketingAssets.logoMark}
+            alt=""
+            className="h-9 w-9 rounded-xl shadow-sm"
+          />
           <span className="text-xl tracking-tight">{APP_NAME}</span>
         </Link>
 

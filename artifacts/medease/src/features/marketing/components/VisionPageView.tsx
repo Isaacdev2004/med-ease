@@ -5,6 +5,7 @@ import { SecuritySection } from '@/features/marketing/components/LandingSections
 import { useMarketingCta } from '@/features/marketing/components/MarketingCtaProvider';
 import { MarketingSection } from '@/features/marketing/components/MarketingSection';
 import { visionPage } from '@/features/marketing/content/audience-pages-fr';
+import { marketingAssets } from '@/features/marketing/content/marketing-assets';
 import { useDocumentTitle } from '@/shared/hooks/use-document-title';
 import { Button } from '@/shared/ui/button';
 
@@ -24,13 +25,23 @@ export function VisionPageView() {
     <>
       <section className="marketing-hero-bg relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-20">
         <div className="marketing-hero-grid pointer-events-none absolute inset-0 opacity-50" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mx-auto max-w-4xl text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-            {visionPage.hero.title}
-          </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg text-muted-foreground leading-relaxed">
-            {visionPage.hero.subtitle}
-          </p>
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+              {visionPage.hero.title}
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
+              {visionPage.hero.subtitle}
+            </p>
+          </div>
+          <figure className="marketing-media-frame mx-auto mt-12 max-w-4xl overflow-hidden">
+            <img
+              src={marketingAssets.notreVision}
+              alt="Construire la santé de demain — Med'ease"
+              className="w-full object-cover"
+              loading="lazy"
+            />
+          </figure>
         </div>
       </section>
 

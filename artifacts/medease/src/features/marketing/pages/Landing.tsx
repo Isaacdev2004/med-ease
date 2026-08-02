@@ -1,14 +1,15 @@
 import { useEffect } from 'react';
 
 import {
+  AudienceDualSection,
   DualCtaSection,
   FaqSection,
   FoundationsSection,
   HeroSection,
   ImpactSection,
   ProblemSection,
-  SecuritySection,
   SolutionSection,
+  TrustSection,
   WhyNowSection,
 } from '@/features/marketing/components/LandingSections';
 import { landingSeo } from '@/features/marketing/content/landing-fr';
@@ -28,13 +29,14 @@ export default function Landing() {
     <>
       <HeroSection />
       <ProblemSection />
+      <AudienceDualSection />
       <SolutionSection />
       <FoundationsSection />
-      <ImpactSection />
       <WhyNowSection />
+      <ImpactSection />
+      <TrustSection />
       <DualCtaSection />
       <FaqSection />
-      <SecuritySection />
     </>
   );
 }
