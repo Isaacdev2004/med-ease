@@ -5,12 +5,99 @@ import type {
   VitalReading,
 } from '@/services/patient-records/types';
 import { getPatientIdForUser } from '@/services/patient-records/mock-data';
+import {
+  buildDemographicsFromPatient,
+  buildPatientHealthRecordFromApi,
+} from '@/services/patient-records/live-record.mapper';
 import { patientRecordRepository } from '@/services/patient-records/repository';
+import { patientsService } from '@/services/patients';
+import { NotFoundError } from '@workspace/repository-transport';
 
 const DELAY_MS = 250;
 
 function delay(ms = DELAY_MS) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function buildAppointmentTimeline(
+  patientId: string,
+): Promise<TimelineEntry[]> {
+  try {
+    const { appointmentService } =
+      await import('@/services/appointments/appointment.service');
+    const [upcoming, past] = await Promise.all([
+      appointmentService.getUpcoming({ patientId, pageSize: 10 }),
+      appointmentService.getPast({ patientId, pageSize: 10 }),
+    ]);
+
+    return [...past, ...upcoming]
+      .sort(
+        (a, b) =>
+          new Date(b.scheduledAt).getTime() - new Date(a.scheduledAt).getTime(),
+      )
+      .map((appointment) => ({
+        id: appointment.id,
+        category: 'encounter' as const,
+        date: appointment.scheduledAt,
+        title: `${appointment.specialty} — ${appointment.reason}`,
+        description: `${appointment.provider.fullName} · ${appointment.facility.name} · ${appointment.status.replaceAll('_', ' ')}`,
+        actor: appointment.provider.fullName,
+      }));
+  } catch {
+    return [];
+  }
+}
+
+async function loadLiveRecord(
+  patientId: string,
+): Promise<PatientHealthRecord | null> {
+  try {
+    const [
+      patient,
+      identifiers,
+      contacts,
+      addresses,
+      emergencyContacts,
+      allergies,
+      preferences,
+      timeline,
+    ] = await Promise.all([
+      patientsService.getPatient(patientId),
+      patientsService.getIdentifiers(patientId),
+      patientsService.getContacts(patientId),
+      patientsService.getAddresses(patientId),
+      patientsService.getEmergencyContacts(patientId),
+      patientsService.getAllergies(patientId),
+      patientsService.getPreferences(patientId).catch(() => undefined),
+      buildAppointmentTimeline(patientId),
+    ]);
+
+    return buildPatientHealthRecordFromApi({
+      patient,
+      identifiers,
+      contacts,
+      addresses,
+      emergencyContacts,
+      allergies,
+      preferences: preferences ?? undefined,
+      timeline,
+    });
+  } catch (error) {
+    if (error instanceof NotFoundError) {
+      return null;
+    }
+    throw error;
+  }
+}
+
+async function loadRecord(
+  patientId: string,
+): Promise<PatientHealthRecord | null> {
+  const liveRecord = await loadLiveRecord(patientId);
+  if (liveRecord) {
+    return liveRecord;
+  }
+  return patientRecordRepository.getById(patientId);
 }
 
 function filterTimeline(
@@ -55,17 +142,48 @@ export const patientRecordService = {
 
   async search(filters?: PatientRecordFilters) {
     await delay();
-    return patientRecordRepository.search(filters);
+    const query = filters?.q?.trim();
+
+    try {
+      if (query) {
+        const result = await patientsService.searchPatients({
+          q: query,
+          page: filters?.page ?? 1,
+          pageSize: filters?.pageSize ?? 25,
+        });
+
+        return {
+          items: result.items.map(buildDemographicsFromPatient),
+          total: result.total,
+          page: result.page,
+          pageSize: result.pageSize,
+        };
+      }
+
+      const result = await patientsService.listPatients({
+        page: filters?.page ?? 1,
+        pageSize: filters?.pageSize ?? 25,
+      });
+
+      return {
+        items: result.items.map(buildDemographicsFromPatient),
+        total: result.total,
+        page: result.page,
+        pageSize: result.pageSize,
+      };
+    } catch {
+      return patientRecordRepository.search(filters);
+    }
   },
 
   async getRecord(patientId: string): Promise<PatientHealthRecord | null> {
     await delay();
-    return patientRecordRepository.getById(patientId);
+    return loadRecord(patientId);
   },
 
   async getSummary(patientId: string) {
     await delay(150);
-    const record = patientRecordRepository.getById(patientId);
+    const record = await loadRecord(patientId);
     if (!record) return null;
     return {
       summary: record.summary,
@@ -76,69 +194,69 @@ export const patientRecordService = {
 
   async getTimeline(patientId: string, filters?: PatientRecordFilters) {
     await delay();
-    const record = patientRecordRepository.getById(patientId);
+    const record = await loadRecord(patientId);
     if (!record) return [];
     return filterTimeline(record.timeline, filters ?? {});
   },
 
   async getVitals(patientId: string): Promise<VitalReading[]> {
     await delay();
-    return patientRecordRepository.getById(patientId)?.vitals ?? [];
+    return (await loadRecord(patientId))?.vitals ?? [];
   },
 
   async getLabs(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.labs ?? [];
+    return (await loadRecord(patientId))?.labs ?? [];
   },
 
   async getRadiology(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.radiology ?? [];
+    return (await loadRecord(patientId))?.radiology ?? [];
   },
 
   async getDocuments(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.documents ?? [];
+    return (await loadRecord(patientId))?.documents ?? [];
   },
 
   async getMedications(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.medications ?? [];
+    return (await loadRecord(patientId))?.medications ?? [];
   },
 
   async getAllergies(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.allergies ?? [];
+    return (await loadRecord(patientId))?.allergies ?? [];
   },
 
   async getProcedures(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.procedures ?? [];
+    return (await loadRecord(patientId))?.procedures ?? [];
   },
 
   async getImmunizations(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.immunizations ?? [];
+    return (await loadRecord(patientId))?.immunizations ?? [];
   },
 
   async getEncounters(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.encounters ?? [];
+    return (await loadRecord(patientId))?.encounters ?? [];
   },
 
   async getCarePlans(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.carePlans ?? [];
+    return (await loadRecord(patientId))?.carePlans ?? [];
   },
 
   async getNotes(patientId: string) {
     await delay();
-    return patientRecordRepository.getById(patientId)?.notes ?? [];
+    return (await loadRecord(patientId))?.notes ?? [];
   },
 
   async getEmergencySummary(patientId: string) {
     await delay(100);
-    return patientRecordRepository.getById(patientId)?.emergencySummary ?? null;
+    return (await loadRecord(patientId))?.emergencySummary ?? null;
   },
 
   async getStats() {
