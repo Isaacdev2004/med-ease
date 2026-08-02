@@ -230,14 +230,17 @@ export const appointmentService = {
     return appointmentRepository.book(input);
   },
 
-  async reschedule(input: RescheduleAppointmentInput) {
+  async reschedule(
+    appointmentId: string,
+    input: RescheduleAppointmentInput,
+  ) {
     await delay(250);
-    return appointmentRepository.reschedule(input.appointmentId, input);
+    return appointmentRepository.reschedule(appointmentId, input);
   },
 
-  async cancel(input: CancelAppointmentInput) {
+  async cancel(appointmentId: string, input?: CancelAppointmentInput) {
     await delay(250);
-    return appointmentRepository.cancel(input.appointmentId, input);
+    return appointmentRepository.cancel(appointmentId, input);
   },
 
   async checkIn(input: CheckInInput) {

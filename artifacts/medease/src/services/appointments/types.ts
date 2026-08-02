@@ -1,7 +1,6 @@
 import type {
   Appointment as ContractAppointment,
   AppointmentFilters as ContractAppointmentFilters,
-  AppointmentListResult,
   AppointmentPatient,
   AppointmentProvider,
   AppointmentFacility,
@@ -16,7 +15,6 @@ import type {
 } from '@medease/appointments-contract';
 
 export type {
-  AppointmentListResult,
   AppointmentPatient,
   AppointmentProvider,
   AppointmentFacility,
@@ -44,6 +42,21 @@ export interface Appointment extends Omit<ContractAppointment, 'status'> {
 export interface AppointmentFilters extends Omit<ContractAppointmentFilters, 'status'> {
   status?: AppointmentStatus;
 }
+
+export interface AppointmentListResult {
+  items: Appointment[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export type CancelAppointmentMutationInput = CancelAppointmentInput & {
+  appointmentId: string;
+};
+
+export type RescheduleAppointmentMutationInput = RescheduleAppointmentInput & {
+  appointmentId: string;
+};
 
 export type CalendarViewMode = 'month' | 'week' | 'day' | 'agenda' | 'timeline';
 

@@ -6,9 +6,9 @@ import { appointmentOfflineQueue } from '@/services/appointments/offline-sync';
 import { appointmentService } from '@/services/appointments/appointment.service';
 import type {
   BookAppointmentInput,
-  CancelAppointmentInput,
+  CancelAppointmentMutationInput,
   CheckInInput,
-  RescheduleAppointmentInput,
+  RescheduleAppointmentMutationInput,
 } from '@/services/appointments/types';
 
 function runOrQueue(label: string, execute: () => Promise<unknown>) {
@@ -46,8 +46,10 @@ export function useAppointmentMutations() {
   });
 
   const cancel = useMutation({
-    mutationFn: (input: CancelAppointmentInput) =>
-      runOrQueue('Cancel appointment', () => appointmentService.cancel(input)),
+    mutationFn: ({ appointmentId, ...input }: CancelAppointmentMutationInput) =>
+      runOrQueue('Cancel appointment', () =>
+        appointmentService.cancel(appointmentId, input),
+      ),
     onSuccess: () => {
       invalidateAll(client);
       appToast.success({ title: 'Appointment cancelled' });
@@ -55,9 +57,12 @@ export function useAppointmentMutations() {
   });
 
   const reschedule = useMutation({
-    mutationFn: (input: RescheduleAppointmentInput) =>
+    mutationFn: ({
+      appointmentId,
+      ...input
+    }: RescheduleAppointmentMutationInput) =>
       runOrQueue('Reschedule appointment', () =>
-        appointmentService.reschedule(input),
+        appointmentService.reschedule(appointmentId, input),
       ),
     onSuccess: () => {
       invalidateAll(client);
