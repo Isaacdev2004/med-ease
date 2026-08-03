@@ -42,14 +42,36 @@ export function MedicationSearch({
 }: MedicationSearchProps) {
   const [focused, setFocused] = useState(false);
   const [recent, setRecent] = useState<string[]>([]);
-  const suggestions = defaultValue
-    ? medicalLibraryService.getSuggestions(defaultValue)
-    : [];
-  const popular = medicalLibraryService.getPopularMedications();
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [popular, setPopular] = useState<string[]>([]);
 
   useEffect(() => {
     setRecent(loadRecent());
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    void medicalLibraryService.getPopularMedications().then((items) => {
+      if (!cancelled) setPopular(items);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!defaultValue) {
+      setSuggestions([]);
+      return;
+    }
+    void medicalLibraryService.getSuggestions(defaultValue).then((items) => {
+      if (!cancelled) setSuggestions(items);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [defaultValue]);
 
   function handleSearch(value: string) {
     onSearch(value);

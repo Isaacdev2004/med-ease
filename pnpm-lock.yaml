@@ -126,6 +126,9 @@ importers:
       '@medease/constants':
         specifier: workspace:*
         version: link:../../packages/constants
+      '@medease/directory-contract':
+        specifier: workspace:*
+        version: link:../../packages/directory-contract
       '@medease/events':
         specifier: workspace:*
         version: link:../../packages/events
@@ -135,6 +138,9 @@ importers:
       '@medease/logger':
         specifier: workspace:*
         version: link:../../packages/logger
+      '@medease/medical-library-contract':
+        specifier: workspace:*
+        version: link:../../packages/medical-library-contract
       '@medease/medications-contract':
         specifier: workspace:*
         version: link:../../packages/medications-contract
@@ -387,9 +393,15 @@ importers:
       '@medease/care-pathways-contract':
         specifier: workspace:*
         version: link:../../packages/care-pathways-contract
+      '@medease/directory-contract':
+        specifier: workspace:*
+        version: link:../../packages/directory-contract
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
+      '@medease/medical-library-contract':
+        specifier: workspace:*
+        version: link:../../packages/medical-library-contract
       '@medease/medications-contract':
         specifier: workspace:*
         version: link:../../packages/medications-contract
@@ -922,6 +934,12 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
 
+  packages/directory-contract:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
   packages/events:
     dependencies:
       '@medease/audit':
@@ -965,6 +983,12 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 25.9.5
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/medical-library-contract:
+    devDependencies:
       typescript:
         specifier: ~5.9.3
         version: 5.9.3

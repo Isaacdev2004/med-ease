@@ -367,6 +367,18 @@ enum CareTaskStatus {
   @@schema("clinical")
 }
 
+enum DirectoryProviderType {
+  professional
+  facility
+  pharmacy
+  transport
+  nursing_home
+  medical_center
+
+  @@map("directory_provider_type")
+  @@schema("clinical")
+}
+
 enum WorkflowStatus {
   draft
   active

@@ -22,6 +22,8 @@ import { MedicationsModule } from './medications/medications.module';
 import { BedsModule } from './beds/beds.module';
 import { AdmissionsModule } from './admissions/admissions.module';
 import { CarePathwaysModule } from './care-pathways/care-pathways.module';
+import { DirectoryModule } from './directory/directory.module';
+import { MedicalLibraryModule } from './medical-library/medical-library.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { MedeaseConfigModule } from './config/config.module';
 import { TenantModule } from './tenant/tenant.module';
@@ -85,6 +87,8 @@ import { PrismaModule } from '@medease/prisma';
     BedsModule,
     AdmissionsModule,
     CarePathwaysModule,
+    DirectoryModule,
+    MedicalLibraryModule,
     ObservabilityModule,
     MedeaseLoggerModule,
     PrismaModule,

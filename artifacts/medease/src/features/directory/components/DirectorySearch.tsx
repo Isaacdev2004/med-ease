@@ -38,13 +38,35 @@ export function DirectorySearch({
 }: DirectorySearchProps) {
   const [focused, setFocused] = useState(false);
   const [recent, setRecent] = useState<string[]>([]);
-  const suggestions = defaultValue
-    ? directoryService.getSuggestions(defaultValue)
-    : [];
-  const popular = directoryService.getPopularSearches();
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [popular, setPopular] = useState<string[]>([]);
 
   useEffect(() => {
     setRecent(loadRecentSearches());
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const next = defaultValue
+        ? await directoryService.getSuggestions(defaultValue)
+        : [];
+      if (!cancelled) setSuggestions(next);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [defaultValue]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const next = await directoryService.getPopularSearches();
+      if (!cancelled) setPopular(next);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   function handleSearch(value: string) {

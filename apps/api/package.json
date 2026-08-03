@@ -27,6 +27,8 @@
     "@medease/beds-contract": "workspace:*",
     "@medease/admissions-contract": "workspace:*",
     "@medease/care-pathways-contract": "workspace:*",
+    "@medease/directory-contract": "workspace:*",
+    "@medease/medical-library-contract": "workspace:*",
     "@medease/patients-contract": "workspace:*",
     "@medease/prisma": "workspace:*",
     "@medease/queue": "workspace:*",

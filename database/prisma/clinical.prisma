@@ -685,3 +685,144 @@ model CarePlanTask {
   @@map("care_plan_tasks")
   @@schema("clinical")
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Provider directory (Epic 3 / P0)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model DirectoryProvider {
+  id                    String                @id @db.Uuid
+  tenantId              String                @map("tenant_id") @db.Uuid
+  type                  DirectoryProviderType
+  name                  String
+  title                 String?
+  specialty             String?
+  medicalSpecialty      String?               @map("medical_specialty")
+  facilityType          String?               @map("facility_type")
+  finessNumber          String?               @map("finess_number")
+  street                String                @default("")
+  city                  String                @default("")
+  department            String                @default("")
+  postalCode            String                @default("") @map("postal_code")
+  country               String                @default("France")
+  latitude              Float?
+  longitude             Float?
+  distanceKm            Float?                @map("distance_km")
+  phone                 String?
+  email                 String?
+  website               String?
+  availability          String?
+  status                String                @default("stable")
+  languages             String[]              @default([])
+  insuranceAccepted     String[]              @default([]) @map("insurance_accepted")
+  accessibility         String[]              @default([])
+  services              String[]              @default([])
+  qualifications        String[]              @default([])
+  teleconsultation      Boolean               @default(false)
+  emergencyServices     Boolean               @default(false) @map("emergency_services")
+  openingHours          Json?                 @map("opening_hours")
+  associatedFacilityIds  String[]              @default([]) @map("associated_facility_ids")
+  relatedProfessionalIds String[]              @default([]) @map("related_professional_ids")
+  active                Boolean               @default(true)
+  createdBy             String                @map("created_by") @db.Uuid
+  updatedBy             String?               @map("updated_by") @db.Uuid
+  createdAt             DateTime              @default(now()) @map("created_at")
+  updatedAt             DateTime              @updatedAt @map("updated_at")
+
+  favorites DirectoryFavorite[]
+
+  @@unique([tenantId, finessNumber])
+  @@index([tenantId, type, active])
+  @@index([tenantId, city])
+  @@index([tenantId, specialty])
+  @@index([tenantId, name])
+  @@map("directory_providers")
+  @@schema("clinical")
+}
+
+model DirectoryFavorite {
+  id         String   @id @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  providerId String   @map("provider_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  provider DirectoryProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, providerId])
+  @@index([tenantId, userId])
+  @@map("directory_favorites")
+  @@schema("clinical")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Medical library / medication catalog (Epic 3 / P0)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model MedicationCatalog {
+  id                       String   @id @db.Uuid
+  tenantId                 String   @map("tenant_id") @db.Uuid
+  bdpmId                   String?  @map("bdpm_id")
+  name                     String
+  brandName                String?  @map("brand_name")
+  genericName              String   @map("generic_name")
+  strength                 String
+  dosageForm               String   @map("dosage_form")
+  route                    String
+  atcCode                  String   @map("atc_code")
+  therapeuticClass         String   @map("therapeutic_class")
+  category                 String
+  manufacturer             String?
+  prescriptionRequired     Boolean  @default(false) @map("prescription_required")
+  controlledSubstance      Boolean  @default(false) @map("controlled_substance")
+  pregnancySafety          String   @default("unknown") @map("pregnancy_safety")
+  breastfeedingSafety      String   @default("unknown") @map("breastfeeding_safety")
+  pediatricApproved        Boolean  @default(false) @map("pediatric_approved")
+  geriatricApproved        Boolean  @default(false) @map("geriatric_approved")
+  available                Boolean  @default(true)
+  searchCount              Int      @default(0) @map("search_count")
+  description              String   @default("")
+  activeIngredients        String[] @default([]) @map("active_ingredients")
+  indications              String[] @default([])
+  contraindications        String[] @default([])
+  warnings                 String[] @default([])
+  precautions              String[] @default([])
+  sideEffects              String[] @default([]) @map("side_effects")
+  administration           String[] @default([])
+  storage                  String   @default("")
+  patientInformation       String   @default("") @map("patient_information")
+  professionalInformation  String   @default("") @map("professional_information")
+  references               String[] @default([])
+  dosages                  Json     @default("[]")
+  interactions             Json     @default("[]")
+  relatedMedicationIds     String[] @default([]) @map("related_medication_ids")
+  createdBy                String   @map("created_by") @db.Uuid
+  updatedBy                String?  @map("updated_by") @db.Uuid
+  createdAt                DateTime @default(now()) @map("created_at")
+  updatedAt                DateTime @updatedAt @map("updated_at")
+
+  favorites MedicationLibraryFavorite[]
+
+  @@unique([tenantId, bdpmId])
+  @@index([tenantId, category, available])
+  @@index([tenantId, name])
+  @@index([tenantId, atcCode])
+  @@index([tenantId, therapeuticClass])
+  @@map("medication_catalog")
+  @@schema("clinical")
+}
+
+model MedicationLibraryFavorite {
+  id           String   @id @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  medicationId String   @map("medication_id") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  medication MedicationCatalog @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, medicationId])
+  @@index([tenantId, userId])
+  @@map("medication_library_favorites")
+  @@schema("clinical")
+}
