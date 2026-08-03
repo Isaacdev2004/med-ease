@@ -56,13 +56,18 @@ export const carePlanService = {
   async getTasks(patientId?: string, carePlanId?: string) {
     await delay();
     return sortTasksByDueDate(
-      carePlanRepository.getTasks(carePlanId, patientId),
+      await carePlanRepository.getTasks(carePlanId, patientId),
     );
+  },
+
+  async getSteps(carePlanId: string) {
+    await delay();
+    return carePlanRepository.getSteps(carePlanId);
   },
 
   async getTodayTasks(patientId: string) {
     await delay(100);
-    const tasks = carePlanRepository.getTasks(undefined, patientId);
+    const tasks = await carePlanRepository.getTasks(undefined, patientId);
     return categorizeTasks(tasks).today;
   },
 
@@ -78,7 +83,7 @@ export const carePlanService = {
 
   async getRiskAssessment(patientId: string, carePlanId?: string) {
     await delay(150);
-    const risks = carePlanRepository.getRisks(patientId, carePlanId);
+    const risks = await carePlanRepository.getRisks(patientId, carePlanId);
     return { risks, overall: computeOverallRisk(risks) };
   },
 
@@ -115,7 +120,7 @@ export const carePlanService = {
 
   async getPopulationCare(filters?: CarePlanFilters) {
     await delay();
-    const plans = carePlanRepository.getAllPlans(filters);
+    const plans = await carePlanRepository.getAllPlans(filters);
     return {
       totalPatients: new Set(plans.map((p) => p.patientId)).size,
       activePlans: plans.filter((p) => p.status === 'active').length,
@@ -146,6 +151,11 @@ export const carePlanService = {
     return carePlanRepository.assignTask(input);
   },
 
+  async completeStep(carePlanId: string, stepId: string, notes?: string) {
+    await delay();
+    return carePlanRepository.completeStep(carePlanId, stepId, notes);
+  },
+
   async suspendCarePlan(id: string) {
     await delay();
     return carePlanRepository.suspendPlan(id);
@@ -158,7 +168,7 @@ export const carePlanService = {
 
   async getGoalCompletion(patientId: string) {
     await delay(50);
-    const goals = carePlanRepository.getGoals(undefined, patientId);
+    const goals = await carePlanRepository.getGoals(undefined, patientId);
     return computeGoalCompletionRate(goals);
   },
 };

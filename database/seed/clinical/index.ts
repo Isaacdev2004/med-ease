@@ -333,6 +333,194 @@ function buildDemoTransfers() {
   ];
 }
 
+/** Demo care pathway definitions + Sarah Jenkins diabetes enrollment. */
+function buildDemoCarePathways() {
+  return [
+    {
+      id: '01930000-0000-7000-8000-000000000c01',
+      code: 'diabetes',
+      name: 'Diabetes Management',
+      description:
+        'Evidence-based diabetes care pathway with HbA1c targets and medication titration.',
+      completionCriteria: 'HbA1c < 7% for 2 consecutive readings',
+      requiredAppointments: 4,
+      requiredLabs: 3,
+      medicationProtocols: ['Metformin first-line', 'GLP-1 if indicated'],
+      mandatoryTasks: ['HbA1c test', 'Foot exam', 'Nutrition consult'],
+      steps: [
+        { id: '01930000-0000-7000-8000-000000000c11', title: 'Baseline labs', sortOrder: 0 },
+        {
+          id: '01930000-0000-7000-8000-000000000c12',
+          title: 'Medication optimization',
+          sortOrder: 1,
+        },
+        {
+          id: '01930000-0000-7000-8000-000000000c13',
+          title: '3-month review',
+          sortOrder: 2,
+        },
+      ],
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000c02',
+      code: 'hypertension',
+      name: 'Hypertension Control',
+      description:
+        'Blood pressure management with lifestyle and pharmacologic interventions.',
+      completionCriteria: 'BP < 130/80 for 3 months',
+      requiredAppointments: 3,
+      requiredLabs: 2,
+      medicationProtocols: ['ACE inhibitor or ARB first-line'],
+      mandatoryTasks: ['Daily BP log', 'Sodium reduction education'],
+      steps: [
+        { id: '01930000-0000-7000-8000-000000000c21', title: 'BP baseline', sortOrder: 0 },
+        {
+          id: '01930000-0000-7000-8000-000000000c22',
+          title: 'Home monitoring setup',
+          sortOrder: 1,
+        },
+      ],
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000c03',
+      code: 'heart_failure',
+      name: 'Heart Failure Care',
+      description:
+        'Comprehensive heart failure management and readmission prevention.',
+      completionCriteria: 'Stable weight, no hospitalization 90 days',
+      requiredAppointments: 5,
+      requiredLabs: 4,
+      medicationProtocols: ['Beta-blocker', 'ACE inhibitor', 'Diuretic'],
+      mandatoryTasks: ['Daily weight', 'Fluid restriction education'],
+      steps: [
+        { id: '01930000-0000-7000-8000-000000000c31', title: 'Echo baseline', sortOrder: 0 },
+        {
+          id: '01930000-0000-7000-8000-000000000c32',
+          title: 'Medication titration',
+          sortOrder: 1,
+        },
+      ],
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000c04',
+      code: 'post_surgery',
+      name: 'Post-Operative Recovery',
+      description: 'Structured recovery after surgical procedures.',
+      completionCriteria: 'Full mobility restored, wound healed',
+      requiredAppointments: 2,
+      requiredLabs: 1,
+      medicationProtocols: ['Analgesia protocol', 'DVT prophylaxis'],
+      mandatoryTasks: ['Pain management', 'Mobility exercises'],
+      steps: [
+        {
+          id: '01930000-0000-7000-8000-000000000c41',
+          title: 'Discharge planning',
+          sortOrder: 0,
+        },
+        { id: '01930000-0000-7000-8000-000000000c42', title: 'Wound check', sortOrder: 1 },
+      ],
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000c05',
+      code: 'copd',
+      name: 'COPD Management',
+      description: 'Chronic obstructive pulmonary disease care pathway.',
+      completionCriteria: 'Stable FEV1, reduced exacerbations',
+      requiredAppointments: 3,
+      requiredLabs: 1,
+      medicationProtocols: [
+        'Bronchodilator',
+        'Inhaled corticosteroid if indicated',
+      ],
+      mandatoryTasks: ['Inhaler technique', 'Smoking cessation'],
+      steps: [
+        { id: '01930000-0000-7000-8000-000000000c51', title: 'Spirometry', sortOrder: 0 },
+      ],
+    },
+  ];
+}
+
+function buildDemoCarePlanEnrollment() {
+  const now = new Date();
+  const review = new Date(now);
+  review.setDate(review.getDate() + 30);
+  const patient = DEMO_PATIENTS[0]!;
+  return {
+    plan: {
+      id: '01930000-0000-7000-8000-000000000d01',
+      patientId: patient.id,
+      patientName: patient.fullName,
+      pathwayId: '01930000-0000-7000-8000-000000000c01',
+      pathwayCode: 'diabetes',
+      admissionId: '01930000-0000-7000-8000-000000000a02',
+      title: 'Type 2 Diabetes Care Plan',
+      description:
+        'Evidence-based diabetes care pathway with HbA1c targets and medication titration.',
+      type: 'chronic_disease' as const,
+      status: 'active' as const,
+      primaryDiagnosis: 'Type 2 Diabetes',
+      diagnosisCode: 'ICD-E11.9',
+      startDate: now,
+      reviewDate: review,
+      completionPercent: 33,
+      progressPercent: 33,
+      healthScore: 72,
+      riskLevel: 'moderate',
+      assignedPhysician: 'Dr. Jean-Luc Martin',
+      assignedPhysicianId: DEMO_PHYSICIAN_ID,
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+    },
+    steps: [
+      {
+        id: '01930000-0000-7000-8000-000000000d11',
+        title: 'Baseline labs',
+        sortOrder: 0,
+        status: 'completed' as const,
+        completedAt: now,
+      },
+      {
+        id: '01930000-0000-7000-8000-000000000d12',
+        title: 'Medication optimization',
+        sortOrder: 1,
+        status: 'in_progress' as const,
+      },
+      {
+        id: '01930000-0000-7000-8000-000000000d13',
+        title: '3-month review',
+        sortOrder: 2,
+        status: 'pending' as const,
+      },
+    ],
+    tasks: [
+      {
+        id: '01930000-0000-7000-8000-000000000d21',
+        title: 'HbA1c test',
+        type: 'lab',
+        priority: 'high',
+        dueOffsetDays: 7,
+        status: 'completed' as const,
+      },
+      {
+        id: '01930000-0000-7000-8000-000000000d22',
+        title: 'Foot exam',
+        type: 'appointment',
+        priority: 'medium',
+        dueOffsetDays: 14,
+        status: 'pending' as const,
+      },
+      {
+        id: '01930000-0000-7000-8000-000000000d23',
+        title: 'Nutrition consult',
+        type: 'education',
+        priority: 'medium',
+        dueOffsetDays: 21,
+        status: 'pending' as const,
+      },
+    ],
+  };
+}
+
 /** Demo beds — Paris facility board for buyer walkthrough. */
 function buildDemoBeds() {
   return [
@@ -1371,6 +1559,142 @@ export const clinicalSeed: SeedModule = {
               startedAt: transfer.startedAt ?? null,
               completedAt: transfer.completedAt ?? null,
               updatedBy: DEMO_ADMIN_ID,
+            },
+          });
+        }
+
+        for (const pathway of buildDemoCarePathways()) {
+          await tx.carePathwayDefinition.upsert({
+            where: { id: pathway.id },
+            create: {
+              id: pathway.id,
+              tenantId: DEMO_TENANT_ID,
+              code: pathway.code,
+              name: pathway.name,
+              description: pathway.description,
+              completionCriteria: pathway.completionCriteria,
+              requiredAppointments: pathway.requiredAppointments,
+              requiredLabs: pathway.requiredLabs,
+              medicationProtocols: pathway.medicationProtocols,
+              mandatoryTasks: pathway.mandatoryTasks,
+              active: true,
+              createdBy: DEMO_ADMIN_ID,
+            },
+            update: {
+              name: pathway.name,
+              description: pathway.description,
+              completionCriteria: pathway.completionCriteria,
+              requiredAppointments: pathway.requiredAppointments,
+              requiredLabs: pathway.requiredLabs,
+              medicationProtocols: pathway.medicationProtocols,
+              mandatoryTasks: pathway.mandatoryTasks,
+              active: true,
+              updatedBy: DEMO_ADMIN_ID,
+            },
+          });
+
+          for (const step of pathway.steps) {
+            await tx.carePathwayStepDefinition.upsert({
+              where: { id: step.id },
+              create: {
+                id: step.id,
+                tenantId: DEMO_TENANT_ID,
+                pathwayId: pathway.id,
+                sortOrder: step.sortOrder,
+                title: step.title,
+              },
+              update: {
+                sortOrder: step.sortOrder,
+                title: step.title,
+              },
+            });
+          }
+        }
+
+        const enrollment = buildDemoCarePlanEnrollment();
+        await tx.carePlan.upsert({
+          where: { id: enrollment.plan.id },
+          create: {
+            id: enrollment.plan.id,
+            tenantId: DEMO_TENANT_ID,
+            patientId: enrollment.plan.patientId,
+            patientName: enrollment.plan.patientName,
+            pathwayId: enrollment.plan.pathwayId,
+            pathwayCode: enrollment.plan.pathwayCode,
+            admissionId: enrollment.plan.admissionId,
+            title: enrollment.plan.title,
+            description: enrollment.plan.description,
+            type: enrollment.plan.type,
+            status: enrollment.plan.status,
+            primaryDiagnosis: enrollment.plan.primaryDiagnosis,
+            diagnosisCode: enrollment.plan.diagnosisCode,
+            startDate: enrollment.plan.startDate,
+            reviewDate: enrollment.plan.reviewDate,
+            completionPercent: enrollment.plan.completionPercent,
+            progressPercent: enrollment.plan.progressPercent,
+            healthScore: enrollment.plan.healthScore,
+            riskLevel: enrollment.plan.riskLevel,
+            assignedPhysician: enrollment.plan.assignedPhysician,
+            assignedPhysicianId: enrollment.plan.assignedPhysicianId,
+            facilityId: enrollment.plan.facilityId,
+            facilityName: enrollment.plan.facilityName,
+            createdBy: DEMO_ADMIN_ID,
+          },
+          update: {
+            status: enrollment.plan.status,
+            pathwayId: enrollment.plan.pathwayId,
+            pathwayCode: enrollment.plan.pathwayCode,
+            admissionId: enrollment.plan.admissionId,
+            completionPercent: enrollment.plan.completionPercent,
+            progressPercent: enrollment.plan.progressPercent,
+            updatedBy: DEMO_ADMIN_ID,
+          },
+        });
+
+        for (const step of enrollment.steps) {
+          await tx.carePlanStep.upsert({
+            where: { id: step.id },
+            create: {
+              id: step.id,
+              tenantId: DEMO_TENANT_ID,
+              carePlanId: enrollment.plan.id,
+              sortOrder: step.sortOrder,
+              title: step.title,
+              status: step.status,
+              completedAt: step.completedAt,
+            },
+            update: {
+              status: step.status,
+              completedAt: step.completedAt ?? null,
+              title: step.title,
+              sortOrder: step.sortOrder,
+            },
+          });
+        }
+
+        for (const task of enrollment.tasks) {
+          const dueDate = new Date();
+          dueDate.setDate(dueDate.getDate() + task.dueOffsetDays);
+          await tx.carePlanTask.upsert({
+            where: { id: task.id },
+            create: {
+              id: task.id,
+              tenantId: DEMO_TENANT_ID,
+              carePlanId: enrollment.plan.id,
+              patientId: enrollment.plan.patientId,
+              title: task.title,
+              type: task.type,
+              priority: task.priority,
+              owner: enrollment.plan.assignedPhysician,
+              dueDate,
+              status: task.status,
+              completedAt: task.status === 'completed' ? new Date() : undefined,
+            },
+            update: {
+              title: task.title,
+              status: task.status,
+              priority: task.priority,
+              dueDate,
             },
           });
         }

@@ -317,6 +317,56 @@ enum TransferStatus {
   @@schema("clinical")
 }
 
+enum CarePlanStatus {
+  draft
+  active
+  on_hold
+  completed
+  cancelled
+  archived
+  suspended
+
+  @@map("care_plan_status")
+  @@schema("clinical")
+}
+
+enum CarePlanType {
+  chronic_disease
+  rehabilitation
+  preventive
+  post_operative
+  home_care
+  palliative
+  goal_based
+  collaborative
+  shared
+
+  @@map("care_plan_type")
+  @@schema("clinical")
+}
+
+enum CareStepStatus {
+  pending
+  in_progress
+  completed
+  skipped
+
+  @@map("care_step_status")
+  @@schema("clinical")
+}
+
+enum CareTaskStatus {
+  pending
+  in_progress
+  completed
+  overdue
+  missed
+  cancelled
+
+  @@map("care_task_status")
+  @@schema("clinical")
+}
+
 enum WorkflowStatus {
   draft
   active

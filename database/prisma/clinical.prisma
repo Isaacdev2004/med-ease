@@ -33,6 +33,7 @@ model Patient {
   bedAssignments    BedAssignment[]
   admissions        Admission[]
   transfers         PatientTransfer[]
+  carePlans         CarePlan[]
 
   @@unique([tenantId, mrn])
   @@index([tenantId, status])
@@ -550,5 +551,137 @@ model PatientTransfer {
   @@index([tenantId, patientId, status])
   @@index([tenantId, admissionId])
   @@map("patient_transfers")
+  @@schema("clinical")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Care pathways / enrollments (Epic 3 / P0)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model CarePathwayDefinition {
+  id                   String   @id @db.Uuid
+  tenantId             String   @map("tenant_id") @db.Uuid
+  code                 String
+  name                 String
+  description          String   @default("")
+  completionCriteria   String   @default("") @map("completion_criteria")
+  requiredAppointments Int      @default(0) @map("required_appointments")
+  requiredLabs         Int      @default(0) @map("required_labs")
+  medicationProtocols  String[] @default([]) @map("medication_protocols")
+  mandatoryTasks       String[] @default([]) @map("mandatory_tasks")
+  active               Boolean  @default(true)
+  createdBy            String   @map("created_by") @db.Uuid
+  updatedBy            String?  @map("updated_by") @db.Uuid
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  steps       CarePathwayStepDefinition[]
+  enrollments CarePlan[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, active])
+  @@map("care_pathway_definitions")
+  @@schema("clinical")
+}
+
+model CarePathwayStepDefinition {
+  id          String   @id @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  pathwayId   String   @map("pathway_id") @db.Uuid
+  sortOrder   Int      @map("sort_order")
+  title       String
+  description String?
+
+  pathway CarePathwayDefinition @relation(fields: [pathwayId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, pathwayId, sortOrder])
+  @@map("care_pathway_step_definitions")
+  @@schema("clinical")
+}
+
+model CarePlan {
+  id                   String         @id @db.Uuid
+  tenantId             String         @map("tenant_id") @db.Uuid
+  patientId            String         @map("patient_id") @db.Uuid
+  patientName          String         @map("patient_name")
+  pathwayId            String?        @map("pathway_id") @db.Uuid
+  pathwayCode          String?        @map("pathway_code")
+  admissionId          String?        @map("admission_id") @db.Uuid
+  title                String
+  description          String         @default("")
+  type                 CarePlanType   @default(chronic_disease)
+  status               CarePlanStatus @default(draft)
+  primaryDiagnosis     String?        @map("primary_diagnosis")
+  diagnosisCode        String?        @map("diagnosis_code")
+  startDate            DateTime       @map("start_date") @db.Date
+  endDate              DateTime?      @map("end_date") @db.Date
+  reviewDate           DateTime       @map("review_date") @db.Date
+  completionPercent    Float          @default(0) @map("completion_percent")
+  progressPercent      Float          @default(0) @map("progress_percent")
+  healthScore          Float          @default(70) @map("health_score")
+  riskLevel            String         @default("moderate") @map("risk_level")
+  assignedPhysician    String         @map("assigned_physician")
+  assignedPhysicianId  String         @map("assigned_physician_id") @db.Uuid
+  facilityId           String?        @map("facility_id") @db.Uuid
+  facilityName         String?        @map("facility_name")
+  notes                String?
+  createdBy            String         @map("created_by") @db.Uuid
+  updatedBy            String?        @map("updated_by") @db.Uuid
+  createdAt            DateTime       @default(now()) @map("created_at")
+  updatedAt            DateTime       @updatedAt @map("updated_at")
+  version              Int            @default(1)
+
+  patient Patient                 @relation(fields: [patientId], references: [id])
+  pathway CarePathwayDefinition?  @relation(fields: [pathwayId], references: [id], onDelete: SetNull)
+  steps   CarePlanStep[]
+  tasks   CarePlanTask[]
+
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, pathwayId, status])
+  @@index([tenantId, status, updatedAt(sort: Desc)])
+  @@map("care_plans")
+  @@schema("clinical")
+}
+
+model CarePlanStep {
+  id          String         @id @db.Uuid
+  tenantId    String         @map("tenant_id") @db.Uuid
+  carePlanId  String         @map("care_plan_id") @db.Uuid
+  sortOrder   Int            @map("sort_order")
+  title       String
+  description String?
+  status      CareStepStatus @default(pending)
+  completedAt DateTime?      @map("completed_at") @db.Timestamptz(3)
+  notes       String?
+
+  carePlan CarePlan @relation(fields: [carePlanId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, carePlanId, sortOrder])
+  @@map("care_plan_steps")
+  @@schema("clinical")
+}
+
+model CarePlanTask {
+  id              String         @id @db.Uuid
+  tenantId        String         @map("tenant_id") @db.Uuid
+  carePlanId      String         @map("care_plan_id") @db.Uuid
+  patientId       String         @map("patient_id") @db.Uuid
+  title           String
+  description     String?
+  type            String         @default("custom")
+  priority        String         @default("medium")
+  owner           String         @default("")
+  dueDate         DateTime       @map("due_date") @db.Timestamptz(3)
+  status          CareTaskStatus @default(pending)
+  completionNotes String?        @map("completion_notes")
+  completedAt     DateTime?      @map("completed_at") @db.Timestamptz(3)
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  carePlan CarePlan @relation(fields: [carePlanId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, carePlanId, status])
+  @@index([tenantId, patientId, dueDate])
+  @@map("care_plan_tasks")
   @@schema("clinical")
 }

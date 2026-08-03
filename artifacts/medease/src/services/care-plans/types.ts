@@ -311,8 +311,15 @@ export interface CreateCarePlanInput {
   description?: string;
   type: CarePlanType;
   pathwayId?: PathwayId;
+  admissionId?: string;
   primaryDiagnosis?: string;
   templateId?: string;
+  assignedPhysician?: string;
+  assignedPhysicianId?: string;
+  facilityId?: string;
+  facilityName?: string;
+  activate?: boolean;
+  notes?: string;
 }
 
 export interface UpdateGoalInput {
@@ -336,4 +343,7 @@ export interface AssignTaskInput {
 
 export const AUTH_USER_PATIENT_MAP: Record<string, string> = {
   'user-patient': 'phr-001',
+  // Demo patient user (seed) → Sarah Jenkins clinical patient
+  '01930000-0000-7000-8000-000000000106':
+    '01930000-0000-7000-8000-000000000301',
 };
