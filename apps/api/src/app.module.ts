@@ -27,6 +27,7 @@ import { MedicalLibraryModule } from './medical-library/medical-library.module';
 import { LaboratoryModule } from './laboratory/laboratory.module';
 import { RadiologyModule } from './radiology/radiology.module';
 import { MonitoringModule } from './monitoring/monitoring.module';
+import { TelemedicineModule } from './telemedicine/telemedicine.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { MedeaseConfigModule } from './config/config.module';
 import { TenantModule } from './tenant/tenant.module';
@@ -95,6 +96,7 @@ import { PrismaModule } from '@medease/prisma';
     LaboratoryModule,
     RadiologyModule,
     MonitoringModule,
+    TelemedicineModule,
     ObservabilityModule,
     MedeaseLoggerModule,
     PrismaModule,

@@ -168,6 +168,9 @@ importers:
       '@medease/storage':
         specifier: workspace:*
         version: link:../../packages/storage
+      '@medease/telemedicine-contract':
+        specifier: workspace:*
+        version: link:../../packages/telemedicine-contract
       '@medease/types':
         specifier: workspace:*
         version: link:../../packages/types
@@ -429,6 +432,9 @@ importers:
       '@medease/repository-contract-test':
         specifier: workspace:*
         version: link:../../packages/repository-contract-test
+      '@medease/telemedicine-contract':
+        specifier: workspace:*
+        version: link:../../packages/telemedicine-contract
       '@radix-ui/react-accordion':
         specifier: ^1.2.4
         version: 1.2.16(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1160,6 +1166,12 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 25.9.5
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/telemedicine-contract:
+    devDependencies:
       typescript:
         specifier: ~5.9.3
         version: 5.9.3

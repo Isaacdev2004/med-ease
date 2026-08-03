@@ -43,6 +43,7 @@ model Patient {
   monitoringPrograms       MonitoringProgram[]
   earlyWarningScores       EarlyWarningScore[]
   deviceAssignments        DeviceAssignment[]
+  telemedicineSessions     TelemedicineSession[]
 
   @@unique([tenantId, mrn])
   @@index([tenantId, status])
@@ -1306,5 +1307,196 @@ model EarlyWarningScore {
 
   @@index([tenantId, patientId, calculatedAt(sort: Desc)])
   @@map("early_warning_scores")
+  @@schema("clinical")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Telemedicine sessions / participants / chat / waiting room (Epic 4 / P2)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model TelemedicineSession {
+  id                  String                       @id @db.Uuid
+  tenantId            String                       @map("tenant_id") @db.Uuid
+  appointmentId       String?                      @map("appointment_id") @db.Uuid
+  encounterId         String?                      @map("encounter_id") @db.Uuid
+  patientId           String                       @map("patient_id") @db.Uuid
+  patientName         String                       @map("patient_name")
+  clinicianId         String                       @map("clinician_id") @db.Uuid
+  clinicianName       String                       @map("clinician_name")
+  facilityId          String?                      @map("facility_id") @db.Uuid
+  meetingNumber       String                       @map("meeting_number")
+  meetingPassword     String?                      @map("meeting_password")
+  platform            TelemedicinePlatform         @default(webrtc)
+  roomId              String                       @map("room_id")
+  sessionType         TelemedicineSessionType      @default(consultation) @map("session_type")
+  specialty           String                       @default("")
+  scheduledStart      DateTime                     @map("scheduled_start") @db.Timestamptz(3)
+  scheduledEnd        DateTime                     @map("scheduled_end") @db.Timestamptz(3)
+  actualStart         DateTime?                    @map("actual_start") @db.Timestamptz(3)
+  actualEnd           DateTime?                    @map("actual_end") @db.Timestamptz(3)
+  durationMinutes     Int?                         @map("duration_minutes")
+  timezone            String                       @default("UTC")
+  language            String                       @default("en")
+  interpreterRequired Boolean                      @default(false) @map("interpreter_required")
+  status              TelemedicineSessionStatus    @default(scheduled)
+  recordingStatus     TelemedicineRecordingStatus  @default(none) @map("recording_status")
+  waitingRoomEnabled  Boolean                      @default(true) @map("waiting_room_enabled")
+  encryption          Boolean                      @default(true)
+  qualityScore        Float?                       @map("quality_score")
+  notes               String?
+  createdBy           String                       @map("created_by") @db.Uuid
+  updatedBy           String?                      @map("updated_by") @db.Uuid
+  createdAt           DateTime                     @default(now()) @map("created_at")
+  updatedAt           DateTime                     @updatedAt @map("updated_at")
+
+  patient       Patient                @relation(fields: [patientId], references: [id])
+  participants  SessionParticipant[]
+  messages      SessionMessage[]
+  attachments   SessionAttachment[]
+  recordings    SessionRecording[]
+  waitingEntries WaitingRoomEntry[]
+  clinicalNotes SessionClinicalNote[]
+
+  @@unique([tenantId, meetingNumber])
+  @@index([tenantId, patientId, scheduledStart(sort: Desc)])
+  @@index([tenantId, clinicianId, status])
+  @@index([tenantId, facilityId, status])
+  @@index([tenantId, status, scheduledStart])
+  @@map("telemedicine_sessions")
+  @@schema("clinical")
+}
+
+model SessionParticipant {
+  id                 String                         @id @db.Uuid
+  tenantId           String                         @map("tenant_id") @db.Uuid
+  sessionId          String                         @map("session_id") @db.Uuid
+  userId             String?                        @map("user_id") @db.Uuid
+  name               String
+  role               TelemedicineParticipantRole
+  joinedAt           DateTime?                      @map("joined_at") @db.Timestamptz(3)
+  leftAt             DateTime?                      @map("left_at") @db.Timestamptz(3)
+  cameraOn           Boolean                        @default(false) @map("camera_on")
+  microphoneOn       Boolean                        @default(false) @map("microphone_on")
+  screenSharing      Boolean                        @default(false) @map("screen_sharing")
+  connectionQuality  TelemedicineConnectionQuality  @default(good) @map("connection_quality")
+  deviceType         String                         @default("") @map("device_type")
+  browser            String                         @default("")
+  networkType        String                         @default("") @map("network_type")
+  permissions        String[]                       @default([])
+  createdAt          DateTime                       @default(now()) @map("created_at")
+  updatedAt          DateTime                       @updatedAt @map("updated_at")
+
+  session TelemedicineSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, sessionId])
+  @@map("session_participants")
+  @@schema("clinical")
+}
+
+model SessionMessage {
+  id              String                    @id @db.Uuid
+  tenantId        String                    @map("tenant_id") @db.Uuid
+  sessionId       String                    @map("session_id") @db.Uuid
+  senderId        String                    @map("sender_id")
+  senderName      String                    @map("sender_name")
+  receiverId      String?                   @map("receiver_id")
+  content         String
+  sentAt          DateTime                  @default(now()) @map("sent_at") @db.Timestamptz(3)
+  deliveryStatus  TelemedicineMessageStatus @default(sent) @map("delivery_status")
+  readAt          DateTime?                 @map("read_at") @db.Timestamptz(3)
+  pinned          Boolean                   @default(false)
+
+  session TelemedicineSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, sessionId, sentAt(sort: Desc)])
+  @@map("session_messages")
+  @@schema("clinical")
+}
+
+model SessionAttachment {
+  id          String                     @id @db.Uuid
+  tenantId    String                     @map("tenant_id") @db.Uuid
+  sessionId   String                     @map("session_id") @db.Uuid
+  name        String
+  type        TelemedicineAttachmentType
+  mimeType    String                     @map("mime_type")
+  sizeBytes   Int                        @map("size_bytes")
+  uploadedBy  String                     @map("uploaded_by")
+  uploadedAt  DateTime                   @default(now()) @map("uploaded_at") @db.Timestamptz(3)
+  url         String                     @default("")
+
+  session TelemedicineSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, sessionId])
+  @@map("session_attachments")
+  @@schema("clinical")
+}
+
+model SessionRecording {
+  id               String                      @id @db.Uuid
+  tenantId         String                      @map("tenant_id") @db.Uuid
+  sessionId        String                      @map("session_id") @db.Uuid
+  consentGiven     Boolean                     @default(false) @map("consent_given")
+  status           TelemedicineRecordingStatus @default(none)
+  durationSeconds  Int?                        @map("duration_seconds")
+  storageUrl       String?                     @map("storage_url")
+  retentionDays    Int                         @default(30) @map("retention_days")
+  transcription    String?
+  startedAt        DateTime?                   @map("started_at") @db.Timestamptz(3)
+  stoppedAt        DateTime?                   @map("stopped_at") @db.Timestamptz(3)
+  createdAt        DateTime                    @default(now()) @map("created_at")
+  updatedAt        DateTime                    @updatedAt @map("updated_at")
+
+  session TelemedicineSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, sessionId])
+  @@map("session_recordings")
+  @@schema("clinical")
+}
+
+model WaitingRoomEntry {
+  id                    String                       @id @db.Uuid
+  tenantId              String                       @map("tenant_id") @db.Uuid
+  sessionId             String                       @map("session_id") @db.Uuid
+  patientId             String                       @map("patient_id") @db.Uuid
+  patientName           String                       @map("patient_name")
+  status                TelemedicineWaitingStatus    @default(waiting)
+  joinedAt              DateTime                     @default(now()) @map("joined_at") @db.Timestamptz(3)
+  admittedAt            DateTime?                    @map("admitted_at") @db.Timestamptz(3)
+  estimatedWaitMinutes  Int                          @default(5) @map("estimated_wait_minutes")
+  priority              TelemedicineWaitingPriority  @default(normal)
+  createdAt             DateTime                     @default(now()) @map("created_at")
+  updatedAt             DateTime                     @updatedAt @map("updated_at")
+
+  session TelemedicineSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, sessionId, status])
+  @@index([tenantId, status, joinedAt])
+  @@map("waiting_room_entries")
+  @@schema("clinical")
+}
+
+model SessionClinicalNote {
+  id               String                 @id @db.Uuid
+  tenantId         String                 @map("tenant_id") @db.Uuid
+  sessionId        String                 @map("session_id") @db.Uuid
+  patientId        String                 @map("patient_id") @db.Uuid
+  clinicianId      String                 @map("clinician_id") @db.Uuid
+  subjective       String                 @default("")
+  objective        String                 @default("")
+  assessment       String                 @default("")
+  plan             String                 @default("")
+  diagnosis        String?
+  treatment        String?
+  recommendations  String?
+  followUp         String?                @map("follow_up")
+  status           TelemedicineNoteStatus @default(draft)
+  createdAt        DateTime               @default(now()) @map("created_at")
+  updatedAt        DateTime               @updatedAt @map("updated_at")
+
+  session TelemedicineSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, sessionId])
+  @@map("session_clinical_notes")
   @@schema("clinical")
 }

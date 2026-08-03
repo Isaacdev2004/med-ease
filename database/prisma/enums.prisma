@@ -706,6 +706,129 @@ enum EarlyWarningRisk {
   @@schema("clinical")
 }
 
+enum TelemedicineSessionStatus {
+  scheduled
+  waiting
+  in_progress
+  completed
+  cancelled
+  no_show
+  failed
+
+  @@map("telemedicine_session_status")
+  @@schema("clinical")
+}
+
+enum TelemedicineSessionType {
+  consultation
+  follow_up
+  urgent
+  specialist
+  group
+  interpreter
+
+  @@map("telemedicine_session_type")
+  @@schema("clinical")
+}
+
+enum TelemedicinePlatform {
+  webrtc
+  twilio
+  agora
+  daily
+  zoom
+  teams
+
+  @@map("telemedicine_platform")
+  @@schema("clinical")
+}
+
+enum TelemedicineRecordingStatus {
+  none
+  pending_consent
+  recording
+  stopped
+  processing
+  available
+
+  @@map("telemedicine_recording_status")
+  @@schema("clinical")
+}
+
+enum TelemedicineParticipantRole {
+  patient
+  clinician
+  nurse
+  interpreter
+  caregiver
+  observer
+
+  @@map("telemedicine_participant_role")
+  @@schema("clinical")
+}
+
+enum TelemedicineConnectionQuality {
+  excellent
+  good
+  fair
+  poor
+  disconnected
+
+  @@map("telemedicine_connection_quality")
+  @@schema("clinical")
+}
+
+enum TelemedicineMessageStatus {
+  sent
+  delivered
+  read
+  failed
+
+  @@map("telemedicine_message_status")
+  @@schema("clinical")
+}
+
+enum TelemedicineAttachmentType {
+  image
+  pdf
+  lab
+  radiology
+  prescription
+  consent
+  document
+
+  @@map("telemedicine_attachment_type")
+  @@schema("clinical")
+}
+
+enum TelemedicineWaitingStatus {
+  waiting
+  admitted
+  rejected
+  left
+
+  @@map("telemedicine_waiting_status")
+  @@schema("clinical")
+}
+
+enum TelemedicineWaitingPriority {
+  normal
+  urgent
+  high
+
+  @@map("telemedicine_waiting_priority")
+  @@schema("clinical")
+}
+
+enum TelemedicineNoteStatus {
+  draft
+  final
+  signed
+
+  @@map("telemedicine_note_status")
+  @@schema("clinical")
+}
+
 enum WorkflowStatus {
   draft
   active

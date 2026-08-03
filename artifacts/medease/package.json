@@ -63,6 +63,7 @@
     "@medease/laboratory-contract": "workspace:*",
     "@medease/radiology-contract": "workspace:*",
     "@medease/monitoring-contract": "workspace:*",
+    "@medease/telemedicine-contract": "workspace:*",
     "@medease/patients-contract": "workspace:*",
     "@medease/repository-contract-test": "workspace:*",
     "class-variance-authority": "catalog:",
