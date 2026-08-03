@@ -1,15 +1,20 @@
-import { useState } from 'react';
-
 import {
   PortalActionButton,
   PortalDataTableSection,
   PortalMetricsGrid,
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_BEDS, type BedRow } from '@/features/portal-pages/data/mock-data';
+import {
+  useBedBoard,
+  useReleaseBed,
+  useUpdateBedStatus,
+} from '@/features/beds/hooks/use-beds';
+import { toBedRow } from '@/services/beds/types';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
+
+type BedRow = ReturnType<typeof toBedRow>;
 
 const statusVariant = {
   available: 'default',
@@ -36,10 +41,12 @@ const columns: DataTableColumn<BedRow>[] = [
 ];
 
 export default function BedManagementPage() {
-  const [beds, setBeds] = useState(MOCK_BEDS);
+  const boardQuery = useBedBoard();
+  const updateStatus = useUpdateBedStatus();
+  const releaseBed = useReleaseBed();
 
-  const available = beds.filter((row) => row.status === 'available').length;
-  const occupied = beds.filter((row) => row.status === 'occupied').length;
+  const beds = (boardQuery.data?.beds ?? []).map(toBedRow);
+  const summary = boardQuery.data?.summary;
 
   return (
     <PageShell
@@ -51,15 +58,23 @@ export default function BedManagementPage() {
     >
       <PortalMetricsGrid
         metrics={[
-          { title: 'Available', value: available, status: 'stable' },
-          { title: 'Occupied', value: occupied, status: 'observation' },
+          {
+            title: 'Available',
+            value: summary?.available ?? 0,
+            status: 'stable',
+          },
+          {
+            title: 'Occupied',
+            value: summary?.occupied ?? 0,
+            status: 'observation',
+          },
           {
             title: 'Cleaning',
-            value: beds.filter((b) => b.status === 'cleaning').length,
+            value: summary?.cleaning ?? 0,
           },
           {
             title: 'Reserved',
-            value: beds.filter((b) => b.status === 'reserved').length,
+            value: summary?.reserved ?? 0,
           },
         ]}
       />
@@ -75,22 +90,28 @@ export default function BedManagementPage() {
           <>
             <DropdownMenuItem
               onClick={() => {
-                setBeds((prev) =>
-                  prev.map((item) =>
-                    item.id === row.id
-                      ? {
-                          ...item,
-                          status: 'available' as const,
-                          patient: undefined,
-                        }
-                      : item,
-                  ),
-                );
+                updateStatus.mutate({
+                  bedId: row.id,
+                  input: { status: 'available' },
+                });
               }}
             >
               Mark available
             </DropdownMenuItem>
-            <DropdownMenuItem>Schedule cleaning</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                if (row.status === 'occupied') {
+                  releaseBed.mutate(row.id);
+                } else {
+                  updateStatus.mutate({
+                    bedId: row.id,
+                    input: { status: 'cleaning' },
+                  });
+                }
+              }}
+            >
+              Schedule cleaning
+            </DropdownMenuItem>
           </>
         )}
       />

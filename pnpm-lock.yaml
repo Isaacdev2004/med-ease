@@ -111,6 +111,9 @@ importers:
       '@medease/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@medease/beds-contract':
+        specifier: workspace:*
+        version: link:../../packages/beds-contract
       '@medease/config':
         specifier: workspace:*
         version: link:../../packages/config
@@ -369,6 +372,9 @@ importers:
       '@medease/appointments-contract':
         specifier: workspace:*
         version: link:../../packages/appointments-contract
+      '@medease/beds-contract':
+        specifier: workspace:*
+        version: link:../../packages/beds-contract
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
@@ -863,6 +869,12 @@ importers:
       tsx:
         specifier: 'catalog:'
         version: 4.23.0
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/beds-contract:
+    devDependencies:
       typescript:
         specifier: ~5.9.3
         version: 5.9.3

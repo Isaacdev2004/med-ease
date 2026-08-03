@@ -264,6 +264,27 @@ enum ClaimStatus {
   @@schema("operations")
 }
 
+enum BedStatus {
+  available
+  occupied
+  reserved
+  cleaning
+  maintenance
+  blocked
+
+  @@map("bed_status")
+  @@schema("clinical")
+}
+
+enum BedAssignmentStatus {
+  assigned
+  released
+  transferred
+
+  @@map("bed_assignment_status")
+  @@schema("clinical")
+}
+
 enum WorkflowStatus {
   draft
   active

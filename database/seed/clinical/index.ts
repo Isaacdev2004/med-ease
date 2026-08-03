@@ -215,6 +215,98 @@ type DemoMedicationSeed = {
   }>;
 };
 
+/** Demo beds — Paris facility board for buyer walkthrough. */
+function buildDemoBeds() {
+  return [
+    {
+      id: '01930000-0000-7000-8000-000000000901',
+      assignmentId: '01930000-0000-7000-8000-000000000951',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      label: 'ICU-3-01',
+      ward: 'ICU-3',
+      roomLabel: 'ICU-3',
+      bedType: 'Critical care',
+      status: 'occupied' as const,
+      patientId: DEMO_PATIENTS[0]!.id,
+      patientName: DEMO_PATIENTS[0]!.fullName,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000902',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      label: 'ICU-3-02',
+      ward: 'ICU-3',
+      roomLabel: 'ICU-3',
+      bedType: 'Critical care',
+      status: 'available' as const,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000903',
+      assignmentId: '01930000-0000-7000-8000-000000000952',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      label: 'MS2B-14',
+      ward: 'Med-Surg 2B',
+      roomLabel: '2B-14',
+      bedType: 'Standard',
+      status: 'occupied' as const,
+      patientId: DEMO_PATIENTS[1]!.id,
+      patientName: DEMO_PATIENTS[1]!.fullName,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000904',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      label: 'MS2B-15',
+      ward: 'Med-Surg 2B',
+      roomLabel: '2B-15',
+      bedType: 'Standard',
+      status: 'cleaning' as const,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000905',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      label: 'PED-08',
+      ward: 'Pediatrics',
+      roomLabel: 'PED-08',
+      bedType: 'Pediatric',
+      status: 'reserved' as const,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000906',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      label: 'MAT-03',
+      ward: 'Maternity',
+      roomLabel: 'MAT-03',
+      bedType: 'Maternity',
+      status: 'available' as const,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000907',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      label: 'SUR-11',
+      ward: 'Surgical',
+      roomLabel: 'SUR-11',
+      bedType: 'Surgical',
+      status: 'maintenance' as const,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000908',
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      label: 'ER-04',
+      ward: 'Emergency',
+      roomLabel: 'ER-04',
+      bedType: 'Emergency',
+      status: 'available' as const,
+    },
+  ];
+}
+
 /** Demo medications — Sarah Jenkins pill organizer for buyer walkthrough. */
 function buildDemoMedications(): DemoMedicationSeed[] {
   const sarah = DEMO_PATIENTS[0]!;
@@ -1042,6 +1134,55 @@ export const clinicalSeed: SeedModule = {
               active: true,
             },
           });
+        }
+
+        for (const bed of buildDemoBeds()) {
+          await tx.bed.upsert({
+            where: { id: bed.id },
+            create: {
+              id: bed.id,
+              tenantId: DEMO_TENANT_ID,
+              facilityId: bed.facilityId,
+              facilityName: bed.facilityName,
+              label: bed.label,
+              ward: bed.ward,
+              roomLabel: bed.roomLabel,
+              bedType: bed.bedType,
+              status: bed.status,
+              patientId: bed.patientId,
+              patientName: bed.patientName,
+              createdBy: DEMO_ADMIN_ID,
+            },
+            update: {
+              status: bed.status,
+              patientId: bed.patientId ?? null,
+              patientName: bed.patientName ?? null,
+              facilityName: bed.facilityName,
+              ward: bed.ward,
+              roomLabel: bed.roomLabel,
+              bedType: bed.bedType,
+              updatedBy: DEMO_ADMIN_ID,
+            },
+          });
+
+          if (bed.assignmentId && bed.patientId && bed.patientName) {
+            await tx.bedAssignment.upsert({
+              where: { id: bed.assignmentId },
+              create: {
+                id: bed.assignmentId,
+                tenantId: DEMO_TENANT_ID,
+                bedId: bed.id,
+                patientId: bed.patientId,
+                patientName: bed.patientName,
+                status: 'assigned',
+                assignedBy: DEMO_ADMIN_ID,
+              },
+              update: {
+                status: 'assigned',
+                patientName: bed.patientName,
+              },
+            });
+          }
         }
       });
     } finally {
