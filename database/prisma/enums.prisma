@@ -475,6 +475,237 @@ enum LabCategory {
   @@schema("clinical")
 }
 
+enum ImagingStudyStatus {
+  scheduled
+  in_progress
+  completed
+  pending_interpretation
+  preliminary
+  final
+  amended
+  cancelled
+
+  @@map("imaging_study_status")
+  @@schema("clinical")
+}
+
+enum ImagingStudyPriority {
+  routine
+  urgent
+  stat
+
+  @@map("imaging_study_priority")
+  @@schema("clinical")
+}
+
+enum ImagingBodyPart {
+  head
+  neck
+  chest
+  abdomen
+  pelvis
+  spine
+  upper_extremity
+  lower_extremity
+  whole_body
+  breast
+  dental
+  cardiac
+
+  @@map("imaging_body_part")
+  @@schema("clinical")
+}
+
+enum ImagingCategory {
+  diagnostic
+  screening
+  interventional
+  emergency
+  follow_up
+  research
+
+  @@map("imaging_category")
+  @@schema("clinical")
+}
+
+enum ImagingReportStatus {
+  draft
+  preliminary
+  final
+  amended
+  cancelled
+
+  @@map("imaging_report_status")
+  @@schema("clinical")
+}
+
+enum ImagingBillingStatus {
+  pending
+  submitted
+  paid
+  denied
+
+  @@map("imaging_billing_status")
+  @@schema("clinical")
+}
+
+enum ImagingDeviceStatus {
+  online
+  offline
+  maintenance
+
+  @@map("imaging_device_status")
+  @@schema("clinical")
+}
+
+enum VitalType {
+  blood_pressure
+  heart_rate
+  respiratory_rate
+  temperature
+  spo2
+  blood_glucose
+  weight
+  bmi
+  ecg_summary
+  pain_score
+  fall_risk
+
+  @@map("vital_type")
+  @@schema("clinical")
+}
+
+enum VitalStatus {
+  normal
+  warning
+  critical
+
+  @@map("vital_status")
+  @@schema("clinical")
+}
+
+enum MonitoringContext {
+  home
+  ward
+  telemonitoring
+  outpatient
+  rpm
+
+  @@map("monitoring_context")
+  @@schema("clinical")
+}
+
+enum MonitoringObservationStatus {
+  final
+  preliminary
+  amended
+
+  @@map("monitoring_observation_status")
+  @@schema("clinical")
+}
+
+enum MonitoringInterpretation {
+  normal
+  abnormal
+  critical
+
+  @@map("monitoring_interpretation")
+  @@schema("clinical")
+}
+
+enum MonitoringDeviceStatus {
+  online
+  offline
+  syncing
+  error
+  maintenance
+
+  @@map("monitoring_device_status")
+  @@schema("clinical")
+}
+
+enum BatteryStatus {
+  full
+  good
+  low
+  critical
+  unknown
+
+  @@map("battery_status")
+  @@schema("clinical")
+}
+
+enum MonitoringDeviceType {
+  wearable
+  bedside
+  home
+  mobile
+  gateway
+
+  @@map("monitoring_device_type")
+  @@schema("clinical")
+}
+
+enum AlertSeverity {
+  info
+  warning
+  critical
+  urgent
+
+  @@map("alert_severity")
+  @@schema("clinical")
+}
+
+enum MonitoringAlertStatus {
+  active
+  acknowledged
+  resolved
+  dismissed
+
+  @@map("monitoring_alert_status")
+  @@schema("clinical")
+}
+
+enum MonitoringAlertType {
+  threshold
+  missed_reading
+  device_offline
+  battery_low
+  escalation
+  clinical
+
+  @@map("monitoring_alert_type")
+  @@schema("clinical")
+}
+
+enum RpmProgramStatus {
+  active
+  paused
+  completed
+  pending
+
+  @@map("rpm_program_status")
+  @@schema("clinical")
+}
+
+enum EarlyWarningType {
+  NEWS2
+  MEWS
+
+  @@map("early_warning_type")
+  @@schema("clinical")
+}
+
+enum EarlyWarningRisk {
+  low
+  medium
+  high
+  critical
+
+  @@map("early_warning_risk")
+  @@schema("clinical")
+}
+
 enum WorkflowStatus {
   draft
   active

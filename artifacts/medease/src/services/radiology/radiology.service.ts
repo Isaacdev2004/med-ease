@@ -40,7 +40,7 @@ export const radiologyService = {
 
   async getAllStudies(filters?: StudyFilters) {
     await delay();
-    return sortStudiesByDate(radiologyRepository.getAllStudies(filters));
+    return sortStudiesByDate(await radiologyRepository.getAllStudies(filters));
   },
 
   async getStudy(id: string) {
@@ -61,9 +61,9 @@ export const radiologyService = {
   async getPatientImaging(patientId: string) {
     await delay();
     const studies = sortStudiesByDate(
-      radiologyRepository.getAllStudies({ patientId }),
+      await radiologyRepository.getAllStudies({ patientId }),
     );
-    const reports = radiologyRepository.getAllReports(patientId);
+    const reports = await radiologyRepository.getAllReports(patientId);
     return { studies, reports, critical: reports.filter((r) => r.isCritical) };
   },
 
@@ -89,28 +89,31 @@ export const radiologyService = {
 
   async getRadiologistDashboard(radiologistId?: string) {
     await delay();
-    const studies = radiologyRepository.getAllStudies(
+    const studies = await radiologyRepository.getAllStudies(
       radiologistId ? { radiologistId } : undefined,
     );
+    const pending = await radiologyRepository.getPendingReports();
+    const critical = await radiologyRepository.getCriticalReports();
     return {
       activeStudies: studies.filter(
         (s) => s.status === 'pending_interpretation',
       ).length,
-      pendingReports: radiologyRepository.getPendingReports().length,
-      critical: radiologyRepository.getCriticalReports().length,
+      pendingReports: pending.length,
+      critical: critical.length,
       studies: studies.slice(0, 10),
     };
   },
 
   async getFacilityImaging(facilityId?: string) {
     await delay();
-    const studies = radiologyRepository.getAllStudies(
+    const studies = await radiologyRepository.getAllStudies(
       facilityId ? { facilityId } : undefined,
     );
+    const pending = await radiologyRepository.getPendingReports();
     return {
       studiesToday: studies.filter((_, i) => i % 40 === 0).length || 6,
-      devices: radiologyRepository.getDevices(),
-      pending: radiologyRepository.getPendingReports().length,
+      devices: await radiologyRepository.getDevices(),
+      pending: pending.length,
       studies: studies.slice(0, 12),
     };
   },
@@ -127,7 +130,7 @@ export const radiologyService = {
 
   async getImageViewerState(studyId: string) {
     await delay();
-    const study = radiologyRepository.getStudy(studyId);
+    const study = await radiologyRepository.getStudy(studyId);
     if (!study) return null;
     return createDefaultViewerState(study);
   },

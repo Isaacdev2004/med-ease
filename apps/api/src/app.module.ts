@@ -25,6 +25,8 @@ import { CarePathwaysModule } from './care-pathways/care-pathways.module';
 import { DirectoryModule } from './directory/directory.module';
 import { MedicalLibraryModule } from './medical-library/medical-library.module';
 import { LaboratoryModule } from './laboratory/laboratory.module';
+import { RadiologyModule } from './radiology/radiology.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { MedeaseConfigModule } from './config/config.module';
 import { TenantModule } from './tenant/tenant.module';
@@ -91,6 +93,8 @@ import { PrismaModule } from '@medease/prisma';
     DirectoryModule,
     MedicalLibraryModule,
     LaboratoryModule,
+    RadiologyModule,
+    MonitoringModule,
     ObservabilityModule,
     MedeaseLoggerModule,
     PrismaModule,

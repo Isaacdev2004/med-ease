@@ -3,6 +3,8 @@ import { coreSeed } from './core';
 import { clinicalSeed } from './clinical';
 import { directoryMedicalLibrarySeed } from './directory-medical-library';
 import { laboratorySeed } from './laboratory';
+import { radiologySeed } from './radiology';
+import { monitoringSeed } from './monitoring';
 import { iamSeed } from './iam';
 import { identitySeed } from './identity';
 import { operationsSeed } from './operations';
@@ -20,6 +22,8 @@ async function main() {
       clinicalSeed,
       directoryMedicalLibrarySeed,
       laboratorySeed,
+      radiologySeed,
+      monitoringSeed,
       operationsSeed,
     ],
     { dryRun },

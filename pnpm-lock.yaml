@@ -147,6 +147,9 @@ importers:
       '@medease/medications-contract':
         specifier: workspace:*
         version: link:../../packages/medications-contract
+      '@medease/monitoring-contract':
+        specifier: workspace:*
+        version: link:../../packages/monitoring-contract
       '@medease/observability':
         specifier: workspace:*
         version: link:../../packages/observability
@@ -159,6 +162,9 @@ importers:
       '@medease/queue':
         specifier: workspace:*
         version: link:../../packages/queue
+      '@medease/radiology-contract':
+        specifier: workspace:*
+        version: link:../../packages/radiology-contract
       '@medease/storage':
         specifier: workspace:*
         version: link:../../packages/storage
@@ -411,9 +417,15 @@ importers:
       '@medease/medications-contract':
         specifier: workspace:*
         version: link:../../packages/medications-contract
+      '@medease/monitoring-contract':
+        specifier: workspace:*
+        version: link:../../packages/monitoring-contract
       '@medease/patients-contract':
         specifier: workspace:*
         version: link:../../packages/patients-contract
+      '@medease/radiology-contract':
+        specifier: workspace:*
+        version: link:../../packages/radiology-contract
       '@medease/repository-contract-test':
         specifier: workspace:*
         version: link:../../packages/repository-contract-test
@@ -1011,6 +1023,12 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
 
+  packages/monitoring-contract:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
   packages/observability:
     dependencies:
       '@opentelemetry/api':
@@ -1097,6 +1115,12 @@ importers:
       tsx:
         specifier: 'catalog:'
         version: 4.23.0
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/radiology-contract:
+    devDependencies:
       typescript:
         specifier: ~5.9.3
         version: 5.9.3

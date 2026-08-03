@@ -35,6 +35,14 @@ model Patient {
   transfers         PatientTransfer[]
   carePlans         CarePlan[]
   labOrders         LabOrder[]
+  radiologyOrders   RadiologyOrder[]
+  radiologyStudies  RadiologyStudy[]
+  monitoringVitals         MonitoringVital[]
+  monitoringObservations   MonitoringObservation[]
+  monitoringAlerts         MonitoringAlert[]
+  monitoringPrograms       MonitoringProgram[]
+  earlyWarningScores       EarlyWarningScore[]
+  deviceAssignments        DeviceAssignment[]
 
   @@unique([tenantId, mrn])
   @@index([tenantId, status])
@@ -967,5 +975,336 @@ model LabObservation {
   @@index([tenantId, orderId])
   @@index([tenantId, patientId, flag])
   @@map("lab_observations")
+  @@schema("clinical")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Radiology orders / studies / reports (Epic 4 / P1)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model RadiologyOrder {
+  id                  String               @id @db.Uuid
+  tenantId            String               @map("tenant_id") @db.Uuid
+  orderNumber         String               @map("order_number")
+  studyId             String?              @map("study_id") @db.Uuid
+  patientId           String               @map("patient_id") @db.Uuid
+  patientName         String               @map("patient_name")
+  orderingPhysician   String               @map("ordering_physician")
+  orderingPhysicianId String               @map("ordering_physician_id") @db.Uuid
+  facilityId          String               @map("facility_id") @db.Uuid
+  facilityName        String               @map("facility_name")
+  modality            String
+  bodyPart            ImagingBodyPart      @map("body_part")
+  priority            ImagingStudyPriority @default(routine)
+  status              ImagingStudyStatus   @default(scheduled)
+  clinicalIndication  String               @default("") @map("clinical_indication")
+  reason              String               @default("")
+  carePlanId          String?              @map("care_plan_id") @db.Uuid
+  appointmentId       String?              @map("appointment_id") @db.Uuid
+  scheduledAt         DateTime?            @map("scheduled_at") @db.Timestamptz(3)
+  notes               String?
+  createdBy           String               @map("created_by") @db.Uuid
+  updatedBy           String?              @map("updated_by") @db.Uuid
+  createdAt           DateTime             @default(now()) @map("created_at")
+  updatedAt           DateTime             @updatedAt @map("updated_at")
+  version             Int                  @default(1)
+
+  patient Patient          @relation(fields: [patientId], references: [id])
+  study   RadiologyStudy?  @relation(fields: [studyId], references: [id])
+
+  @@unique([tenantId, orderNumber])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, facilityId, status])
+  @@index([tenantId, status, createdAt(sort: Desc)])
+  @@map("radiology_orders")
+  @@schema("clinical")
+}
+
+model RadiologyStudy {
+  id                   String                @id @db.Uuid
+  tenantId             String                @map("tenant_id") @db.Uuid
+  accessionNumber      String                @map("accession_number")
+  patientId            String                @map("patient_id") @db.Uuid
+  patientName          String                @map("patient_name")
+  orderingPhysician    String                @map("ordering_physician")
+  orderingPhysicianId  String                @map("ordering_physician_id") @db.Uuid
+  facilityId           String                @map("facility_id") @db.Uuid
+  facilityName         String                @map("facility_name")
+  radiologistId        String?               @map("radiologist_id") @db.Uuid
+  radiologistName      String?               @map("radiologist_name")
+  modality             String
+  bodyPart             ImagingBodyPart       @map("body_part")
+  category             ImagingCategory       @default(diagnostic)
+  status               ImagingStudyStatus    @default(scheduled)
+  priority             ImagingStudyPriority  @default(routine)
+  studyDate            DateTime              @map("study_date") @db.Timestamptz(3)
+  reason               String                @default("")
+  clinicalIndication   String                @default("") @map("clinical_indication")
+  protocol             String                @default("")
+  contrast             Json                  @default("{\"used\":false}")
+  patientPosition      Json                  @default("{\"code\":\"HFS\",\"description\":\"Head first supine\"}") @map("patient_position")
+  imageCount           Int                   @default(0) @map("image_count")
+  seriesCount          Int                   @default(0) @map("series_count")
+  series               Json                  @default("[]")
+  radiationDoseMsv     Float?                @map("radiation_dose_msv")
+  deviceId             String                @default("") @map("device_id")
+  deviceName           String                @default("") @map("device_name")
+  isEmergency          Boolean               @default(false) @map("is_emergency")
+  billingStatus        ImagingBillingStatus  @default(pending) @map("billing_status")
+  isCritical           Boolean               @default(false) @map("is_critical")
+  carePlanId           String?               @map("care_plan_id") @db.Uuid
+  appointmentId        String?               @map("appointment_id") @db.Uuid
+  comparisonStudyIds   String[]              @default([]) @map("comparison_study_ids")
+  createdBy            String                @map("created_by") @db.Uuid
+  updatedBy            String?               @map("updated_by") @db.Uuid
+  createdAt            DateTime              @default(now()) @map("created_at")
+  updatedAt            DateTime              @updatedAt @map("updated_at")
+  version              Int                   @default(1)
+
+  patient Patient          @relation(fields: [patientId], references: [id])
+  orders  RadiologyOrder[]
+  report  RadiologyReport?
+
+  @@unique([tenantId, accessionNumber])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, facilityId, status])
+  @@index([tenantId, status, studyDate(sort: Desc)])
+  @@index([tenantId, isCritical])
+  @@map("radiology_studies")
+  @@schema("clinical")
+}
+
+model RadiologyReport {
+  id                String              @id @db.Uuid
+  tenantId          String              @map("tenant_id") @db.Uuid
+  studyId           String              @unique @map("study_id") @db.Uuid
+  patientId         String              @map("patient_id") @db.Uuid
+  patientName       String              @map("patient_name")
+  accessionNumber   String              @map("accession_number")
+  status            ImagingReportStatus @default(draft)
+  modality          String
+  bodyPart          ImagingBodyPart     @map("body_part")
+  title             String
+  findings          Json                @default("[]")
+  impression        Json                @default("{\"summary\":\"\",\"critical\":false}")
+  recommendations   Json                @default("[]")
+  measurements      Json                @default("[]")
+  radiologistId     String              @default("") @map("radiologist_id")
+  radiologistName   String              @default("") @map("radiologist_name")
+  signedAt          DateTime?           @map("signed_at") @db.Timestamptz(3)
+  isCritical        Boolean             @default(false) @map("is_critical")
+  isUnread          Boolean             @default(true) @map("is_unread")
+  attachments       String[]            @default([])
+  createdBy         String              @map("created_by") @db.Uuid
+  updatedBy         String?             @map("updated_by") @db.Uuid
+  createdAt         DateTime            @default(now()) @map("created_at")
+  updatedAt         DateTime            @updatedAt @map("updated_at")
+  version           Int                 @default(1)
+
+  study RadiologyStudy @relation(fields: [studyId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, status, createdAt(sort: Desc)])
+  @@index([tenantId, isCritical])
+  @@map("radiology_reports")
+  @@schema("clinical")
+}
+
+model ImagingDevice {
+  id                  String              @id @db.Uuid
+  tenantId            String              @map("tenant_id") @db.Uuid
+  name                String
+  modality            String
+  facilityId          String              @map("facility_id") @db.Uuid
+  facilityName        String              @map("facility_name")
+  status              ImagingDeviceStatus @default(online)
+  utilizationPercent  Int                 @default(0) @map("utilization_percent")
+  createdAt           DateTime            @default(now()) @map("created_at")
+  updatedAt           DateTime            @updatedAt @map("updated_at")
+
+  @@index([tenantId, facilityId])
+  @@map("imaging_devices")
+  @@schema("clinical")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Patient monitoring / vitals / RPM (Epic 4 / P1)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model MonitoringDevice {
+  id                String                 @id @db.Uuid
+  tenantId          String                 @map("tenant_id") @db.Uuid
+  name              String
+  manufacturer      String                 @default("")
+  model             String                 @default("")
+  type              MonitoringDeviceType   @default(home)
+  serialNumber      String                 @map("serial_number")
+  status            MonitoringDeviceStatus @default(online)
+  battery           BatteryStatus          @default(unknown)
+  batteryPercent    Int?                   @map("battery_percent")
+  lastSyncAt        DateTime?              @map("last_sync_at") @db.Timestamptz(3)
+  firmwareVersion   String?                @map("firmware_version")
+  calibrationDue    DateTime?              @map("calibration_due") @db.Timestamptz(3)
+  supportedMetrics  String[]               @default([]) @map("supported_metrics")
+  createdAt         DateTime               @default(now()) @map("created_at")
+  updatedAt         DateTime               @updatedAt @map("updated_at")
+
+  assignments DeviceAssignment[]
+
+  @@unique([tenantId, serialNumber])
+  @@index([tenantId, status])
+  @@map("monitoring_devices")
+  @@schema("clinical")
+}
+
+model DeviceAssignment {
+  id           String    @id @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  deviceId     String    @map("device_id") @db.Uuid
+  patientId    String    @map("patient_id") @db.Uuid
+  assignedAt   DateTime  @default(now()) @map("assigned_at") @db.Timestamptz(3)
+  assignedBy   String    @map("assigned_by")
+  unassignedAt DateTime? @map("unassigned_at") @db.Timestamptz(3)
+  programId    String?   @map("program_id") @db.Uuid
+  active       Boolean   @default(true)
+
+  device  MonitoringDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  patient Patient          @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId, active])
+  @@index([tenantId, deviceId])
+  @@map("device_assignments")
+  @@schema("clinical")
+}
+
+model MonitoringVital {
+  id           String            @id @db.Uuid
+  tenantId     String            @map("tenant_id") @db.Uuid
+  patientId    String            @map("patient_id") @db.Uuid
+  type         VitalType
+  valueText    String            @map("value_text")
+  valueNumeric Float?            @map("value_numeric")
+  unit         String            @default("")
+  recordedAt   DateTime          @map("recorded_at") @db.Timestamptz(3)
+  context      MonitoringContext @default(home)
+  deviceId     String?           @map("device_id") @db.Uuid
+  recordedBy   String?           @map("recorded_by")
+  status       VitalStatus       @default(normal)
+  systolic     Int?
+  diastolic    Int?
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId, recordedAt(sort: Desc)])
+  @@index([tenantId, type, recordedAt(sort: Desc)])
+  @@map("vital_signs")
+  @@schema("clinical")
+}
+
+model MonitoringObservation {
+  id               String                       @id @db.Uuid
+  tenantId         String                       @map("tenant_id") @db.Uuid
+  patientId        String                       @map("patient_id") @db.Uuid
+  category         String                       @default("vital-signs")
+  code             String
+  display          String
+  valueText        String                       @map("value_text")
+  valueNumeric     Float?                       @map("value_numeric")
+  unit             String                       @default("")
+  recordedAt       DateTime                     @map("recorded_at") @db.Timestamptz(3)
+  context          MonitoringContext            @default(home)
+  deviceId         String?                      @map("device_id") @db.Uuid
+  sessionId        String?                      @map("session_id") @db.Uuid
+  status           MonitoringObservationStatus  @default(final)
+  interpretation   MonitoringInterpretation?
+  referenceRange   String?                      @map("reference_range")
+  recordedBy       String?                      @map("recorded_by")
+  notes            String?
+  carePlanId       String?                      @map("care_plan_id") @db.Uuid
+  appointmentId    String?                      @map("appointment_id") @db.Uuid
+  createdBy        String                       @map("created_by") @db.Uuid
+  updatedBy        String?                      @map("updated_by") @db.Uuid
+  createdAt        DateTime                     @default(now()) @map("created_at")
+  updatedAt        DateTime                     @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId, recordedAt(sort: Desc)])
+  @@index([tenantId, category, recordedAt(sort: Desc)])
+  @@map("monitoring_observations")
+  @@schema("clinical")
+}
+
+model MonitoringAlert {
+  id               String                @id @db.Uuid
+  tenantId         String                @map("tenant_id") @db.Uuid
+  patientId        String                @map("patient_id") @db.Uuid
+  patientName      String                @map("patient_name")
+  type             MonitoringAlertType
+  severity         AlertSeverity         @default(warning)
+  status           MonitoringAlertStatus @default(active)
+  title            String
+  message          String                @default("")
+  metric           VitalType?
+  valueText        String?               @map("value_text")
+  threshold        String?
+  acknowledgedAt   DateTime?             @map("acknowledged_at") @db.Timestamptz(3)
+  acknowledgedBy   String?               @map("acknowledged_by")
+  resolvedAt       DateTime?             @map("resolved_at") @db.Timestamptz(3)
+  observationId    String?               @map("observation_id") @db.Uuid
+  deviceId         String?               @map("device_id") @db.Uuid
+  createdAt        DateTime              @default(now()) @map("created_at")
+  updatedAt        DateTime              @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, status, severity, createdAt(sort: Desc)])
+  @@map("monitoring_alerts")
+  @@schema("clinical")
+}
+
+model MonitoringProgram {
+  id             String           @id @db.Uuid
+  tenantId       String           @map("tenant_id") @db.Uuid
+  patientId      String           @map("patient_id") @db.Uuid
+  name           String
+  status         RpmProgramStatus @default(active)
+  enrolledAt     DateTime         @default(now()) @map("enrolled_at") @db.Timestamptz(3)
+  enrolledBy     String           @map("enrolled_by")
+  deviceIds      String[]         @default([]) @map("device_ids")
+  metrics        String[]         @default([])
+  frequency      String           @default("")
+  clinicianId    String           @map("clinician_id") @db.Uuid
+  clinicianName  String           @map("clinician_name")
+  carePlanId     String?          @map("care_plan_id") @db.Uuid
+  completedAt    DateTime?        @map("completed_at") @db.Timestamptz(3)
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId, status])
+  @@map("monitoring_programs")
+  @@schema("clinical")
+}
+
+model EarlyWarningScore {
+  id            String            @id @db.Uuid
+  tenantId      String            @map("tenant_id") @db.Uuid
+  patientId     String            @map("patient_id") @db.Uuid
+  type          EarlyWarningType
+  score         Int
+  riskLevel     EarlyWarningRisk  @map("risk_level")
+  components    Json              @default("{}")
+  calculatedAt  DateTime          @map("calculated_at") @db.Timestamptz(3)
+  context       MonitoringContext @default(ward)
+  createdAt     DateTime          @default(now()) @map("created_at")
+
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@index([tenantId, patientId, calculatedAt(sort: Desc)])
+  @@map("early_warning_scores")
   @@schema("clinical")
 }
