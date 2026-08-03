@@ -135,6 +135,9 @@ importers:
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
+      '@medease/laboratory-contract':
+        specifier: workspace:*
+        version: link:../../packages/laboratory-contract
       '@medease/logger':
         specifier: workspace:*
         version: link:../../packages/logger
@@ -399,6 +402,9 @@ importers:
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
+      '@medease/laboratory-contract':
+        specifier: workspace:*
+        version: link:../../packages/laboratory-contract
       '@medease/medical-library-contract':
         specifier: workspace:*
         version: link:../../packages/medical-library-contract
@@ -963,6 +969,12 @@ importers:
         version: 5.9.3
 
   packages/iam-contract:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/laboratory-contract:
     devDependencies:
       typescript:
         specifier: ~5.9.3

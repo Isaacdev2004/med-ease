@@ -34,6 +34,7 @@ model Patient {
   admissions        Admission[]
   transfers         PatientTransfer[]
   carePlans         CarePlan[]
+  labOrders         LabOrder[]
 
   @@unique([tenantId, mrn])
   @@index([tenantId, status])
@@ -824,5 +825,147 @@ model MedicationLibraryFavorite {
   @@unique([userId, medicationId])
   @@index([tenantId, userId])
   @@map("medication_library_favorites")
+  @@schema("clinical")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Laboratory orders / specimens / results (Epic 4 / P1)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model LabOrder {
+  id                   String              @id @db.Uuid
+  tenantId             String              @map("tenant_id") @db.Uuid
+  orderNumber          String              @map("order_number")
+  patientId            String              @map("patient_id") @db.Uuid
+  patientName          String              @map("patient_name")
+  orderingPhysician    String              @map("ordering_physician")
+  orderingPhysicianId  String              @map("ordering_physician_id") @db.Uuid
+  facilityId           String              @map("facility_id") @db.Uuid
+  facilityName         String              @map("facility_name")
+  department           String              @default("")
+  laboratoryId         String              @map("laboratory_id") @db.Uuid
+  laboratoryName       String              @map("laboratory_name")
+  priority             LabOrderPriority    @default(routine)
+  status               LabOrderStatus      @default(pending)
+  collectionMethod     LabCollectionMethod @default(in_clinic) @map("collection_method")
+  clinicalIndication   String              @default("") @map("clinical_indication")
+  diagnosis            String?
+  carePlanId           String?             @map("care_plan_id") @db.Uuid
+  appointmentId        String?             @map("appointment_id") @db.Uuid
+  testIds              String[]            @default([]) @map("test_ids")
+  testNames            String[]            @default([]) @map("test_names")
+  notes                String?
+  isRecurring          Boolean             @default(false) @map("is_recurring")
+  isStanding           Boolean             @default(false) @map("is_standing")
+  scheduledAt          DateTime?           @map("scheduled_at") @db.Timestamptz(3)
+  collectedAt          DateTime?           @map("collected_at") @db.Timestamptz(3)
+  createdBy            String              @map("created_by") @db.Uuid
+  updatedBy            String?             @map("updated_by") @db.Uuid
+  createdAt            DateTime            @default(now()) @map("created_at")
+  updatedAt            DateTime            @updatedAt @map("updated_at")
+  version              Int                 @default(1)
+
+  patient    Patient               @relation(fields: [patientId], references: [id])
+  specimens  LabSpecimen[]
+  reports    LabDiagnosticReport[]
+
+  @@unique([tenantId, orderNumber])
+  @@index([tenantId, facilityId, status])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, status, createdAt(sort: Desc)])
+  @@map("lab_orders")
+  @@schema("clinical")
+}
+
+model LabSpecimen {
+  id               String            @id @db.Uuid
+  tenantId         String            @map("tenant_id") @db.Uuid
+  orderId          String            @map("order_id") @db.Uuid
+  patientId        String            @map("patient_id") @db.Uuid
+  barcode          String
+  qrCode           String            @map("qr_code")
+  specimenType     String            @map("specimen_type")
+  status           LabSpecimenStatus @default(pending)
+  collectedBy      String?           @map("collected_by")
+  collectedAt      DateTime?         @map("collected_at") @db.Timestamptz(3)
+  receivedAt       DateTime?         @map("received_at") @db.Timestamptz(3)
+  temperature      String?
+  storageLocation  String?           @map("storage_location")
+  rejectionReason  String?           @map("rejection_reason")
+  chainOfCustody   Json              @default("[]") @map("chain_of_custody")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+
+  order LabOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, orderId])
+  @@index([tenantId, patientId, status])
+  @@map("lab_specimens")
+  @@schema("clinical")
+}
+
+model LabDiagnosticReport {
+  id                 String          @id @db.Uuid
+  tenantId           String          @map("tenant_id") @db.Uuid
+  orderId            String          @map("order_id") @db.Uuid
+  patientId          String          @map("patient_id") @db.Uuid
+  patientName        String          @map("patient_name")
+  reportNumber       String          @map("report_number")
+  status             LabResultStatus @default(pending)
+  category           LabCategory     @default(custom)
+  title              String
+  summary            String?
+  verifiedBy         String?         @map("verified_by")
+  approvedBy         String?         @map("approved_by")
+  digitalSignature   String?         @map("digital_signature")
+  technologistId     String?         @map("technologist_id") @db.Uuid
+  technologistName   String?         @map("technologist_name")
+  releasedAt         DateTime?       @map("released_at") @db.Timestamptz(3)
+  correctedAt        DateTime?       @map("corrected_at") @db.Timestamptz(3)
+  comments           String?
+  attachments        String[]        @default([])
+  createdBy          String          @map("created_by") @db.Uuid
+  updatedBy          String?         @map("updated_by") @db.Uuid
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  version            Int             @default(1)
+
+  order         LabOrder          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  observations  LabObservation[]
+
+  @@unique([tenantId, reportNumber])
+  @@index([tenantId, orderId])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, status, createdAt(sort: Desc)])
+  @@map("lab_diagnostic_reports")
+  @@schema("clinical")
+}
+
+model LabObservation {
+  id                   String        @id @db.Uuid
+  tenantId             String        @map("tenant_id") @db.Uuid
+  reportId             String        @map("report_id") @db.Uuid
+  orderId              String        @map("order_id") @db.Uuid
+  patientId            String        @map("patient_id") @db.Uuid
+  testId               String        @map("test_id")
+  testName             String        @map("test_name")
+  loincCode            String        @default("") @map("loinc_code")
+  category             LabCategory   @default(custom)
+  value                String
+  numericValue         Float?        @map("numeric_value")
+  unit                 String        @default("")
+  referenceRange       String        @default("") @map("reference_range")
+  flag                 LabResultFlag @default(normal)
+  interpretation       String?
+  patientFriendlyText  String?       @map("patient_friendly_text")
+  collectedAt          DateTime      @map("collected_at") @db.Timestamptz(3)
+  resultedAt           DateTime?     @map("resulted_at") @db.Timestamptz(3)
+
+  report LabDiagnosticReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, reportId])
+  @@index([tenantId, orderId])
+  @@index([tenantId, patientId, flag])
+  @@map("lab_observations")
   @@schema("clinical")
 }

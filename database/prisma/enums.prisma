@@ -379,6 +379,102 @@ enum DirectoryProviderType {
   @@schema("clinical")
 }
 
+enum LabOrderStatus {
+  draft
+  pending
+  scheduled
+  collected
+  in_progress
+  completed
+  cancelled
+  rejected
+
+  @@map("lab_order_status")
+  @@schema("clinical")
+}
+
+enum LabOrderPriority {
+  routine
+  urgent
+  stat
+
+  @@map("lab_order_priority")
+  @@schema("clinical")
+}
+
+enum LabCollectionMethod {
+  in_clinic
+  home_collection
+  external_lab
+  referral
+
+  @@map("lab_collection_method")
+  @@schema("clinical")
+}
+
+enum LabResultStatus {
+  pending
+  processing
+  verified
+  released
+  corrected
+  amended
+  cancelled
+  rejected
+
+  @@map("lab_result_status")
+  @@schema("clinical")
+}
+
+enum LabResultFlag {
+  normal
+  high
+  low
+  critical_high
+  critical_low
+  abnormal
+
+  @@map("lab_result_flag")
+  @@schema("clinical")
+}
+
+enum LabSpecimenStatus {
+  pending
+  collected
+  in_transit
+  received
+  processing
+  rejected
+  lost
+  damaged
+  stored
+  recollected
+
+  @@map("lab_specimen_status")
+  @@schema("clinical")
+}
+
+enum LabCategory {
+  hematology
+  biochemistry
+  microbiology
+  immunology
+  virology
+  pathology
+  genetics
+  endocrinology
+  toxicology
+  urinalysis
+  coagulation
+  blood_bank
+  covid
+  pregnancy
+  custom
+
+  @@map("lab_category")
+  @@schema("clinical")
+}
+
 enum WorkflowStatus {
   draft
   active

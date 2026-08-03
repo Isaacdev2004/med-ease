@@ -2,6 +2,7 @@ import { loadDatabaseEnv } from '../load-env.js';
 import { coreSeed } from './core';
 import { clinicalSeed } from './clinical';
 import { directoryMedicalLibrarySeed } from './directory-medical-library';
+import { laboratorySeed } from './laboratory';
 import { iamSeed } from './iam';
 import { identitySeed } from './identity';
 import { operationsSeed } from './operations';
@@ -18,6 +19,7 @@ async function main() {
       iamSeed,
       clinicalSeed,
       directoryMedicalLibrarySeed,
+      laboratorySeed,
       operationsSeed,
     ],
     { dryRun },

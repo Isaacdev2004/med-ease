@@ -56,7 +56,7 @@ export const laboratoryService = {
 
   async getAllOrders(filters?: LabOrderFilters) {
     await delay();
-    return sortOrdersByDate(laboratoryRepository.getAllOrders(filters));
+    return sortOrdersByDate(await laboratoryRepository.getAllOrders(filters));
   },
 
   async getOrder(id: string) {
@@ -81,28 +81,28 @@ export const laboratoryService = {
 
   async getAllResults(filters?: LabResultFilters) {
     await delay();
-    return sortResultsByDate(laboratoryRepository.getAllResults(filters));
+    return sortResultsByDate(await laboratoryRepository.getAllResults(filters));
   },
 
   async getResult(id: string) {
     await delay();
-    const report = laboratoryRepository.getResult(id);
+    const report = await laboratoryRepository.getResult(id);
     if (!report) return null;
     return {
       report,
-      observations: laboratoryRepository.getObservationsForReport(id),
+      observations: await laboratoryRepository.getObservationsForReport(id),
     };
   },
 
   async getPatientLaboratory(patientId: string) {
     await delay();
     const orders = sortOrdersByDate(
-      laboratoryRepository.getAllOrders({ patientId }),
+      await laboratoryRepository.getAllOrders({ patientId }),
     );
     const results = sortResultsByDate(
-      laboratoryRepository.getAllResults({ patientId }),
+      await laboratoryRepository.getAllResults({ patientId }),
     );
-    const observations = laboratoryRepository.getObservations(patientId);
+    const observations = await laboratoryRepository.getObservations(patientId);
     return {
       orders,
       results,
@@ -124,23 +124,27 @@ export const laboratoryService = {
 
   async getAlerts(patientId?: string) {
     await delay();
-    return sortAlertsByDate(laboratoryRepository.getAlerts(patientId));
+    return sortAlertsByDate(await laboratoryRepository.getAlerts(patientId));
   },
 
   async getCriticalResults(patientId?: string) {
     await delay();
-    return sortAlertsByDate(laboratoryRepository.getCriticalAlerts(patientId));
+    return sortAlertsByDate(
+      await laboratoryRepository.getCriticalAlerts(patientId),
+    );
   },
 
   async getUnacknowledgedAlerts(patientId?: string) {
     await delay();
-    return getUnacknowledgedAlerts(laboratoryRepository.getAlerts(patientId));
+    return getUnacknowledgedAlerts(
+      await laboratoryRepository.getAlerts(patientId),
+    );
   },
 
   async getSpecimens(orderId?: string, patientId?: string) {
     await delay();
     return sortSpecimensByDate(
-      laboratoryRepository.getSpecimens(orderId, patientId),
+      await laboratoryRepository.getSpecimens(orderId, patientId),
     );
   },
 
@@ -176,7 +180,8 @@ export const laboratoryService = {
 
   async getReferenceRanges() {
     await delay();
-    return laboratoryRepository.getTestCatalog().map((t) => ({
+    const catalog = await laboratoryRepository.getTestCatalog();
+    return catalog.map((t) => ({
       testId: t.id,
       name: t.name,
       referenceRange: t.referenceRange,

@@ -60,6 +60,7 @@
     "@medease/care-pathways-contract": "workspace:*",
     "@medease/directory-contract": "workspace:*",
     "@medease/medical-library-contract": "workspace:*",
+    "@medease/laboratory-contract": "workspace:*",
     "@medease/patients-contract": "workspace:*",
     "@medease/repository-contract-test": "workspace:*",
     "class-variance-authority": "catalog:",
