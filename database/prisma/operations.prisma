@@ -1,4 +1,94 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Operations schema — inventory, workforce, procurement, quality
-// (Patient billing lives in financial schema — Epic 5)
+// Operations schema — inventory (Epic 5 MVP)
 // ─────────────────────────────────────────────────────────────────────────────
+
+model Warehouse {
+  id                  String   @id @db.Uuid
+  tenantId            String   @map("tenant_id") @db.Uuid
+  facilityId          String   @map("facility_id") @db.Uuid
+  name                String
+  code                String
+  address             String   @default("")
+  capacity            Int      @default(0)
+  utilizationPercent  Int      @default(0) @map("utilization_percent")
+  zones               String[] @default([])
+  managerName         String   @default("") @map("manager_name")
+  status              String   @default("active")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  items InventoryItem[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, facilityId])
+  @@map("warehouses")
+  @@schema("operations")
+}
+
+model InventoryItem {
+  id                 String               @id @db.Uuid
+  tenantId           String               @map("tenant_id") @db.Uuid
+  warehouseId        String               @map("warehouse_id") @db.Uuid
+  facilityId         String               @map("facility_id") @db.Uuid
+  sku                String
+  barcode            String               @default("")
+  itemName           String               @map("item_name")
+  genericName        String?              @map("generic_name")
+  category           InventoryCategory    @default(supplies)
+  department         InventoryDepartment  @default(general)
+  manufacturer       String               @default("")
+  supplierName       String               @default("") @map("supplier_name")
+  unit               String               @default("ea")
+  packageSize        Int                  @default(1) @map("package_size")
+  purchasePriceCents BigInt               @default(0) @map("purchase_price_cents")
+  sellingPriceCents  BigInt               @default(0) @map("selling_price_cents")
+  quantityOnHand     Int                  @default(0) @map("quantity_on_hand")
+  reservedQuantity   Int                  @default(0) @map("reserved_quantity")
+  reorderLevel       Int                  @default(0) @map("reorder_level")
+  reorderQuantity    Int                  @default(0) @map("reorder_quantity")
+  maximumStock       Int                  @default(0) @map("maximum_stock")
+  minimumStock       Int                  @default(0) @map("minimum_stock")
+  expiryDate         DateTime?            @map("expiry_date") @db.Date
+  batchNumber        String?              @map("batch_number")
+  storageConditions  String               @default("") @map("storage_conditions")
+  shelfLocation      String               @default("") @map("shelf_location")
+  status             InventoryItemStatus  @default(active)
+  coldChain          Boolean              @default(false) @map("cold_chain")
+  createdBy          String               @map("created_by") @db.Uuid
+  updatedBy          String?              @map("updated_by") @db.Uuid
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+
+  warehouse Warehouse      @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+  movements StockMovement[]
+
+  @@unique([tenantId, sku])
+  @@index([tenantId, facilityId, status])
+  @@index([tenantId, warehouseId, category])
+  @@index([tenantId, department, status])
+  @@map("inventory_items")
+  @@schema("operations")
+}
+
+model StockMovement {
+  id           String            @id @db.Uuid
+  tenantId     String            @map("tenant_id") @db.Uuid
+  inventoryId  String            @map("inventory_id") @db.Uuid
+  itemName     String            @map("item_name")
+  type         StockMovementType
+  quantity     Int
+  fromLocation String?           @map("from_location")
+  toLocation   String?           @map("to_location")
+  reference    String?
+  performedBy  String            @map("performed_by")
+  notes        String?
+  createdBy    String            @map("created_by") @db.Uuid
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  item InventoryItem @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, inventoryId, createdAt(sort: Desc)])
+  @@index([tenantId, type, createdAt(sort: Desc)])
+  @@map("stock_movements")
+  @@schema("operations")
+}

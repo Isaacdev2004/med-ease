@@ -333,6 +333,60 @@ enum InvoiceLineCategory {
   @@schema("financial")
 }
 
+enum InventoryCategory {
+  medication
+  reagent
+  consumable
+  equipment
+  supplies
+  vaccine
+  controlled
+  asset
+  otc
+  narcotic
+
+  @@map("inventory_category")
+  @@schema("operations")
+}
+
+enum InventoryDepartment {
+  pharmacy
+  laboratory
+  radiology
+  icu
+  surgery
+  general
+  biomedical
+  warehouse
+
+  @@map("inventory_department")
+  @@schema("operations")
+}
+
+enum InventoryItemStatus {
+  active
+  low_stock
+  out_of_stock
+  expired
+  recalled
+  inactive
+
+  @@map("inventory_item_status")
+  @@schema("operations")
+}
+
+enum StockMovementType {
+  receive
+  issue
+  transfer
+  adjustment
+  return
+  count
+
+  @@map("stock_movement_type")
+  @@schema("operations")
+}
+
 enum BedStatus {
   available
   occupied

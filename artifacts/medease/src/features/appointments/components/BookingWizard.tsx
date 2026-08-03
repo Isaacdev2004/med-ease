@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useQuery } from '@tanstack/react-query';
 
 import { useAvailableSlots } from '@/features/appointments/hooks/use-appointments';
 import { useBookAppointment } from '@/features/appointments/mutations/appointments.mutations';
@@ -8,7 +9,9 @@ import {
   bookingWizardSteps,
   type BookingFormValues,
 } from '@/features/appointments/validation/booking.schema';
-import { FACILITIES, PROVIDERS, SPECIALTIES } from '@/services/appointments';
+import { directoryQueries } from '@/features/directory/queries/directory.queries';
+import { patientsQueries } from '@/features/patients/queries/patients.queries';
+import { SPECIALTIES } from '@/services/appointments';
 import { FormWizard } from '@/shared/forms/FormWizard';
 import { useZodForm } from '@/shared/forms/use-zod-form';
 import { Label } from '@/shared/ui/label';
@@ -22,11 +25,6 @@ import {
 } from '@/shared/ui/select';
 import { Card, CardContent } from '@/shared/ui/card';
 import { cn } from '@/shared/lib/utils';
-
-const DEMO_PATIENTS = Array.from({ length: 8 }, (_, i) => ({
-  id: `phr-${String(i + 1).padStart(3, '0')}`,
-  name: `Patient ${i + 1}`,
-}));
 
 interface BookingWizardProps {
   defaultPatientId?: string;
@@ -59,6 +57,22 @@ export function BookingWizard({
     watch.facilityId,
     watch.date,
   );
+
+  const patientsQuery = useQuery(patientsQueries.list({ pageSize: 50 }));
+  const providersQuery = useQuery(
+    directoryQueries.search({
+      type: 'professional',
+      specialty: watch.specialty || undefined,
+      pageSize: 50,
+    }),
+  );
+  const facilitiesQuery = useQuery(
+    directoryQueries.search({ type: 'facility', pageSize: 50 }),
+  );
+
+  const patients = patientsQuery.data?.items ?? [];
+  const providers = providersQuery.data?.items ?? [];
+  const facilities = facilitiesQuery.data?.items ?? [];
 
   async function validateStep(stepIndex: number) {
     const fields = bookingStepFields[stepIndex];
@@ -98,13 +112,16 @@ export function BookingWizard({
                 <SelectValue placeholder="Select patient" />
               </SelectTrigger>
               <SelectContent>
-                {DEMO_PATIENTS.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>
-                    {p.name}
+                {patients.map((p) => (
+                  <SelectItem key={p.patientId} value={p.patientId}>
+                    {p.fullName}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {patientsQuery.isLoading ? (
+              <p className="text-xs text-muted-foreground">Loading patients…</p>
+            ) : null}
           </div>
         );
       case 1:
@@ -143,6 +160,7 @@ export function BookingWizard({
                 value={watch.specialty}
                 onValueChange={(v) => {
                   form.setValue('specialty', v);
+                  form.setValue('providerId', '');
                   form.setValue(
                     'visitType',
                     v === 'Telemedicine' ? 'telemedicine' : 'in_person',
@@ -179,13 +197,19 @@ export function BookingWizard({
                 <SelectValue placeholder="Select provider" />
               </SelectTrigger>
               <SelectContent>
-                {PROVIDERS.map((p) => (
+                {providers.map((p) => (
                   <SelectItem key={p.id} value={p.id}>
-                    {p.fullName} — {p.specialty}
+                    {p.name}
+                    {p.specialty ? ` — ${p.specialty}` : ''}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {providersQuery.isLoading ? (
+              <p className="text-xs text-muted-foreground">
+                Loading providers…
+              </p>
+            ) : null}
           </div>
         );
       case 4:
@@ -200,13 +224,18 @@ export function BookingWizard({
                 <SelectValue placeholder="Select facility" />
               </SelectTrigger>
               <SelectContent>
-                {FACILITIES.map((f) => (
+                {facilities.map((f) => (
                   <SelectItem key={f.id} value={f.id}>
                     {f.name}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {facilitiesQuery.isLoading ? (
+              <p className="text-xs text-muted-foreground">
+                Loading facilities…
+              </p>
+            ) : null}
           </div>
         );
       case 5:
@@ -244,7 +273,10 @@ export function BookingWizard({
             </div>
           </div>
         );
-      case 7:
+      case 7: {
+        const patient = patients.find((p) => p.patientId === watch.patientId);
+        const provider = providers.find((p) => p.id === watch.providerId);
+        const facility = facilities.find((f) => f.id === watch.facilityId);
         return (
           <div className="space-y-4">
             <div className="space-y-2">
@@ -258,11 +290,14 @@ export function BookingWizard({
             <Card>
               <CardContent className="pt-4 text-sm space-y-1">
                 <p>
-                  <strong>Patient:</strong> {watch.patientId}
+                  <strong>Patient:</strong> {patient?.fullName ?? watch.patientId}
                 </p>
                 <p>
-                  <strong>Provider:</strong>{' '}
-                  {PROVIDERS.find((p) => p.id === watch.providerId)?.fullName}
+                  <strong>Provider:</strong> {provider?.name ?? watch.providerId}
+                </p>
+                <p>
+                  <strong>Facility:</strong>{' '}
+                  {facility?.name ?? watch.facilityId}
                 </p>
                 <p>
                   <strong>When:</strong>{' '}
@@ -274,6 +309,7 @@ export function BookingWizard({
             </Card>
           </div>
         );
+      }
       default:
         return (
           <p className="text-success font-medium">

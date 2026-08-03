@@ -138,6 +138,9 @@ importers:
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
+      '@medease/inventory-contract':
+        specifier: workspace:*
+        version: link:../../packages/inventory-contract
       '@medease/laboratory-contract':
         specifier: workspace:*
         version: link:../../packages/laboratory-contract
@@ -417,6 +420,9 @@ importers:
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
+      '@medease/inventory-contract':
+        specifier: workspace:*
+        version: link:../../packages/inventory-contract
       '@medease/laboratory-contract':
         specifier: workspace:*
         version: link:../../packages/laboratory-contract
@@ -999,6 +1005,12 @@ importers:
         version: 5.9.3
 
   packages/iam-contract:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/inventory-contract:
     devDependencies:
       typescript:
         specifier: ~5.9.3

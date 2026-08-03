@@ -7,6 +7,7 @@ import { radiologySeed } from './radiology';
 import { monitoringSeed } from './monitoring';
 import { telemedicineSeed } from './telemedicine';
 import { billingSeed } from './billing';
+import { inventorySeed } from './inventory';
 import { iamSeed } from './iam';
 import { identitySeed } from './identity';
 import { operationsSeed } from './operations';
@@ -28,6 +29,7 @@ async function main() {
       monitoringSeed,
       telemedicineSeed,
       billingSeed,
+      inventorySeed,
       operationsSeed,
     ],
     { dryRun },
