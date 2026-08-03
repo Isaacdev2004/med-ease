@@ -4,6 +4,7 @@ import type {
   TimelineEntry,
   VitalReading,
 } from '@/services/patient-records/types';
+import { useApiAuth } from '@/services/auth/auth-service';
 import { getPatientIdForUser } from '@/services/patient-records/mock-data';
 import {
   buildDemographicsFromPatient,
@@ -48,6 +49,94 @@ async function buildAppointmentTimeline(
   }
 }
 
+async function loadClinicalEmbeds(patientId: string) {
+  const empty = {
+    medications: [],
+    labObservations: [],
+    radiologyStudies: [],
+    radiologyReports: [],
+    vitals: [],
+    carePlans: [],
+    careGoals: [],
+    careTasks: [],
+    telemedicineSessions: [],
+  };
+
+  try {
+    const [
+      { medicationService },
+      { laboratoryService },
+      { radiologyService },
+      { patientMonitoringService },
+      { carePlanService },
+      { telemedicineService },
+    ] = await Promise.all([
+      import('@/services/medications/medication.service'),
+      import('@/services/laboratory/laboratory.service'),
+      import('@/services/radiology/radiology.service'),
+      import('@/services/patient-monitoring/patient-monitoring.service'),
+      import('@/services/care-plans/care-plan.service'),
+      import('@/services/telemedicine/telemedicine.service'),
+    ]);
+
+    const [
+      medications,
+      laboratory,
+      imaging,
+      vitals,
+      carePlans,
+      careGoals,
+      careTasks,
+      teleSessions,
+    ] = await Promise.all([
+      medicationService
+        .getMedications({ patientId })
+        .catch(() => [] as Awaited<ReturnType<typeof medicationService.getMedications>>),
+      laboratoryService
+        .getPatientLaboratory(patientId)
+        .catch(() => null),
+      radiologyService
+        .getPatientImaging(patientId)
+        .catch(() => null),
+      patientMonitoringService
+        .getVitalSigns({ patientId, pageSize: 50 })
+        .then((result) => result.items)
+        .catch(() => [] as Awaited<
+          ReturnType<typeof patientMonitoringService.getVitalSigns>
+        >['items']),
+      carePlanService
+        .getCarePlans({ patientId })
+        .catch(() => [] as Awaited<ReturnType<typeof carePlanService.getCarePlans>>),
+      carePlanService
+        .getGoals(patientId)
+        .catch(() => [] as Awaited<ReturnType<typeof carePlanService.getGoals>>),
+      carePlanService
+        .getTasks(patientId)
+        .catch(() => [] as Awaited<ReturnType<typeof carePlanService.getTasks>>),
+      telemedicineService
+        .searchSessions({ patientId, pageSize: 25 })
+        .then((result) => result.items)
+        .catch(() => [] as Awaited<
+          ReturnType<typeof telemedicineService.searchSessions>
+        >['items']),
+    ]);
+
+    return {
+      medications,
+      labObservations: laboratory?.observations ?? [],
+      radiologyStudies: imaging?.studies ?? [],
+      radiologyReports: imaging?.reports ?? [],
+      vitals,
+      carePlans,
+      careGoals,
+      careTasks,
+      telemedicineSessions: teleSessions,
+    };
+  } catch {
+    return empty;
+  }
+}
+
 async function loadLiveRecord(
   patientId: string,
 ): Promise<PatientHealthRecord | null> {
@@ -61,6 +150,7 @@ async function loadLiveRecord(
       allergies,
       preferences,
       timeline,
+      clinical,
     ] = await Promise.all([
       patientsService.getPatient(patientId),
       patientsService.getIdentifiers(patientId),
@@ -70,6 +160,7 @@ async function loadLiveRecord(
       patientsService.getAllergies(patientId),
       patientsService.getPreferences(patientId).catch(() => undefined),
       buildAppointmentTimeline(patientId),
+      loadClinicalEmbeds(patientId),
     ]);
 
     return buildPatientHealthRecordFromApi({
@@ -81,6 +172,7 @@ async function loadLiveRecord(
       allergies,
       preferences: preferences ?? undefined,
       timeline,
+      ...clinical,
     });
   } catch (error) {
     if (error instanceof NotFoundError) {
@@ -137,6 +229,21 @@ export const patientRecordService = {
   ): Promise<string | null> {
     await delay(50);
     if (explicitId) return explicitId;
+
+    if (useApiAuth) {
+      try {
+        const result = await patientsService.listPatients({
+          userId,
+          page: 1,
+          pageSize: 1,
+        });
+        const patientId = result.items[0]?.patientId;
+        if (patientId) return patientId;
+      } catch {
+        // Fall back to mock resolver below.
+      }
+    }
+
     return getPatientIdForUser(userId);
   },
 

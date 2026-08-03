@@ -33,6 +33,7 @@
     "@medease/radiology-contract": "workspace:*",
     "@medease/monitoring-contract": "workspace:*",
     "@medease/telemedicine-contract": "workspace:*",
+    "@medease/billing-contract": "workspace:*",
     "@medease/patients-contract": "workspace:*",
     "@medease/prisma": "workspace:*",
     "@medease/queue": "workspace:*",

@@ -1,0 +1,220 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Financial schema — patient billing / revenue cycle (Epic 5)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model InsurancePolicy {
+  id                   String                @id @db.Uuid
+  tenantId             String                @map("tenant_id") @db.Uuid
+  patientId            String                @map("patient_id") @db.Uuid
+  payer                String
+  policyNumber         String                @map("policy_number")
+  groupNumber          String?               @map("group_number")
+  planType             String                @map("plan_type")
+  coverageStart        DateTime              @map("coverage_start") @db.Timestamptz(3)
+  coverageEnd          DateTime              @map("coverage_end") @db.Timestamptz(3)
+  deductibleCents      BigInt                @default(0) @map("deductible_cents")
+  copayCents           BigInt                @default(0) @map("copay_cents")
+  coinsurancePercent   Int                   @default(0) @map("coinsurance_percent")
+  status               InsurancePolicyStatus @default(active)
+  eligibilityVerified  Boolean               @default(false) @map("eligibility_verified")
+  lastVerifiedAt       DateTime?             @map("last_verified_at") @db.Timestamptz(3)
+  createdAt            DateTime              @default(now()) @map("created_at")
+  updatedAt            DateTime              @updatedAt @map("updated_at")
+
+  invoices PatientInvoice[]
+  claims   InsuranceClaim[]
+
+  @@index([tenantId, patientId, status])
+  @@map("insurance_policies")
+  @@schema("financial")
+}
+
+model PatientInvoice {
+  id                 String         @id @db.Uuid
+  tenantId           String         @map("tenant_id") @db.Uuid
+  invoiceNumber      String         @map("invoice_number")
+  patientId          String         @map("patient_id") @db.Uuid
+  patientName        String         @map("patient_name")
+  facilityId         String         @map("facility_id") @db.Uuid
+  facilityName       String         @map("facility_name")
+  providerId         String         @map("provider_id") @db.Uuid
+  providerName       String         @map("provider_name")
+  appointmentId      String?        @map("appointment_id") @db.Uuid
+  encounterId        String?        @map("encounter_id") @db.Uuid
+  insurancePolicyId  String?        @map("insurance_policy_id") @db.Uuid
+  status             InvoiceStatus  @default(draft)
+  currencyCode       String         @default("EUR") @map("currency_code") @db.Char(3)
+  subtotalCents      BigInt         @default(0) @map("subtotal_cents")
+  discountCents      BigInt         @default(0) @map("discount_cents")
+  taxCents           BigInt         @default(0) @map("tax_cents")
+  totalCents         BigInt         @default(0) @map("total_cents")
+  paidCents          BigInt         @default(0) @map("paid_cents")
+  balanceCents       BigInt         @default(0) @map("balance_cents")
+  paymentMethod      BillingPaymentMethod? @map("payment_method")
+  notes              String?
+  issuedAt           DateTime?      @map("issued_at") @db.Timestamptz(3)
+  dueAt              DateTime?      @map("due_at") @db.Timestamptz(3)
+  createdBy          String         @map("created_by") @db.Uuid
+  updatedBy          String?        @map("updated_by") @db.Uuid
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+  version            Int            @default(1)
+
+  insurancePolicy InsurancePolicy?   @relation(fields: [insurancePolicyId], references: [id], onDelete: SetNull)
+  lineItems       InvoiceLineItem[]
+  payments        Payment[]
+  receipts        Receipt[]
+  refunds         Refund[]
+  claims          InsuranceClaim[]
+
+  @@unique([tenantId, invoiceNumber])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, facilityId, status])
+  @@index([tenantId, status, issuedAt(sort: Desc)])
+  @@map("patient_invoices")
+  @@schema("financial")
+}
+
+model InvoiceLineItem {
+  id             String              @id @db.Uuid
+  tenantId       String              @map("tenant_id") @db.Uuid
+  invoiceId      String              @map("invoice_id") @db.Uuid
+  category       InvoiceLineCategory @default(other)
+  description    String
+  code           String?
+  quantity       Decimal             @default(1) @db.Decimal(10, 2)
+  unitPriceCents BigInt              @map("unit_price_cents")
+  amountCents    BigInt              @map("amount_cents")
+  sortOrder      Int                 @default(0) @map("sort_order")
+  createdAt      DateTime            @default(now()) @map("created_at")
+
+  invoice PatientInvoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, invoiceId])
+  @@map("invoice_line_items")
+  @@schema("financial")
+}
+
+model Payment {
+  id                 String               @id @db.Uuid
+  tenantId           String               @map("tenant_id") @db.Uuid
+  invoiceId          String               @map("invoice_id") @db.Uuid
+  patientId          String               @map("patient_id") @db.Uuid
+  facilityId         String?              @map("facility_id") @db.Uuid
+  providerId         String?              @map("provider_id") @db.Uuid
+  amountCents        BigInt               @map("amount_cents")
+  currencyCode       String               @default("EUR") @map("currency_code") @db.Char(3)
+  method             BillingPaymentMethod
+  status             BillingPaymentStatus @default(pending)
+  reference          String
+  paidAt             DateTime             @map("paid_at") @db.Timestamptz(3)
+  installmentNumber  Int?                 @map("installment_number")
+  totalInstallments  Int?                 @map("total_installments")
+  retryCount         Int                  @default(0) @map("retry_count")
+  notes              String?
+  createdBy          String               @map("created_by") @db.Uuid
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+
+  invoice  PatientInvoice @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+  receipts Receipt[]
+  refunds  Refund[]
+
+  @@index([tenantId, invoiceId])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, paidAt(sort: Desc)])
+  @@map("payments")
+  @@schema("financial")
+}
+
+model Receipt {
+  id             String               @id @db.Uuid
+  tenantId       String               @map("tenant_id") @db.Uuid
+  paymentId      String               @map("payment_id") @db.Uuid
+  invoiceId      String               @map("invoice_id") @db.Uuid
+  patientId      String               @map("patient_id") @db.Uuid
+  receiptNumber  String               @map("receipt_number")
+  amountCents    BigInt               @map("amount_cents")
+  currencyCode   String               @default("EUR") @map("currency_code") @db.Char(3)
+  paymentMethod  BillingPaymentMethod @map("payment_method")
+  issuedAt       DateTime             @map("issued_at") @db.Timestamptz(3)
+  downloadUrl    String               @default("") @map("download_url")
+  createdAt      DateTime             @default(now()) @map("created_at")
+
+  payment Payment        @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  invoice PatientInvoice @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+
+  @@unique([tenantId, receiptNumber])
+  @@index([tenantId, patientId])
+  @@index([tenantId, invoiceId])
+  @@map("receipts")
+  @@schema("financial")
+}
+
+model Refund {
+  id           String              @id @db.Uuid
+  tenantId     String              @map("tenant_id") @db.Uuid
+  paymentId    String              @map("payment_id") @db.Uuid
+  invoiceId    String              @map("invoice_id") @db.Uuid
+  patientId    String              @map("patient_id") @db.Uuid
+  amountCents  BigInt              @map("amount_cents")
+  currencyCode String              @default("EUR") @map("currency_code") @db.Char(3)
+  reason       String
+  status       BillingRefundStatus @default(pending)
+  processedAt  DateTime?           @map("processed_at") @db.Timestamptz(3)
+  createdBy    String              @map("created_by") @db.Uuid
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @updatedAt @map("updated_at")
+
+  payment Payment        @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  invoice PatientInvoice @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, paymentId])
+  @@index([tenantId, patientId, status])
+  @@map("refunds")
+  @@schema("financial")
+}
+
+model InsuranceClaim {
+  id                   String         @id @db.Uuid
+  tenantId             String         @map("tenant_id") @db.Uuid
+  patientId            String         @map("patient_id") @db.Uuid
+  patientName          String         @map("patient_name")
+  invoiceId            String?        @map("invoice_id") @db.Uuid
+  insurancePolicyId    String?        @map("insurance_policy_id") @db.Uuid
+  facilityId           String         @map("facility_id") @db.Uuid
+  providerId           String         @map("provider_id") @db.Uuid
+  payer                String
+  policyNumber         String         @map("policy_number")
+  authorizationNumber  String?        @map("authorization_number")
+  diagnosisCodes       String[]       @default([]) @map("diagnosis_codes")
+  procedureCodes       String[]       @default([]) @map("procedure_codes")
+  medications          String[]       @default([])
+  laboratoryOrders     String[]       @default([]) @map("laboratory_orders")
+  radiologyOrders      String[]       @default([]) @map("radiology_orders")
+  totalClaimCents      BigInt         @map("total_claim_cents")
+  approvedCents        BigInt         @default(0) @map("approved_cents")
+  deniedCents          BigInt         @default(0) @map("denied_cents")
+  deductibleCents      BigInt         @default(0) @map("deductible_cents")
+  copayCents           BigInt         @default(0) @map("copay_cents")
+  coinsuranceCents     BigInt         @default(0) @map("coinsurance_cents")
+  currencyCode         String         @default("EUR") @map("currency_code") @db.Char(3)
+  status               ClaimStatus    @default(draft)
+  submissionDate       DateTime?      @map("submission_date") @db.Timestamptz(3)
+  adjudicationDate     DateTime?      @map("adjudication_date") @db.Timestamptz(3)
+  denialReason         String?        @map("denial_reason")
+  createdBy            String         @map("created_by") @db.Uuid
+  updatedBy            String?        @map("updated_by") @db.Uuid
+  createdAt            DateTime       @default(now()) @map("created_at")
+  updatedAt            DateTime       @updatedAt @map("updated_at")
+  version              Int            @default(1)
+
+  invoice         PatientInvoice?  @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  insurancePolicy InsurancePolicy? @relation(fields: [insurancePolicyId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, facilityId, status])
+  @@index([tenantId, status, createdAt(sort: Desc)])
+  @@map("insurance_claims")
+  @@schema("financial")
+}

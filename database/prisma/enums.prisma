@@ -245,23 +245,92 @@ enum RefillRequestStatus {
 enum InvoiceStatus {
   draft
   issued
+  partial
   paid
   overdue
   cancelled
+  written_off
 
   @@map("invoice_status")
-  @@schema("operations")
+  @@schema("financial")
 }
 
 enum ClaimStatus {
   draft
   submitted
+  pending
+  approved
+  partially_approved
+  denied
+  appealed
+  resubmitted
   accepted
   rejected
   paid
 
   @@map("claim_status")
-  @@schema("operations")
+  @@schema("financial")
+}
+
+enum BillingPaymentMethod {
+  cash
+  card
+  bank_transfer
+  insurance
+  wallet
+  stripe
+  paystack
+  flutterwave
+  mobile_money
+
+  @@map("billing_payment_method")
+  @@schema("financial")
+}
+
+enum BillingPaymentStatus {
+  pending
+  processing
+  completed
+  failed
+  refunded
+  partially_refunded
+
+  @@map("billing_payment_status")
+  @@schema("financial")
+}
+
+enum BillingRefundStatus {
+  pending
+  processing
+  completed
+  failed
+
+  @@map("billing_refund_status")
+  @@schema("financial")
+}
+
+enum InsurancePolicyStatus {
+  active
+  inactive
+  pending
+  expired
+
+  @@map("insurance_policy_status")
+  @@schema("financial")
+}
+
+enum InvoiceLineCategory {
+  consultation
+  laboratory
+  radiology
+  medication
+  monitoring
+  telemedicine
+  procedure
+  other
+
+  @@map("invoice_line_category")
+  @@schema("financial")
 }
 
 enum BedStatus {

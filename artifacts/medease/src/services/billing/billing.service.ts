@@ -113,14 +113,13 @@ export const billingService = {
 
   async generateReceipt(paymentId: string) {
     await delay();
-    const payments = billingRepository.getPayments();
+    const payments = await billingRepository.getPayments();
     const payment = payments.items.find((p) => p.paymentId === paymentId);
     if (!payment) return null;
-    return (
-      billingRepository
-        .getReceipts({ patientId: payment.patientId })
-        .items.find((r) => r.paymentId === paymentId) ?? null
-    );
+    const receipts = await billingRepository.getReceipts({
+      patientId: payment.patientId,
+    });
+    return receipts.items.find((r) => r.paymentId === paymentId) ?? null;
   },
 
   async downloadInvoice(invoiceId: string) {

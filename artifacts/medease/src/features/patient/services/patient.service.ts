@@ -121,22 +121,41 @@ export const patientService = {
 
     const { appointmentService } =
       await import('@/services/appointments/appointment.service');
+    const { medicationService } =
+      await import('@/services/medications/medication.service');
+    const { laboratoryService } =
+      await import('@/services/laboratory/laboratory.service');
 
-    const [patient, upcoming] = await Promise.all([
+    const [patient, upcoming, medications, laboratory] = await Promise.all([
       patientsService.getPatient(clinicalPatientId),
       appointmentService.getUpcoming({ patientId: clinicalPatientId }),
+      medicationService
+        .getMedications({ patientId: clinicalPatientId, status: 'active' })
+        .catch(() => []),
+      laboratoryService
+        .getPatientLaboratory(clinicalPatientId)
+        .catch(() => null),
     ]);
 
     const nextAppointment = upcoming[0]
       ? mapAppointmentSummary(upcoming[0])
       : null;
+    const recentObservation = laboratory?.observations[0];
 
     return {
       patientId: clinicalPatientId,
       greetingName: firstName(patient.fullName),
       nextAppointment,
-      recentTestLabel: 'Lab results will appear here when available.',
-      medications: [],
+      recentTestLabel: recentObservation
+        ? `${recentObservation.testName}: ${recentObservation.value} ${recentObservation.unit}`
+        : 'Lab results will appear here when available.',
+      medications: medications.slice(0, 5).map((med) => ({
+        id: med.id,
+        name: med.name,
+        dosage: med.dose || med.strength,
+        schedule: med.instructions || med.frequency,
+        refillsRemaining: med.refillsRemaining,
+      })),
     };
   },
 

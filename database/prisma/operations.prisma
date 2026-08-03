@@ -1,3 +1,4 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Operations schema — inventory, workforce, procurement, quality, billing ops
+// Operations schema — inventory, workforce, procurement, quality
+// (Patient billing lives in financial schema — Epic 5)
 // ─────────────────────────────────────────────────────────────────────────────

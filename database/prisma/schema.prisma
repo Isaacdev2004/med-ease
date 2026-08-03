@@ -10,5 +10,5 @@ datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-  schemas   = ["core", "identity", "clinical", "operations", "intelligence", "platform", "audit", "integration"]
+  schemas   = ["core", "identity", "clinical", "operations", "financial", "intelligence", "platform", "audit", "integration"]
 }

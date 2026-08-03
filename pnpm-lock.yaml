@@ -117,6 +117,9 @@ importers:
       '@medease/beds-contract':
         specifier: workspace:*
         version: link:../../packages/beds-contract
+      '@medease/billing-contract':
+        specifier: workspace:*
+        version: link:../../packages/billing-contract
       '@medease/care-pathways-contract':
         specifier: workspace:*
         version: link:../../packages/care-pathways-contract
@@ -402,6 +405,9 @@ importers:
       '@medease/beds-contract':
         specifier: workspace:*
         version: link:../../packages/beds-contract
+      '@medease/billing-contract':
+        specifier: workspace:*
+        version: link:../../packages/billing-contract
       '@medease/care-pathways-contract':
         specifier: workspace:*
         version: link:../../packages/care-pathways-contract
@@ -928,6 +934,12 @@ importers:
         version: 5.9.3
 
   packages/beds-contract:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/billing-contract:
     devDependencies:
       typescript:
         specifier: ~5.9.3
