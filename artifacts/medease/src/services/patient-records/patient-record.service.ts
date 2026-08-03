@@ -4,7 +4,6 @@ import type {
   TimelineEntry,
   VitalReading,
 } from '@/services/patient-records/types';
-import { useApiAuth } from '@/services/auth/auth-service';
 import { getPatientIdForUser } from '@/services/patient-records/mock-data';
 import {
   buildDemographicsFromPatient,
@@ -12,6 +11,7 @@ import {
 } from '@/services/patient-records/live-record.mapper';
 import { patientRecordRepository } from '@/services/patient-records/repository';
 import { patientsService } from '@/services/patients';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
 import { NotFoundError } from '@workspace/repository-transport';
 
 const DELAY_MS = 250;
@@ -228,23 +228,10 @@ export const patientRecordService = {
     explicitId?: string,
   ): Promise<string | null> {
     await delay(50);
-    if (explicitId) return explicitId;
-
-    if (useApiAuth) {
-      try {
-        const result = await patientsService.listPatients({
-          userId,
-          page: 1,
-          pageSize: 1,
-        });
-        const patientId = result.items[0]?.patientId;
-        if (patientId) return patientId;
-      } catch {
-        // Fall back to mock resolver below.
-      }
-    }
-
-    return getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async search(filters?: PatientRecordFilters) {

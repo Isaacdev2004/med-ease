@@ -3,6 +3,8 @@ import { computeMedicationAnalytics } from '@/services/medications/analytics';
 import { checkMedicationInteractions } from '@/services/medications/interaction-engine';
 import { getPatientIdForUser } from '@/services/medications/mock-data';
 import { medicationRepository } from '@/services/medications/repository';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
+import { useApiAuth } from '@/services/auth/auth-service';
 import {
   buildMedicationCalendar,
   getTodayDoses,
@@ -18,13 +20,17 @@ import type {
   AdministerInput,
 } from '@/services/medications/types';
 
-const DELAY = 250;
-const delay = (ms = DELAY) => new Promise((r) => setTimeout(r, ms));
+const DELAY = useApiAuth ? 0 : 250;
+const delay = (ms = DELAY) =>
+  DELAY <= 0 ? Promise.resolve() : new Promise((r) => setTimeout(r, ms));
 
 export const medicationService = {
   async resolvePatientId(userId: string, explicitId?: string) {
     await delay(50);
-    return explicitId ?? getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async searchMedications(filters?: MedicationFilters) {

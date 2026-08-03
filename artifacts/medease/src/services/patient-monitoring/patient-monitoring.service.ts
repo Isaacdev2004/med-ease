@@ -1,6 +1,8 @@
+import { useApiAuth } from '@/services/auth/auth-service';
 import { computeMonitoringAnalytics } from '@/services/patient-monitoring/analytics';
 import { getPatientIdForUser } from '@/services/patient-monitoring/mock-data';
 import { patientMonitoringRepository } from '@/services/patient-monitoring/repository';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
 import type {
   AssignDeviceInput,
   CreateObservationInput,
@@ -9,16 +11,20 @@ import type {
   UpdateObservationInput,
 } from '@/services/patient-monitoring/types';
 
-const DELAY = 250;
+const DELAY = useApiAuth ? 0 : 250;
 
 async function delay(ms = DELAY) {
+  if (DELAY <= 0) return;
   await new Promise((r) => setTimeout(r, ms));
 }
 
 export const patientMonitoringService = {
   async resolvePatientId(userId: string, explicitId?: string) {
     await delay(50);
-    return explicitId ?? getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async getDashboard(patientId?: string) {

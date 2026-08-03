@@ -1,7 +1,9 @@
+import { useApiAuth } from '@/services/auth/auth-service';
 import { computeTelemedicineAnalytics } from '@/services/telemedicine/analytics';
 import { runDeviceCheck } from '@/services/telemedicine/bandwidth';
 import { getPatientIdForUser } from '@/services/telemedicine/mock-data';
 import { telemedicineRepository } from '@/services/telemedicine/repository';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
 import type {
   SaveClinicalNoteInput,
   SendMessageInput,
@@ -9,15 +11,19 @@ import type {
   UploadFileInput,
 } from '@/services/telemedicine/types';
 
-const DELAY = 250;
+const DELAY = useApiAuth ? 0 : 250;
 async function delay(ms = DELAY) {
+  if (DELAY <= 0) return;
   await new Promise((r) => setTimeout(r, ms));
 }
 
 export const telemedicineService = {
   async resolvePatientId(userId: string, explicitId?: string) {
     await delay(50);
-    return explicitId ?? getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async searchSessions(filters?: TelemedicineFilters) {

@@ -1,31 +1,70 @@
+import { useApiAuth } from '@/services/auth/auth-service';
 import { buildAnalytics } from '@/services/care-plans/analytics';
 import { computeGoalCompletionRate } from '@/services/care-plans/goal-engine';
-import {
-  getPatientIdForUser,
-  buildDashboard,
-  buildProgress,
-} from '@/services/care-plans/mock-data';
+import { getPatientIdForUser } from '@/services/care-plans/mock-data';
 import { carePlanRepository } from '@/services/care-plans/repository';
 import { computeOverallRisk } from '@/services/care-plans/risk-engine';
 import {
   categorizeTasks,
   sortTasksByDueDate,
 } from '@/services/care-plans/task-engine';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
 import type {
   AssignTaskInput,
+  CarePlanDashboard,
   CarePlanFilters,
   CompleteTaskInput,
   CreateCarePlanInput,
   UpdateGoalInput,
 } from '@/services/care-plans/types';
 
-const DELAY = 250;
-const delay = (ms = DELAY) => new Promise((r) => setTimeout(r, ms));
+const DELAY = useApiAuth ? 0 : 250;
+const delay = (ms = DELAY) =>
+  DELAY <= 0 ? Promise.resolve() : new Promise((r) => setTimeout(r, ms));
+
+async function buildLiveDashboard(patientId: string): Promise<CarePlanDashboard> {
+  const [plans, tasks] = await Promise.all([
+    carePlanRepository.getAllPlans({ patientId }),
+    carePlanRepository.getTasks(undefined, patientId),
+  ]);
+  const activePlan =
+    plans.find((p) => p.status === 'active') ?? plans[0] ?? undefined;
+  const now = Date.now();
+
+  return {
+    patientId,
+    activePlan,
+    healthScore: activePlan?.healthScore ?? 0,
+    completionPercent: activePlan?.completionPercent ?? 0,
+    progressPercent: activePlan?.progressPercent ?? 0,
+    riskLevel: activePlan?.riskLevel ?? 'moderate',
+    pendingTasks: tasks.filter((t) => t.status === 'pending').length,
+    upcomingTasks: tasks.filter(
+      (t) => t.status === 'pending' && new Date(t.dueDate).getTime() > now,
+    ).length,
+    completedTasks: tasks.filter((t) => t.status === 'completed').length,
+    overdueTasks: tasks.filter((t) => t.status === 'overdue').length,
+    missedTasks: tasks.filter((t) => t.status === 'missed').length,
+    assignedProfessionals: activePlan ? 1 : 0,
+    upcomingAppointments: activePlan?.linkedAppointmentIds.length ?? 0,
+    activeMedications: activePlan?.linkedMedicationIds.length ?? 0,
+    outstandingLabs: 0,
+    outstandingImaging: 0,
+    recentActivity: plans.slice(0, 5).map((p) => ({
+      id: p.id,
+      title: p.title,
+      date: p.updatedAt,
+    })),
+  };
+}
 
 export const carePlanService = {
   async resolvePatientId(userId: string, explicitId?: string) {
     await delay(50);
-    return explicitId ?? getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async searchCarePlans(filters?: CarePlanFilters) {
@@ -99,11 +138,31 @@ export const carePlanService = {
 
   async getDashboard(patientId: string) {
     await delay();
+    if (useApiAuth) return buildLiveDashboard(patientId);
+    const { buildDashboard } = await import('@/services/care-plans/mock-data');
     return buildDashboard(patientId);
   },
 
   async getProgressTracking(patientId: string) {
     await delay();
+    if (useApiAuth) {
+      const dashboard = await buildLiveDashboard(patientId);
+      return {
+        patientId,
+        daily: dashboard.progressPercent,
+        weekly: dashboard.progressPercent,
+        monthly: dashboard.completionPercent,
+        quarterly: dashboard.completionPercent,
+        yearly: dashboard.completionPercent,
+        goalCompletion: dashboard.completionPercent,
+        medicationCompliance: 0,
+        appointmentAttendance: 0,
+        clinicalImprovement: dashboard.healthScore,
+        healthScoreTrend: [] as { label: string; value: number }[],
+        riskTrend: [] as { label: string; value: number }[],
+      };
+    }
+    const { buildProgress } = await import('@/services/care-plans/mock-data');
     return buildProgress(patientId);
   },
 

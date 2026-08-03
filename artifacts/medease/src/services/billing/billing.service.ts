@@ -1,6 +1,8 @@
+import { useApiAuth } from '@/services/auth/auth-service';
 import { computeRevenueAnalytics } from '@/services/billing/analytics';
 import { getPatientIdForUser } from '@/services/billing/mock-data';
 import { billingRepository } from '@/services/billing/repository';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
 import type {
   BillingFilters,
   CreateInvoiceInput,
@@ -10,15 +12,19 @@ import type {
   UpdateInvoiceInput,
 } from '@/services/billing/types';
 
-const DELAY = 250;
+const DELAY = useApiAuth ? 0 : 250;
 async function delay(ms = DELAY) {
+  if (DELAY <= 0) return;
   await new Promise((r) => setTimeout(r, ms));
 }
 
 export const billingService = {
   async resolvePatientId(userId: string, explicitId?: string) {
     await delay(50);
-    return explicitId ?? getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async searchInvoices(filters?: BillingFilters) {

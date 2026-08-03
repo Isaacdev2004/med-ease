@@ -3,40 +3,10 @@ import type {
   PatientAppointmentSummary,
   PatientDashboardData,
 } from '@/features/patient/types';
-import { useApiAuth } from '@/services/auth/auth-service';
 import { getPatientIdForUser } from '@/services/patient-records/mock-data';
 import { patientsService } from '@/services/patients';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
 import type { Appointment as ApiAppointment } from '@/services/appointments/types';
-
-const DEMO_DELAY_MS = 350;
-
-function delay<T>(value: T, ms = DEMO_DELAY_MS): Promise<T> {
-  return new Promise((resolve) => {
-    window.setTimeout(() => resolve(value), ms);
-  });
-}
-
-const demoDashboard: PatientDashboardData = {
-  patientId: 'user-patient',
-  greetingName: 'Sarah',
-  nextAppointment: {
-    id: 'appt-001',
-    providerName: 'Dr. Emily Chen',
-    specialty: 'Cardiology',
-    scheduledAt: new Date(Date.now() + 86_400_000).toISOString(),
-    location: 'Mount Sinai Main Campus, Room 402',
-  },
-  recentTestLabel: 'Comprehensive Metabolic Panel',
-  medications: [
-    {
-      id: 'med-001',
-      name: 'Atorvastatin',
-      dosage: '20mg',
-      schedule: 'Take 1 pill daily at bedtime',
-      refillsRemaining: 12,
-    },
-  ],
-};
 
 function firstName(fullName: string): string {
   return fullName.trim().split(/\s+/)[0] ?? fullName;
@@ -71,26 +41,6 @@ function mapAppointment(appointment: ApiAppointment): Appointment {
   };
 }
 
-async function resolveClinicalPatientId(authUserId: string): Promise<string | null> {
-  if (useApiAuth) {
-    try {
-      const result = await patientsService.listPatients({
-        userId: authUserId,
-        page: 1,
-        pageSize: 1,
-      });
-      const patientId = result.items[0]?.patientId;
-      if (patientId) {
-        return patientId;
-      }
-    } catch {
-      // Fall back to mock resolver below.
-    }
-  }
-
-  return getPatientIdForUser(authUserId);
-}
-
 function emptyDashboard(
   patientId: string,
   greetingName = 'there',
@@ -104,19 +54,14 @@ function emptyDashboard(
   };
 }
 
-/** Patient domain API — live Supabase data when API auth is enabled. */
+/** Patient domain API — always prefers live Supabase/API data. */
 export const patientService = {
   async getDashboard(authUserId: string): Promise<PatientDashboardData> {
-    const clinicalPatientId = await resolveClinicalPatientId(authUserId);
+    const clinicalPatientId = await resolveClinicalPatientId(authUserId, {
+      demoFallback: getPatientIdForUser,
+    });
     if (!clinicalPatientId) {
-      if (!useApiAuth) {
-        return delay({ ...demoDashboard, patientId: authUserId });
-      }
       return emptyDashboard(authUserId);
-    }
-
-    if (!useApiAuth) {
-      return delay({ ...demoDashboard, patientId: clinicalPatientId });
     }
 
     const { appointmentService } =
@@ -140,6 +85,7 @@ export const patientService = {
     const nextAppointment = upcoming[0]
       ? mapAppointmentSummary(upcoming[0])
       : null;
+    const recentResult = laboratory?.results[0];
     const recentObservation = laboratory?.observations[0];
 
     return {
@@ -148,7 +94,9 @@ export const patientService = {
       nextAppointment,
       recentTestLabel: recentObservation
         ? `${recentObservation.testName}: ${recentObservation.value} ${recentObservation.unit}`
-        : 'Lab results will appear here when available.',
+        : recentResult
+          ? `${recentResult.title} (${recentResult.status})`
+          : 'Lab results will appear here when available.',
       medications: medications.slice(0, 5).map((med) => ({
         id: med.id,
         name: med.name,
@@ -162,7 +110,9 @@ export const patientService = {
   async getAppointments(authUserId: string): Promise<Appointment[]> {
     const { appointmentService } =
       await import('@/services/appointments/appointment.service');
-    const clinicalPatientId = await resolveClinicalPatientId(authUserId);
+    const clinicalPatientId = await resolveClinicalPatientId(authUserId, {
+      demoFallback: getPatientIdForUser,
+    });
     if (!clinicalPatientId) {
       return [];
     }
@@ -180,29 +130,9 @@ export const patientService = {
     const { appointmentService } =
       await import('@/services/appointments/appointment.service');
 
-    if (useApiAuth) {
-      const updated = await appointmentService.reschedule(appointmentId, {
-        scheduledAt,
-      });
-      return mapAppointment(updated);
-    }
-
-    const dashboard = await this.getDashboard('user-patient');
-    if (
-      !dashboard.nextAppointment ||
-      dashboard.nextAppointment.id !== appointmentId
-    ) {
-      throw new Error('Appointment not found');
-    }
-
-    return delay({
-      id: appointmentId,
-      patientId: dashboard.patientId,
-      providerName: dashboard.nextAppointment.providerName,
-      specialty: dashboard.nextAppointment.specialty,
+    const updated = await appointmentService.reschedule(appointmentId, {
       scheduledAt,
-      location: dashboard.nextAppointment.location,
-      status: 'scheduled',
     });
+    return mapAppointment(updated);
   },
 };

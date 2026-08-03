@@ -12,6 +12,7 @@ import {
 } from '@/services/appointments/calendar';
 import { getPatientIdForUser } from '@/services/appointments/mock-data';
 import { appointmentRepository } from '@/services/appointments/repository';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
 import { validateBookingSlot } from '@/services/appointments/scheduler';
 import type {
   AppointmentAnalytics,
@@ -146,8 +147,10 @@ export const appointmentService = {
     explicitId?: string,
   ): Promise<string | null> {
     await delay(50);
-    if (explicitId) return explicitId;
-    return getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async search(filters?: AppointmentFilters) {

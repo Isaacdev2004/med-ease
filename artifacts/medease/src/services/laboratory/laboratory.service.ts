@@ -1,13 +1,5 @@
-import { buildAnalytics } from '@/services/laboratory/analytics';
-import {
-  getUnacknowledgedAlerts,
-  sortAlertsByDate,
-} from '@/services/laboratory/alerts';
-import {
-  getPatientIdForUser,
-  buildDashboard,
-  buildTrends,
-} from '@/services/laboratory/mock-data';
+import { useApiAuth } from '@/services/auth/auth-service';
+import { getPatientIdForUser } from '@/services/laboratory/mock-data';
 import {
   sortOrdersByDate,
   categorizeOrders,
@@ -18,12 +10,19 @@ import {
   sortResultsByDate,
 } from '@/services/laboratory/results';
 import { sortSpecimensByDate } from '@/services/laboratory/specimens';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
+import { buildAnalytics } from '@/services/laboratory/analytics';
+import {
+  getUnacknowledgedAlerts,
+  sortAlertsByDate,
+} from '@/services/laboratory/alerts';
 import type {
   CancelLabOrderInput,
   CollectSpecimenInput,
   CreateLabOrderInput,
   LabOrderFilters,
   LabResultFilters,
+  LaboratoryDashboard,
   ReleaseResultInput,
   VerifyResultInput,
   ApproveResultInput,
@@ -32,20 +31,77 @@ import type {
   ShareResultInput,
 } from '@/services/laboratory/types';
 
-const DELAY = 250;
+const DELAY = useApiAuth ? 0 : 250;
 
 async function delay() {
+  if (DELAY <= 0) return;
   await new Promise((r) => setTimeout(r, DELAY));
 }
 
+async function buildLiveDashboard(
+  patientId?: string,
+): Promise<LaboratoryDashboard> {
+  const [orders, results, specimens] = await Promise.all([
+    laboratoryRepository.getAllOrders(patientId ? { patientId } : undefined),
+    laboratoryRepository.getAllResults(patientId ? { patientId } : undefined),
+    laboratoryRepository.getSpecimens(undefined, patientId),
+  ]);
+
+  const today = new Date().toDateString();
+  const todayOrders = orders.filter(
+    (o) => new Date(o.createdAt).toDateString() === today,
+  ).length;
+  const pendingCollection = orders.filter((o) =>
+    ['pending', 'scheduled'].includes(o.status),
+  ).length;
+  const collectedSamples = orders.filter((o) => o.status === 'collected').length;
+  const inProcessing = orders.filter((o) => o.status === 'in_progress').length;
+  const resultsReady = results.filter((r) => r.status === 'released').length;
+  const criticalResults = results.filter((r) =>
+    r.title?.toLowerCase().includes('critical'),
+  ).length;
+  const rejectedSamples = specimens.filter((s) => s.status === 'rejected').length;
+  const cancelledOrders = orders.filter((o) => o.status === 'cancelled').length;
+
+  return {
+    patientId,
+    todayOrders,
+    pendingCollection,
+    collectedSamples,
+    inProcessing,
+    resultsReady,
+    criticalResults,
+    rejectedSamples,
+    cancelledOrders,
+    averageTurnaroundHours: 0,
+    recentActivity: [],
+    kpis: [
+      { label: 'Orders today', value: todayOrders },
+      { label: 'Pending', value: pendingCollection },
+      { label: 'Critical', value: criticalResults },
+    ],
+    chartData: [
+      { label: 'Pending', value: pendingCollection },
+      { label: 'In progress', value: inProcessing },
+      { label: 'Ready', value: resultsReady },
+      { label: 'Cancelled', value: cancelledOrders },
+    ],
+  };
+}
+
 export const laboratoryService = {
-  async resolvePatientId(userId: string) {
+  async resolvePatientId(userId: string, explicitId?: string) {
     await delay();
-    return getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async getDashboard(patientId?: string) {
     await delay();
+    if (useApiAuth) return buildLiveDashboard(patientId);
+    const { buildDashboard } = await import('@/services/laboratory/mock-data');
     return buildDashboard(patientId);
   },
 
@@ -119,6 +175,11 @@ export const laboratoryService = {
 
   async getTrends(patientId: string) {
     await delay();
+    if (useApiAuth) {
+      // Trends require observation time series — return empty until live obs API lands.
+      return [];
+    }
+    const { buildTrends } = await import('@/services/laboratory/mock-data');
     return buildTrends(patientId);
   },
 
@@ -262,6 +323,8 @@ export const laboratoryService = {
 
   async getTrendAnalysis(patientId: string, testId?: string) {
     await delay();
+    if (useApiAuth) return [];
+    const { buildTrends } = await import('@/services/laboratory/mock-data');
     const trends = buildTrends(patientId);
     return testId ? trends.filter((t) => t.testId === testId) : trends;
   },

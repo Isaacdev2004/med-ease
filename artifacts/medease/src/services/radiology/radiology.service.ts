@@ -1,35 +1,83 @@
-import { buildAnalytics } from '@/services/radiology/analytics';
-import {
-  buildDashboard,
-  getPatientIdForUser,
-} from '@/services/radiology/mock-data';
+import { useApiAuth } from '@/services/auth/auth-service';
+import { getPatientIdForUser } from '@/services/radiology/mock-data';
 import { radiologyRepository } from '@/services/radiology/repository';
 import { sortStudiesByDate } from '@/services/radiology/studies';
 import { createDefaultViewerState } from '@/services/radiology/viewer';
+import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
+import { buildAnalytics } from '@/services/radiology/analytics';
 import type {
   AddAnnotationInput,
   AddMeasurementInput,
   ApproveReportInput,
   CompleteInterpretationInput,
   CreateRadiologyOrderInput,
+  RadiologyDashboard,
   StudyFilters,
   StudyPermissions,
 } from '@/services/radiology/types';
 
-const DELAY = 250;
+const DELAY = useApiAuth ? 0 : 250;
 
 async function delay() {
+  if (DELAY <= 0) return;
   await new Promise((r) => setTimeout(r, DELAY));
 }
 
+async function buildLiveDashboard(
+  patientId?: string,
+): Promise<RadiologyDashboard> {
+  const studies = sortStudiesByDate(
+    await radiologyRepository.getAllStudies(
+      patientId ? { patientId } : undefined,
+    ),
+  );
+  const reports = await radiologyRepository.getAllReports(patientId);
+  const today = new Date().toDateString();
+
+  return {
+    patientId,
+    studiesToday: studies.filter(
+      (s) => new Date(s.studyDate).toDateString() === today,
+    ).length,
+    pendingReports: reports.filter(
+      (r) => r.status === 'draft' || r.status === 'preliminary',
+    ).length,
+    criticalFindings: reports.filter((r) => r.isCritical).length,
+    averageReportingHours: 0,
+    unreadReports: reports.filter((r) => r.isUnread).length,
+    emergencyStudies: studies.filter((s) => s.isEmergency).length,
+    recentStudies: studies.slice(0, 5),
+    recentActivity: [],
+    kpis: [
+      { label: 'Studies', value: studies.length },
+      {
+        label: 'Pending',
+        value: reports.filter((r) => r.status !== 'final').length,
+      },
+      { label: 'Critical', value: reports.filter((r) => r.isCritical).length },
+    ],
+    chartData: Object.entries(
+      studies.reduce<Record<string, number>>((acc, study) => {
+        acc[study.modality] = (acc[study.modality] ?? 0) + 1;
+        return acc;
+      }, {}),
+    ).map(([label, value]) => ({ label, value })),
+  };
+}
+
 export const radiologyService = {
-  async resolvePatientId(userId: string) {
+  async resolvePatientId(userId: string, explicitId?: string) {
     await delay();
-    return getPatientIdForUser(userId);
+    return resolveClinicalPatientId(userId, {
+      explicitId,
+      demoFallback: getPatientIdForUser,
+    });
   },
 
   async getDashboard(patientId?: string) {
     await delay();
+    if (useApiAuth) return buildLiveDashboard(patientId);
+    const { buildDashboard } = await import('@/services/radiology/mock-data');
     return buildDashboard(patientId);
   },
 
