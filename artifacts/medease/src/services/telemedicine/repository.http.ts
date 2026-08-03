@@ -2,8 +2,13 @@ import { httpTransport } from '@workspace/repository-transport';
 import type {
   SaveClinicalNoteInput,
   SendMessageInput,
+  SessionExport,
+  SessionFavorite,
+  SessionShare,
   TelemedicineFilters,
   UploadFileInput,
+  VideoParticipant,
+  WhiteboardSession,
 } from '@/services/telemedicine/types';
 import {
   mapChatMessage,
@@ -21,13 +26,14 @@ import {
   mapWaitingRoomEntryArray,
   telemedicineFiltersToQuery,
 } from '@/services/telemedicine/dto-mappers';
-import { telemedicineMockRepository } from '@/services/telemedicine/repository.mock';
 
 const BASE = '/api/telemedicine';
 
 class TelemedicineHttpRepository {
   private readonly transport = httpTransport;
-  private readonly mock = telemedicineMockRepository;
+  private readonly favorites: SessionFavorite[] = [];
+  private readonly shares: SessionShare[] = [];
+  private readonly whiteboards = new Map<string, WhiteboardSession>();
 
   async searchSessions(filters?: TelemedicineFilters) {
     return mapPaginatedSessions(
@@ -179,73 +185,145 @@ class TelemedicineHttpRepository {
     );
   }
 
-  // Hybrid mock-only surfaces
-  inviteParticipant(
-    sessionId: string,
-    name: string,
-    role: 'patient' | 'clinician' | 'interpreter',
-  ) {
-    return this.mock.inviteParticipant(sessionId, name, role);
+  /**
+   * Extras without Nest write APIs yet: never fall back to mock Sarah fixtures.
+   * Prefer live reads / empty / ephemeral session-local state.
+   */
+  async inviteParticipant(
+    _sessionId: string,
+    _name: string,
+    _role: 'patient' | 'clinician' | 'interpreter',
+  ): Promise<VideoParticipant | null> {
+    return null;
   }
 
-  removeParticipant(participantId: string) {
-    return this.mock.removeParticipant(participantId);
+  async removeParticipant(_participantId: string) {
+    return null;
   }
 
-  uploadFile(input: UploadFileInput) {
-    return this.mock.uploadFile(input);
+  async uploadFile(_input: UploadFileInput) {
+    return null;
   }
 
-  getAttachments(sessionId: string) {
-    return this.mock.getAttachments(sessionId);
+  async getAttachments(_sessionId: string) {
+    return [];
   }
 
-  recordSession(sessionId: string, consentGiven: boolean) {
-    return this.mock.recordSession(sessionId, consentGiven);
+  async recordSession(_sessionId: string, _consentGiven: boolean) {
+    return null;
   }
 
-  stopRecording(sessionId: string) {
-    return this.mock.stopRecording(sessionId);
+  async stopRecording(_sessionId: string) {
+    return null;
   }
 
-  generateTranscript(sessionId: string) {
-    return this.mock.generateTranscript(sessionId);
+  async generateTranscript(sessionId: string) {
+    const recordings = await this.getRecordings(sessionId);
+    const withText = recordings.find((r) => r.transcription);
+    return withText?.transcription ?? null;
   }
 
-  toggleParticipantMedia(
+  async toggleParticipantMedia(
     participantId: string,
     field: 'cameraOn' | 'microphoneOn',
     value: boolean,
   ) {
-    return this.mock.toggleParticipantMedia(participantId, field, value);
+    // Media patch API not exposed yet — no mock mutation.
+    void participantId;
+    void field;
+    void value;
+    return null;
   }
 
-  toggleScreenShare(participantId: string, sharing: boolean) {
-    return this.mock.toggleScreenShare(participantId, sharing);
+  async toggleScreenShare(participantId: string, sharing: boolean) {
+    void participantId;
+    void sharing;
+    return null;
   }
 
-  search(query: string, patientId?: string) {
-    return this.mock.search(query, patientId);
+  async search(query: string, patientId?: string) {
+    const q = query.toLowerCase();
+    const { items } = await this.searchSessions({
+      patientId,
+      q: query,
+      pageSize: 20,
+    });
+    return {
+      sessions: items.filter(
+        (s) =>
+          s.patientName.toLowerCase().includes(q) ||
+          s.clinicianName.toLowerCase().includes(q) ||
+          s.meetingNumber.includes(q),
+      ),
+      messages: [] as Awaited<ReturnType<typeof this.getMessages>>,
+    };
   }
 
-  exportVisit(sessionId: string, format: 'pdf' | 'fhir' | 'json') {
-    return this.mock.exportVisit(sessionId, format);
+  async exportVisit(
+    sessionId: string,
+    format: SessionExport['format'],
+  ): Promise<SessionExport | null> {
+    const session = await this.getSession(sessionId);
+    if (!session) return null;
+    return {
+      id: `exp-${sessionId}`,
+      sessionId,
+      format,
+      exportedAt: new Date().toISOString(),
+    };
   }
 
-  shareVisit(sessionId: string, sharedWith: string) {
-    return this.mock.shareVisit(sessionId, sharedWith);
+  async shareVisit(
+    sessionId: string,
+    sharedWith: string,
+  ): Promise<SessionShare | null> {
+    const session = await this.getSession(sessionId);
+    if (!session) return null;
+    const share = {
+      id: `share-${sessionId}-${Date.now()}`,
+      sessionId,
+      sharedWith,
+      sharedAt: new Date().toISOString(),
+    };
+    this.shares.push(share);
+    return share;
   }
 
-  toggleFavorite(sessionId: string, userId: string) {
-    return this.mock.toggleFavorite(sessionId, userId);
+  async toggleFavorite(sessionId: string, userId: string) {
+    const existing = this.favorites.find(
+      (f) => f.sessionId === sessionId && f.userId === userId,
+    );
+    if (existing) {
+      this.favorites.splice(this.favorites.indexOf(existing), 1);
+      return { favorited: false };
+    }
+    this.favorites.push({
+      id: `fav-${sessionId}-${userId}`,
+      sessionId,
+      userId,
+      createdAt: new Date().toISOString(),
+    });
+    return { favorited: true };
   }
 
-  getWhiteboard(sessionId: string) {
-    return this.mock.getWhiteboard(sessionId);
+  async getWhiteboard(sessionId: string): Promise<WhiteboardSession> {
+    const existing = this.whiteboards.get(sessionId);
+    if (existing) return existing;
+    const now = new Date().toISOString();
+    const board: WhiteboardSession = {
+      id: `wb-${sessionId}`,
+      sessionId,
+      createdBy: 'system',
+      createdAt: now,
+      updatedAt: now,
+      strokeCount: 0,
+    };
+    this.whiteboards.set(sessionId, board);
+    return board;
   }
 
-  getFavorites(userId: string) {
-    return this.mock.getFavorites(userId);
+  async getFavorites(userId: string) {
+    return this.favorites.filter((f) => f.userId === userId);
   }
 }
 

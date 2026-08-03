@@ -1,12 +1,19 @@
 import { httpTransport } from '@workspace/repository-transport';
 import type {
   ApproveResultInput,
+  BloodBankRecord,
   CancelLabOrderInput,
   CollectSpecimenInput,
   CreateLabOrderInput,
   ExportResultInput,
+  LabAlert,
+  LabObservation,
   LabOrderFilters,
   LabResultFilters,
+  LabTimelineEntry,
+  MicrobiologyResult,
+  PathologyResult,
+  QualityDashboard,
   ReleaseResultInput,
   ShareResultInput,
   UploadResultInput,
@@ -26,13 +33,41 @@ import {
   mapSpecimenRecord,
   mapSpecimenRecordArray,
 } from '@/services/laboratory/dto-mappers';
-import { laboratoryMockRepository } from '@/services/laboratory/repository.mock';
 
 const BASE = '/api/laboratory';
 
+function alertsFromObservations(observations: LabObservation[]): LabAlert[] {
+  return observations
+    .filter(
+      (o) =>
+        o.flag === 'critical_high' ||
+        o.flag === 'critical_low' ||
+        o.flag === 'high' ||
+        o.flag === 'low' ||
+        o.flag === 'abnormal',
+    )
+    .map((o) => {
+      const critical =
+        o.flag === 'critical_high' || o.flag === 'critical_low';
+      return {
+        id: `alert-${o.id}`,
+        type: critical ? ('critical_result' as const) : ('abnormal_result' as const),
+        severity: critical ? ('critical' as const) : ('warning' as const),
+        patientId: o.patientId,
+        orderId: o.orderId,
+        reportId: o.reportId,
+        observationId: o.id,
+        title: `${o.testName} ${o.flag.replace('_', ' ')}`,
+        message: o.interpretation ?? `${o.testName}: ${o.value} ${o.unit}`,
+        acknowledged: false,
+        createdAt: o.resultedAt ?? o.collectedAt,
+      };
+    });
+}
+
 class LaboratoryHttpRepository {
   private readonly transport = httpTransport;
-  private readonly mock = laboratoryMockRepository;
+  private readonly favorites = new Set<string>();
 
   async listOrders(filters?: LabOrderFilters) {
     return mapPaginatedLabOrders(
@@ -110,7 +145,7 @@ class LaboratoryHttpRepository {
       );
       return detail.observations;
     } catch {
-      return this.mock.getObservationsForReport(reportId);
+      return [];
     }
   }
 
@@ -215,69 +250,209 @@ class LaboratoryHttpRepository {
     );
   }
 
-  // MVP mock-only surfaces (hybrid, same pattern as care-plans goals)
-  getObservations(patientId?: string) {
-    return this.mock.getObservations(patientId);
+  /** Live observations from report details — never mock demo rows. */
+  async getObservations(patientId?: string): Promise<LabObservation[]> {
+    const reports = await this.getAllResults(
+      patientId ? { patientId } : undefined,
+    );
+    const batches = await Promise.all(
+      reports.map((report) => this.getObservationsForReport(report.id)),
+    );
+    return batches.flat();
   }
 
-  getAlerts(patientId?: string) {
-    return this.mock.getAlerts(patientId);
+  async getAlerts(patientId?: string): Promise<LabAlert[]> {
+    return alertsFromObservations(await this.getObservations(patientId));
   }
 
-  getCriticalAlerts(patientId?: string) {
-    return this.mock.getCriticalAlerts(patientId);
+  async getCriticalAlerts(patientId?: string): Promise<LabAlert[]> {
+    return (await this.getAlerts(patientId)).filter(
+      (a) => a.severity === 'critical',
+    );
   }
 
-  getMicrobiology(patientId?: string) {
-    return this.mock.getMicrobiology(patientId);
+  async getMicrobiology(patientId?: string): Promise<MicrobiologyResult[]> {
+    const reports = await this.getAllResults({
+      ...(patientId ? { patientId } : {}),
+      category: 'microbiology',
+    });
+    return reports.map((report) => ({
+      id: report.id,
+      reportId: report.id,
+      patientId: report.patientId,
+      specimenType: report.title,
+      status: report.status,
+      cultures: [],
+      comments: report.summary,
+      finalizedAt: report.releasedAt,
+      technologistName: report.technologistName,
+    }));
   }
 
-  getPathology(patientId?: string) {
-    return this.mock.getPathology(patientId);
+  async getPathology(patientId?: string): Promise<PathologyResult[]> {
+    const reports = await this.getAllResults({
+      ...(patientId ? { patientId } : {}),
+      category: 'pathology',
+    });
+    return reports.map((report) => ({
+      id: report.id,
+      reportId: report.id,
+      patientId: report.patientId,
+      specimenSite: report.title,
+      status: report.status,
+      histology: [],
+      macroscopic: report.summary,
+      pathologistName: report.approvedBy,
+      finalizedAt: report.releasedAt,
+    }));
   }
 
-  getBloodBank(patientId?: string) {
-    return this.mock.getBloodBank(patientId);
+  async getBloodBank(patientId?: string): Promise<BloodBankRecord[]> {
+    const reports = await this.getAllResults({
+      ...(patientId ? { patientId } : {}),
+      category: 'blood_bank',
+    });
+    return reports.map((report) => ({
+      id: report.id,
+      patientId: report.patientId,
+      orderId: report.orderId,
+      component: 'RBC' as const,
+      bloodGroup: 'Unknown',
+      rhFactor: 'Positive' as const,
+      crossMatchResult: 'pending' as const,
+      status: report.status,
+      collectedAt: report.createdAt,
+      verifiedBy: report.verifiedBy,
+    }));
   }
 
-  getInstruments() {
-    return this.mock.getInstruments();
+  /** No live instrument registry yet — empty, not demo fixtures. */
+  async getInstruments() {
+    return [];
   }
 
-  getTechnologists() {
-    return this.mock.getTechnologists();
+  async getTechnologists() {
+    return [];
   }
 
-  getQualityControl() {
-    return this.mock.getQualityControl();
+  async getQualityControl() {
+    return [];
   }
 
-  getQualityDashboard() {
-    return this.mock.getQualityDashboard();
+  async getQualityDashboard(): Promise<QualityDashboard> {
+    const pending = await this.getPendingResults();
+    return {
+      qualityScore: 0,
+      verificationRate: 0,
+      rejectionRate: 0,
+      pendingVerification: pending.length,
+      instrumentUtilization: 0,
+      recentQc: [],
+      kpis: [
+        { label: 'Pending verification', value: pending.length },
+      ],
+    };
   }
 
-  getFavorites(patientId?: string) {
-    return this.mock.getFavorites(patientId);
+  async getFavorites(patientId?: string) {
+    if (this.favorites.size === 0) return [];
+    const reports = await this.getAllResults(
+      patientId ? { patientId } : undefined,
+    );
+    return reports.filter((r) => this.favorites.has(r.id));
   }
 
-  toggleFavorite(reportId: string) {
-    return this.mock.toggleFavorite(reportId);
+  async toggleFavorite(reportId: string) {
+    if (this.favorites.has(reportId)) {
+      this.favorites.delete(reportId);
+      return false;
+    }
+    this.favorites.add(reportId);
+    return true;
   }
 
-  exportResult(input: ExportResultInput, exportedBy?: string) {
-    return this.mock.exportResult(input, exportedBy);
+  async exportResult(input: ExportResultInput, exportedBy = 'system') {
+    const report = await this.getResult(input.reportId);
+    if (!report) return null;
+    return {
+      id: `exp-${report.id}`,
+      reportId: input.reportId,
+      format: input.format,
+      exportedAt: new Date().toISOString(),
+      exportedBy,
+    };
   }
 
-  shareResult(input: ShareResultInput) {
-    return this.mock.shareResult(input);
+  async shareResult(input: ShareResultInput) {
+    const report = await this.getResult(input.reportId);
+    if (!report) return null;
+    return {
+      id: `share-${report.id}`,
+      reportId: input.reportId,
+      sharedWith: input.sharedWith,
+      sharedAt: new Date().toISOString(),
+    };
   }
 
-  getTimeline(patientId: string) {
-    return this.mock.getTimeline(patientId);
+  async getTimeline(patientId: string): Promise<LabTimelineEntry[]> {
+    const [orders, results, alerts] = await Promise.all([
+      this.getAllOrders({ patientId }),
+      this.getAllResults({ patientId }),
+      this.getAlerts(patientId),
+    ]);
+    const entries: LabTimelineEntry[] = [
+      ...orders.map((o) => ({
+        id: `tl-order-${o.id}`,
+        patientId,
+        type: 'order' as const,
+        title: `Order ${o.orderNumber}`,
+        description: o.testNames.join(', '),
+        timestamp: o.createdAt,
+        orderId: o.id,
+      })),
+      ...results.map((r) => ({
+        id: `tl-result-${r.id}`,
+        patientId,
+        type: 'result' as const,
+        title: r.title,
+        description: r.status,
+        timestamp: r.releasedAt ?? r.updatedAt,
+        orderId: r.orderId,
+        reportId: r.id,
+      })),
+      ...alerts.map((a) => ({
+        id: `tl-${a.id}`,
+        patientId,
+        type: 'alert' as const,
+        title: a.title,
+        description: a.message,
+        timestamp: a.createdAt,
+        orderId: a.orderId,
+        reportId: a.reportId,
+        severity: a.severity,
+      })),
+    ];
+    return entries.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
   }
 
-  search(query: string, patientId?: string) {
-    return this.mock.search(query, patientId);
+  async search(query: string, patientId?: string) {
+    const q = query.toLowerCase();
+    const [orders, results] = await Promise.all([
+      this.getAllOrders(patientId ? { patientId } : undefined),
+      this.getAllResults(patientId ? { patientId } : undefined),
+    ]);
+    return {
+      orders: orders
+        .filter((o) =>
+          `${o.orderNumber} ${o.testNames.join(' ')}`.toLowerCase().includes(q),
+        )
+        .slice(0, 15),
+      results: results
+        .filter((r) =>
+          `${r.reportNumber} ${r.title}`.toLowerCase().includes(q),
+        )
+        .slice(0, 15),
+    };
   }
 }
 

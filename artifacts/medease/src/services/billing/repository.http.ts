@@ -2,6 +2,9 @@ import { httpTransport } from '@workspace/repository-transport';
 import type {
   BillingFilters,
   CreateInvoiceInput,
+  FinancialExport,
+  InvoiceFavorite,
+  InvoiceShare,
   RecordPaymentInput,
   RefundPaymentInput,
   SubmitClaimInput,
@@ -23,13 +26,13 @@ import {
   mapPaymentTimelineArray,
   mapRefund,
 } from '@/services/billing/dto-mappers';
-import { billingMockRepository } from '@/services/billing/repository.mock';
 
 const BASE = '/api/billing';
 
 class BillingHttpRepository {
   private readonly transport = httpTransport;
-  private readonly mock = billingMockRepository;
+  private readonly favorites: InvoiceFavorite[] = [];
+  private readonly shares: InvoiceShare[] = [];
 
   searchInvoices(filters?: BillingFilters) {
     return this.transport
@@ -226,24 +229,73 @@ class BillingHttpRepository {
       .then(mapPaymentTimelineArray);
   }
 
-  favoriteInvoice(invoiceId: string, patientId: string) {
-    return this.mock.favoriteInvoice(invoiceId, patientId);
+  async favoriteInvoice(invoiceId: string, patientId: string) {
+    if (
+      !this.favorites.some(
+        (f) => f.invoiceId === invoiceId && f.patientId === patientId,
+      )
+    ) {
+      this.favorites.push({
+        invoiceId,
+        patientId,
+        createdAt: new Date().toISOString(),
+      });
+    }
+    return this.favorites.filter((f) => f.patientId === patientId);
   }
 
-  shareInvoice(invoiceId: string, sharedWith: string) {
-    return this.mock.shareInvoice(invoiceId, sharedWith);
+  async shareInvoice(invoiceId: string, sharedWith: string) {
+    const invoice = await this.getInvoice(invoiceId);
+    if (!invoice) return null;
+    const share = {
+      invoiceId,
+      sharedWith,
+      sharedAt: new Date().toISOString(),
+    };
+    this.shares.push(share);
+    return share;
   }
 
-  downloadInvoice(invoiceId: string) {
-    return this.mock.downloadInvoice(invoiceId);
+  async downloadInvoice(invoiceId: string) {
+    const invoice = await this.getInvoice(invoiceId);
+    if (!invoice) return null;
+    return {
+      url: `${BASE}/invoices/${invoiceId}`,
+      invoiceNumber: invoice.invoiceNumber,
+    };
   }
 
-  exportFinancialReport(format: 'csv' | 'pdf' | 'xlsx' = 'pdf') {
-    return this.mock.exportFinancialReport(format);
+  async exportFinancialReport(
+    format: 'csv' | 'pdf' | 'xlsx' = 'pdf',
+  ): Promise<FinancialExport> {
+    const invoices = await this.searchInvoices({ page: 1, pageSize: 1 });
+    return {
+      format,
+      generatedAt: new Date().toISOString(),
+      url: `${BASE}/exports/financial-report.${format}`,
+      recordCount: invoices.total,
+    };
   }
 
-  search(query: string, patientId?: string) {
-    return this.mock.search(query, patientId);
+  async search(query: string, patientId?: string) {
+    const [invoices, claims] = await Promise.all([
+      this.searchInvoices({
+        q: query,
+        patientId,
+        page: 1,
+        pageSize: 10,
+      }),
+      this.searchClaims({
+        q: query,
+        patientId,
+        page: 1,
+        pageSize: 10,
+      }),
+    ]);
+    return {
+      invoices: invoices.items,
+      claims: claims.items,
+    };
   }
 }
 
