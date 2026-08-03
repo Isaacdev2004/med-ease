@@ -300,7 +300,7 @@ model PatientMedication {
   instructions           String           @default("")
   warnings               String[]         @default([])
   contraindications      String[]         @default([])
-  sideEffects            String[]         @default([])
+  sideEffects            String[]         @default([]) @map("side_effects")
   storage                String?
   prescribingPhysician   String           @map("prescribing_physician")
   dispensingPharmacy     String?          @map("dispensing_pharmacy")

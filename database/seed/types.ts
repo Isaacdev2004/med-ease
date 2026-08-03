@@ -19,7 +19,23 @@ export async function runSeedModules(
         module: seedModule.name,
       }),
     );
-    await seedModule.run(ctx);
+    try {
+      await seedModule.run(ctx);
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.stack ?? error.message
+          : String(error);
+      console.error(
+        JSON.stringify({
+          level: 'error',
+          msg: 'Seed module failed',
+          module: seedModule.name,
+          error: message,
+        }),
+      );
+      throw error;
+    }
     console.log(
       JSON.stringify({
         level: 'info',

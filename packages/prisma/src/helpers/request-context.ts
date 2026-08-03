@@ -67,11 +67,20 @@ async function runInContextTransaction<T>(
 
       try {
         return await fn(tx);
+      } catch (error) {
+        // Avoid masking the original failure: once Postgres aborts the
+        // transaction (e.g. constraint violation), clear_request_context
+        // would fail with 25P02 and hide the real root cause.
+        throw error;
       } finally {
-        await clearPrismaRequestContext(tx);
+        try {
+          await clearPrismaRequestContext(tx);
+        } catch {
+          // Transaction may already be aborted; ignore cleanup errors.
+        }
       }
     },
-    { timeout: 60_000 },
+    { timeout: 120_000 },
   );
 }
 
