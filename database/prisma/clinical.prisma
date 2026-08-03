@@ -31,6 +31,8 @@ model Patient {
   prescriptions     Prescription[]
   medications       PatientMedication[]
   bedAssignments    BedAssignment[]
+  admissions        Admission[]
+  transfers         PatientTransfer[]
 
   @@unique([tenantId, mrn])
   @@index([tenantId, status])
@@ -439,6 +441,7 @@ model Bed {
   version       Int       @default(1)
 
   assignments BedAssignment[]
+  admissions  Admission[]
 
   @@unique([tenantId, facilityId, label])
   @@index([tenantId, facilityId, status])
@@ -467,5 +470,85 @@ model BedAssignment {
   @@index([tenantId, bedId, assignedAt(sort: Desc)])
   @@index([tenantId, patientId, status])
   @@map("bed_assignments")
+  @@schema("clinical")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Admissions / transfers (Epic 3 / P0)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Admission {
+  id            String            @id @db.Uuid
+  tenantId      String            @map("tenant_id") @db.Uuid
+  patientId     String            @map("patient_id") @db.Uuid
+  patientName   String            @map("patient_name")
+  patientMrn    String            @map("patient_mrn")
+  facilityId    String            @map("facility_id") @db.Uuid
+  facilityName  String            @map("facility_name")
+  ward          String
+  bedId         String?           @map("bed_id") @db.Uuid
+  bedLabel      String?           @map("bed_label")
+  status        AdmissionStatus   @default(requested)
+  priority      AdmissionPriority @default(routine)
+  reason        String?
+  requestedAt   DateTime          @default(now()) @map("requested_at") @db.Timestamptz(3)
+  triagedAt     DateTime?         @map("triaged_at") @db.Timestamptz(3)
+  admittedAt    DateTime?         @map("admitted_at") @db.Timestamptz(3)
+  dischargedAt  DateTime?         @map("discharged_at") @db.Timestamptz(3)
+  cancelledAt   DateTime?         @map("cancelled_at") @db.Timestamptz(3)
+  notes         String?
+  createdBy     String            @map("created_by") @db.Uuid
+  updatedBy     String?           @map("updated_by") @db.Uuid
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
+  version       Int               @default(1)
+
+  patient   Patient            @relation(fields: [patientId], references: [id])
+  bed       Bed?               @relation(fields: [bedId], references: [id], onDelete: SetNull)
+  transfers PatientTransfer[]
+
+  @@index([tenantId, facilityId, status])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, status, requestedAt(sort: Desc)])
+  @@map("admissions")
+  @@schema("clinical")
+}
+
+model PatientTransfer {
+  id               String         @id @db.Uuid
+  tenantId         String         @map("tenant_id") @db.Uuid
+  admissionId      String?        @map("admission_id") @db.Uuid
+  patientId        String         @map("patient_id") @db.Uuid
+  patientName      String         @map("patient_name")
+  fromFacilityId   String         @map("from_facility_id") @db.Uuid
+  fromFacilityName String         @map("from_facility_name")
+  fromWard         String         @map("from_ward")
+  fromBedId        String?        @map("from_bed_id") @db.Uuid
+  toFacilityId     String         @map("to_facility_id") @db.Uuid
+  toFacilityName   String         @map("to_facility_name")
+  toWard           String         @map("to_ward")
+  toBedId          String?        @map("to_bed_id") @db.Uuid
+  toBedLabel       String?        @map("to_bed_label")
+  status           TransferStatus @default(requested)
+  reason           String?
+  requestedAt      DateTime       @default(now()) @map("requested_at") @db.Timestamptz(3)
+  approvedAt       DateTime?      @map("approved_at") @db.Timestamptz(3)
+  startedAt        DateTime?      @map("started_at") @db.Timestamptz(3)
+  completedAt      DateTime?      @map("completed_at") @db.Timestamptz(3)
+  cancelledAt      DateTime?      @map("cancelled_at") @db.Timestamptz(3)
+  notes            String?
+  createdBy        String         @map("created_by") @db.Uuid
+  updatedBy        String?        @map("updated_by") @db.Uuid
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+  version          Int            @default(1)
+
+  patient   Patient    @relation(fields: [patientId], references: [id])
+  admission Admission? @relation(fields: [admissionId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, status, requestedAt(sort: Desc)])
+  @@index([tenantId, patientId, status])
+  @@index([tenantId, admissionId])
+  @@map("patient_transfers")
   @@schema("clinical")
 }

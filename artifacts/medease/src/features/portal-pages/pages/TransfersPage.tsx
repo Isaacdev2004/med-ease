@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import {
   PortalActionButton,
   PortalDataTableSection,
@@ -7,12 +5,16 @@ import {
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
 import {
-  MOCK_TRANSFERS,
-  type TransferRow,
-} from '@/features/portal-pages/data/mock-data';
+  useCancelTransfer,
+  useCompleteTransfer,
+  useTransfers,
+} from '@/features/admissions/hooks/use-admissions';
+import { toTransferRow } from '@/services/admissions/types';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
+
+type TransferRow = ReturnType<typeof toTransferRow>;
 
 const columns: DataTableColumn<TransferRow>[] = [
   { id: 'patient', header: 'Patient', cell: (row) => row.patient },
@@ -27,11 +29,15 @@ const columns: DataTableColumn<TransferRow>[] = [
 ];
 
 export default function TransfersPage() {
-  const [transfers, setTransfers] = useState(MOCK_TRANSFERS);
+  const transfersQuery = useTransfers();
+  const completeTransfer = useCompleteTransfer();
+  const cancelTransfer = useCancelTransfer();
 
+  const transfers = (transfersQuery.data ?? []).map(toTransferRow);
   const active = transfers.filter(
     (row) => row.status === 'requested' || row.status === 'in-transit',
   ).length;
+  const completed = transfers.filter((row) => row.status === 'completed').length;
 
   return (
     <PageShell
@@ -48,8 +54,8 @@ export default function TransfersPage() {
         columns={3}
         metrics={[
           { title: 'Active transfers', value: active, status: 'observation' },
-          { title: 'Completed today', value: 6, status: 'stable' },
-          { title: 'Avg. transfer time', value: '22 min' },
+          { title: 'Completed', value: completed, status: 'stable' },
+          { title: 'Total', value: transfers.length },
         ]}
       />
 
@@ -64,18 +70,18 @@ export default function TransfersPage() {
           <>
             <DropdownMenuItem
               onClick={() => {
-                setTransfers((prev) =>
-                  prev.map((item) =>
-                    item.id === row.id
-                      ? { ...item, status: 'completed' as const }
-                      : item,
-                  ),
-                );
+                completeTransfer.mutate(row.id);
               }}
             >
               Mark complete
             </DropdownMenuItem>
-            <DropdownMenuItem>Cancel transfer</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                cancelTransfer.mutate(row.id);
+              }}
+            >
+              Cancel transfer
+            </DropdownMenuItem>
           </>
         )}
       />

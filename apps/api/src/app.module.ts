@@ -20,6 +20,7 @@ import { PatientsModule } from './patients/patients.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { MedicationsModule } from './medications/medications.module';
 import { BedsModule } from './beds/beds.module';
+import { AdmissionsModule } from './admissions/admissions.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { MedeaseConfigModule } from './config/config.module';
 import { TenantModule } from './tenant/tenant.module';
@@ -81,6 +82,7 @@ import { PrismaModule } from '@medease/prisma';
     AppointmentsModule,
     MedicationsModule,
     BedsModule,
+    AdmissionsModule,
     ObservabilityModule,
     MedeaseLoggerModule,
     PrismaModule,

@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import {
   PortalActionButton,
   PortalDataTableSection,
@@ -7,12 +5,16 @@ import {
   PortalStatusBadge,
 } from '@/features/portal-pages/components/PortalUtilityComponents';
 import {
-  MOCK_ADMISSIONS,
-  type AdmissionRow,
-} from '@/features/portal-pages/data/mock-data';
+  useAdmissionBoard,
+  useAdmitPatient,
+  useAssignAdmissionBed,
+} from '@/features/admissions/hooks/use-admissions';
+import { toAdmissionRow } from '@/services/admissions/types';
 import type { DataTableColumn } from '@/shared/components';
 import { PageShell } from '@/shared/components';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
+
+type AdmissionRow = ReturnType<typeof toAdmissionRow>;
 
 const columns: DataTableColumn<AdmissionRow>[] = [
   { id: 'patient', header: 'Patient', cell: (row) => row.patient },
@@ -37,10 +39,12 @@ const columns: DataTableColumn<AdmissionRow>[] = [
 ];
 
 export default function AdmissionsPage() {
-  const [admissions, setAdmissions] = useState(MOCK_ADMISSIONS);
+  const boardQuery = useAdmissionBoard();
+  const admitPatient = useAdmitPatient();
+  const assignBed = useAssignAdmissionBed();
 
-  const pending = admissions.filter((row) => row.status === 'pending').length;
-  const admitted = admissions.filter((row) => row.status === 'admitted').length;
+  const admissions = (boardQuery.data?.admissions ?? []).map(toAdmissionRow);
+  const summary = boardQuery.data?.summary;
 
   return (
     <PageShell
@@ -55,14 +59,26 @@ export default function AdmissionsPage() {
     >
       <PortalMetricsGrid
         metrics={[
-          { title: 'Pending', value: pending, status: 'observation' },
-          { title: 'Admitted today', value: admitted, status: 'stable' },
           {
-            title: 'Avg. wait time',
-            value: '38 min',
-            description: 'Emergency to ward',
+            title: 'Pending',
+            value: summary?.pending ?? 0,
+            status: 'observation',
           },
-          { title: 'Capacity', value: '87%', status: 'observation' },
+          {
+            title: 'Admitted',
+            value: summary?.admitted ?? 0,
+            status: 'stable',
+          },
+          {
+            title: 'Urgent',
+            value: summary?.urgent ?? 0,
+            description: 'High-priority queue',
+          },
+          {
+            title: 'Discharged',
+            value: summary?.discharged ?? 0,
+            status: 'observation',
+          },
         ]}
       />
 
@@ -77,18 +93,27 @@ export default function AdmissionsPage() {
           <>
             <DropdownMenuItem
               onClick={() => {
-                setAdmissions((prev) =>
-                  prev.map((item) =>
-                    item.id === row.id
-                      ? { ...item, status: 'admitted' as const }
-                      : item,
-                  ),
+                if (row.apiStatus === 'bed_assigned' || row.bedId) {
+                  admitPatient.mutate(row.id);
+                  return;
+                }
+                assignBed.mutate(
+                  { admissionId: row.id },
+                  {
+                    onSuccess: () => admitPatient.mutate(row.id),
+                  },
                 );
               }}
             >
               Admit patient
             </DropdownMenuItem>
-            <DropdownMenuItem>Assign bed</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                assignBed.mutate({ admissionId: row.id });
+              }}
+            >
+              Assign bed
+            </DropdownMenuItem>
           </>
         )}
       />

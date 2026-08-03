@@ -215,6 +215,124 @@ type DemoMedicationSeed = {
   }>;
 };
 
+/** Demo admissions / transfers — request → triage → bed → admit flow. */
+function buildDemoAdmissions() {
+  const now = new Date();
+  return [
+    {
+      id: '01930000-0000-7000-8000-000000000a01',
+      patientId: DEMO_PATIENTS[2]!.id,
+      patientName: DEMO_PATIENTS[2]!.fullName,
+      patientMrn: DEMO_PATIENTS[2]!.mrn,
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      ward: 'Emergency',
+      status: 'requested' as const,
+      priority: 'urgent' as const,
+      reason: 'Chest pain workup',
+      requestedAt: now,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000a02',
+      patientId: DEMO_PATIENTS[0]!.id,
+      patientName: DEMO_PATIENTS[0]!.fullName,
+      patientMrn: DEMO_PATIENTS[0]!.mrn,
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      ward: 'ICU-3',
+      bedId: '01930000-0000-7000-8000-000000000901',
+      bedLabel: 'ICU-3-01',
+      status: 'admitted' as const,
+      priority: 'urgent' as const,
+      reason: 'Post-op monitoring',
+      requestedAt: now,
+      admittedAt: now,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000a03',
+      patientId: DEMO_PATIENTS[1]!.id,
+      patientName: DEMO_PATIENTS[1]!.fullName,
+      patientMrn: DEMO_PATIENTS[1]!.mrn,
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      ward: 'Med-Surg 2B',
+      status: 'triaged' as const,
+      priority: 'routine' as const,
+      reason: 'Elective admission',
+      requestedAt: now,
+      triagedAt: now,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000a04',
+      patientId: DEMO_PATIENTS[4]!.id,
+      patientName: DEMO_PATIENTS[4]!.fullName,
+      patientMrn: DEMO_PATIENTS[4]!.mrn,
+      facilityId: DEMO_FACILITY_PARIS,
+      facilityName: 'Pitié-Salpêtrière',
+      ward: 'Pediatrics',
+      status: 'discharged' as const,
+      priority: 'routine' as const,
+      reason: 'Observation complete',
+      requestedAt: now,
+      admittedAt: now,
+      dischargedAt: now,
+    },
+  ];
+}
+
+function buildDemoTransfers() {
+  const now = new Date();
+  return [
+    {
+      id: '01930000-0000-7000-8000-000000000b01',
+      admissionId: '01930000-0000-7000-8000-000000000a02',
+      patientId: DEMO_PATIENTS[0]!.id,
+      patientName: DEMO_PATIENTS[0]!.fullName,
+      fromFacilityId: DEMO_FACILITY_PARIS,
+      fromFacilityName: 'Pitié-Salpêtrière',
+      fromWard: 'Emergency',
+      toFacilityId: DEMO_FACILITY_PARIS,
+      toFacilityName: 'Pitié-Salpêtrière',
+      toWard: 'ICU-3',
+      toBedId: '01930000-0000-7000-8000-000000000901',
+      status: 'in_transit' as const,
+      reason: 'Step-up care',
+      requestedAt: now,
+      startedAt: now,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000b02',
+      patientId: DEMO_PATIENTS[1]!.id,
+      patientName: DEMO_PATIENTS[1]!.fullName,
+      fromFacilityId: DEMO_FACILITY_PARIS,
+      fromFacilityName: 'Pitié-Salpêtrière',
+      fromWard: 'Med-Surg 2B',
+      fromBedId: '01930000-0000-7000-8000-000000000903',
+      toFacilityId: DEMO_FACILITY_PARIS,
+      toFacilityName: 'Pitié-Salpêtrière',
+      toWard: 'Rehab',
+      status: 'requested' as const,
+      reason: 'Rehab placement',
+      requestedAt: now,
+    },
+    {
+      id: '01930000-0000-7000-8000-000000000b03',
+      patientId: DEMO_PATIENTS[4]!.id,
+      patientName: DEMO_PATIENTS[4]!.fullName,
+      fromFacilityId: DEMO_FACILITY_PARIS,
+      fromFacilityName: 'Pitié-Salpêtrière',
+      fromWard: 'Pediatrics',
+      toFacilityId: DEMO_FACILITY_PARIS,
+      toFacilityName: 'Pitié-Salpêtrière',
+      toWard: 'Observation',
+      status: 'completed' as const,
+      reason: 'Step-down',
+      requestedAt: now,
+      completedAt: now,
+    },
+  ];
+}
+
 /** Demo beds — Paris facility board for buyer walkthrough. */
 function buildDemoBeds() {
   return [
@@ -1183,6 +1301,78 @@ export const clinicalSeed: SeedModule = {
               },
             });
           }
+        }
+
+        for (const admission of buildDemoAdmissions()) {
+          await tx.admission.upsert({
+            where: { id: admission.id },
+            create: {
+              id: admission.id,
+              tenantId: DEMO_TENANT_ID,
+              patientId: admission.patientId,
+              patientName: admission.patientName,
+              patientMrn: admission.patientMrn,
+              facilityId: admission.facilityId,
+              facilityName: admission.facilityName,
+              ward: admission.ward,
+              bedId: admission.bedId,
+              bedLabel: admission.bedLabel,
+              status: admission.status,
+              priority: admission.priority,
+              reason: admission.reason,
+              requestedAt: admission.requestedAt,
+              triagedAt: admission.triagedAt,
+              admittedAt: admission.admittedAt,
+              dischargedAt: admission.dischargedAt,
+              createdBy: DEMO_ADMIN_ID,
+            },
+            update: {
+              status: admission.status,
+              priority: admission.priority,
+              ward: admission.ward,
+              bedId: admission.bedId ?? null,
+              bedLabel: admission.bedLabel ?? null,
+              triagedAt: admission.triagedAt ?? null,
+              admittedAt: admission.admittedAt ?? null,
+              dischargedAt: admission.dischargedAt ?? null,
+              updatedBy: DEMO_ADMIN_ID,
+            },
+          });
+        }
+
+        for (const transfer of buildDemoTransfers()) {
+          await tx.patientTransfer.upsert({
+            where: { id: transfer.id },
+            create: {
+              id: transfer.id,
+              tenantId: DEMO_TENANT_ID,
+              admissionId: transfer.admissionId,
+              patientId: transfer.patientId,
+              patientName: transfer.patientName,
+              fromFacilityId: transfer.fromFacilityId,
+              fromFacilityName: transfer.fromFacilityName,
+              fromWard: transfer.fromWard,
+              fromBedId: transfer.fromBedId,
+              toFacilityId: transfer.toFacilityId,
+              toFacilityName: transfer.toFacilityName,
+              toWard: transfer.toWard,
+              toBedId: transfer.toBedId,
+              status: transfer.status,
+              reason: transfer.reason,
+              requestedAt: transfer.requestedAt,
+              startedAt: transfer.startedAt,
+              completedAt: transfer.completedAt,
+              createdBy: DEMO_ADMIN_ID,
+            },
+            update: {
+              status: transfer.status,
+              fromWard: transfer.fromWard,
+              toWard: transfer.toWard,
+              startedAt: transfer.startedAt ?? null,
+              completedAt: transfer.completedAt ?? null,
+              updatedBy: DEMO_ADMIN_ID,
+            },
+          });
         }
       });
     } finally {

@@ -285,6 +285,38 @@ enum BedAssignmentStatus {
   @@schema("clinical")
 }
 
+enum AdmissionStatus {
+  requested
+  triaged
+  bed_assigned
+  admitted
+  cancelled
+  discharged
+
+  @@map("admission_status")
+  @@schema("clinical")
+}
+
+enum AdmissionPriority {
+  routine
+  urgent
+  emergency
+
+  @@map("admission_priority")
+  @@schema("clinical")
+}
+
+enum TransferStatus {
+  requested
+  approved
+  in_transit
+  completed
+  cancelled
+
+  @@map("transfer_status")
+  @@schema("clinical")
+}
+
 enum WorkflowStatus {
   draft
   active
