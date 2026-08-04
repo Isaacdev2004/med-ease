@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { ReportingSectionContent } from '@/features/reporting/components/ReportingSections';
 import {
@@ -23,7 +24,7 @@ export function ReportingShell({
   basePath,
   variant = 'professional',
   title = 'Enterprise Reporting',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
   userId,
 }: ReportingShellProps) {
   const [location] = useLocation();

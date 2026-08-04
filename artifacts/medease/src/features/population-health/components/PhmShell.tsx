@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { PhmSectionContent } from '@/features/population-health/components/PhmSections';
 import {
@@ -22,7 +23,7 @@ export function PhmShell({
   basePath,
   variant = 'professional',
   title = 'Population Health',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: PhmShellProps) {
   const [location] = useLocation();
   const perms = usePhmPermissions();

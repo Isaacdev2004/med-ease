@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { MessagingSectionContent } from '@/features/messaging/components/MessagingSections';
 import {
@@ -23,7 +24,7 @@ export function MessagingShell({
   basePath,
   variant = 'professional',
   title = 'Messaging & Notifications',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
   userId,
 }: MessagingShellProps) {
   const [location] = useLocation();

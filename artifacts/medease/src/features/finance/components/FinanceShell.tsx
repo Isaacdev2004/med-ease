@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { FinanceSectionContent } from '@/features/finance/components/FinanceSections';
 import {
@@ -22,7 +23,7 @@ export function FinanceShell({
   basePath,
   variant = 'professional',
   title = 'Finance',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: FinanceShellProps) {
   const [location] = useLocation();
   const perms = useFinancePermissions();

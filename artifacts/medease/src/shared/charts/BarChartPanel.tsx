@@ -28,16 +28,17 @@ export function BarChartPanel({
   loading,
   className,
 }: BarChartPanelProps) {
+  const series = data ?? [];
   return (
     <ChartPanel
       title={title}
       description={description}
       loading={loading}
-      empty={data.length === 0}
+      empty={series.length === 0}
       className={className}
     >
       <ChartContainer config={barConfig} className={cn('h-64 w-full')}>
-        <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+        <BarChart data={series} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
           <CartesianGrid vertical={false} />
           <XAxis dataKey="label" tickLine={false} axisLine={false} />
           <YAxis tickLine={false} axisLine={false} width={32} />

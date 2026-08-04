@@ -256,6 +256,14 @@ const DASHBOARD_DEFAULTS: Record<string, Record<string, unknown>> = {
     tenantTrend: [],
     regionBreakdown: [],
     recentAudits: [],
+    // analytics fields
+    tenantGrowthRate: 0,
+    avgFacilitiesPerTenant: 0,
+    licenseUtilizationRate: 0,
+    storageUtilizationRate: 0,
+    jobSuccessRate: 0,
+    systemUptimePercent: 0,
+    healthTrend: [],
   },
 };
 

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { BillingSectionContent } from '@/features/billing/components/BillingSections';
 import {
@@ -43,7 +44,7 @@ export function BillingShell({
     const providerId =
       explicitProviderId ?? (variant === 'clinician' ? 'prov-001' : undefined);
     const facilityId =
-      explicitFacilityId ?? (variant === 'facility' ? 'fac-001' : undefined);
+      explicitFacilityId ?? (variant === 'facility' ? DEMO_FACILITY_ID : undefined);
     return {
       ...(patientId ? { patientId } : {}),
       ...(providerId ? { providerId } : {}),

@@ -375,34 +375,34 @@ export function ProcurementMetrics({
   const kpis = [
     {
       label: 'Total spend',
-      value: `€${dashboard.totalSpend.toLocaleString()}`,
+      value: `€${(dashboard.totalSpend ?? 0).toLocaleString()}`,
       icon: Wallet,
     },
     {
       label: 'Pending approvals',
-      value: dashboard.pendingApprovals,
+      value: dashboard.pendingApprovals ?? 0,
       icon: Clock,
     },
-    { label: 'Open POs', value: dashboard.openPOs, icon: Package },
-    { label: 'Open RFQs', value: dashboard.openRFQs, icon: CheckCircle2 },
+    { label: 'Open POs', value: dashboard.openPOs ?? 0, icon: Package },
+    { label: 'Open RFQs', value: dashboard.openRFQs ?? 0, icon: CheckCircle2 },
     {
       label: 'Active contracts',
-      value: dashboard.activeContracts,
+      value: dashboard.activeContracts ?? 0,
       icon: CheckCircle2,
     },
     {
       label: 'Delayed deliveries',
-      value: dashboard.overdueDeliveries,
+      value: dashboard.overdueDeliveries ?? 0,
       icon: Truck,
     },
     {
       label: 'Invoice mismatches',
-      value: dashboard.invoiceMismatches,
+      value: dashboard.invoiceMismatches ?? 0,
       icon: AlertTriangle,
     },
     {
       label: 'Budget utilization',
-      value: `${dashboard.budgetUtilization}%`,
+      value: `${dashboard.budgetUtilization ?? 0}%`,
       icon: Wallet,
     },
   ];

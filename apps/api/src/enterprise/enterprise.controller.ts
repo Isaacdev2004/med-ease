@@ -35,6 +35,13 @@ class ListQueryDto {
   @ApiPropertyOptional() @IsOptional() @IsString() status?: string;
   @ApiPropertyOptional() @IsOptional() @IsString() id?: string;
   @ApiPropertyOptional() @IsOptional() @IsString() scopeKey?: string;
+  /** UI shells often filter by facility / department / partner. */
+  @ApiPropertyOptional() @IsOptional() @IsString() facilityId?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() departmentId?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() department?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() partnerId?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() tenantId?: string;
+  @ApiPropertyOptional() @IsOptional() @IsString() framework?: string;
   @ApiPropertyOptional() @IsOptional() @Type(() => Number) @IsInt() @Min(1) page?: number;
   @ApiPropertyOptional() @IsOptional() @Type(() => Number) @IsInt() @Min(1) pageSize?: number;
 }

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { CdssSectionContent } from '@/features/cdss/components/CdssSections';
 import {
@@ -22,7 +23,7 @@ export function CdssShell({
   basePath,
   variant = 'professional',
   title = 'Clinical Decision Support',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: CdssShellProps) {
   const [location] = useLocation();
   const perms = useCdssPermissions();

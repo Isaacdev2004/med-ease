@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { FacilitiesSectionContent } from '@/features/facilities/components/FacilitiesSections';
 import {
@@ -22,7 +23,7 @@ export function FacilitiesShell({
   basePath,
   variant = 'professional',
   title = 'Facilities',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: FacilitiesShellProps) {
   const [location] = useLocation();
   const perms = useFacilitiesPermissions();

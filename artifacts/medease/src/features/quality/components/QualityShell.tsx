@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { QualitySectionContent } from '@/features/quality/components/QualitySections';
 import {
@@ -22,7 +23,7 @@ export function QualityShell({
   basePath,
   variant = 'professional',
   title = 'Quality',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: QualityShellProps) {
   const [location] = useLocation();
   const perms = useQualityPermissions();

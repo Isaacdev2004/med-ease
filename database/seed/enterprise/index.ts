@@ -917,6 +917,13 @@ function dashboardFor(module: string, items: SeedItem[]) {
             timestamp: NOW,
           },
         ],
+        tenantGrowthRate: 4.2,
+        avgFacilitiesPerTenant: 3,
+        licenseUtilizationRate: 68,
+        storageUtilizationRate: 21,
+        jobSuccessRate: 99.1,
+        systemUptimePercent: 99.95,
+        healthTrend: trend(98),
       };
     default:
       return {

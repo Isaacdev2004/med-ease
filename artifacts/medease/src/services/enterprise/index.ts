@@ -20,17 +20,34 @@ export async function fetchNotifications(filters?: {
   page?: number;
   pageSize?: number;
 }) {
-  return httpTransport.get('/api/notifications', {
-    query: filters as Record<string, string | number | boolean | undefined>,
-  });
+  try {
+    return await httpTransport.get('/api/notifications', {
+      query: filters as Record<string, string | number | boolean | undefined>,
+    });
+  } catch {
+    // Soft-fail: bell should not break portal when auth/permission races.
+    return { items: [], total: 0, page: 1, pageSize: filters?.pageSize ?? 100 };
+  }
 }
 
 export async function markNotificationRead(id: string) {
-  return httpTransport.post(`/api/notifications/${id}/read`, { body: {} });
+  try {
+    return await httpTransport.post(`/api/notifications/${id}/read`, {
+      body: {},
+    });
+  } catch {
+    return null;
+  }
 }
 
 export async function markAllNotificationsRead() {
-  return httpTransport.post('/api/notifications/read-all', { body: {} });
+  try {
+    return await httpTransport.post('/api/notifications/read-all', {
+      body: {},
+    });
+  } catch {
+    return null;
+  }
 }
 
 export async function fetchPreferences() {

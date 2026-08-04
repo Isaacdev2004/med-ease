@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { AiIntelligenceSectionContent } from '@/features/ai-intelligence/components/AiIntelligenceSections';
 import {
@@ -22,7 +23,7 @@ export function AiIntelligenceShell({
   basePath,
   variant = 'professional',
   title = 'AI Clinical Intelligence',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: AiIntelligenceShellProps) {
   const [location] = useLocation();
   const perms = useAiPermissions();

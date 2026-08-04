@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import {
   CommandCenterTabs,
@@ -22,7 +23,7 @@ export function CommandCenterShell({
   basePath,
   variant = 'professional',
   title = 'Executive Command Center',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: CommandCenterShellProps) {
   const [location] = useLocation();
   const perms = useExecutivePermissions();

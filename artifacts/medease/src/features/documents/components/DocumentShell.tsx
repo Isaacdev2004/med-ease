@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { DocumentSectionContent } from '@/features/documents/components/DocumentSections';
 import {
@@ -26,7 +27,7 @@ export function DocumentShell({
   variant = 'professional',
   title = 'Enterprise Documents',
   tenantId: tenantIdProp,
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
   userId,
 }: DocumentShellProps) {
   const [location] = useLocation();

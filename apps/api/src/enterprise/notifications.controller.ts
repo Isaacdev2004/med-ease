@@ -11,18 +11,36 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { IsBoolean, IsInt, IsOptional, Min } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { RequireAnyPermission } from '../authorization/decorators/require-permission.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { EnterpriseService } from './enterprise.service';
 
-const READ = ['platform.read', 'platform.admin', 'iam.read'] as const;
+const READ = [
+  'platform.read',
+  'platform.admin',
+  'iam.read',
+  'patients.read',
+  'appointments.read',
+] as const;
 const WRITE = ['platform.write', 'platform.admin', 'iam.write'] as const;
 
+function toBool(value: unknown): boolean | undefined {
+  if (value === undefined || value === null || value === '') return undefined;
+  if (typeof value === 'boolean') return value;
+  if (value === 'true' || value === '1') return true;
+  if (value === 'false' || value === '0') return false;
+  return Boolean(value);
+}
+
 class NotifQueryDto {
-  @ApiPropertyOptional() @IsOptional() @Type(() => Boolean) @IsBoolean() unreadOnly?: boolean;
+  @ApiPropertyOptional()
+  @IsOptional()
+  @Transform(({ value }) => toBool(value))
+  @IsBoolean()
+  unreadOnly?: boolean;
   @ApiPropertyOptional() @IsOptional() @Type(() => Number) @IsInt() @Min(1) page?: number;
   @ApiPropertyOptional() @IsOptional() @Type(() => Number) @IsInt() @Min(1) pageSize?: number;
 }

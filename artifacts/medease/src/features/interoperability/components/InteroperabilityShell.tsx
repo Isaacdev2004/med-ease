@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { InteropSectionContent } from '@/features/interoperability/components/InteropSections';
 import {
@@ -22,7 +23,7 @@ export function InteroperabilityShell({
   basePath,
   variant = 'professional',
   title = 'Interoperability Hub',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: InteroperabilityShellProps) {
   const [location] = useLocation();
   const perms = useInteropPermissions();

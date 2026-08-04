@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { PublicHealthSectionContent } from '@/features/public-health/components/PublicHealthSections';
 import {
@@ -22,7 +23,7 @@ export function PublicHealthShell({
   basePath,
   variant = 'professional',
   title = 'Public Health',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: PublicHealthShellProps) {
   const [location] = useLocation();
   const perms = usePublicHealthPermissions();

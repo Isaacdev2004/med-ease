@@ -1,4 +1,5 @@
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { PlatformAdminShell } from '@/features/platform-admin/components/PlatformAdminShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
@@ -11,7 +12,7 @@ export default function PlatformSettingsPage() {
       variant="readonly"
       title="Platform Settings"
       tenantId="ten-0001"
-      facilityId="fac-001"
+      facilityId={DEMO_FACILITY_ID}
     />
   );
 }

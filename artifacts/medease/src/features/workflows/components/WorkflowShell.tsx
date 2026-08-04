@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { WorkflowSectionContent } from '@/features/workflows/components/WorkflowSections';
 import {
@@ -23,7 +24,7 @@ export function WorkflowShell({
   basePath,
   variant = 'professional',
   title = 'Workflow Automation',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
   userId,
 }: WorkflowShellProps) {
   const [location] = useLocation();

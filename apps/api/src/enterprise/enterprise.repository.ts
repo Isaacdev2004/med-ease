@@ -71,9 +71,28 @@ export class EnterpriseRepository extends TenantAwareRepository {
       page?: number;
       pageSize?: number;
       id?: string;
+      facilityId?: string;
+      departmentId?: string;
+      department?: string;
+      partnerId?: string;
+      tenantId?: string;
+      framework?: string;
     },
   ) {
     const { page, pageSize, skip, take } = normalizePagination(query);
+    const payloadFilters: Array<[string, string]> = [];
+    for (const key of [
+      'facilityId',
+      'departmentId',
+      'department',
+      'partnerId',
+      'tenantId',
+      'framework',
+    ] as const) {
+      const value = query[key];
+      if (value) payloadFilters.push([key, value]);
+    }
+
     return this.prisma.runInTransaction(async (tx) => {
       if (query.id) {
         const one = await tx.enterpriseRecord.findFirst({
@@ -104,19 +123,37 @@ export class EnterpriseRepository extends TenantAwareRepository {
           : {}),
       };
 
-      const [rows, total] = await Promise.all([
+      // When payload filters are present, over-fetch then filter in memory
+      // (JSON path filters vary by Postgres / Prisma version).
+      const fetchTake = payloadFilters.length ? Math.max(take * 20, 200) : take;
+      const fetchSkip = payloadFilters.length ? 0 : skip;
+
+      const [rows, totalUnfiltered] = await Promise.all([
         tx.enterpriseRecord.findMany({
           where,
           orderBy: [{ updatedAt: 'desc' }],
-          skip,
-          take,
+          skip: fetchSkip,
+          take: fetchTake,
         }),
         tx.enterpriseRecord.count({ where }),
       ]);
 
+      let payloads = rows.map((r) => r.payload);
+      if (payloadFilters.length) {
+        payloads = payloads.filter((payload) => {
+          const row = asRecord(payload);
+          return payloadFilters.every(([key, value]) => {
+            const cell = row[key];
+            return cell != null && String(cell) === value;
+          });
+        });
+        const pageItems = payloads.slice(skip, skip + take);
+        return toPaginatedResult(pageItems, payloads.length, page, pageSize);
+      }
+
       return toPaginatedResult(
-        rows.map((r) => r.payload),
-        total,
+        payloads,
+        totalUnfiltered,
         page,
         pageSize,
       );

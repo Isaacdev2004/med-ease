@@ -1,4 +1,5 @@
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { BillingShell } from '@/features/billing/components/BillingShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
@@ -27,7 +28,7 @@ export default function FacilityBillingPage() {
       basePath={basePath}
       variant="facility"
       title={titles[segment]}
-      facilityId="fac-001"
+      facilityId={DEMO_FACILITY_ID}
     />
   );
 }

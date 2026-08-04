@@ -120,10 +120,10 @@ export function PlatformDashboardPanel({
           </Card>
         ))}
       </div>
-      <BarChartPanel title="Tenant Growth" data={dashboard.tenantTrend} />
+      <BarChartPanel title="Tenant Growth" data={dashboard.tenantTrend ?? []} />
       <BarChartPanel
         title="Tenants by Region"
-        data={dashboard.regionBreakdown}
+        data={dashboard.regionBreakdown ?? []}
       />
     </div>
   );
@@ -160,7 +160,7 @@ export function PlatformAnalyticsPanel({
           </Card>
         ))}
       </div>
-      <BarChartPanel title="Health Trend" data={analytics.healthTrend} />
+      <BarChartPanel title="Health Trend" data={analytics.healthTrend ?? []} />
     </div>
   );
 }

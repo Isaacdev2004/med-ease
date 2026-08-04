@@ -429,7 +429,10 @@ class ProcurementHttpRepository {
       this.searchSuppliers({ pageSize: 50 }),
     ]);
     return {
-      totalSpend: orders.items.reduce((s: number, o: PurchaseOrder) => s + o.total, 0),
+      totalSpend: orders.items.reduce(
+        (s: number, o: PurchaseOrder) => s + (Number(o.total) || 0),
+        0,
+      ),
       pendingApprovals: orders.items.filter((o: PurchaseOrder) => o.status === 'pending_approval').length,
       openPOs: orders.items.filter((o: PurchaseOrder) =>
         ['approved', 'ordered', 'partially_received'].includes(o.status),

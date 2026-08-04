@@ -22,6 +22,12 @@ export class EnterpriseService {
       page?: number;
       pageSize?: number;
       id?: string;
+      facilityId?: string;
+      departmentId?: string;
+      department?: string;
+      partnerId?: string;
+      tenantId?: string;
+      framework?: string;
     },
   ) {
     return this.repository.listResources(module, resourceType, query);

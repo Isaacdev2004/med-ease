@@ -1,4 +1,5 @@
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { FacilitiesShell } from '@/features/facilities/components/FacilitiesShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
@@ -25,7 +26,7 @@ export default function ProfessionalFacilitiesPage() {
       basePath={resolveModuleBasePath(location, segment)}
       variant="professional"
       title={TITLES[segment]}
-      facilityId="fac-001"
+      facilityId={DEMO_FACILITY_ID}
     />
   );
 }

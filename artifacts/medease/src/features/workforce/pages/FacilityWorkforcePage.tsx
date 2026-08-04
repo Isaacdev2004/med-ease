@@ -1,4 +1,5 @@
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { WorkforceShell } from '@/features/workforce/components/WorkforceShell';
 import { resolveModuleBasePath } from '@/shared/hooks/use-portal-path';
@@ -32,7 +33,7 @@ export default function FacilityWorkforcePage() {
       basePath={resolveModuleBasePath(location, segment)}
       variant="facility"
       title={TITLES[segment]}
-      facilityId="fac-001"
+      facilityId={DEMO_FACILITY_ID}
     />
   );
 }

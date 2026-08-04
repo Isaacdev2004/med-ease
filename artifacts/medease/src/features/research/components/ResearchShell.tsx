@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { DEMO_FACILITY_ID } from '@/shared/constants/demo-ids';
 
 import { ResearchSectionContent } from '@/features/research/components/ResearchSections';
 import {
@@ -22,7 +23,7 @@ export function ResearchShell({
   basePath,
   variant = 'professional',
   title = 'Clinical Research',
-  facilityId = 'fac-001',
+  facilityId = DEMO_FACILITY_ID,
 }: ResearchShellProps) {
   const [location] = useLocation();
   const perms = useResearchPermissions();
