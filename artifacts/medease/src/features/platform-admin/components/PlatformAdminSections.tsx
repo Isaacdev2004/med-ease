@@ -86,7 +86,7 @@ export function DashboardSection({ filters }: SectionProps) {
           <TenantCard key={t.tenantId} tenant={t} />
         ))}
       </div>
-      <AuditTimeline audits={dashboard.data.recentAudits} />
+      <AuditTimeline audits={dashboard.data.recentAudits ?? []} />
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
   );

@@ -89,7 +89,7 @@ export function DashboardSection({ filters }: SectionProps) {
           <ProcessCard key={i.instanceId} instance={i} />
         ))}
       </div>
-      <EventTimeline events={dashboard.data.recentEvents} />
+      <EventTimeline events={dashboard.data.recentEvents ?? []} />
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
   );

@@ -67,7 +67,7 @@ export function DashboardSection({
   return (
     <div className="space-y-6">
       <AiDashboardPanel dashboard={dashboard.data} />
-      <AiAlertsPanel alerts={dashboard.data.recentAlerts} />
+      <AiAlertsPanel alerts={dashboard.data.recentAlerts ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(predictions.data?.items ?? []).slice(0, 6).map((p) => (
           <PredictionCard key={p.predictionId} prediction={p} />
@@ -228,7 +228,7 @@ export function ModelMonitoringSection({
   return (
     <div className="space-y-6">
       {dashboard.data && (
-        <DriftDetectionPanel alerts={dashboard.data.recentAlerts} />
+        <DriftDetectionPanel alerts={dashboard.data.recentAlerts ?? []} />
       )}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(performance.data?.items ?? []).slice(0, 9).map((e) => (
@@ -295,7 +295,7 @@ export function AuditSection({ filters }: { filters?: AiIntelligenceFilters }) {
   const dashboard = useAiDashboard(filters?.facilityId);
   if (dashboard.isLoading) return <LoadingView />;
   return dashboard.data ? (
-    <AiAlertsPanel alerts={dashboard.data.recentAlerts} />
+    <AiAlertsPanel alerts={dashboard.data.recentAlerts ?? []} />
   ) : null;
 }
 

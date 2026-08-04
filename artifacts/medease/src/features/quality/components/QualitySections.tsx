@@ -63,9 +63,9 @@ export function DashboardSection({ filters }: { filters?: QualityFilters }) {
   return (
     <div className="space-y-6">
       <ExecutiveDashboard dashboard={dashboard.data} />
-      <HeatMap data={dashboard.data.riskHeatMap} />
+      <HeatMap data={dashboard.data.riskHeatMap ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(incidents.data?.items ?? dashboard.data.recentIncidents)
+        {(incidents.data?.items ?? dashboard.data.recentIncidents ?? [])
           .slice(0, 6)
           .map((i) => (
             <IncidentCard
@@ -76,7 +76,7 @@ export function DashboardSection({ filters }: { filters?: QualityFilters }) {
           ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {dashboard.data.recentCapa.map((c) => (
+        {(dashboard.data.recentCapa ?? []).map((c) => (
           <CAPACard key={c.capaId} capa={c} />
         ))}
       </div>
@@ -129,8 +129,8 @@ export function InfectionSection({ filters }: { filters?: QualityFilters }) {
   if (!infection.data) return <EmptyState title="No infection data" />;
   return (
     <InfectionDashboard
-      records={infection.data.records.items}
-      outbreaks={infection.data.outbreaks}
+      records={infection.data.records?.items ?? []}
+      outbreaks={infection.data.outbreaks ?? []}
     />
   );
 }

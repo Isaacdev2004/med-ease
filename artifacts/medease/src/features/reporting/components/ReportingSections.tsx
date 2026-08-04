@@ -84,9 +84,9 @@ export function DashboardSection({ filters }: SectionProps) {
           <InstanceCard key={i.instanceId} instance={i} />
         ))}
       </div>
-      <ReportTimeline exports={dashboard.data.recentExports} />
+      <ReportTimeline exports={dashboard.data.recentExports ?? []} />
       <ExportPanel
-        exports={dashboard.data.recentExports}
+        exports={dashboard.data.recentExports ?? []}
         onExport={(fmt) => exportData.mutate(fmt)}
       />
     </div>

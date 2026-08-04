@@ -58,9 +58,9 @@ export function DashboardSection({ filters }: { filters?: PhmFilters }) {
   return (
     <div className="space-y-6">
       <PopulationDashboard dashboard={dashboard.data} />
-      <RiskDistributionPanel distribution={dashboard.data.riskDistribution} />
+      <RiskDistributionPanel distribution={dashboard.data.riskDistribution ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(gaps.data?.items ?? dashboard.data.recentGaps)
+        {(gaps.data?.items ?? dashboard.data.recentGaps ?? [])
           .slice(0, 6)
           .map((g) => (
             <CareGapCard
@@ -76,7 +76,7 @@ export function DashboardSection({ filters }: { filters?: PhmFilters }) {
           ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(registries.data?.items ?? dashboard.data.topRegistries)
+        {(registries.data?.items ?? dashboard.data.topRegistries ?? [])
           .slice(0, 6)
           .map((r) => (
             <RegistryCard key={r.registryId} registry={r} />

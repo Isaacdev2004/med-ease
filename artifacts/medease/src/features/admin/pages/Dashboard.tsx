@@ -152,16 +152,6 @@ export default function Dashboard() {
     return <LoadingView label="Loading system overview…" />;
   }
 
-  if (iam.isError && !iam.data) {
-    return (
-      <EmptyState
-        icon={AlertTriangle}
-        title="Unable to load system overview"
-        description="The IAM dashboard API did not respond. Confirm the API is reachable and you are signed in with admin permissions."
-      />
-    );
-  }
-
   const dash = iam.data;
   const latency = health.data?.latencyMs;
   const latencyHint =
@@ -190,6 +180,14 @@ export default function Dashboard() {
           {useApiAuth ? `API ${health.data?.status ?? '…'}` : 'Demo data'}
         </Badge>
       </div>
+
+      {iam.isError && !dash ? (
+        <EmptyState
+          icon={AlertTriangle}
+          title="IAM metrics unavailable"
+          description="Other live modules below still load. Check API reachability and admin permissions."
+        />
+      ) : null}
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KpiCard

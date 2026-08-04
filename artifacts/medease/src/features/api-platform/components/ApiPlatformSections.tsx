@@ -73,7 +73,7 @@ export function DeveloperSection({ filters }: SectionProps) {
           <ApiKeyCard key={k.keyId} apiKey={k} />
         ))}
       </div>
-      <WebhookDeliveryPanel deliveries={dashboard.data.recentDeliveries} />
+      <WebhookDeliveryPanel deliveries={dashboard.data.recentDeliveries ?? []} />
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
   );

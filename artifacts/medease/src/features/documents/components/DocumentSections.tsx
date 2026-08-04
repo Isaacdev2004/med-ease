@@ -89,7 +89,7 @@ export function DashboardSection({ filters }: SectionProps) {
           <DocumentCard key={d.documentId} document={d} />
         ))}
       </div>
-      <ActivityTimeline logs={dashboard.data.recentActivity} />
+      <ActivityTimeline logs={dashboard.data.recentActivity ?? []} />
       <ExportToolbar onExport={(fmt) => exportData.mutate(fmt)} />
     </div>
   );

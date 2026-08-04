@@ -77,7 +77,7 @@ export function DashboardSection({ filters }: { filters?: CdssFilters }) {
     <div className="space-y-6">
       <CDSDashboard dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(alerts.data?.items ?? dashboard.data.recentAlerts)
+        {(alerts.data?.items ?? dashboard.data.recentAlerts ?? [])
           .slice(0, 6)
           .map((a) => (
             <ClinicalAlertCard
@@ -93,7 +93,7 @@ export function DashboardSection({ filters }: { filters?: CdssFilters }) {
           ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(recs.data?.items ?? dashboard.data.recentRecommendations)
+        {(recs.data?.items ?? dashboard.data.recentRecommendations ?? [])
           .slice(0, 6)
           .map((r) => (
             <RecommendationCard

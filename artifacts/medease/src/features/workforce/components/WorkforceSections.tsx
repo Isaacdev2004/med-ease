@@ -68,7 +68,7 @@ export function DashboardSection({ filters }: { filters?: WorkforceFilters }) {
     <div className="space-y-6">
       <WorkforceMetrics dashboard={dashboard.data} />
       {coverage.data ? <CoverageDashboard metrics={coverage.data} /> : null}
-      <ScheduleGrid shifts={dashboard.data.recentShifts} />
+      <ScheduleGrid shifts={dashboard.data.recentShifts ?? []} />
     </div>
   );
 }

@@ -65,13 +65,13 @@ export function DashboardSection({ filters }: { filters?: FacilitiesFilters }) {
   if (!dashboard.data)
     return <EmptyState icon={Building2} title="No facilities data" />;
   const utility =
-    utilities.data?.items?.[0] ?? dashboard.data.utilitySystems[0];
+    utilities.data?.items?.[0] ?? dashboard.data.utilitySystems?.[0];
   return (
     <div className="space-y-6">
       <MetricsDashboard dashboard={dashboard.data} />
       {utility ? <UtilityCard utility={utility} /> : null}
       <MaintenanceCalendar
-        orders={workOrders.data?.items ?? dashboard.data.recentWorkOrders}
+        orders={workOrders.data?.items ?? dashboard.data.recentWorkOrders ?? []}
       />
     </div>
   );

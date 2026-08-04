@@ -74,7 +74,7 @@ export function DashboardSection({ filters }: { filters?: ResearchFilters }) {
     <div className="space-y-6">
       <StudyDashboard dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(trials.data?.items ?? dashboard.data.topTrials)
+        {(trials.data?.items ?? dashboard.data.topTrials ?? [])
           .slice(0, 6)
           .map((t) => (
             <TrialCard key={t.trialId} trial={t} />

@@ -72,16 +72,16 @@ export function DashboardSection({ filters }: { filters?: InteropFilters }) {
   return (
     <div className="space-y-6">
       <HealthDashboard dashboard={dashboard.data} />
-      <IntegrationTimeline jobs={dashboard.data.recentJobs} />
+      <IntegrationTimeline jobs={dashboard.data.recentJobs ?? []} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(endpoints.data?.items ?? dashboard.data.topEndpoints)
+        {(endpoints.data?.items ?? dashboard.data.topEndpoints ?? [])
           .slice(0, 6)
           .map((e) => (
             <EndpointCard key={e.endpointId} endpoint={e} />
           ))}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(hl7.data?.items ?? dashboard.data.recentMessages)
+        {(hl7.data?.items ?? dashboard.data.recentMessages ?? [])
           .slice(0, 6)
           .map((m) => (
             <Hl7MessageCard key={m.messageId} message={m} />

@@ -74,7 +74,7 @@ export function DashboardSection({
     <div className="space-y-6">
       <EpidemiologyDashboard dashboard={dashboard.data} />
       <PublicHealthSafetyPanel
-        outbreaks={outbreaks.data?.items ?? dashboard.data.recentOutbreaks}
+        outbreaks={outbreaks.data?.items ?? dashboard.data.recentOutbreaks ?? []}
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {(cases.data?.items ?? []).slice(0, 6).map((c) => (

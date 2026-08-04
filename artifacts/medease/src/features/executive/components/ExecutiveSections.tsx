@@ -74,10 +74,10 @@ export function DashboardSection({ filters }: { filters?: ExecutiveFilters }) {
     <div className="space-y-6">
       <ExecutiveDashboard dashboard={dashboard.data} />
       <EnterpriseAlertCenter
-        alerts={alerts.data?.items ?? dashboard.data.recentAlerts}
+        alerts={alerts.data?.items ?? dashboard.data.recentAlerts ?? []}
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(kpis.data?.items ?? dashboard.data.topKpis).slice(0, 6).map((k) => (
+        {(kpis.data?.items ?? dashboard.data.topKpis ?? []).slice(0, 6).map((k) => (
           <ExecutiveKpiCard key={k.kpiId} kpi={k} />
         ))}
       </div>
