@@ -44,6 +44,7 @@ export default function PatientsListPage() {
 
   const critical = patients.filter((row) => row.status === 'critical').length;
   const active = patients.filter((row) => row.status !== 'discharged').length;
+  const discharged = patients.filter((row) => row.status === 'discharged').length;
 
   return (
     <PageShell
@@ -65,7 +66,11 @@ export default function PatientsListPage() {
             value: query.data?.total ?? patients.length,
             status: 'stable',
           },
-          { title: 'Discharges planned', value: 0 },
+          {
+            title: 'Discharged (page)',
+            value: discharged,
+            status: 'observation',
+          },
         ]}
       />
 

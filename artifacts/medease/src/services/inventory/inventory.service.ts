@@ -1,3 +1,4 @@
+import { useApiAuth } from '@/services/auth/auth-service';
 import { computeInventoryAnalytics } from '@/services/inventory/analytics';
 import { inventoryRepository } from '@/services/inventory/repository';
 import type {
@@ -10,8 +11,9 @@ import type {
   TransferStockInput,
 } from '@/services/inventory/types';
 
-const DELAY = 250;
+const DELAY = useApiAuth ? 0 : 250;
 async function delay(ms = DELAY) {
+  if (DELAY <= 0) return;
   await new Promise((r) => setTimeout(r, ms));
 }
 
@@ -126,7 +128,82 @@ export const inventoryService = {
 
   async getAnalytics() {
     await delay();
-    return computeInventoryAnalytics();
+    if (!useApiAuth) return computeInventoryAnalytics();
+
+    const [dashboard, inventory, warehouses, suppliers, orders] =
+      await Promise.all([
+        inventoryRepository.getDashboard(),
+        inventoryRepository.searchInventory({ page: 1, pageSize: 100 }),
+        inventoryRepository.getWarehouses(),
+        inventoryRepository.getSuppliers(),
+        inventoryRepository.getPurchaseOrders({ page: 1, pageSize: 50 }),
+      ]);
+
+    const byDept = new Map<string, number>();
+    for (const item of inventory.items) {
+      const key = item.department || 'general';
+      byDept.set(
+        key,
+        (byDept.get(key) ?? 0) + item.quantityOnHand * item.purchasePrice,
+      );
+    }
+
+    const expiredValue = inventory.items
+      .filter((i) => i.status === 'expired')
+      .reduce((s, i) => s + i.quantityOnHand * i.purchasePrice, 0);
+
+    return {
+      inventoryValue: dashboard.inventoryValue,
+      stockTurnover: dashboard.stockTurnover,
+      daysOfInventory: dashboard.daysOfInventory,
+      lowStockItems: dashboard.lowStockCount,
+      expiredStockValue: Math.round(expiredValue),
+      procurementCycleDays: 0,
+      supplierPerformance: suppliers.length
+        ? Math.round(
+            (suppliers.reduce((s, x) => s + x.rating, 0) / suppliers.length) * 20,
+          )
+        : 0,
+      warehouseUtilization: warehouses.length
+        ? Math.round(
+            warehouses.reduce((s, w) => s + w.utilizationPercent, 0) /
+              warehouses.length,
+          )
+        : 0,
+      assetUtilization: dashboard.assetUtilization,
+      equipmentUptime: 0,
+      inventoryTrends: [
+        { label: 'Current', value: dashboard.inventoryValue },
+      ],
+      consumptionByDepartment: [...byDept.entries()].map(([label, value]) => ({
+        label,
+        value: Math.round(value),
+      })),
+      procurementSpend: [
+        {
+          label: 'Open POs',
+          value: orders.items.reduce((s, o) => s + o.total, 0),
+        },
+      ],
+      expiryTimeline: dashboard.expiryAlerts.slice(0, 6).map((a) => ({
+        label: a.itemName.slice(0, 16),
+        value: a.quantity,
+      })),
+      abcAnalysis: [
+        { label: 'Tracked SKUs', value: dashboard.totalItems },
+        { label: 'Low stock', value: dashboard.lowStockCount },
+        { label: 'Out of stock', value: dashboard.outOfStockCount },
+      ],
+      warehouseCapacity: warehouses.slice(0, 6).map((w) => ({
+        label: w.code,
+        value: w.utilizationPercent,
+      })),
+      equipmentUtilization: [],
+      supplierRankings: suppliers.slice(0, 8).map((s) => ({
+        label: s.name.slice(0, 15),
+        value: Math.round(s.rating * 20),
+      })),
+    };
   },
 
   async scanBarcode(barcode: string) {
