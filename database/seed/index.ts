@@ -10,6 +10,7 @@ import { billingSeed } from './billing';
 import { inventorySeed } from './inventory';
 import { procurementSeed } from './procurement';
 import { financeSeed } from './finance';
+import { enterpriseSeed } from './enterprise';
 import { iamSeed } from './iam';
 import { identitySeed } from './identity';
 import { operationsSeed } from './operations';
@@ -34,6 +35,7 @@ async function main() {
       inventorySeed,
       procurementSeed,
       financeSeed,
+      enterpriseSeed,
       operationsSeed,
     ],
     { dryRun },

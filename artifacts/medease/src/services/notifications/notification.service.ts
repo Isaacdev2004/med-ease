@@ -1,3 +1,9 @@
+import { useApiAuth } from '@/services/auth/auth-service';
+import {
+  fetchNotifications,
+  markAllNotificationsRead,
+  markNotificationRead,
+} from '@/services/enterprise';
 import type {
   ActivityEvent,
   MedNotification,
@@ -177,16 +183,29 @@ export const notificationService = {
     filters?: NotificationFilters,
   ): Promise<MedNotification[]> {
     void userId;
+    if (useApiAuth) {
+      const raw = (await fetchNotifications({
+        unreadOnly: filters?.unread,
+        page: 1,
+        pageSize: 100,
+      })) as { items?: MedNotification[] };
+      const items = Array.isArray(raw?.items) ? raw.items : [];
+      return applyFilters(items as MedNotification[], filters);
+    }
     await delay(200);
     return applyFilters(store, filters);
   },
 
   async unreadCount(userId: string): Promise<number> {
-    void userId;
-    return store.filter((item) => !item.read && !item.archived).length;
+    const items = await this.list(userId, { unread: true });
+    return items.filter((item) => !item.read && !item.archived).length;
   },
 
   async markRead(userId: string, ids: string[]): Promise<MedNotification[]> {
+    if (useApiAuth) {
+      await Promise.all(ids.map((id) => markNotificationRead(id)));
+      return this.list(userId);
+    }
     void userId;
     store = store.map((item) =>
       ids.includes(item.id) ? { ...item, read: true } : item,
@@ -195,6 +214,7 @@ export const notificationService = {
   },
 
   async markUnread(userId: string, ids: string[]): Promise<MedNotification[]> {
+    if (useApiAuth) return this.list(userId);
     void userId;
     store = store.map((item) =>
       ids.includes(item.id) ? { ...item, read: false } : item,
@@ -203,6 +223,10 @@ export const notificationService = {
   },
 
   async archive(userId: string, ids: string[]): Promise<MedNotification[]> {
+    if (useApiAuth) {
+      await Promise.all(ids.map((id) => markNotificationRead(id)));
+      return this.list(userId);
+    }
     void userId;
     store = store.map((item) =>
       ids.includes(item.id) ? { ...item, archived: true, read: true } : item,
@@ -215,18 +239,27 @@ export const notificationService = {
     id: string,
     pinned: boolean,
   ): Promise<MedNotification[]> {
+    if (useApiAuth) return this.list(userId);
     void userId;
     store = store.map((item) => (item.id === id ? { ...item, pinned } : item));
     return applyFilters(store);
   },
 
   async markAllRead(userId: string): Promise<MedNotification[]> {
+    if (useApiAuth) {
+      await markAllNotificationsRead();
+      return this.list(userId);
+    }
     void userId;
     store = store.map((item) => ({ ...item, read: true }));
     return applyFilters(store);
   },
 
   async dismiss(userId: string, id: string): Promise<MedNotification[]> {
+    if (useApiAuth) {
+      await markNotificationRead(id);
+      return this.list(userId);
+    }
     void userId;
     store = store.filter((item) => item.id !== id);
     return applyFilters(store);
@@ -236,6 +269,7 @@ export const notificationService = {
     userId: string,
     notification: MedNotification,
   ): Promise<MedNotification[]> {
+    if (useApiAuth) return this.list(userId);
     void userId;
     store = [
       notification,
@@ -245,6 +279,7 @@ export const notificationService = {
   },
 
   async listActivity(userId: string): Promise<ActivityEvent[]> {
+    if (useApiAuth) return [];
     void userId;
     await delay(150);
     return [...MOCK_ACTIVITY].sort(
@@ -254,6 +289,7 @@ export const notificationService = {
   },
 
   async listReminders(userId: string): Promise<ReminderItem[]> {
+    if (useApiAuth) return [];
     void userId;
     await delay(100);
     return MOCK_REMINDERS;

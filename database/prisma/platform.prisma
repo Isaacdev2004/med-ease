@@ -28,3 +28,79 @@ model MarketingLead {
   @@map("marketing_leads")
   @@schema("platform")
 }
+
+/// Tenant-scoped enterprise module records (admin CMMS, workforce, quality, …).
+model EnterpriseRecord {
+  id           String   @id @db.Uuid
+  tenantId     String   @map("tenant_id") @db.Uuid
+  module       String   @db.VarChar(64)
+  resourceType String   @map("resource_type") @db.VarChar(64)
+  externalKey  String?  @map("external_key") @db.VarChar(120)
+  title        String?  @db.VarChar(320)
+  status       String?  @db.VarChar(64)
+  payload      Json     @db.JsonB
+  createdBy    String?  @map("created_by") @db.Uuid
+  updatedBy    String?  @map("updated_by") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([tenantId, module, resourceType, updatedAt(sort: Desc)])
+  @@index([tenantId, module, resourceType, status])
+  @@index([tenantId, module, externalKey])
+  @@map("enterprise_records")
+  @@schema("platform")
+}
+
+/// Precomputed dashboards / analytics snapshots per enterprise module.
+model EnterpriseSnapshot {
+  id        String   @id @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  module    String   @db.VarChar(64)
+  kind      String   @db.VarChar(32)
+  scopeKey  String   @default("") @map("scope_key") @db.VarChar(120)
+  payload   Json     @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, module, kind, scopeKey])
+  @@index([tenantId, module, kind])
+  @@map("enterprise_snapshots")
+  @@schema("platform")
+}
+
+/// In-app notifications for all portals.
+model AppNotification {
+  id        String   @id @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  title     String   @db.VarChar(320)
+  message   String
+  type      String   @db.VarChar(64)
+  priority  String   @default("medium") @db.VarChar(32)
+  category  String   @default("system") @db.VarChar(64)
+  read      Boolean  @default(false)
+  pinned    Boolean  @default(false)
+  payload   Json?    @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([tenantId, userId, read, createdAt(sort: Desc)])
+  @@index([tenantId, createdAt(sort: Desc)])
+  @@map("app_notifications")
+  @@schema("platform")
+}
+
+/// Per-user portal preferences (settings page).
+model UserPreference {
+  id        String   @id @db.Uuid
+  tenantId  String   @map("tenant_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  key       String   @db.VarChar(120)
+  value     Json     @db.JsonB
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([tenantId, userId, key])
+  @@index([tenantId, userId])
+  @@map("user_preferences")
+  @@schema("platform")
+}
