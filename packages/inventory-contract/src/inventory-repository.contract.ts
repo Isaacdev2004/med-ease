@@ -1,6 +1,7 @@
 import type {
   AdjustStockInput,
   CreateInventoryInput,
+  CreatePurchaseOrderInput,
   InventoryDashboard,
   InventoryDepartment,
   InventoryFilters,
@@ -8,7 +9,10 @@ import type {
   InventoryListResult,
   IssueStockInput,
   MovementListResult,
+  PurchaseOrder,
+  PurchaseOrderListResult,
   ReceiveStockInput,
+  Supplier,
   UpdateInventoryInput,
   Warehouse,
 } from './inventory.types';
@@ -31,4 +35,11 @@ export interface InventoryRepositoryContract {
     warehouseId?: string,
     department?: InventoryDepartment,
   ): Promise<InventoryDashboard>;
+  getSuppliers(): Promise<Supplier[]>;
+  getPurchaseOrders(
+    filters?: InventoryFilters,
+  ): Promise<PurchaseOrderListResult>;
+  createPurchaseOrder(input: CreatePurchaseOrderInput): Promise<PurchaseOrder>;
+  approvePurchaseOrder(purchaseOrderId: string): Promise<PurchaseOrder>;
+  receivePurchaseOrder(purchaseOrderId: string): Promise<PurchaseOrder>;
 }

@@ -387,6 +387,19 @@ enum StockMovementType {
   @@schema("operations")
 }
 
+enum PurchaseOrderStatus {
+  draft
+  pending_approval
+  approved
+  ordered
+  partial
+  received
+  cancelled
+
+  @@map("purchase_order_status")
+  @@schema("operations")
+}
+
 enum BedStatus {
   available
   occupied

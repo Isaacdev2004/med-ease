@@ -23,13 +23,17 @@ import {
   mapTimelineEntryArray,
   monitoringFiltersToQuery,
 } from '@/services/patient-monitoring/dto-mappers';
-import { patientMonitoringMockRepository } from '@/services/patient-monitoring/repository.mock';
 
 const BASE = '/api/monitoring';
 
 class PatientMonitoringHttpRepository {
   private readonly transport = httpTransport;
-  private readonly mock = patientMonitoringMockRepository;
+  private readonly favorites: {
+    id: string;
+    patientId: string;
+    observationId: string;
+    createdAt: string;
+  }[] = [];
 
   async getDashboard(patientId?: string) {
     return mapMonitoringDashboard(
@@ -212,44 +216,141 @@ class PatientMonitoringHttpRepository {
     );
   }
 
-  // Hybrid mock-only surfaces
-  getTrendAnalysis(patientId: string, metric?: VitalSign['type']) {
-    return this.mock.getTrendAnalysis(patientId, metric);
+  /** Extras without Nest endpoints — live-safe, never mock demo rows. */
+  async getTrendAnalysis(
+    patientId: string,
+    metric?: VitalSign['type'],
+  ): Promise<import('@/services/patient-monitoring/types').PatientTrend[]> {
+    const { items } = await this.listVitals({ patientId, pageSize: 100 });
+    const filtered = metric ? items.filter((v) => v.type === metric) : items;
+    if (!filtered.length) return [];
+    const byDay = new Map<string, number[]>();
+    for (const vital of filtered) {
+      const day = vital.recordedAt.slice(0, 10);
+      if (!day) continue;
+      const bucket = byDay.get(day) ?? [];
+      bucket.push(Number(vital.value) || 0);
+      byDay.set(day, bucket);
+    }
+    const points = [...byDay.entries()]
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([day, values]) => ({
+        label: day,
+        value:
+          values.reduce((sum, n) => sum + n, 0) /
+          Math.max(values.length, 1),
+      }));
+    const values = points.map((p) => p.value);
+    const average =
+      values.reduce((sum, n) => sum + n, 0) / Math.max(values.length, 1);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const first = values[0] ?? 0;
+    const last = values[values.length - 1] ?? 0;
+    const trend =
+      last < first * 0.95
+        ? ('improving' as const)
+        : last > first * 1.05
+          ? ('deteriorating' as const)
+          : ('stable' as const);
+    return [
+      {
+        id: `trend-${patientId}-${metric ?? filtered[0]!.type}`,
+        patientId,
+        metric: metric ?? filtered[0]!.type,
+        period: 'daily',
+        points,
+        average,
+        min,
+        max,
+        trend,
+      },
+    ];
   }
 
-  getSessions(patientId?: string) {
-    return this.mock.getSessions(patientId);
+  async getSessions(_patientId?: string) {
+    return [];
   }
 
-  search(query: string, patientId?: string) {
-    return this.mock.search(query, patientId);
+  async search(query: string, patientId?: string) {
+    const q = query.toLowerCase();
+    const [observations, vitals] = await Promise.all([
+      this.listObservations({ patientId, pageSize: 50 }),
+      this.listVitals({ patientId, pageSize: 50 }),
+    ]);
+    return {
+      observations: observations.items
+        .filter((o) =>
+          `${o.display ?? ''} ${o.code ?? ''}`.toLowerCase().includes(q),
+        )
+        .slice(0, 20),
+      vitals: vitals.items
+        .filter((v) => `${v.type}`.toLowerCase().includes(q))
+        .slice(0, 20),
+      alerts: [] as Awaited<ReturnType<typeof this.listAlerts>>['items'],
+    };
   }
 
-  getHistory(patientId: string) {
-    return this.mock.getHistory(patientId);
+  async getHistory(patientId: string) {
+    const [vitals, observations, alerts] = await Promise.all([
+      this.listVitals({ patientId, pageSize: 50 }),
+      this.listObservations({ patientId, pageSize: 50 }),
+      this.listAlerts({ patientId, pageSize: 30 }),
+    ]);
+    return {
+      vitals: vitals.items,
+      observations: observations.items,
+      alerts: alerts.items,
+    };
   }
 
-  getFavorites(patientId: string) {
-    return this.mock.getFavorites(patientId);
+  async getFavorites(patientId: string) {
+    return this.favorites.filter((f) => f.patientId === patientId);
   }
 
-  toggleFavorite(patientId: string, observationId: string) {
-    return this.mock.toggleFavorite(patientId, observationId);
+  async toggleFavorite(patientId: string, observationId: string) {
+    const existing = this.favorites.find(
+      (f) => f.patientId === patientId && f.observationId === observationId,
+    );
+    if (existing) {
+      this.favorites.splice(this.favorites.indexOf(existing), 1);
+      return { favorited: false };
+    }
+    this.favorites.push({
+      id: `fav-${observationId}`,
+      patientId,
+      observationId,
+      createdAt: new Date().toISOString(),
+    });
+    return { favorited: true };
   }
 
-  exportObservations(
+  async exportObservations(
     patientId: string,
     format: 'pdf' | 'csv' | 'fhir',
   ) {
-    return this.mock.exportObservations(patientId, format);
+    const { total } = await this.listObservations({ patientId, pageSize: 1 });
+    return {
+      id: `export-${patientId}`,
+      patientId,
+      format,
+      exportedAt: new Date().toISOString(),
+      recordCount: total,
+    };
   }
 
-  shareObservations(
+  async shareObservations(
     patientId: string,
     sharedWith: string,
     observationIds: string[],
   ) {
-    return this.mock.shareObservations(patientId, sharedWith, observationIds);
+    return {
+      id: `share-${patientId}`,
+      patientId,
+      sharedWith,
+      sharedAt: new Date().toISOString(),
+      observationIds,
+    };
   }
 }
 

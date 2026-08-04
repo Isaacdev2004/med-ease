@@ -177,3 +177,76 @@ export interface MovementListResult {
   page: number;
   pageSize: number;
 }
+
+export type PurchaseOrderStatus =
+  | 'draft'
+  | 'pending_approval'
+  | 'approved'
+  | 'ordered'
+  | 'partial'
+  | 'received'
+  | 'cancelled';
+
+export interface Supplier {
+  supplierId: string;
+  name: string;
+  contactEmail: string;
+  contactPhone: string;
+  address: string;
+  rating: number;
+  onTimeDeliveryRate: number;
+  totalOrders: number;
+  categories: InventoryCategory[];
+  status: 'active' | 'inactive' | 'pending';
+}
+
+export interface PurchaseOrderLine {
+  lineId: string;
+  inventoryId?: string;
+  sku: string;
+  itemName: string;
+  quantity: number;
+  unitPrice: number;
+  receivedQuantity: number;
+}
+
+export interface PurchaseOrder {
+  purchaseOrderId: string;
+  poNumber: string;
+  supplierId: string;
+  supplierName: string;
+  department: InventoryDepartment;
+  status: PurchaseOrderStatus;
+  items: PurchaseOrderLine[];
+  subtotal: number;
+  tax: number;
+  total: number;
+  requestedBy: string;
+  approvedBy?: string;
+  orderDate?: string;
+  expectedDelivery?: string;
+  receivedDate?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreatePurchaseOrderInput {
+  supplierId: string;
+  department: InventoryDepartment;
+  facilityId?: string;
+  items: {
+    sku: string;
+    itemName: string;
+    quantity: number;
+    unitPrice: number;
+    inventoryId?: string;
+  }[];
+  requestedBy?: string;
+}
+
+export interface PurchaseOrderListResult {
+  items: PurchaseOrder[];
+  total: number;
+  page: number;
+  pageSize: number;
+}

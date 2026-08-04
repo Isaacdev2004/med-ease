@@ -29,6 +29,28 @@ export function assertWarehouseFound<T>(
   }
 }
 
+export function assertSupplierFound<T>(
+  supplier: T | null | undefined,
+  supplierId?: string,
+): asserts supplier is T {
+  if (!supplier) {
+    throw new NotFoundError('Supplier not found', {
+      details: supplierId ? { supplierId } : undefined,
+    });
+  }
+}
+
+export function assertPurchaseOrderFound<T>(
+  purchaseOrder: T | null | undefined,
+  purchaseOrderId?: string,
+): asserts purchaseOrder is T {
+  if (!purchaseOrder) {
+    throw new NotFoundError('Purchase order not found', {
+      details: purchaseOrderId ? { purchaseOrderId } : undefined,
+    });
+  }
+}
+
 export function mapInventoryRepositoryError(error: unknown): never {
   if (isPrismaNotFoundError(error)) {
     throw new NotFoundError('Inventory resource not found', { cause: error });

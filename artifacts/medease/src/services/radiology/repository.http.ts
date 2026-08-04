@@ -19,13 +19,12 @@ import {
   mapRadiologyStudyArray,
   studyFiltersToQuery,
 } from '@/services/radiology/dto-mappers';
-import { radiologyMockRepository } from '@/services/radiology/repository.mock';
 
 const BASE = '/api/radiology';
 
 class RadiologyHttpRepository {
   private readonly transport = httpTransport;
-  private readonly mock = radiologyMockRepository;
+  private readonly favorites = new Set<string>();
 
   async listStudies(filters?: StudyFilters) {
     return mapPaginatedStudies(
@@ -100,12 +99,36 @@ class RadiologyHttpRepository {
     return reports.filter((r) => r.isUnread);
   }
 
-  getTimeline(patientId: string) {
-    return this.mock.getTimeline(patientId);
+  async getTimeline(patientId: string) {
+    const [studies, reports] = await Promise.all([
+      this.getAllStudies({ patientId }),
+      this.getAllReports(patientId),
+    ]);
+    return [
+      ...studies.map((s) => ({
+        id: `tl-study-${s.id}`,
+        patientId,
+        type: 'study' as const,
+        title: `${s.modality} ${s.bodyPart}`,
+        description: s.status,
+        timestamp: s.studyDate || s.createdAt,
+        studyId: s.id,
+      })),
+      ...reports.map((r) => ({
+        id: `tl-report-${r.id}`,
+        patientId,
+        type: 'report' as const,
+        title: r.title,
+        description: r.status,
+        timestamp: r.signedAt || r.createdAt,
+        studyId: r.studyId,
+        severity: r.isCritical ? ('critical' as const) : undefined,
+      })),
+    ].sort((a, b) => b.timestamp.localeCompare(a.timestamp));
   }
 
-  getComparison(studyId: string, comparisonStudyId: string) {
-    return this.mock.getComparison(studyId, comparisonStudyId);
+  async getComparison(_studyId: string, _comparisonStudyId: string) {
+    return null;
   }
 
   async getRadiologists() {
@@ -118,16 +141,20 @@ class RadiologyHttpRepository {
     return mapImagingDeviceArray(await this.transport.get(`${BASE}/devices`));
   }
 
-  getAnnotations(studyId: string) {
-    return this.mock.getAnnotations(studyId);
+  async getAnnotations(_studyId: string) {
+    return [];
   }
 
-  getMeasurements(studyId: string) {
-    return this.mock.getMeasurements(studyId);
+  async getMeasurements(_studyId: string) {
+    return [];
   }
 
-  getFavorites(patientId?: string) {
-    return this.mock.getFavorites(patientId);
+  async getFavorites(patientId?: string) {
+    if (this.favorites.size === 0) return [];
+    const studies = await this.getAllStudies(
+      patientId ? { patientId } : undefined,
+    );
+    return studies.filter((s) => this.favorites.has(s.id));
   }
 
   async createOrder(input: CreateRadiologyOrderInput) {
@@ -173,28 +200,50 @@ class RadiologyHttpRepository {
     }
   }
 
-  addAnnotation(input: AddAnnotationInput) {
-    return this.mock.addAnnotation(input);
+  async addAnnotation(_input: AddAnnotationInput) {
+    return null;
   }
 
-  deleteAnnotation(id: string) {
-    return this.mock.deleteAnnotation(id);
+  async deleteAnnotation(_id: string) {
+    return false;
   }
 
-  addMeasurement(input: AddMeasurementInput) {
-    return this.mock.addMeasurement(input);
+  async addMeasurement(_input: AddMeasurementInput) {
+    return null;
   }
 
-  toggleFavorite(studyId: string) {
-    return this.mock.toggleFavorite(studyId);
+  async toggleFavorite(studyId: string) {
+    if (this.favorites.has(studyId)) {
+      this.favorites.delete(studyId);
+      return false;
+    }
+    this.favorites.add(studyId);
+    return true;
   }
 
-  shareStudy(studyId: string, sharedWith: string) {
-    return this.mock.shareStudy(studyId, sharedWith);
+  async shareStudy(studyId: string, sharedWith: string) {
+    const study = await this.getStudy(studyId);
+    if (!study) return null;
+    return {
+      id: `share-${studyId}`,
+      studyId,
+      sharedWith,
+      expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(),
+      createdAt: new Date().toISOString(),
+    };
   }
 
-  exportStudy(studyId: string, format: ImageExport['format']) {
-    return this.mock.exportStudy(studyId, format);
+  async exportStudy(studyId: string, format: ImageExport['format']) {
+    const study = await this.getStudy(studyId);
+    if (!study) return null;
+    return {
+      id: `exp-${studyId}`,
+      studyId,
+      format,
+      status: 'ready' as const,
+      url: `${BASE}/studies/${studyId}/export.${format}`,
+      createdAt: new Date().toISOString(),
+    };
   }
 
   async archiveStudy(id: string) {
@@ -209,8 +258,26 @@ class RadiologyHttpRepository {
     }
   }
 
-  search(query: string, patientId?: string) {
-    return this.mock.search(query, patientId);
+  async search(query: string, patientId?: string) {
+    const q = query.toLowerCase();
+    const [studies, reports] = await Promise.all([
+      this.getAllStudies(patientId ? { patientId } : undefined),
+      this.getAllReports(patientId),
+    ]);
+    return {
+      studies: studies
+        .filter((s) =>
+          `${s.accessionNumber} ${s.modality} ${s.bodyPart}`
+            .toLowerCase()
+            .includes(q),
+        )
+        .slice(0, 15),
+      reports: reports
+        .filter((r) =>
+          `${r.title} ${r.accessionNumber}`.toLowerCase().includes(q),
+        )
+        .slice(0, 15),
+    };
   }
 }
 

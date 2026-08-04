@@ -3,8 +3,12 @@ import type {
   InventoryDepartment,
   InventoryItem,
   InventoryStatus,
+  PurchaseOrder,
+  PurchaseOrderLine,
+  PurchaseOrderStatus,
   StockMovement,
   StockMovementType,
+  Supplier,
   Warehouse,
 } from '@medease/inventory-contract';
 import type { Prisma } from '@medease/prisma';
@@ -103,5 +107,68 @@ export function mapMovement(
     performedBy: row.performedBy,
     notes: row.notes ?? undefined,
     createdAt: row.createdAt.toISOString(),
+  };
+}
+
+export function mapSupplier(row: Prisma.SupplierGetPayload<object>): Supplier {
+  return {
+    supplierId: row.id,
+    name: row.name,
+    contactEmail: row.contactEmail,
+    contactPhone: row.contactPhone,
+    address: row.address,
+    rating: row.rating,
+    onTimeDeliveryRate: row.onTimeDeliveryRate,
+    totalOrders: row.totalOrders,
+    categories: row.categories as InventoryCategory[],
+    status:
+      row.status === 'inactive'
+        ? 'inactive'
+        : row.status === 'pending'
+          ? 'pending'
+          : 'active',
+  };
+}
+
+export function mapPurchaseOrderLine(
+  row: Prisma.PurchaseOrderLineGetPayload<object>,
+): PurchaseOrderLine {
+  return {
+    lineId: row.id,
+    inventoryId: row.inventoryId ?? undefined,
+    sku: row.sku,
+    itemName: row.itemName,
+    quantity: row.quantity,
+    unitPrice: fromCents(row.unitPriceCents),
+    receivedQuantity: row.receivedQuantity,
+  };
+}
+
+export function mapPurchaseOrder(
+  row: Prisma.PurchaseOrderGetPayload<{
+    include: { lines: true; supplier: true };
+  }>,
+): PurchaseOrder {
+  return {
+    purchaseOrderId: row.id,
+    poNumber: row.poNumber,
+    supplierId: row.supplierId,
+    supplierName: row.supplier.name,
+    department: row.department as InventoryDepartment,
+    status: row.status as PurchaseOrderStatus,
+    items: row.lines
+      .slice()
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .map(mapPurchaseOrderLine),
+    subtotal: fromCents(row.subtotalCents),
+    tax: fromCents(row.taxCents),
+    total: fromCents(row.totalCents),
+    requestedBy: row.requestedBy,
+    approvedBy: row.approvedBy ?? undefined,
+    orderDate: row.orderDate?.toISOString(),
+    expectedDelivery: row.expectedDelivery?.toISOString(),
+    receivedDate: row.receivedDate?.toISOString(),
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
   };
 }

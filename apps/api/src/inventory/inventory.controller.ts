@@ -30,6 +30,7 @@ import {
   AdjustStockBodyDto,
   ApiErrorResponseDto,
   CreateInventoryBodyDto,
+  CreatePurchaseOrderBodyDto,
   DashboardQueryDto,
   InventoryFiltersDto,
   IssueStockBodyDto,
@@ -44,6 +45,12 @@ const READ = ['inventory.read'] as const;
 const WRITE = ['inventory.write'] as const;
 const RECEIVE = ['inventory.receive', 'inventory.write'] as const;
 const ISSUE = ['inventory.issue', 'inventory.write'] as const;
+const PROCURE = [
+  'inventory.procurement',
+  'inventory.write',
+  'procurement.read',
+  'procurement.write',
+] as const;
 
 const ERRORS = {
   badRequest: {
@@ -171,5 +178,45 @@ export class InventoryController {
     @Body() body: AdjustStockBodyDto,
   ) {
     return this.inventoryService.adjustStock({ inventoryId, ...body });
+  }
+
+  @Get('suppliers')
+  @RequireAnyPermission([...READ, ...PROCURE])
+  @ApiOperation({ summary: 'List suppliers' })
+  getSuppliers() {
+    return this.inventoryService.getSuppliers();
+  }
+
+  @Get('purchase-orders')
+  @RequireAnyPermission([...READ, ...PROCURE])
+  @ApiOperation({ summary: 'List purchase orders (paginated)' })
+  getPurchaseOrders(@Query() filters: InventoryFiltersDto) {
+    return this.inventoryService.getPurchaseOrders(filters);
+  }
+
+  @Post('purchase-orders')
+  @RequireAnyPermission([...WRITE, ...PROCURE])
+  @ApiCreatedResponse({ description: 'Purchase order created' })
+  @ApiBadRequestResponse(ERRORS.badRequest)
+  createPurchaseOrder(@Body() body: CreatePurchaseOrderBodyDto) {
+    return this.inventoryService.createPurchaseOrder(body);
+  }
+
+  @Post('purchase-orders/:purchaseOrderId/approve')
+  @RequireAnyPermission([...WRITE, ...PROCURE])
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({ name: 'purchaseOrderId', format: 'uuid' })
+  @ApiNotFoundResponse(ERRORS.notFound)
+  approvePurchaseOrder(@Param('purchaseOrderId') purchaseOrderId: string) {
+    return this.inventoryService.approvePurchaseOrder(purchaseOrderId);
+  }
+
+  @Post('purchase-orders/:purchaseOrderId/receive')
+  @RequireAnyPermission([...RECEIVE, ...PROCURE])
+  @HttpCode(HttpStatus.OK)
+  @ApiParam({ name: 'purchaseOrderId', format: 'uuid' })
+  @ApiNotFoundResponse(ERRORS.notFound)
+  receivePurchaseOrder(@Param('purchaseOrderId') purchaseOrderId: string) {
+    return this.inventoryService.receivePurchaseOrder(purchaseOrderId);
   }
 }

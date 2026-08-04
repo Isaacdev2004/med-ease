@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsBoolean,
   IsIn,
   IsInt,
@@ -9,6 +10,7 @@ import {
   IsUUID,
   Min,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -338,4 +340,59 @@ export class AdjustStockBodyDto implements Omit<AdjustStockInput, 'inventoryId'>
   @IsOptional()
   @IsString()
   performedBy?: string;
+}
+
+export class PurchaseOrderLineBodyDto {
+  @ApiProperty()
+  @IsString()
+  @MinLength(1)
+  sku!: string;
+
+  @ApiProperty()
+  @IsString()
+  @MinLength(1)
+  itemName!: string;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  quantity!: number;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  unitPrice!: number;
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  @IsOptional()
+  @IsUUID()
+  inventoryId?: string;
+}
+
+export class CreatePurchaseOrderBodyDto {
+  @ApiProperty({ format: 'uuid' })
+  @IsUUID()
+  supplierId!: string;
+
+  @ApiProperty({ enum: DEPARTMENTS })
+  @IsIn(DEPARTMENTS)
+  department!: (typeof DEPARTMENTS)[number];
+
+  @ApiPropertyOptional({ format: 'uuid' })
+  @IsOptional()
+  @IsUUID()
+  facilityId?: string;
+
+  @ApiProperty({ type: [PurchaseOrderLineBodyDto] })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PurchaseOrderLineBodyDto)
+  items!: PurchaseOrderLineBodyDto[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  requestedBy?: string;
 }

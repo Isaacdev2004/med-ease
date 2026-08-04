@@ -61,12 +61,88 @@ model InventoryItem {
 
   warehouse Warehouse      @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
   movements StockMovement[]
+  poLines   PurchaseOrderLine[]
 
   @@unique([tenantId, sku])
   @@index([tenantId, facilityId, status])
   @@index([tenantId, warehouseId, category])
   @@index([tenantId, department, status])
   @@map("inventory_items")
+  @@schema("operations")
+}
+
+model Supplier {
+  id                  String   @id @db.Uuid
+  tenantId            String   @map("tenant_id") @db.Uuid
+  name                String
+  contactEmail        String   @default("") @map("contact_email")
+  contactPhone        String   @default("") @map("contact_phone")
+  address             String   @default("")
+  rating              Float    @default(0)
+  onTimeDeliveryRate  Int      @default(0) @map("on_time_delivery_rate")
+  totalOrders         Int      @default(0) @map("total_orders")
+  categories          InventoryCategory[] @default([])
+  status              String   @default("active")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  purchaseOrders PurchaseOrder[]
+
+  @@index([tenantId, status])
+  @@index([tenantId, name])
+  @@map("suppliers")
+  @@schema("operations")
+}
+
+model PurchaseOrder {
+  id               String              @id @db.Uuid
+  tenantId         String              @map("tenant_id") @db.Uuid
+  facilityId       String?             @map("facility_id") @db.Uuid
+  supplierId       String              @map("supplier_id") @db.Uuid
+  poNumber         String              @map("po_number")
+  department       InventoryDepartment @default(general)
+  status           PurchaseOrderStatus @default(draft)
+  subtotalCents    BigInt              @default(0) @map("subtotal_cents")
+  taxCents         BigInt              @default(0) @map("tax_cents")
+  totalCents       BigInt              @default(0) @map("total_cents")
+  requestedBy      String              @map("requested_by")
+  approvedBy       String?             @map("approved_by")
+  orderDate        DateTime?           @map("order_date")
+  expectedDelivery DateTime?           @map("expected_delivery")
+  receivedDate     DateTime?           @map("received_date")
+  createdBy        String              @map("created_by") @db.Uuid
+  updatedBy        String?             @map("updated_by") @db.Uuid
+  createdAt        DateTime            @default(now()) @map("created_at")
+  updatedAt        DateTime            @updatedAt @map("updated_at")
+
+  supplier Supplier            @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  lines    PurchaseOrderLine[]
+
+  @@unique([tenantId, poNumber])
+  @@index([tenantId, status])
+  @@index([tenantId, supplierId])
+  @@index([tenantId, department, status])
+  @@map("purchase_orders")
+  @@schema("operations")
+}
+
+model PurchaseOrderLine {
+  id               String @id @db.Uuid
+  tenantId         String @map("tenant_id") @db.Uuid
+  purchaseOrderId  String @map("purchase_order_id") @db.Uuid
+  inventoryId      String? @map("inventory_id") @db.Uuid
+  sku              String
+  itemName         String @map("item_name")
+  quantity         Int
+  unitPriceCents   BigInt @map("unit_price_cents")
+  receivedQuantity Int    @default(0) @map("received_quantity")
+  sortOrder        Int    @default(0) @map("sort_order")
+
+  purchaseOrder PurchaseOrder  @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  inventoryItem InventoryItem? @relation(fields: [inventoryId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, purchaseOrderId])
+  @@map("purchase_order_lines")
   @@schema("operations")
 }
 

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import type {
   AdjustStockInput,
   CreateInventoryInput,
+  CreatePurchaseOrderInput,
   InventoryDepartment,
   InventoryFilters,
   IssueStockInput,
@@ -58,5 +59,25 @@ export class InventoryService {
     department?: InventoryDepartment,
   ) {
     return this.repository.getDashboard(facilityId, warehouseId, department);
+  }
+
+  getSuppliers() {
+    return this.repository.getSuppliers();
+  }
+
+  getPurchaseOrders(filters?: InventoryFilters) {
+    return this.repository.getPurchaseOrders(filters);
+  }
+
+  createPurchaseOrder(input: CreatePurchaseOrderInput) {
+    return this.repository.createPurchaseOrder(input);
+  }
+
+  approvePurchaseOrder(purchaseOrderId: string) {
+    return this.repository.approvePurchaseOrder(purchaseOrderId);
+  }
+
+  receivePurchaseOrder(purchaseOrderId: string) {
+    return this.repository.receivePurchaseOrder(purchaseOrderId);
   }
 }

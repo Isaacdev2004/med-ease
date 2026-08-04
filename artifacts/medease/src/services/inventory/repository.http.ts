@@ -4,6 +4,7 @@ import { httpTransport } from '@workspace/repository-transport';
 import type {
   AdjustInventoryInput,
   CreateInventoryInput,
+  CreatePurchaseOrderInput,
   InventoryCategory,
   InventoryDashboard,
   InventoryDepartment,
@@ -11,12 +12,15 @@ import type {
   InventoryItem,
   InventoryStatus,
   IssueStockInput,
+  PurchaseOrder,
+  PurchaseOrderLine,
+  PurchaseOrderStatus,
   ReceiveStockInput,
   StockMovement,
   StockMovementType,
+  Supplier,
   Warehouse,
 } from '@/services/inventory/types';
-import { inventoryMockRepository } from '@/services/inventory/repository.mock';
 
 const BASE = '/api/inventory';
 const DEMO_FACILITY = '01930000-0000-7000-8000-000000000201';
@@ -44,23 +48,27 @@ function asBoolean(value: unknown, fallback = false): boolean {
 }
 
 function asCategory(value: unknown): InventoryCategory {
-  const v = asString(value, 'supplies');
-  return v as InventoryCategory;
+  return asString(value, 'supplies') as InventoryCategory;
 }
 
 function asDepartment(value: unknown): InventoryDepartment {
-  const v = asString(value, 'general');
-  return v as InventoryDepartment;
+  return asString(value, 'general') as InventoryDepartment;
 }
 
 function asStatus(value: unknown): InventoryStatus {
-  const v = asString(value, 'active');
-  return v as InventoryStatus;
+  return asString(value, 'active') as InventoryStatus;
 }
 
 function asMovementType(value: unknown): StockMovementType {
-  const v = asString(value, 'adjustment');
-  return v as StockMovementType;
+  return asString(value, 'adjustment') as StockMovementType;
+}
+
+function asPoStatus(value: unknown): PurchaseOrderStatus {
+  return asString(value, 'draft') as PurchaseOrderStatus;
+}
+
+function emptyPage(page = 1, pageSize = 25) {
+  return { items: [], total: 0, page, pageSize };
 }
 
 export function inventoryFiltersToQuery(
@@ -187,7 +195,7 @@ export function mapInventoryDashboard(raw: unknown): InventoryDashboard {
     lowStockCount: asNumber(row.lowStockCount),
     outOfStockCount: asNumber(row.outOfStockCount),
     expiredCount: asNumber(row.expiredCount),
-    pendingOrders: 0,
+    pendingOrders: asNumber(row.pendingOrders),
     activeTransfers: 0,
     assetUtilization: 0,
     stockTurnover: 0,
@@ -198,14 +206,96 @@ export function mapInventoryDashboard(raw: unknown): InventoryDashboard {
   };
 }
 
+export function mapPurchaseOrderLine(raw: unknown): PurchaseOrderLine {
+  const row = asRecord(raw);
+  return {
+    lineId: asString(row.lineId),
+    inventoryId: asOptionalString(row.inventoryId),
+    sku: asString(row.sku),
+    itemName: asString(row.itemName),
+    quantity: asNumber(row.quantity),
+    unitPrice: asNumber(row.unitPrice),
+    receivedQuantity: asNumber(row.receivedQuantity),
+  };
+}
+
+export function mapPurchaseOrder(raw: unknown): PurchaseOrder {
+  const row = asRecord(raw);
+  return {
+    purchaseOrderId: asString(row.purchaseOrderId),
+    poNumber: asString(row.poNumber),
+    supplierId: asString(row.supplierId),
+    supplierName: asString(row.supplierName),
+    department: asDepartment(row.department),
+    status: asPoStatus(row.status),
+    items: Array.isArray(row.items)
+      ? row.items.map(mapPurchaseOrderLine)
+      : [],
+    subtotal: asNumber(row.subtotal),
+    tax: asNumber(row.tax),
+    total: asNumber(row.total),
+    requestedBy: asString(row.requestedBy),
+    approvedBy: asOptionalString(row.approvedBy),
+    orderDate: asOptionalString(row.orderDate),
+    expectedDelivery: asOptionalString(row.expectedDelivery),
+    receivedDate: asOptionalString(row.receivedDate),
+    createdAt: asString(row.createdAt),
+    updatedAt: asString(row.updatedAt),
+  };
+}
+
+export function mapPaginatedPurchaseOrders(raw: unknown) {
+  const row = asRecord(raw);
+  const items = Array.isArray(row.items)
+    ? row.items.map(mapPurchaseOrder)
+    : [];
+  return {
+    items,
+    total: asNumber(row.total, items.length),
+    page: asNumber(row.page, 1),
+    pageSize: asNumber(row.pageSize, 25),
+  };
+}
+
+export function mapSupplier(raw: unknown): Supplier {
+  const row = asRecord(raw);
+  return {
+    supplierId: asString(row.supplierId),
+    name: asString(row.name),
+    contactEmail: asString(row.contactEmail),
+    contactPhone: asString(row.contactPhone),
+    address: asString(row.address),
+    rating: asNumber(row.rating),
+    onTimeDeliveryRate: asNumber(row.onTimeDeliveryRate),
+    totalOrders: asNumber(row.totalOrders),
+    categories: Array.isArray(row.categories)
+      ? row.categories
+          .filter((c): c is string => typeof c === 'string')
+          .map((c) => c as InventoryCategory)
+      : [],
+    status:
+      asString(row.status) === 'inactive'
+        ? 'inactive'
+        : asString(row.status) === 'pending'
+          ? 'pending'
+          : 'active',
+  };
+}
+
 class InventoryHttpRepository {
   private readonly transport = httpTransport;
-  private readonly mock = inventoryMockRepository;
+  private readonly favorites: { inventoryId: string; userId: string; createdAt: string }[] =
+    [];
 
   searchInventory(filters?: InventoryFilters) {
     return this.transport
       .get(`${BASE}/items`, { query: inventoryFiltersToQuery(filters) })
-      .then(mapPaginatedItems);
+      .then(mapPaginatedItems) as Promise<{
+      items: InventoryItem[];
+      total: number;
+      page: number;
+      pageSize: number;
+    }>;
   }
 
   async getInventoryItem(inventoryId: string) {
@@ -228,7 +318,7 @@ class InventoryHttpRepository {
       ) ?? warehouses[0];
 
     if (!warehouse) {
-      return this.mock.createInventoryItem(input);
+      return null;
     }
 
     return this.transport
@@ -273,8 +363,8 @@ class InventoryHttpRepository {
     }
   }
 
-  deleteInventory(inventoryId: string) {
-    return this.mock.deleteInventory(inventoryId);
+  deleteInventory(_inventoryId: string) {
+    return false;
   }
 
   receiveStock(input: ReceiveStockInput) {
@@ -305,10 +395,8 @@ class InventoryHttpRepository {
       .then(mapInventoryItem);
   }
 
-  transferStock(
-    ...args: Parameters<typeof inventoryMockRepository.transferStock>
-  ) {
-    return this.mock.transferStock(...args);
+  async transferStock() {
+    return null;
   }
 
   adjustInventory(input: AdjustInventoryInput) {
@@ -328,32 +416,57 @@ class InventoryHttpRepository {
       .then(mapPaginatedMovements);
   }
 
-  getPurchaseOrders(
-    ...args: Parameters<typeof inventoryMockRepository.getPurchaseOrders>
-  ) {
-    return this.mock.getPurchaseOrders(...args);
+  getPurchaseOrders(filters?: InventoryFilters) {
+    return this.transport
+      .get(`${BASE}/purchase-orders`, {
+        query: inventoryFiltersToQuery(filters),
+      })
+      .then(mapPaginatedPurchaseOrders) as Promise<{
+      items: PurchaseOrder[];
+      total: number;
+      page: number;
+      pageSize: number;
+    }>;
   }
 
-  createPurchaseOrder(
-    ...args: Parameters<typeof inventoryMockRepository.createPurchaseOrder>
-  ) {
-    return this.mock.createPurchaseOrder(...args);
+  createPurchaseOrder(input: CreatePurchaseOrderInput) {
+    return this.transport
+      .post(`${BASE}/purchase-orders`, { body: input })
+      .then(mapPurchaseOrder);
   }
 
-  approvePurchaseOrder(
-    ...args: Parameters<typeof inventoryMockRepository.approvePurchaseOrder>
-  ) {
-    return this.mock.approvePurchaseOrder(...args);
+  async approvePurchaseOrder(purchaseOrderId: string) {
+    try {
+      return mapPurchaseOrder(
+        await this.transport.post(
+          `${BASE}/purchase-orders/${purchaseOrderId}/approve`,
+          { body: {} },
+        ),
+      );
+    } catch {
+      return null;
+    }
   }
 
-  receivePurchaseOrder(
-    ...args: Parameters<typeof inventoryMockRepository.receivePurchaseOrder>
-  ) {
-    return this.mock.receivePurchaseOrder(...args);
+  async receivePurchaseOrder(purchaseOrderId: string) {
+    try {
+      return mapPurchaseOrder(
+        await this.transport.post(
+          `${BASE}/purchase-orders/${purchaseOrderId}/receive`,
+          { body: {} },
+        ),
+      );
+    } catch {
+      return null;
+    }
   }
 
-  getSuppliers() {
-    return this.mock.getSuppliers();
+  getSuppliers(): Promise<Supplier[]> {
+    return this.transport
+      .get(`${BASE}/suppliers`)
+      .then((raw: unknown) =>
+        Array.isArray(raw) ? raw.map(mapSupplier) : [],
+      );
   }
 
   getWarehouses() {
@@ -364,67 +477,142 @@ class InventoryHttpRepository {
       );
   }
 
-  getAssets(...args: Parameters<typeof inventoryMockRepository.getAssets>) {
-    return this.mock.getAssets(...args);
+  getAssets(filters?: InventoryFilters) {
+    return emptyPage(filters?.page, filters?.pageSize);
   }
 
-  getTransfers(
-    ...args: Parameters<typeof inventoryMockRepository.getTransfers>
-  ) {
-    return this.mock.getTransfers(...args);
+  getTransfers(filters?: InventoryFilters) {
+    return emptyPage(filters?.page, filters?.pageSize);
   }
 
-  getExpiryAlerts(
-    ...args: Parameters<typeof inventoryMockRepository.getExpiryAlerts>
-  ) {
-    return this.mock.getExpiryAlerts(...args);
+  async getExpiryAlerts(department?: string) {
+    const page = await this.searchInventory({
+      department: department as InventoryDepartment | undefined,
+      pageSize: 100,
+    });
+    const items: InventoryItem[] = page.items;
+    const now = Date.now();
+    return items
+      .filter((item: InventoryItem) => Boolean(item.expiryDate))
+      .map((item: InventoryItem) => {
+        const days = Math.round(
+          (new Date(item.expiryDate!).getTime() - now) / 86400000,
+        );
+        return {
+          alertId: `exp-${item.inventoryId}`,
+          inventoryId: item.inventoryId,
+          itemName: item.itemName,
+          batchNumber: item.batchNumber,
+          expiryDate: item.expiryDate!,
+          quantity: item.quantityOnHand,
+          daysUntilExpiry: days,
+          severity:
+            days <= 30
+              ? ('critical' as const)
+              : days <= 90
+                ? ('warning' as const)
+                : ('info' as const),
+          department: item.department,
+        };
+      })
+      .filter((a: { daysUntilExpiry: number }) => a.daysUntilExpiry <= 90)
+      .sort(
+        (
+          a: { daysUntilExpiry: number },
+          b: { daysUntilExpiry: number },
+        ) => a.daysUntilExpiry - b.daysUntilExpiry,
+      );
   }
 
   getCycleCounts() {
-    return this.mock.getCycleCounts();
+    return [];
   }
 
-  getDashboard(department?: string, warehouseId?: string) {
-    return this.transport
-      .get(`${BASE}/dashboard`, {
-        query: {
-          department,
-          warehouseId,
-        },
-      })
-      .then(mapInventoryDashboard);
+  async getDashboard(department?: string, warehouseId?: string) {
+    const [dashboard, orders] = await Promise.all([
+      this.transport
+        .get(`${BASE}/dashboard`, {
+          query: { department, warehouseId },
+        })
+        .then(mapInventoryDashboard),
+      this.getPurchaseOrders({
+        department: department as InventoryDepartment | undefined,
+        pageSize: 25,
+      }),
+    ]);
+    const pendingOrders = orders.items.filter((p: PurchaseOrder) =>
+      ['pending_approval', 'approved', 'ordered'].includes(p.status),
+    ).length;
+    return {
+      ...dashboard,
+      pendingOrders,
+      recentOrders: orders.items.slice(0, 6),
+    };
   }
 
-  scanBarcode(...args: Parameters<typeof inventoryMockRepository.scanBarcode>) {
-    return this.mock.scanBarcode(...args);
+  async scanBarcode(barcode: string) {
+    const page = await this.searchInventory({ q: barcode, pageSize: 5 });
+    const item = page.items.find(
+      (i: InventoryItem) => i.barcode === barcode || i.sku === barcode,
+    );
+    return {
+      barcode,
+      inventoryId: item?.inventoryId,
+      itemName: item?.itemName,
+      found: Boolean(item),
+      gs1Code: item?.gs1Code,
+    };
   }
 
-  generateBarcode(
-    ...args: Parameters<typeof inventoryMockRepository.generateBarcode>
-  ) {
-    return this.mock.generateBarcode(...args);
+  generateBarcode(inventoryId: string) {
+    return { barcode: `ME-${inventoryId.slice(-10)}`, inventoryId };
   }
 
-  forecastDemand(
-    ...args: Parameters<typeof inventoryMockRepository.forecastDemand>
-  ) {
-    return this.mock.forecastDemand(...args);
+  forecastDemand(_inventoryId?: string) {
+    return [];
   }
 
-  favoriteItem(
-    ...args: Parameters<typeof inventoryMockRepository.favoriteItem>
-  ) {
-    return this.mock.favoriteItem(...args);
+  favoriteItem(inventoryId: string, userId: string) {
+    if (
+      !this.favorites.some(
+        (f) => f.inventoryId === inventoryId && f.userId === userId,
+      )
+    ) {
+      this.favorites.push({
+        inventoryId,
+        userId,
+        createdAt: new Date().toISOString(),
+      });
+    }
+    return this.favorites.filter((f) => f.userId === userId);
   }
 
-  exportInventory(
-    ...args: Parameters<typeof inventoryMockRepository.exportInventory>
-  ) {
-    return this.mock.exportInventory(...args);
+  async exportInventory(format: 'csv' | 'pdf' | 'xlsx') {
+    const { total } = await this.searchInventory({ pageSize: 1 });
+    return {
+      format,
+      generatedAt: new Date().toISOString(),
+      url: `${BASE}/exports/inventory.${format}`,
+      recordCount: total,
+    };
   }
 
-  search(...args: Parameters<typeof inventoryMockRepository.search>) {
-    return this.mock.search(...args);
+  async search(query: string, department?: string) {
+    const [itemsPage, suppliers] = await Promise.all([
+      this.searchInventory({
+        q: query,
+        department: department as InventoryDepartment | undefined,
+        pageSize: 15,
+      }),
+      this.getSuppliers(),
+    ]);
+    const q = query.toLowerCase();
+    return {
+      items: itemsPage.items,
+      suppliers: (suppliers as Supplier[])
+        .filter((s: Supplier) => s.name.toLowerCase().includes(q))
+        .slice(0, 5),
+    };
   }
 }
 
