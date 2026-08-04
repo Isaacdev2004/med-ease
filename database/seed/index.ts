@@ -9,6 +9,7 @@ import { telemedicineSeed } from './telemedicine';
 import { billingSeed } from './billing';
 import { inventorySeed } from './inventory';
 import { procurementSeed } from './procurement';
+import { financeSeed } from './finance';
 import { iamSeed } from './iam';
 import { identitySeed } from './identity';
 import { operationsSeed } from './operations';
@@ -32,6 +33,7 @@ async function main() {
       billingSeed,
       inventorySeed,
       procurementSeed,
+      financeSeed,
       operationsSeed,
     ],
     { dryRun },

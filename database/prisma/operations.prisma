@@ -117,6 +117,7 @@ model PurchaseOrder {
 
   supplier Supplier            @relation(fields: [supplierId], references: [id], onDelete: Restrict)
   lines    PurchaseOrderLine[]
+  receipts GoodsReceipt[]
 
   @@unique([tenantId, poNumber])
   @@index([tenantId, status])
@@ -166,5 +167,110 @@ model StockMovement {
   @@index([tenantId, inventoryId, createdAt(sort: Desc)])
   @@index([tenantId, type, createdAt(sort: Desc)])
   @@map("stock_movements")
+  @@schema("operations")
+}
+
+model Rfq {
+  id                 String    @id @db.Uuid
+  tenantId           String    @map("tenant_id") @db.Uuid
+  rfqNumber          String    @map("rfq_number")
+  title              String
+  department         String    @default("general")
+  status             RfqStatus @default(draft)
+  requisitionId      String?   @map("requisition_id") @db.Uuid
+  deadline           DateTime
+  awardedSupplierId  String?   @map("awarded_supplier_id") @db.Uuid
+  invitedSupplierIds String[]  @default([]) @map("invited_supplier_ids")
+  createdBy          String    @map("created_by") @db.Uuid
+  createdAt          DateTime  @default(now()) @map("created_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
+
+  lines     RfqLine[]
+  responses RfqResponse[]
+
+  @@unique([tenantId, rfqNumber])
+  @@index([tenantId, status])
+  @@index([tenantId, department, status])
+  @@map("rfqs")
+  @@schema("operations")
+}
+
+model RfqLine {
+  id             String  @id @db.Uuid
+  tenantId       String  @map("tenant_id") @db.Uuid
+  rfqId          String  @map("rfq_id") @db.Uuid
+  description    String
+  quantity       Int
+  unit           String  @default("ea")
+  specifications String?
+  sortOrder      Int     @default(0) @map("sort_order")
+
+  rfq Rfq @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, rfqId])
+  @@map("rfq_lines")
+  @@schema("operations")
+}
+
+model RfqResponse {
+  id            String            @id @db.Uuid
+  tenantId      String            @map("tenant_id") @db.Uuid
+  rfqId         String            @map("rfq_id") @db.Uuid
+  supplierId    String            @map("supplier_id") @db.Uuid
+  supplierName  String            @map("supplier_name")
+  totalQuoteCents BigInt          @map("total_quote_cents")
+  currencyCode  String            @default("EUR") @map("currency_code") @db.Char(3)
+  validUntil    DateTime          @map("valid_until")
+  rank          Int?
+  status        RfqResponseStatus @default(submitted)
+  lineQuotes    Json              @map("line_quotes")
+  submittedAt   DateTime          @default(now()) @map("submitted_at")
+
+  rfq Rfq @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, rfqId])
+  @@index([tenantId, supplierId])
+  @@map("rfq_responses")
+  @@schema("operations")
+}
+
+model GoodsReceipt {
+  id              String             @id @db.Uuid
+  tenantId        String             @map("tenant_id") @db.Uuid
+  receiptNumber   String             @map("receipt_number")
+  purchaseOrderId String             @map("purchase_order_id") @db.Uuid
+  poNumber        String             @map("po_number")
+  supplierId      String             @map("supplier_id") @db.Uuid
+  warehouseId     String             @map("warehouse_id") @db.Uuid
+  status          GoodsReceiptStatus @default(pending)
+  receivedBy      String             @map("received_by")
+  receivedAt      DateTime           @map("received_at")
+  notes           String?
+  createdBy       String             @map("created_by") @db.Uuid
+  createdAt       DateTime           @default(now()) @map("created_at")
+
+  purchaseOrder PurchaseOrder      @relation(fields: [purchaseOrderId], references: [id], onDelete: Restrict)
+  lines         GoodsReceiptLine[]
+
+  @@unique([tenantId, receiptNumber])
+  @@index([tenantId, purchaseOrderId])
+  @@index([tenantId, status])
+  @@map("goods_receipts")
+  @@schema("operations")
+}
+
+model GoodsReceiptLine {
+  id          String @id @db.Uuid
+  tenantId    String @map("tenant_id") @db.Uuid
+  receiptId   String @map("receipt_id") @db.Uuid
+  poLineId    String? @map("po_line_id") @db.Uuid
+  description String
+  orderedQty  Int    @map("ordered_qty")
+  receivedQty Int    @map("received_qty")
+
+  receipt GoodsReceipt @relation(fields: [receiptId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, receiptId])
+  @@map("goods_receipt_lines")
   @@schema("operations")
 }

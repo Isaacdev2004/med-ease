@@ -218,3 +218,93 @@ model InsuranceClaim {
   @@map("insurance_claims")
   @@schema("financial")
 }
+
+// ─── General Ledger (Epic 5) ─────────────────────────────────────────────────
+
+model ChartOfAccount {
+  id           String        @id @db.Uuid
+  tenantId     String        @map("tenant_id") @db.Uuid
+  code         String
+  name         String
+  type         GlAccountType
+  parentId     String?       @map("parent_id") @db.Uuid
+  facilityId   String?       @map("facility_id") @db.Uuid
+  balanceCents BigInt        @default(0) @map("balance_cents")
+  isActive     Boolean       @default(true) @map("is_active")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  lines JournalLine[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, type, isActive])
+  @@map("chart_of_accounts")
+  @@schema("financial")
+}
+
+model FiscalPeriod {
+  id         String             @id @db.Uuid
+  tenantId   String             @map("tenant_id") @db.Uuid
+  name       String
+  startDate  DateTime           @map("start_date") @db.Date
+  endDate    DateTime           @map("end_date") @db.Date
+  status     FiscalPeriodStatus @default(open)
+  fiscalYear Int                @map("fiscal_year")
+  createdAt  DateTime           @default(now()) @map("created_at")
+  updatedAt  DateTime           @updatedAt @map("updated_at")
+
+  journals JournalEntry[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId, fiscalYear, status])
+  @@map("fiscal_periods")
+  @@schema("financial")
+}
+
+model JournalEntry {
+  id               String             @id @db.Uuid
+  tenantId         String             @map("tenant_id") @db.Uuid
+  entryNumber      String             @map("entry_number")
+  description      String
+  entryDate        DateTime           @map("entry_date") @db.Date
+  fiscalPeriodId   String             @map("fiscal_period_id") @db.Uuid
+  status           JournalEntryStatus @default(draft)
+  totalDebitCents  BigInt             @default(0) @map("total_debit_cents")
+  totalCreditCents BigInt             @default(0) @map("total_credit_cents")
+  facilityId       String?            @map("facility_id") @db.Uuid
+  sourceModule     String?            @map("source_module")
+  sourceRef        String?            @map("source_ref")
+  postedAt         DateTime?          @map("posted_at")
+  createdBy        String             @map("created_by") @db.Uuid
+  updatedBy        String?            @map("updated_by") @db.Uuid
+  createdAt        DateTime           @default(now()) @map("created_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+
+  fiscalPeriod FiscalPeriod  @relation(fields: [fiscalPeriodId], references: [id], onDelete: Restrict)
+  lines        JournalLine[]
+
+  @@unique([tenantId, entryNumber])
+  @@index([tenantId, status, entryDate(sort: Desc)])
+  @@index([tenantId, fiscalPeriodId])
+  @@map("journal_entries")
+  @@schema("financial")
+}
+
+model JournalLine {
+  id          String  @id @db.Uuid
+  tenantId    String  @map("tenant_id") @db.Uuid
+  journalId   String  @map("journal_id") @db.Uuid
+  accountId   String  @map("account_id") @db.Uuid
+  debitCents  BigInt  @default(0) @map("debit_cents")
+  creditCents BigInt  @default(0) @map("credit_cents")
+  description String?
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  journal JournalEntry  @relation(fields: [journalId], references: [id], onDelete: Cascade)
+  account ChartOfAccount @relation(fields: [accountId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, journalId])
+  @@index([tenantId, accountId])
+  @@map("journal_lines")
+  @@schema("financial")
+}

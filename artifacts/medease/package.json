@@ -66,6 +66,8 @@
     "@medease/telemedicine-contract": "workspace:*",
     "@medease/billing-contract": "workspace:*",
     "@medease/inventory-contract": "workspace:*",
+    "@medease/finance-contract": "workspace:*",
+    "@medease/procurement-contract": "workspace:*",
     "@medease/patients-contract": "workspace:*",
     "@medease/repository-contract-test": "workspace:*",
     "class-variance-authority": "catalog:",

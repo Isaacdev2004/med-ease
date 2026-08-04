@@ -163,6 +163,125 @@ export const procurementSeed: SeedModule = {
             updatedBy: DEMO_ADMIN_ID,
           },
         });
+
+        const RFQ_ID = '01930000-0000-7000-8000-000000001531';
+        const RFQ_LINE_1 = '01930000-0000-7000-8000-000000001533';
+        const RFQ_LINE_2 = '01930000-0000-7000-8000-000000001534';
+        const RFQ_RESP_1 = '01930000-0000-7000-8000-000000001535';
+        const RFQ_RESP_2 = '01930000-0000-7000-8000-000000001536';
+        const GR_ID = '01930000-0000-7000-8000-000000001541';
+        const GR_LINE_1 = '01930000-0000-7000-8000-000000001543';
+        const WAREHOUSE_PARIS = '01930000-0000-7000-8000-000000001401';
+
+        await tx.rfq.upsert({
+          where: { id: RFQ_ID },
+          create: {
+            id: RFQ_ID,
+            tenantId: DEMO_TENANT_ID,
+            rfqNumber: 'RFQ-2026-PAR-001',
+            title: 'Q3 Pharmacy consumables',
+            department: 'pharmacy',
+            status: 'open',
+            deadline: new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000),
+            invitedSupplierIds: [SUPPLIER_MED, SUPPLIER_LAB],
+            createdBy: DEMO_ADMIN_ID,
+            lines: {
+              create: [
+                {
+                  id: RFQ_LINE_1,
+                  tenantId: DEMO_TENANT_ID,
+                  description: 'Amoxicillin 500mg (box of 20)',
+                  quantity: 100,
+                  unit: 'box',
+                  specifications: 'EU GMP',
+                  sortOrder: 0,
+                },
+                {
+                  id: RFQ_LINE_2,
+                  tenantId: DEMO_TENANT_ID,
+                  description: 'Nitrile Gloves (M)',
+                  quantity: 200,
+                  unit: 'box',
+                  sortOrder: 1,
+                },
+              ],
+            },
+            responses: {
+              create: [
+                {
+                  id: RFQ_RESP_1,
+                  tenantId: DEMO_TENANT_ID,
+                  supplierId: SUPPLIER_MED,
+                  supplierName: 'MedSupply EU',
+                  totalQuoteCents: 175000n,
+                  currencyCode: 'EUR',
+                  validUntil: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000),
+                  rank: 1,
+                  status: 'submitted',
+                  lineQuotes: [
+                    { lineId: RFQ_LINE_1, unitPrice: 8.5, leadTimeDays: 5 },
+                    { lineId: RFQ_LINE_2, unitPrice: 4.5, leadTimeDays: 3 },
+                  ],
+                  submittedAt: now,
+                },
+                {
+                  id: RFQ_RESP_2,
+                  tenantId: DEMO_TENANT_ID,
+                  supplierId: SUPPLIER_LAB,
+                  supplierName: 'LabTech FR',
+                  totalQuoteCents: 189000n,
+                  currencyCode: 'EUR',
+                  validUntil: new Date(now.getTime() + 12 * 24 * 60 * 60 * 1000),
+                  rank: 2,
+                  status: 'submitted',
+                  lineQuotes: [
+                    { lineId: RFQ_LINE_1, unitPrice: 9.1, leadTimeDays: 7 },
+                    { lineId: RFQ_LINE_2, unitPrice: 4.9, leadTimeDays: 4 },
+                  ],
+                  submittedAt: now,
+                },
+              ],
+            },
+          },
+          update: {
+            status: 'open',
+            title: 'Q3 Pharmacy consumables',
+          },
+        });
+
+        await tx.goodsReceipt.upsert({
+          where: { id: GR_ID },
+          create: {
+            id: GR_ID,
+            tenantId: DEMO_TENANT_ID,
+            receiptNumber: 'GR-2026-PAR-001',
+            purchaseOrderId: PO_RECEIVED,
+            poNumber: 'PO-2026-PAR-002',
+            supplierId: SUPPLIER_LAB,
+            warehouseId: WAREHOUSE_PARIS,
+            status: 'complete',
+            receivedBy: 'Marie Dubois',
+            receivedAt: new Date(now.getTime() - 6 * 24 * 60 * 60 * 1000),
+            notes: 'Full receipt of Troponin reagent',
+            createdBy: DEMO_ADMIN_ID,
+            lines: {
+              create: [
+                {
+                  id: GR_LINE_1,
+                  tenantId: DEMO_TENANT_ID,
+                  poLineId: LINE_RECV_1,
+                  description: 'Troponin Assay Reagent',
+                  orderedQty: 4,
+                  receivedQty: 4,
+                },
+              ],
+            },
+          },
+          update: {
+            status: 'complete',
+            notes: 'Full receipt of Troponin reagent',
+          },
+        });
       });
     } finally {
       await prisma.$disconnect();

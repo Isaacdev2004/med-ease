@@ -333,6 +333,36 @@ enum InvoiceLineCategory {
   @@schema("financial")
 }
 
+enum GlAccountType {
+  asset
+  liability
+  equity
+  revenue
+  expense
+
+  @@map("gl_account_type")
+  @@schema("financial")
+}
+
+enum JournalEntryStatus {
+  draft
+  pending_approval
+  posted
+  reversed
+
+  @@map("journal_entry_status")
+  @@schema("financial")
+}
+
+enum FiscalPeriodStatus {
+  open
+  closed
+  locked
+
+  @@map("fiscal_period_status")
+  @@schema("financial")
+}
+
 enum InventoryCategory {
   medication
   reagent
@@ -397,6 +427,37 @@ enum PurchaseOrderStatus {
   cancelled
 
   @@map("purchase_order_status")
+  @@schema("operations")
+}
+
+enum RfqStatus {
+  draft
+  open
+  closed
+  awarded
+  cancelled
+
+  @@map("rfq_status")
+  @@schema("operations")
+}
+
+enum RfqResponseStatus {
+  submitted
+  shortlisted
+  awarded
+  declined
+
+  @@map("rfq_response_status")
+  @@schema("operations")
+}
+
+enum GoodsReceiptStatus {
+  pending
+  partial
+  complete
+  rejected
+
+  @@map("goods_receipt_status")
   @@schema("operations")
 }
 

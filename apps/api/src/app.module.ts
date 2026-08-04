@@ -30,6 +30,8 @@ import { MonitoringModule } from './monitoring/monitoring.module';
 import { TelemedicineModule } from './telemedicine/telemedicine.module';
 import { BillingModule } from './billing/billing.module';
 import { InventoryModule } from './inventory/inventory.module';
+import { FinanceModule } from './finance/finance.module';
+import { ProcurementModule } from './procurement/procurement.module';
 import { AuthorizationModule } from './authorization/authorization.module';
 import { MedeaseConfigModule } from './config/config.module';
 import { TenantModule } from './tenant/tenant.module';
@@ -101,6 +103,8 @@ import { PrismaModule } from '@medease/prisma';
     TelemedicineModule,
     BillingModule,
     InventoryModule,
+    FinanceModule,
+    ProcurementModule,
     ObservabilityModule,
     MedeaseLoggerModule,
     PrismaModule,

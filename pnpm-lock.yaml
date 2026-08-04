@@ -135,6 +135,9 @@ importers:
       '@medease/events':
         specifier: workspace:*
         version: link:../../packages/events
+      '@medease/finance-contract':
+        specifier: workspace:*
+        version: link:../../packages/finance-contract
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
@@ -165,6 +168,9 @@ importers:
       '@medease/prisma':
         specifier: workspace:*
         version: link:../../packages/prisma
+      '@medease/procurement-contract':
+        specifier: workspace:*
+        version: link:../../packages/procurement-contract
       '@medease/queue':
         specifier: workspace:*
         version: link:../../packages/queue
@@ -417,6 +423,9 @@ importers:
       '@medease/directory-contract':
         specifier: workspace:*
         version: link:../../packages/directory-contract
+      '@medease/finance-contract':
+        specifier: workspace:*
+        version: link:../../packages/finance-contract
       '@medease/iam-contract':
         specifier: workspace:*
         version: link:../../packages/iam-contract
@@ -438,6 +447,9 @@ importers:
       '@medease/patients-contract':
         specifier: workspace:*
         version: link:../../packages/patients-contract
+      '@medease/procurement-contract':
+        specifier: workspace:*
+        version: link:../../packages/procurement-contract
       '@medease/radiology-contract':
         specifier: workspace:*
         version: link:../../packages/radiology-contract
@@ -1004,6 +1016,12 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
 
+  packages/finance-contract:
+    devDependencies:
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
   packages/iam-contract:
     devDependencies:
       typescript:
@@ -1126,6 +1144,12 @@ importers:
       tsx:
         specifier: 'catalog:'
         version: 4.23.0
+      typescript:
+        specifier: ~5.9.3
+        version: 5.9.3
+
+  packages/procurement-contract:
+    devDependencies:
       typescript:
         specifier: ~5.9.3
         version: 5.9.3
