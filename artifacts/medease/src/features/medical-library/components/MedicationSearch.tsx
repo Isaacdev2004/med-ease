@@ -97,9 +97,9 @@ export function MedicationSearch({
       <SearchBar
         defaultValue={defaultValue}
         onSearch={handleSearch}
-        placeholder="Search medications by name, brand, ingredient, ATC…"
+        placeholder="Rechercher par nom, marque, DCI / générique…"
         loading={loading}
-        aria-label="Search medical library"
+        aria-label="Rechercher dans la bibliothèque médicale"
       />
       {focused ? (
         <div

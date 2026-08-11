@@ -51,10 +51,12 @@ export function useDirectoryFilters(defaultType?: ProviderType | 'all') {
       department: searchParams.get('department') ?? undefined,
       city: searchParams.get('city') ?? undefined,
       postalCode: searchParams.get('postal') ?? undefined,
-      teleconsultation: searchParams.get('tele') === '1',
-      emergency: searchParams.get('emergency') === '1',
-      openNow: searchParams.get('open') === '1',
-      favoritesOnly: searchParams.get('favorites') === '1',
+      teleconsultation:
+        searchParams.get('tele') === '1' ? true : undefined,
+      emergency: searchParams.get('emergency') === '1' ? true : undefined,
+      openNow: searchParams.get('open') === '1' ? true : undefined,
+      favoritesOnly:
+        searchParams.get('favorites') === '1' ? true : undefined,
       sort,
       page: url.page,
       pageSize: url.pageSize,

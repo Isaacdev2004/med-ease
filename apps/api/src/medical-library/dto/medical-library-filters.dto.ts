@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsIn,
@@ -12,6 +12,8 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 
 import type { MedicationFilters } from '@medease/medical-library-contract';
 import { MEDICATION_CATEGORIES } from '@medease/medical-library-contract';
+
+import { toOptionalBoolean } from '../../common/transforms/optional-boolean';
 
 const CATEGORIES = [...MEDICATION_CATEGORIES, 'all'] as const;
 
@@ -65,13 +67,13 @@ export class MedicationLibraryFiltersDto implements MedicationFilters {
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   prescriptionRequired?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   overTheCounter?: boolean;
 
   @ApiPropertyOptional({ enum: ROUTES })
@@ -92,31 +94,31 @@ export class MedicationLibraryFiltersDto implements MedicationFilters {
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   pediatric?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   geriatric?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   controlledSubstance?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   available?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   favoritesOnly?: boolean;
 
   @ApiPropertyOptional({ enum: SORTS })

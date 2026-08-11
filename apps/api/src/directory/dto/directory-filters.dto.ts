@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsIn,
@@ -12,6 +12,8 @@ import {
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 import type { DirectoryFilters } from '@medease/directory-contract';
+
+import { toOptionalBoolean } from '../../common/transforms/optional-boolean';
 
 const PROVIDER_TYPES = [
   'professional',
@@ -72,25 +74,25 @@ export class DirectoryFiltersDto implements DirectoryFilters {
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   teleconsultation?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   emergency?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   openNow?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   favoritesOnly?: boolean;
 
   @ApiPropertyOptional({ enum: DIRECTORY_SORTS })

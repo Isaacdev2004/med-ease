@@ -1,5 +1,5 @@
 import { Loader2, Search, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { SEARCH_DEBOUNCE_MS } from '@/services/api/cache-config';
 import { useDebouncedValue } from '@/shared/hooks/use-debounced-value';
@@ -29,10 +29,18 @@ export function SearchBar({
 }: SearchBarProps) {
   const [input, setInput] = useState(defaultValue);
   const debounced = useDebouncedValue(input, debounceMs);
+  const onSearchRef = useRef(onSearch);
+  const lastEmitted = useRef<string | null>(null);
 
   useEffect(() => {
-    onSearch(debounced);
-  }, [debounced, onSearch]);
+    onSearchRef.current = onSearch;
+  }, [onSearch]);
+
+  useEffect(() => {
+    if (lastEmitted.current === debounced) return;
+    lastEmitted.current = debounced;
+    onSearchRef.current(debounced);
+  }, [debounced]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {

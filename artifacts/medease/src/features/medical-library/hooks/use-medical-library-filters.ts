@@ -68,10 +68,12 @@ export function useMedicalLibraryFilters(
           : searchParams.get('rx') === '0'
             ? false
             : undefined,
-      overTheCounter: searchParams.get('otc') === '1',
-      pediatric: searchParams.get('pediatric') === '1',
-      geriatric: searchParams.get('geriatric') === '1',
-      favoritesOnly: searchParams.get('favorites') === '1',
+      overTheCounter:
+        searchParams.get('otc') === '1' ? true : undefined,
+      pediatric: searchParams.get('pediatric') === '1' ? true : undefined,
+      geriatric: searchParams.get('geriatric') === '1' ? true : undefined,
+      favoritesOnly:
+        searchParams.get('favorites') === '1' ? true : undefined,
       sort,
       page: url.page,
       pageSize: url.pageSize,

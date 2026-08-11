@@ -74,8 +74,8 @@ export default function MedicalLibraryPage() {
 
   return (
     <DataPageLayout
-      title="Medical Library"
-      subtitle="Centralized medication reference — BDPM-ready knowledge base for all Med-ease portals."
+      title="Bibliothèque médicale"
+      subtitle="Référentiel médicaments — recherche par nom, marque ou DCI."
       lastUpdated={
         query.dataUpdatedAt
           ? new Date(query.dataUpdatedAt).toLocaleString()
