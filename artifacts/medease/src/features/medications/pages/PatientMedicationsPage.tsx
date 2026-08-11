@@ -10,7 +10,7 @@ export default function PatientMedicationsPage() {
     <MedicationsShell
       basePath={basePath}
       variant="patient"
-      title="My Medications"
+      title="Pilulier"
     />
   );
 }

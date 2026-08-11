@@ -114,9 +114,19 @@ export const adminRouteGroup: PortalRouteGroup = {
       lazy: () => import('@/features/notifications/pages/NotificationsPage'),
       nav: { icon: Bell, order: 9 },
     },
+    {
+      path: '/conciergerie-suivi',
+      title: 'Conciergerie — suivi',
+      breadcrumb: 'Conciergerie',
+      analyticsName: 'admin_concierge_followup',
+      lazy: () =>
+        import('@/features/portal-pages/pages/ConciergeFollowUpPage'),
+      nav: { icon: HeartHandshake, label: 'Conciergerie', order: 10 },
+      permission: 'platform.read',
+    },
     ...createDirectoryRoutes({
       analyticsPrefix: 'admin',
-      nav: { icon: Stethoscope, label: 'Directory', order: 11 },
+      nav: { icon: Stethoscope, label: 'Répertoire', order: 11 },
     }),
     ...createClinicianPatientRecordRoutes('admin'),
     ...createAdminSchedulingRoutes('admin'),

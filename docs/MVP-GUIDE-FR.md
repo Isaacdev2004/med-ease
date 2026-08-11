@@ -23,14 +23,14 @@ Après connexion, utilisez le menu latéral pour accéder aux modules ci-dessous
 
 ### A. Répertoire (Directory)
 
-**Objectif :** établissements indexés + recherche (ville / type / distance).
+**Objectif :** établissements indexés + recherche géolocalisée (ville / type / itinéraire).
 
 1. Connectez-vous en **patient** : `patient@medease.health` / `demo`
-2. Ouvrez : **Directory** → ou URL directe  
+2. Ouvrez : **Répertoire** → ou URL directe  
    https://med-ease-api.vercel.app/patient/directory  
    https://med-ease-api.vercel.app/patient/directory/facilities
 3. Utilisez la barre de recherche (nom, ville, spécialité).
-4. Filtrez par type d’établissement / distance si proposé.
+4. Sur la carte, sélectionnez un établissement puis **Itinéraire** (Google Maps).
 
 **Aussi accessible depuis :** professionnel (`/professional/directory`) et établissement (`/facility/directory`).
 
@@ -53,23 +53,24 @@ Après connexion, utilisez le menu latéral pour accéder aux modules ci-dessous
 
 **Objectif :** ajout de médicament + marquage de prise quotidienne.
 
-1. **Ajout (médecin)** — `doctor@medease.health` / `demo`  
-   https://med-ease-api.vercel.app/professional/prescriptions  
-   ou prescription patient : `/professional/patient/:patientId/prescribe`
-2. **Prises (patient)** — `patient@medease.health` / `demo`  
-   https://med-ease-api.vercel.app/patient/medications  
-   Marquez les doses du jour depuis les cartes / actions de prise.
+1. Compte **patient** : `patient@medease.health` / `demo`  
+   https://med-ease-api.vercel.app/patient/medications/today  
+2. Cliquez **Ajouter un médicament**, renseignez nom / DCI, enregistrez.
+3. Sur chaque carte de dose, cliquez **Marquer comme pris**.
+4. (Optionnel) Prescription clinicien :  
+   https://med-ease-api.vercel.app/professional/prescriptions
 
 ---
 
 ### D. Mega carnet (Mega Notebook)
 
-**Objectif :** profils santé consultables / renseignables.
+**Objectif :** 5 profils configurables / consultables.
 
 1. Compte **patient** : `patient@medease.health` / `demo`
 2. Ouvrez : https://med-ease-api.vercel.app/patient/records
-3. Parcourez les sections : profil, résumé, constantes, timeline, profil d’urgence, etc.
-4. Vue clinicien : `/professional/patient/:patientId` (compte médecin).
+3. Utilisez le panneau **Mega carnet — 5 profils** : médical, urgence, familial, mode de vie, constantes.
+4. Ouvrez chaque profil via **Consulter**, puis renseignez / consultez les sections.
+5. Vue clinicien : `/professional/patient/:patientId` (compte médecin).
 
 ---
 
@@ -88,18 +89,21 @@ Après connexion, utilisez le menu latéral pour accéder aux modules ci-dessous
 
 ### F. Conciergerie (Concierge)
 
-**Objectif :** demande créée + suivi + notification e-mail.
+**Objectif :** demande créée + suivi patient + notification e-mail.
 
 1. Sans connexion, ouvrez : https://med-ease-api.vercel.app/conciergerie
 2. Cliquez sur le CTA / formulaire « rejoindre / demande ».
 3. Remplissez et validez — la demande est enregistrée côté plateforme.
-4. La notification e-mail part vers la boîte commerciale configurée (`MARKETING_LEADS_NOTIFY_EMAIL`, ex. `contact@medease.health`).
+4. **Suivi admin** — `admin@medease.health` / `demo` :  
+   https://med-ease-api.vercel.app/admin/conciergerie-suivi  
+   (menu **Conciergerie**)
+5. La notification e-mail part vers la boîte commerciale configurée (`MARKETING_LEADS_NOTIFY_EMAIL`).
 
 ---
 
 ### G. Transfert (Transfer)
 
-**Objectif :** formulaire, lettre de liaison, établissement destinataire.
+**Objectif :** formulaire, lettre de liaison (PDF/HTML), établissement destinataire.
 
 1. Compte **établissement** ou **médecin** :  
    `facility@medease.health` ou `doctor@medease.health` / `demo`
@@ -107,23 +111,25 @@ Après connexion, utilisez le menu latéral pour accéder aux modules ci-dessous
    https://med-ease-api.vercel.app/facility/transfers  
    ou https://med-ease-api.vercel.app/professional/transfers  
    Vue patient : https://med-ease-api.vercel.app/patient/transfers
-3. Consultez la liste des transferts / statuts et l’établissement de destination.
+3. Cliquez **Demander un transfert**, choisissez le patient et l’**établissement destinataire**, validez.
+4. La **lettre de liaison** se télécharge / s’ouvre automatiquement ; vous pouvez aussi la régénérer depuis la liste.
 
 ---
 
 ## 3. Astuces si « la recherche ne fonctionne pas »
 
-1. Utilisez **Connexion** (bouton sur la landing) puis le compte **patient** pour Directory / Library.
+1. Utilisez **Connexion** (bouton sur la landing) puis le compte **patient** pour Répertoire / Bibliothèque.
 2. Attendez 30–60 s au premier chargement (API Render peut être en veille).
 3. Hard refresh du navigateur (Ctrl+F5) après déploiement.
 4. Vérifiez que vous êtes bien sur https://med-ease-api.vercel.app (pas une ancienne URL).
+5. Après un déploiement API : redéployez Render puis `pnpm prisma:seed` pour lat/long du répertoire et les parcours.
 
 ---
 
 ## 4. Langue & landing
 
 - Pages marketing (landing, audiences, conciergerie) : **français**.
-- Portails connectés : francisation en cours pour aligner l’UI MVP sur le français.
+- Portail patient MVP : navigation et modules clés en **français** (Pilulier, Mega carnet, Répertoire, Bibliothèque, E-Parcours, Transferts).
 - Alignement landing ↔ Figma : coordination en cours avec le designer.
 
 ---

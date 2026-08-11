@@ -77,9 +77,15 @@ export function DirectoryMapPlaceholder({
       .filter(Boolean)
       .join(', ');
 
+    const mapsUrl =
+      provider.address.latitude != null && provider.address.longitude != null
+        ? `https://www.google.com/maps/dir/?api=1&destination=${provider.address.latitude},${provider.address.longitude}`
+        : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
+
+    window.open(mapsUrl, '_blank', 'noopener,noreferrer');
     appToast.success({
-      title: 'Directions ready',
-      description: `Route to ${provider.name} (${destination}) opened in maps.`,
+      title: 'Itinéraire ouvert',
+      description: destination || provider.name,
     });
   };
 
@@ -95,7 +101,7 @@ export function DirectoryMapPlaceholder({
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">
             <MapPin className="size-4 text-primary" />
-            {focusProvider ? 'Provider location' : 'Map view'}
+            {focusProvider ? 'Localisation' : 'Carte — recherche géo'}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">

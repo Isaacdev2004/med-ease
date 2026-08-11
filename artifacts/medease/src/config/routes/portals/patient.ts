@@ -48,68 +48,68 @@ import type { PortalRouteGroup } from '@/config/routes/types';
 
 export const patientRouteGroup: PortalRouteGroup = {
   id: 'patient',
-  portalTitle: 'Patient Portal',
+  portalTitle: 'Espace patient',
   roleName: 'Patient',
   userName: 'Sarah Jenkins',
   basePath: ROUTES.patient.root,
   routes: [
     {
       path: '/',
-      title: 'Dashboard',
-      breadcrumb: 'Overview',
+      title: 'Tableau de bord',
+      breadcrumb: 'Aperçu',
       analyticsName: 'patient_dashboard',
       lazy: () => import('@/features/patient/pages/Dashboard'),
-      nav: { icon: Home, label: 'Overview', order: 0 },
+      nav: { icon: Home, label: 'Aperçu', order: 0 },
     },
     ...createPatientAppointmentsRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: Calendar, label: 'Appointments', order: 1 },
+      nav: { icon: Calendar, label: 'Rendez-vous', order: 1 },
     }),
     ...createPatientRecordsRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: FileText, label: 'Health Records', order: 2 },
+      nav: { icon: FileText, label: 'Mega carnet', order: 2 },
     }),
     ...createPatientMedicationsRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: PillBottle, label: 'Medications', order: 3 },
+      nav: { icon: PillBottle, label: 'Pilulier', order: 3 },
     }),
     ...createMedicalLibraryRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: Pill, label: 'Medical Library', order: 4 },
+      nav: { icon: Pill, label: 'Bibliothèque', order: 4 },
     }),
     ...createDirectoryRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: Stethoscope, label: 'Healthcare Directory', order: 5 },
+      nav: { icon: Stethoscope, label: 'Répertoire', order: 5 },
     }),
     ...createPatientCarePlanRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: Activity, label: 'Care Plan', order: 6 },
+      nav: { icon: Activity, label: 'E-Parcours', order: 6 },
     }),
     ...createPatientLaboratoryRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: FlaskConical, label: 'Laboratory', order: 7 },
+      nav: { icon: FlaskConical, label: 'Laboratoire', order: 7 },
     }),
     ...createPatientRadiologyRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: Scan, label: 'Radiology', order: 8 },
+      nav: { icon: Scan, label: 'Imagerie', order: 8 },
     }),
     ...createPatientMonitoringRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: HeartPulse, label: 'Monitoring', order: 9 },
+      nav: { icon: HeartPulse, label: 'Suivi', order: 9 },
     }),
     ...createPatientTelemedicineRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: Video, label: 'Telemedicine', order: 10 },
+      nav: { icon: Video, label: 'Télémédecine', order: 10 },
     }),
     ...createPatientBillingRoutes({
       analyticsPrefix: 'patient',
-      nav: { icon: CreditCard, label: 'Billing', order: 11 },
+      nav: { icon: CreditCard, label: 'Facturation', order: 11 },
     }),
     createTransfersRoute('patient', {
-      nav: { icon: Route, order: 12 },
+      nav: { icon: Route, label: 'Transferts', order: 12 },
     }),
     createAdmissionsRoute('patient', {
-      title: 'Hospital Admissions',
+      title: 'Admissions hospitalières',
       breadcrumb: 'Admissions',
     }),
     {
@@ -118,25 +118,25 @@ export const patientRouteGroup: PortalRouteGroup = {
       breadcrumb: 'Notifications',
       analyticsName: 'patient_notifications',
       lazy: () => import('@/features/notifications/pages/NotificationsPage'),
-      nav: { icon: Bell, order: 7 },
+      nav: { icon: Bell, label: 'Notifications', order: 7 },
     },
     createMessagesRoute('patient', {
-      nav: { icon: MessageSquare, order: 8 },
+      nav: { icon: MessageSquare, label: 'Messages', order: 8 },
     }),
     createPatientDocumentsRoute('patient', {
-      nav: { icon: FolderOpen, order: 9 },
+      nav: { icon: FolderOpen, label: 'Documents', order: 9 },
     }),
     createEmergencyProfileRoute('patient', {
-      nav: { icon: Shield, order: 10 },
+      nav: { icon: Shield, label: 'Urgence', order: 10 },
     }),
     createVaccinationsRoute('patient', {
-      nav: { icon: Syringe, order: 11 },
+      nav: { icon: Syringe, label: 'Vaccinations', order: 11 },
     }),
     createProfileRoute('patient', {
-      nav: { icon: User, order: 13 },
+      nav: { icon: User, label: 'Profil', order: 13 },
     }),
     createSettingsRoute('patient', {
-      nav: { icon: Settings, order: 14 },
+      nav: { icon: Settings, label: 'Paramètres', order: 14 },
     }),
   ],
 };

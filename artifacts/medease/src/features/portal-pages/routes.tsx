@@ -116,7 +116,7 @@ export function createTransfersRoute(
   analyticsPrefix: string,
   options: PortalUtilityRouteOptions = {},
 ): RouteDefinition {
-  return portalUtilityRoute('/transfers', 'Transfers', transfersPage, {
+  return portalUtilityRoute('/transfers', 'Transferts', transfersPage, {
     analyticsName: `${analyticsPrefix}_transfers`,
     ...options,
   });

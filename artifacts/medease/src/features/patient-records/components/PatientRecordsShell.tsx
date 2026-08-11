@@ -1,6 +1,7 @@
 import { useLocation } from 'wouter';
 
 import { PatientBanner } from '@/features/patient-records/components/PatientBanner';
+import { MegaProfilesPanel } from '@/features/patient-records/components/MegaProfilesPanel';
 import { RecordSectionContent } from '@/features/patient-records/components/RecordSections';
 import {
   getSectionFromPath,
@@ -33,10 +34,10 @@ export function PatientRecordsShell({
 
   if (!perms.canView) {
     return (
-      <PageShell title="Health Records">
+      <PageShell title="Mega carnet">
         <EmptyState
-          title="Access denied"
-          description="You do not have permission to view health records."
+          title="Accès refusé"
+          description="Vous n’avez pas l’autorisation de consulter le carnet de santé."
         />
       </PageShell>
     );
@@ -44,30 +45,34 @@ export function PatientRecordsShell({
 
   if (resolveQuery.isLoading || recordQuery.isLoading) {
     return (
-      <PageShell title="Health Records">
-        <LoadingView label="Loading health record…" />
+      <PageShell title="Mega carnet">
+        <LoadingView label="Chargement du carnet…" />
       </PageShell>
     );
   }
 
   if (!recordQuery.data || !patientId) {
     return (
-      <PageShell title="Health Records">
+      <PageShell title="Mega carnet">
         <EmptyState
           icon={FileQuestion}
-          title="Record not found"
-          description="Unable to load patient health record."
+          title="Carnet introuvable"
+          description="Impossible de charger le dossier patient."
         />
       </PageShell>
     );
   }
 
   const record = recordQuery.data;
+  const showProfiles =
+    section === 'dashboard' ||
+    location === basePath ||
+    location.endsWith('/records');
 
   return (
     <PageShell
-      title="Patient Health Record"
-      subtitle={`Longitudinal record · Updated ${new Date(record.updatedAt).toLocaleString()}`}
+      title="Mega carnet de santé"
+      subtitle={`Dossier longitudinal · Mis à jour ${new Date(record.updatedAt).toLocaleString('fr-FR')}`}
     >
       <div className="space-y-6">
         <PatientBanner
@@ -75,6 +80,7 @@ export function PatientRecordsShell({
           healthScore={record.healthScore}
           alerts={record.alerts}
         />
+        {showProfiles ? <MegaProfilesPanel basePath={basePath} /> : null}
         <RecordTabs
           basePath={basePath}
           medicationsOnly={perms.canViewMedicationsOnly}

@@ -143,7 +143,7 @@ export function DoseCard({
             className="mt-2 text-primary underline text-sm"
             onClick={onLog}
           >
-            Mark as taken
+            Marquer comme pris
           </button>
         ) : null}
       </CardContent>

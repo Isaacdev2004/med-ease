@@ -62,14 +62,14 @@ export function MedicationsShell({
   return (
     <PageShell
       title={title}
-      subtitle="Prescriptions, schedules, adherence, refills, and drug safety — connected across your care team."
+      subtitle="Prescriptions, prises du jour, adhérence et renouvelements."
       toolbar={
         variant === 'clinician' && !explicitPatientId ? (
           <input
             type="search"
             className="h-9 w-full max-w-xs rounded-md border bg-background px-3 text-sm"
-            placeholder="Filter by patient or drug…"
-            aria-label="Search medications"
+            placeholder="Filtrer patient ou médicament…"
+            aria-label="Rechercher médicaments"
             onChange={(e) =>
               setFilters((prev) => ({
                 ...prev,

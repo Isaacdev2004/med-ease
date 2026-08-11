@@ -15,6 +15,7 @@ import {
   PrescriptionCard,
   RefillCard,
 } from '@/features/medications/components/MedicationComponents';
+import { AddMedicationDialog } from '@/features/medications/components/AddMedicationDialog';
 import {
   useMedicationAdherence,
   useMedicationAdministration,
@@ -98,21 +99,32 @@ export function TodaySection({ filters }: { filters?: MedicationFilters }) {
   const { logDose } = useMedicationMutations();
   if (!patientId || query.isLoading) return <LoadingView />;
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {(query.data ?? []).map((dose) => (
-        <DoseCard
-          key={dose.id}
-          dose={dose}
-          onLog={() =>
-            void logDose.mutateAsync({
-              medicationId: dose.medicationId,
-              patientId: dose.patientId,
-              scheduledDoseId: dose.id,
-              status: 'taken',
-            })
-          }
-        />
-      ))}
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 className="text-lg font-semibold">Pilulier du jour</h2>
+          <p className="text-sm text-muted-foreground">
+            Marquez chaque prise quotidienne.
+          </p>
+        </div>
+        <AddMedicationDialog patientId={patientId} />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {(query.data ?? []).map((dose) => (
+          <DoseCard
+            key={dose.id}
+            dose={dose}
+            onLog={() =>
+              void logDose.mutateAsync({
+                medicationId: dose.medicationId,
+                patientId: dose.patientId,
+                scheduledDoseId: dose.id,
+                status: 'taken',
+              })
+            }
+          />
+        ))}
+      </div>
     </div>
   );
 }

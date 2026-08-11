@@ -4,10 +4,11 @@ import type { MedicationSection } from '@/features/medications/components/Medica
 import { cn } from '@/shared/lib/utils';
 
 const PATIENT_TABS: { segment: MedicationSection | ''; label: string }[] = [
-  { segment: '', label: 'Dashboard' },
-  { segment: 'history', label: 'History' },
-  { segment: 'reminders', label: 'Reminders' },
-  { segment: 'refills', label: 'Refills' },
+  { segment: 'today', label: "Aujourd'hui" },
+  { segment: '', label: 'Tableau de bord' },
+  { segment: 'history', label: 'Historique' },
+  { segment: 'reminders', label: 'Rappels' },
+  { segment: 'refills', label: 'Renouvellements' },
 ];
 
 type PortalTab = { segment: MedicationSection; label: string; path: string };

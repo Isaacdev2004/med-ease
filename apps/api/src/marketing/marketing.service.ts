@@ -67,4 +67,25 @@ export class MarketingService {
       ctaId: dto.ctaId,
     };
   }
+
+  async listLeads(ctaId?: string) {
+    return this.prisma.runInSystemTransaction(async (tx) => {
+      const rows = await tx.marketingLead.findMany({
+        where: ctaId ? { ctaId } : undefined,
+        orderBy: { createdAt: 'desc' },
+        take: 100,
+      });
+      return {
+        items: rows.map((row) => ({
+          id: row.id,
+          ctaId: row.ctaId,
+          email: row.email,
+          fields: row.fields,
+          createdAt: row.createdAt.toISOString(),
+          status: 'open',
+        })),
+        total: rows.length,
+      };
+    });
+  }
 }
