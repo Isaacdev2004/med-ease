@@ -78,6 +78,9 @@ export function MarketingHeader() {
                   </DropdownMenuItem>
                 ),
               )}
+              <DropdownMenuItem asChild>
+                <Link href={ROUTES.login}>Connexion</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => cta?.openCta('hub')}
                 className="font-medium text-[#0b8f9e]"
@@ -87,6 +90,9 @@ export function MarketingHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
 
+          <Button variant="outline" className="h-10 rounded-full px-4 text-sm" asChild>
+            <Link href={ROUTES.login}>Connexion</Link>
+          </Button>
           <Button
             className="marketing-primary-cta h-10 rounded-full px-5 text-sm"
             onClick={() => cta?.openCta('hub')}
