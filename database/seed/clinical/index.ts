@@ -339,9 +339,9 @@ function buildDemoCarePathways() {
     {
       id: '01930000-0000-7000-8000-000000000c01',
       code: 'diabetes',
-      name: 'Diabetes Management',
+      name: 'Parcours diabète',
       description:
-        'Evidence-based diabetes care pathway with HbA1c targets and medication titration.',
+        'Parcours de soins diabète avec objectifs HbA1c et titration médicamenteuse.',
       completionCriteria: 'HbA1c < 7% for 2 consecutive readings',
       requiredAppointments: 4,
       requiredLabs: 3,
@@ -364,9 +364,9 @@ function buildDemoCarePathways() {
     {
       id: '01930000-0000-7000-8000-000000000c02',
       code: 'hypertension',
-      name: 'Hypertension Control',
+      name: 'Hypertension',
       description:
-        'Blood pressure management with lifestyle and pharmacologic interventions.',
+        'Prise en charge de l\'hypertension : mode de vie et traitement médicamenteux.',
       completionCriteria: 'BP < 130/80 for 3 months',
       requiredAppointments: 3,
       requiredLabs: 2,
@@ -384,9 +384,9 @@ function buildDemoCarePathways() {
     {
       id: '01930000-0000-7000-8000-000000000c03',
       code: 'heart_failure',
-      name: 'Heart Failure Care',
+      name: 'Insuffisance cardiaque',
       description:
-        'Comprehensive heart failure management and readmission prevention.',
+        'Prise en charge globale de l\'insuffisance cardiaque et prévention des réadmissions.',
       completionCriteria: 'Stable weight, no hospitalization 90 days',
       requiredAppointments: 5,
       requiredLabs: 4,
@@ -404,8 +404,8 @@ function buildDemoCarePathways() {
     {
       id: '01930000-0000-7000-8000-000000000c04',
       code: 'post_surgery',
-      name: 'Post-Operative Recovery',
-      description: 'Structured recovery after surgical procedures.',
+      name: 'Récupération post-chirurgie',
+      description: 'Parcours structuré de récupération après intervention chirurgicale.',
       completionCriteria: 'Full mobility restored, wound healed',
       requiredAppointments: 2,
       requiredLabs: 1,
@@ -423,8 +423,8 @@ function buildDemoCarePathways() {
     {
       id: '01930000-0000-7000-8000-000000000c05',
       code: 'copd',
-      name: 'COPD Management',
-      description: 'Chronic obstructive pulmonary disease care pathway.',
+      name: 'BPCO',
+      description: 'Parcours de soins pour la bronchopneumopathie chronique obstructive.',
       completionCriteria: 'Stable FEV1, reduced exacerbations',
       requiredAppointments: 3,
       requiredLabs: 1,

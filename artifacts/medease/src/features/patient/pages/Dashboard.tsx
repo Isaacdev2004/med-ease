@@ -45,19 +45,19 @@ export default function Dashboard() {
     <QueryStateView
       query={dashboardQuery}
       skeleton={<DashboardSkeleton />}
-      loadingLabel="Loading your health summary"
+      loadingLabel="Chargement de votre résumé santé"
     >
       {(data) => (
         <PageShell
-          title={`Welcome back, ${data.greetingName}`}
-          subtitle="Here's your health summary for today."
+          title={`Bon retour, ${data.greetingName}`}
+          subtitle="Voici votre résumé santé du jour."
           status={<StatusBadge status="stable" label="Stable" />}
           lastUpdated={
             dashboardQuery.dataUpdatedAt
               ? format(new Date(dashboardQuery.dataUpdatedAt), 'PPp')
               : undefined
           }
-          primaryAction={<Button>Book Appointment</Button>}
+          primaryAction={<Button>Prendre rendez-vous</Button>}
         >
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2 space-y-6">
@@ -74,7 +74,7 @@ export default function Dashboard() {
                   actions={
                     <div className="flex flex-wrap gap-2 w-full">
                       <Button variant="secondary" size="sm">
-                        Prepare for visit
+                        Préparer la visite
                       </Button>
                       <LoadingButton
                         variant="outline"
@@ -90,7 +90,7 @@ export default function Dashboard() {
                           })
                         }
                       >
-                        Reschedule
+                        Reprogrammer
                       </LoadingButton>
                     </div>
                   }
@@ -100,10 +100,10 @@ export default function Dashboard() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Calendar className="h-5 w-5" aria-hidden="true" />
-                      No upcoming appointments
+                      Aucun rendez-vous à venir
                     </CardTitle>
                     <CardDescription>
-                      Book your next visit when you are ready.
+                      Réservez votre prochaine consultation quand vous le souhaitez.
                     </CardDescription>
                   </CardHeader>
                 </Card>
@@ -111,7 +111,7 @@ export default function Dashboard() {
 
               {data.medications.length > 0 ? (
                 <>
-                  <SectionHeader title="Active Medications" />
+                  <SectionHeader title="Traitements actifs" />
                   <div className="grid gap-4 md:grid-cols-2">
                     {data.medications.map((medication) => (
                       <MedicationCard
@@ -134,14 +134,14 @@ export default function Dashboard() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
                   <FlaskConical className="h-5 w-5" aria-hidden="true" />
-                  Recent Test Results
+                  Résultats récents
                 </CardTitle>
                 <CardDescription>{data.recentTestLabel}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Lab results from your care team will appear here once
-                  available.
+                  Les résultats de laboratoire de votre équipe soignante
+                  apparaîtront ici dès qu&apos;ils seront disponibles.
                 </p>
               </CardContent>
             </Card>

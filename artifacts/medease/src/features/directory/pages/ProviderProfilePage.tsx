@@ -26,11 +26,9 @@ export default function ProviderProfilePage() {
   const [location] = useLocation();
   const { user } = useAuth();
   const providerId = getProviderIdFromPath(location) ?? '';
-  const portalBase = getDirectoryBasePath(location).replace(
-    /\/directory.*$/,
-    '',
-  );
-  const backHref = `${portalBase}/directory`;
+  // Nest-relative paths — wouter portal router resolves /directory inside the mount.
+  const portalBase = '';
+  const backHref = '/directory';
 
   const providerQuery = useProvider(providerId);
   const relatedQuery = useRelatedProviders(providerId);
@@ -56,19 +54,19 @@ export default function ProviderProfilePage() {
 
   if (providerQuery.isLoading) {
     return (
-      <PageShell title="Provider Profile">
-        <LoadingView label="Loading provider profile…" />
+      <PageShell title="Profil établissement">
+        <LoadingView label="Chargement du profil…" />
       </PageShell>
     );
   }
 
   if (!providerQuery.data) {
     return (
-      <PageShell title="Provider Profile">
+      <PageShell title="Profil établissement">
         <EmptyState
           icon={FileQuestion}
-          title="Provider not found"
-          description="This provider may have been removed or you may not have permission to view it."
+          title="Établissement introuvable"
+          description="Ce profil n'existe plus ou vous n'avez pas l'autorisation de le consulter."
         />
       </PageShell>
     );
@@ -77,7 +75,7 @@ export default function ProviderProfilePage() {
   return (
     <PageShell
       title={providerQuery.data.name}
-      subtitle="Healthcare provider profile"
+      subtitle="Profil établissement ou professionnel de santé"
     >
       <ProviderHeader
         provider={providerQuery.data}

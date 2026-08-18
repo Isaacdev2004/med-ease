@@ -34,19 +34,19 @@ export default function MedicationProfilePage() {
 
   if (medicationQuery.isLoading) {
     return (
-      <PageShell title="Medication Profile">
-        <LoadingView label="Loading medication profile…" />
+      <PageShell title="Fiche médicament">
+        <LoadingView label="Chargement de la fiche…" />
       </PageShell>
     );
   }
 
   if (!medicationQuery.data) {
     return (
-      <PageShell title="Medication Profile">
+      <PageShell title="Fiche médicament">
         <EmptyState
           icon={FileQuestion}
-          title="Medication not found"
-          description="This medication may not exist in the library or you may not have permission to view it."
+          title="Médicament introuvable"
+          description="Ce médicament n'est pas dans la bibliothèque ou vous n'avez pas l'autorisation de le consulter."
         />
       </PageShell>
     );
@@ -55,7 +55,7 @@ export default function MedicationProfilePage() {
   return (
     <PageShell
       title={medicationQuery.data.name}
-      subtitle="Medication reference profile"
+      subtitle="Fiche de référence médicament (nom, DCI, posologie)"
     >
       <MedicationHeader
         medication={medicationQuery.data}
@@ -68,7 +68,7 @@ export default function MedicationProfilePage() {
               size="sm"
             />
             <Button size="sm" onClick={() => setCompareOpen(true)}>
-              Compare
+              Comparer
             </Button>
           </>
         }

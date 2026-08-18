@@ -23,9 +23,9 @@ import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { cn } from '@/shared/lib/utils';
 
 const CATEGORY_TABS = [
-  { label: 'All', segment: '' },
-  { label: 'Professionals', segment: 'professionals' },
-  { label: 'Facilities', segment: 'facilities' },
+  { label: 'Tous', segment: '' },
+  { label: 'Professionnels', segment: 'professionals' },
+  { label: 'Établissements', segment: 'facilities' },
   { label: 'Pharmacies', segment: 'pharmacies' },
   { label: 'Transport', segment: 'transport' },
 ] as const;
@@ -50,25 +50,25 @@ export default function DirectoryPage() {
   const activeFilters = useMemo(() => {
     const chips = [];
     if (filterState.q)
-      chips.push({ key: 'q', label: 'Search', value: filterState.q });
+      chips.push({ key: 'q', label: 'Recherche', value: filterState.q });
     if (filterState.specialty) {
       chips.push({
         key: 'status',
-        label: 'Specialty',
+        label: 'Spécialité',
         value: filterState.specialty,
       });
     }
     if (filterState.department) {
       chips.push({
         key: 'department',
-        label: 'Department',
+        label: 'Département',
         value: filterState.department,
       });
     }
     if (filterState.city)
-      chips.push({ key: 'city', label: 'City', value: filterState.city });
+      chips.push({ key: 'city', label: 'Ville', value: filterState.city });
     if (filterState.favoritesOnly) {
-      chips.push({ key: 'favorites', label: 'Favorites', value: 'Yes' });
+      chips.push({ key: 'favorites', label: 'Favoris', value: 'Oui' });
     }
     return chips;
   }, [filterState]);
@@ -90,8 +90,8 @@ export default function DirectoryPage() {
 
   return (
     <DataPageLayout
-      title="Healthcare Services Directory"
-      subtitle="Find professionals, facilities, pharmacies, and transport providers across France."
+      title="Répertoire des établissements"
+      subtitle="Recherchez professionnels, établissements, pharmacies et transporteurs en France."
       lastUpdated={
         query.dataUpdatedAt
           ? new Date(query.dataUpdatedAt).toLocaleString()
@@ -223,13 +223,13 @@ export default function DirectoryPage() {
           icon={Search}
           title={
             filterState.favoritesOnly
-              ? 'No favorites yet'
-              : 'No providers found'
+              ? 'Aucun favori'
+              : 'Aucun résultat'
           }
           description={
             filterState.favoritesOnly
-              ? 'Save providers to quickly access them from your directory.'
-              : 'Try adjusting your search or filters to find healthcare providers.'
+              ? 'Enregistrez des établissements pour y accéder rapidement.'
+              : 'Modifiez votre recherche ou vos filtres (ville, spécialité, type).'
           }
         />
       ) : filterState.view === 'compact' ? (
@@ -259,7 +259,7 @@ export default function DirectoryPage() {
 
       {filterState.view !== 'table' && providers.length > 0 ? (
         <p className="mt-4 text-sm text-muted-foreground">
-          Showing {providers.length} of {query.data?.total ?? 0} providers
+          {providers.length} sur {query.data?.total ?? 0} établissements affichés
         </p>
       ) : null}
     </DataPageLayout>

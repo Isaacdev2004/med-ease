@@ -10,7 +10,7 @@ export default function PatientCarePlanPage() {
     <CarePlansShell
       basePath={basePath}
       variant="patient"
-      title="My Care Plan"
+      title="Mon E-Parcours"
     />
   );
 }

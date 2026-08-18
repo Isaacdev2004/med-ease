@@ -118,25 +118,25 @@ export const patientRouteGroup: PortalRouteGroup = {
       breadcrumb: 'Notifications',
       analyticsName: 'patient_notifications',
       lazy: () => import('@/features/notifications/pages/NotificationsPage'),
-      nav: { icon: Bell, label: 'Notifications', order: 7 },
+      nav: { icon: Bell, label: 'Notifications', order: 13 },
     },
     createMessagesRoute('patient', {
-      nav: { icon: MessageSquare, label: 'Messages', order: 8 },
+      nav: { icon: MessageSquare, label: 'Messages', order: 14 },
     }),
     createPatientDocumentsRoute('patient', {
-      nav: { icon: FolderOpen, label: 'Documents', order: 9 },
+      nav: { icon: FolderOpen, label: 'Documents', order: 15 },
     }),
     createEmergencyProfileRoute('patient', {
-      nav: { icon: Shield, label: 'Urgence', order: 10 },
+      nav: { icon: Shield, label: 'Urgence', order: 16 },
     }),
     createVaccinationsRoute('patient', {
-      nav: { icon: Syringe, label: 'Vaccinations', order: 11 },
+      nav: { icon: Syringe, label: 'Vaccinations', order: 17 },
     }),
     createProfileRoute('patient', {
-      nav: { icon: User, label: 'Profil', order: 13 },
+      nav: { icon: User, label: 'Profil', order: 18 },
     }),
     createSettingsRoute('patient', {
-      nav: { icon: Settings, label: 'Paramètres', order: 14 },
+      nav: { icon: Settings, label: 'Paramètres', order: 19 },
     }),
   ],
 };

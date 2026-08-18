@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsIn,
@@ -13,6 +13,8 @@ import {
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 import type { AppointmentFilters } from '@medease/appointments-contract';
+
+import { toOptionalBoolean } from '../../common/transforms/optional-boolean';
 
 export class AppointmentFiltersDto implements AppointmentFilters {
   @ApiPropertyOptional()
@@ -113,19 +115,19 @@ export class AppointmentFiltersDto implements AppointmentFilters {
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   telemedicine?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   checkedIn?: boolean;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   followUp?: boolean;
 
   @ApiPropertyOptional()

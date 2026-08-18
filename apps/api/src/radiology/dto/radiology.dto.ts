@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
@@ -24,6 +24,8 @@ import type {
   ReportFilters,
   StudyFilters,
 } from '@medease/radiology-contract';
+
+import { toOptionalBoolean } from '../../common/transforms/optional-boolean';
 
 const STUDY_STATUSES = [
   'scheduled',
@@ -110,7 +112,7 @@ export class StudyFiltersDto implements StudyFilters {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   @IsBoolean()
   isCritical?: boolean;
 
@@ -147,7 +149,7 @@ export class ReportFiltersDto implements ReportFilters {
 
   @ApiPropertyOptional()
   @IsOptional()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   @IsBoolean()
   isCritical?: boolean;
 

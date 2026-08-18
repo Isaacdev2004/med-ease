@@ -10,12 +10,12 @@ const adminPage = () =>
   import('@/features/care-plans/pages/AdminCareAnalyticsPage');
 
 const PATIENT_SECTIONS = [
-  'goals',
-  'tasks',
-  'timeline',
-  'team',
-  'progress',
-  'education',
+  { segment: 'goals', label: 'Objectifs' },
+  { segment: 'tasks', label: 'Tâches' },
+  { segment: 'timeline', label: 'Timeline' },
+  { segment: 'team', label: 'Équipe' },
+  { segment: 'progress', label: 'Progrès' },
+  { segment: 'education', label: 'Éducation' },
 ] as const;
 
 export function createPatientCarePlanRoutes(options: {
@@ -25,10 +25,10 @@ export function createPatientCarePlanRoutes(options: {
   const { analyticsPrefix, nav } = options;
 
   const sectionRoutes: RouteDefinition[] = PATIENT_SECTIONS.map((section) => ({
-    path: `/care-plan/${section}`,
-    title: `Care Plan — ${section}`,
-    breadcrumb: section.charAt(0).toUpperCase() + section.slice(1),
-    analyticsName: `${analyticsPrefix}_care_plan_${section}`,
+    path: `/care-plan/${section.segment}`,
+    title: `E-Parcours — ${section.label}`,
+    breadcrumb: section.label,
+    analyticsName: `${analyticsPrefix}_care_plan_${section.segment}`,
     lazy: patientPage,
     permission: 'care-plans.read',
   }));
@@ -37,8 +37,8 @@ export function createPatientCarePlanRoutes(options: {
     ...sectionRoutes,
     {
       path: '/care-plan',
-      title: 'My Care Plan',
-      breadcrumb: 'Care Plan',
+      title: 'Mon E-Parcours',
+      breadcrumb: 'E-Parcours',
       analyticsName: `${analyticsPrefix}_care_plan`,
       lazy: patientPage,
       nav,
@@ -54,8 +54,8 @@ export function createProfessionalCarePlanRoutes(
   return [
     {
       path: '/care-plans',
-      title: 'Care Plans',
-      breadcrumb: 'Care Plans',
+      title: 'Plans de soins',
+      breadcrumb: 'Plans de soins',
       analyticsName: `${analyticsPrefix}_care_plans`,
       lazy: professionalPage,
       permission: 'care-plans.read',
@@ -63,32 +63,32 @@ export function createProfessionalCarePlanRoutes(
     },
     {
       path: '/patient/:patientId/care-plan',
-      title: 'Patient Care Plan',
-      breadcrumb: 'Care Plan',
+      title: 'E-Parcours patient',
+      breadcrumb: 'E-Parcours',
       analyticsName: `${analyticsPrefix}_patient_care_plan`,
       lazy: professionalPage,
       permission: 'care-plans.read',
     },
     {
       path: '/patient/:patientId/tasks',
-      title: 'Patient Tasks',
-      breadcrumb: 'Tasks',
+      title: 'Tâches patient',
+      breadcrumb: 'Tâches',
       analyticsName: `${analyticsPrefix}_patient_tasks`,
       lazy: professionalPage,
       permission: 'care-plans.read',
     },
     {
       path: '/patient/:patientId/goals',
-      title: 'Patient Goals',
-      breadcrumb: 'Goals',
+      title: 'Objectifs patient',
+      breadcrumb: 'Objectifs',
       analyticsName: `${analyticsPrefix}_patient_goals`,
       lazy: professionalPage,
       permission: 'care-plans.read',
     },
     {
       path: '/pathways',
-      title: 'Clinical Pathways',
-      breadcrumb: 'Pathways',
+      title: 'Parcours cliniques',
+      breadcrumb: 'Parcours',
       analyticsName: `${analyticsPrefix}_pathways`,
       lazy: professionalPage,
       permission: 'care-plans.read',
@@ -103,8 +103,8 @@ export function createFacilityCarePlanRoutes(
   return [
     {
       path: '/care-plans',
-      title: 'Care Plans',
-      breadcrumb: 'Care Plans',
+      title: 'Plans de soins',
+      breadcrumb: 'Plans de soins',
       analyticsName: `${analyticsPrefix}_care_plans`,
       lazy: facilityPage,
       permission: 'care-plans.read',
@@ -112,7 +112,7 @@ export function createFacilityCarePlanRoutes(
     },
     {
       path: '/coordination',
-      title: 'Clinical Coordination',
+      title: 'Coordination clinique',
       breadcrumb: 'Coordination',
       analyticsName: `${analyticsPrefix}_coordination`,
       lazy: facilityPage,
@@ -120,8 +120,8 @@ export function createFacilityCarePlanRoutes(
     },
     {
       path: '/ward-care',
-      title: 'Ward Care',
-      breadcrumb: 'Ward Care',
+      title: 'Soins en service',
+      breadcrumb: 'Service',
       analyticsName: `${analyticsPrefix}_ward_care`,
       lazy: facilityPage,
       permission: 'care-plans.read',
@@ -136,8 +136,8 @@ export function createAdminCarePlanRoutes(
   return [
     {
       path: '/care-plans',
-      title: 'Care Plans',
-      breadcrumb: 'Care Plans',
+      title: 'Plans de soins',
+      breadcrumb: 'Plans de soins',
       analyticsName: `${analyticsPrefix}_care_plans`,
       lazy: adminPage,
       permission: 'care-plans.read',
@@ -145,15 +145,15 @@ export function createAdminCarePlanRoutes(
     },
     {
       path: '/care-quality',
-      title: 'Care Quality',
-      breadcrumb: 'Quality',
+      title: 'Qualité des soins',
+      breadcrumb: 'Qualité',
       analyticsName: `${analyticsPrefix}_care_quality`,
       lazy: adminPage,
       permission: 'care-plans.read',
     },
     {
       path: '/population-health',
-      title: 'Population Health',
+      title: 'Santé populationnelle',
       breadcrumb: 'Population',
       analyticsName: `${analyticsPrefix}_population_health`,
       lazy: adminPage,
@@ -161,8 +161,8 @@ export function createAdminCarePlanRoutes(
     },
     {
       path: '/care-analytics',
-      title: 'Care Analytics',
-      breadcrumb: 'Analytics',
+      title: 'Analytique soins',
+      breadcrumb: 'Analytique',
       analyticsName: `${analyticsPrefix}_care_analytics`,
       lazy: adminPage,
       permission: 'care-plans.read',

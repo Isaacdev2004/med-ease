@@ -1,4 +1,4 @@
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsIn,
@@ -16,6 +16,8 @@ import type {
   PatientFilters,
   PatientSearchFilters,
 } from '@medease/patients-contract';
+
+import { toOptionalBoolean } from '../../common/transforms/optional-boolean';
 
 export class PatientFiltersDto implements PatientFilters {
   @ApiPropertyOptional({
@@ -48,7 +50,7 @@ export class PatientFiltersDto implements PatientFilters {
   @ApiPropertyOptional({ default: false })
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   includeArchived?: boolean;
 
   @ApiPropertyOptional({ default: 1, minimum: 1 })
@@ -95,7 +97,7 @@ export class PatientSearchQueryDto implements PatientSearchFilters {
   @ApiPropertyOptional({ default: false })
   @IsOptional()
   @IsBoolean()
-  @Type(() => Boolean)
+  @Transform(toOptionalBoolean)
   includeArchived?: boolean;
 
   @ApiPropertyOptional({ default: 1, minimum: 1 })

@@ -95,9 +95,9 @@ export function DirectorySearch({
       <SearchBar
         defaultValue={defaultValue}
         onSearch={handleSearch}
-        placeholder="Search professionals, facilities, pharmacies…"
+        placeholder="Rechercher établissements, ville, spécialité…"
         loading={loading}
-        aria-label="Search healthcare directory"
+        aria-label="Rechercher dans le répertoire"
       />
       {showPanel ? (
         <div
@@ -127,7 +127,7 @@ export function DirectorySearch({
           {recent.length > 0 ? (
             <div className="mb-3">
               <p className="text-xs font-medium text-muted-foreground mb-2">
-                Recent
+                Récents
               </p>
               <div className="flex flex-wrap gap-2">
                 {recent.map((item) => (
@@ -145,7 +145,7 @@ export function DirectorySearch({
           ) : null}
           <div>
             <p className="text-xs font-medium text-muted-foreground mb-2">
-              Popular
+                Populaires
             </p>
             <div className="flex flex-wrap gap-2">
               {popular.map((item) => (

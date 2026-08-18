@@ -4,13 +4,13 @@ import type { CarePlanSection } from '@/features/care-plans/components/CarePlanS
 import { cn } from '@/shared/lib/utils';
 
 const PATIENT_TABS: { segment: CarePlanSection | ''; label: string }[] = [
-  { segment: '', label: 'Overview' },
-  { segment: 'goals', label: 'Goals' },
-  { segment: 'tasks', label: 'Tasks' },
+  { segment: '', label: 'Aperçu' },
+  { segment: 'goals', label: 'Objectifs' },
+  { segment: 'tasks', label: 'Tâches' },
   { segment: 'timeline', label: 'Timeline' },
-  { segment: 'team', label: 'Care Team' },
-  { segment: 'progress', label: 'Progress' },
-  { segment: 'education', label: 'Education' },
+  { segment: 'team', label: 'Équipe soignante' },
+  { segment: 'progress', label: 'Progrès' },
+  { segment: 'education', label: 'Éducation' },
 ];
 
 const CLINICIAN_TABS: {
@@ -18,8 +18,8 @@ const CLINICIAN_TABS: {
   label: string;
   path: string;
 }[] = [
-  { segment: 'plans', label: 'Care Plans', path: 'care-plans' },
-  { segment: 'pathways', label: 'Pathways', path: 'pathways' },
+  { segment: 'plans', label: 'Plans de soins', path: 'care-plans' },
+  { segment: 'pathways', label: 'Parcours', path: 'pathways' },
 ];
 
 const FACILITY_TABS: {
