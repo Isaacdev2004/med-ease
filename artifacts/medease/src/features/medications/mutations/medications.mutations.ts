@@ -36,7 +36,7 @@ export function useMedicationMutations() {
       runOrQueue('Log dose', () => medicationService.logDose(input)),
     onSuccess: () => {
       invalidateAll(client);
-      appToast.success({ title: 'Dose logged' });
+      appToast.success({ title: 'Prise enregistrée' });
     },
   });
 
@@ -58,7 +58,7 @@ export function useMedicationMutations() {
       ),
     onSuccess: () => {
       invalidateAll(client);
-      appToast.success({ title: 'Prescription created' });
+      appToast.success({ title: 'Médicament ajouté au pilulier' });
     },
   });
 
@@ -69,7 +69,7 @@ export function useMedicationMutations() {
       ),
     onSuccess: () => {
       invalidateAll(client);
-      appToast.success({ title: 'Prescription cancelled' });
+      appToast.success({ title: 'Prescription annulée' });
     },
   });
 
@@ -80,7 +80,7 @@ export function useMedicationMutations() {
       ),
     onSuccess: () => {
       invalidateAll(client);
-      appToast.success({ title: 'Prescription renewed' });
+      appToast.success({ title: 'Prescription renouvelée' });
     },
   });
 

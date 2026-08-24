@@ -22,7 +22,7 @@ export default function ProfessionalCarePlansPage() {
       return (
         <PageShell
           title={
-            location.includes('/tasks') ? 'Patient Tasks' : 'Patient Goals'
+            location.includes('/tasks') ? 'Tâches patient' : 'Objectifs patient'
           }
           subtitle={`Patient ${patientId}`}
         >
@@ -35,7 +35,7 @@ export default function ProfessionalCarePlansPage() {
       <CarePlansShell
         basePath={basePath}
         variant="clinician"
-        title="Patient Care Plan"
+        title="E-Parcours patient"
         patientId={patientId}
       />
     );
@@ -47,7 +47,7 @@ export default function ProfessionalCarePlansPage() {
     <CarePlansShell
       basePath={basePath}
       variant="clinician"
-      title={segment === 'pathways' ? 'Clinical Pathways' : 'Care Plans'}
+      title={segment === 'pathways' ? 'Parcours cliniques' : 'Plans de soins'}
     />
   );
 }

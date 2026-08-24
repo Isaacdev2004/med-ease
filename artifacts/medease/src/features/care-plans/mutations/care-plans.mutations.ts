@@ -37,7 +37,7 @@ export function useCarePlanMutations() {
       ),
     onSuccess: () => {
       invalidateAll(client);
-      appToast.success({ title: 'Care plan created' });
+      appToast.success({ title: 'Parcours créé' });
     },
   });
 

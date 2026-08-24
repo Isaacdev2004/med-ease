@@ -59,6 +59,7 @@ export function buildMedicationCatalogWhere(
       { genericName: { contains: filters.q, mode: 'insensitive' } },
       { atcCode: { contains: filters.q, mode: 'insensitive' } },
       { therapeuticClass: { contains: filters.q, mode: 'insensitive' } },
+      { description: { contains: filters.q, mode: 'insensitive' } },
     ];
   }
 

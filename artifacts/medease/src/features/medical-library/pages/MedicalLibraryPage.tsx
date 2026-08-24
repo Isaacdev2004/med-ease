@@ -191,10 +191,10 @@ export default function MedicalLibraryPage() {
           icon={Search}
           title={
             filterState.favoritesOnly
-              ? 'No favorites yet'
-              : 'No medications found'
+              ? 'Aucun favori'
+              : 'Aucun médicament trouvé'
           }
-          description="Try adjusting your search or filters."
+          description="Essayez un autre terme (nom, DCI, marque) ou retirez les filtres."
         />
       ) : filterState.view === 'compact' ? (
         <div className="space-y-2">

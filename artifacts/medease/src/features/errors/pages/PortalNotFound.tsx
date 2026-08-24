@@ -14,7 +14,7 @@ export default function PortalNotFound({
   portalLabel,
   dashboardPath,
 }: PortalNotFoundProps) {
-  useDocumentTitle('Page Not Found', `${portalLabel} Portal`);
+  useDocumentTitle('Page introuvable', portalLabel);
 
   return (
     <div className="flex min-h-[50vh] items-center justify-center">
@@ -26,17 +26,17 @@ export default function PortalNotFound({
               aria-hidden="true"
             />
             <h1 className="text-2xl font-bold tracking-tight">
-              Page not found
+              Page introuvable
             </h1>
           </div>
           <p className="text-sm text-muted-foreground">
-            This {portalLabel.toLowerCase()} portal page is not available. Check
-            the URL or return to your dashboard.
+            Cette page du portail {portalLabel.toLowerCase()} n’est pas
+            disponible. Vérifiez l’URL ou retournez au tableau de bord.
           </p>
           <Button asChild className="mt-6">
             <Link href={dashboardPath}>
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Dashboard
+              Retour au tableau de bord
             </Link>
           </Button>
         </CardContent>

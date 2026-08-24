@@ -688,8 +688,10 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   ],
   patient: [
     'patients.read',
+    'patients.write',
     'appointments.manage',
     'medications.read',
+    'medications.write',
     'medications.export',
     'medications.refill',
     'care-plans.read',

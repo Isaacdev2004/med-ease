@@ -57,8 +57,10 @@ const MEDICATION_WRITE_PERMISSIONS = [
 ] as const;
 
 const MEDICATION_DOSE_PERMISSIONS = [
+  'medications.read',
   'medications.write',
   'medications.administer',
+  'medications.refill',
   'medications.admin',
 ] as const;
 

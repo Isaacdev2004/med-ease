@@ -9,29 +9,41 @@ interface MedicationTabsProps {
   medication: MedicationRecord;
 }
 
+function BulletList({ items, empty }: { items: string[]; empty: string }) {
+  if (!items.length) {
+    return <p className="text-sm text-muted-foreground">{empty}</p>;
+  }
+  return (
+    <ul className="list-disc pl-5 text-sm text-muted-foreground">
+      {items.map((i) => (
+        <li key={i}>{i}</li>
+      ))}
+    </ul>
+  );
+}
+
 export function MedicationTabs({ medication }: MedicationTabsProps) {
   return (
     <Tabs defaultValue="overview" className="w-full">
-      <TabsList className="flex flex-wrap h-auto">
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="dosage">Dosage</TabsTrigger>
-        <TabsTrigger value="warnings">Warnings</TabsTrigger>
+      <TabsList className="flex h-auto flex-wrap">
+        <TabsTrigger value="overview">Aperçu</TabsTrigger>
+        <TabsTrigger value="dosage">Posologie</TabsTrigger>
+        <TabsTrigger value="warnings">Contre-indications</TabsTrigger>
         <TabsTrigger value="interactions">Interactions</TabsTrigger>
-        <TabsTrigger value="patient">Patient Guide</TabsTrigger>
-        <TabsTrigger value="professional">Professional Guide</TabsTrigger>
+        <TabsTrigger value="patient">Guide patient</TabsTrigger>
+        <TabsTrigger value="professional">Guide pro</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="overview" className="space-y-4 mt-6">
+      <TabsContent value="overview" className="mt-6 space-y-4">
         <Card>
           <CardHeader>
-            <CardTitle>Active Ingredients</CardTitle>
+            <CardTitle>Principes actifs (DCI)</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground">
-              {medication.activeIngredients.map((i) => (
-                <li key={i}>{i}</li>
-              ))}
-            </ul>
+            <BulletList
+              items={medication.activeIngredients}
+              empty="Aucun principe actif renseigné."
+            />
           </CardContent>
         </Card>
         <Card>
@@ -39,25 +51,33 @@ export function MedicationTabs({ medication }: MedicationTabsProps) {
             <CardTitle>Indications</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground">
-              {medication.indications.map((i) => (
-                <li key={i}>{i}</li>
-              ))}
-            </ul>
+            <BulletList
+              items={medication.indications}
+              empty="Aucune indication renseignée."
+            />
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Side Effects</CardTitle>
+            <CardTitle>Effets indésirables</CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground">
-              {medication.sideEffects.map((i) => (
-                <li key={i}>{i}</li>
-              ))}
-            </ul>
+            <BulletList
+              items={medication.sideEffects}
+              empty="Aucun effet indésirable renseigné."
+            />
           </CardContent>
         </Card>
+        {medication.description ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Description</CardTitle>
+            </CardHeader>
+            <CardContent className="text-sm text-muted-foreground">
+              {medication.description}
+            </CardContent>
+          </Card>
+        ) : null}
       </TabsContent>
 
       <TabsContent value="dosage" className="mt-6">
@@ -75,10 +95,10 @@ export function MedicationTabs({ medication }: MedicationTabsProps) {
       <TabsContent value="patient" className="mt-6">
         <Card>
           <CardHeader>
-            <CardTitle>Patient Information</CardTitle>
+            <CardTitle>Information patient</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            {medication.patientInformation}
+            {medication.patientInformation || 'Non renseigné.'}
           </CardContent>
         </Card>
       </TabsContent>
@@ -86,23 +106,19 @@ export function MedicationTabs({ medication }: MedicationTabsProps) {
       <TabsContent value="professional" className="mt-6">
         <Card>
           <CardHeader>
-            <CardTitle>Professional Information</CardTitle>
+            <CardTitle>Information professionnelle</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
-            {medication.professionalInformation}
+            {medication.professionalInformation || 'Non renseigné.'}
           </CardContent>
         </Card>
         {medication.references.length ? (
           <Card className="mt-4">
             <CardHeader>
-              <CardTitle>References</CardTitle>
+              <CardTitle>Références</CardTitle>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc pl-5 text-sm text-muted-foreground">
-                {medication.references.map((ref) => (
-                  <li key={ref}>{ref}</li>
-                ))}
-              </ul>
+              <BulletList items={medication.references} empty="" />
             </CardContent>
           </Card>
         ) : null}

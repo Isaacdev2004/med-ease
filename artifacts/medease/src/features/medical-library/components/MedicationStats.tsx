@@ -1,6 +1,7 @@
+import { BookOpen, Heart, Pill, ShieldAlert } from 'lucide-react';
+
 import type { MedicationLibraryStats } from '@/services/medical-library/medical-library.types';
-import { MetricCard, StatCard } from '@/shared/components';
-import { BookOpen, Heart, Pill, Shield } from 'lucide-react';
+import { StatCard } from '@/shared/components';
 
 interface MedicationStatsProps {
   stats?: MedicationLibraryStats;
@@ -10,31 +11,24 @@ interface MedicationStatsProps {
 export function MedicationStats({ stats, loading }: MedicationStatsProps) {
   if (loading || !stats) {
     return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-24 animate-pulse rounded-lg bg-muted" />
+          <div key={i} className="h-20 animate-pulse rounded-lg bg-muted" />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      <StatCard label="Total Medications" value={stats.total} icon={BookOpen} />
-      <MetricCard
-        title="Prescription"
-        value={stats.prescription}
-        status="warning"
-      />
+    <div className="grid gap-3 grid-cols-2 lg:grid-cols-4 min-w-0">
+      <StatCard label="Total" value={stats.total} icon={BookOpen} />
       <StatCard
-        label="Over-the-counter"
-        value={stats.overTheCounter}
-        icon={Pill}
+        label="Sur ordonnance"
+        value={stats.prescription}
+        icon={ShieldAlert}
       />
-      <StatCard label="Your Favorites" value={stats.favorites} icon={Heart} />
-      <div className="hidden">
-        <Shield />
-      </div>
+      <StatCard label="Sans ordonnance" value={stats.overTheCounter} icon={Pill} />
+      <StatCard label="Favoris" value={stats.favorites} icon={Heart} />
     </div>
   );
 }

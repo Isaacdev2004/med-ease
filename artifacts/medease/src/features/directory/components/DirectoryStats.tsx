@@ -1,8 +1,7 @@
-import { MapPin } from 'lucide-react';
+import { Building2, Heart, MapPin, Pill, Stethoscope } from 'lucide-react';
 
 import type { DirectoryStats } from '@/services/directory/directory.types';
-import { MetricCard, StatCard } from '@/shared/components';
-import { Building2, Heart, Pill, Stethoscope, Truck } from 'lucide-react';
+import { StatCard } from '@/shared/components';
 
 interface DirectoryStatsProps {
   stats?: DirectoryStats;
@@ -12,29 +11,25 @@ interface DirectoryStatsProps {
 export function DirectoryStatsPanel({ stats, loading }: DirectoryStatsProps) {
   if (loading || !stats) {
     return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-5">
         {Array.from({ length: 5 }).map((_, index) => (
-          <div key={index} className="h-24 animate-pulse rounded-lg bg-muted" />
+          <div key={index} className="h-20 animate-pulse rounded-lg bg-muted" />
         ))}
       </div>
     );
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-      <StatCard label="Total Providers" value={stats.total} icon={MapPin} />
-      <MetricCard
-        title="Professionals"
+    <div className="grid gap-3 grid-cols-2 lg:grid-cols-5 min-w-0">
+      <StatCard label="Total" value={stats.total} icon={MapPin} />
+      <StatCard
+        label="Professionnels"
         value={stats.professionals}
-        status="neutral"
+        icon={Stethoscope}
       />
-      <StatCard label="Facilities" value={stats.facilities} icon={Building2} />
+      <StatCard label="Établissements" value={stats.facilities} icon={Building2} />
       <StatCard label="Pharmacies" value={stats.pharmacies} icon={Pill} />
-      <StatCard label="Your Favorites" value={stats.favorites} icon={Heart} />
-      <div className="hidden">
-        <Stethoscope />
-        <Truck />
-      </div>
+      <StatCard label="Favoris" value={stats.favorites} icon={Heart} />
     </div>
   );
 }

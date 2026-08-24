@@ -6,6 +6,7 @@ import {
   CarePlanTabs,
   getCarePlanSectionFromPath,
 } from '@/features/care-plans/components/CarePlanTabs';
+import { CreatePathwayDialog } from '@/features/care-plans/components/CreatePathwayDialog';
 import { useCarePlanPermissions } from '@/features/care-plans/hooks/use-care-plan-permissions';
 import { usePatientCarePlanContext } from '@/features/care-plans/hooks/use-care-plans';
 import type { CarePlanFilters } from '@/services/care-plans/types';
@@ -22,7 +23,7 @@ interface CarePlansShellProps {
 export function CarePlansShell({
   basePath,
   variant = 'patient',
-  title = 'Care Plan',
+  title = 'E-Parcours',
   patientId: explicitPatientId,
 }: CarePlansShellProps) {
   const [location] = useLocation();
@@ -41,8 +42,8 @@ export function CarePlansShell({
     return (
       <PageShell title={title}>
         <EmptyState
-          title="Access denied"
-          description="You do not have permission to view care plans."
+          title="Accès refusé"
+          description="Vous n’avez pas l’autorisation de consulter les parcours de soins."
         />
       </PageShell>
     );
@@ -51,7 +52,7 @@ export function CarePlansShell({
   if (variant === 'patient' && patientResolve.isLoading) {
     return (
       <PageShell title={title}>
-        <LoadingView label="Loading care plan…" />
+        <LoadingView label="Chargement de l’e-parcours…" />
       </PageShell>
     );
   }
@@ -59,7 +60,12 @@ export function CarePlansShell({
   return (
     <PageShell
       title={title}
-      subtitle="Coordinated treatment plans — goals, tasks, care team, and clinical pathways."
+      subtitle="Plans de soins coordonnés — objectifs, tâches, équipe et parcours cliniques."
+      primaryAction={
+        variant === 'clinician' && perms.canCreate ? (
+          <CreatePathwayDialog />
+        ) : undefined
+      }
     >
       <div className="space-y-6">
         <CarePlanTabs basePath={basePath} variant={variant} />

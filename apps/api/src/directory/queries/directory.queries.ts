@@ -51,7 +51,15 @@ export function buildDirectoryListWhere(
   }
 
   if (filters.openNow) {
-    where.availability = { in: ['Open now', '24/7 dispatch'] };
+    where.availability = {
+      in: [
+        'Open now',
+        '24/7 dispatch',
+        'Ouvert maintenant',
+        'Disponible aujourd’hui',
+        'Dispatch 24/7',
+      ],
+    };
   }
 
   if (filters.favoritesOnly) {
@@ -63,8 +71,14 @@ export function buildDirectoryListWhere(
       OR: [
         { name: { contains: filters.q, mode: 'insensitive' } },
         { specialty: { contains: filters.q, mode: 'insensitive' } },
+        { medicalSpecialty: { contains: filters.q, mode: 'insensitive' } },
+        { title: { contains: filters.q, mode: 'insensitive' } },
+        { facilityType: { contains: filters.q, mode: 'insensitive' } },
         { city: { contains: filters.q, mode: 'insensitive' } },
+        { department: { contains: filters.q, mode: 'insensitive' } },
         { finessNumber: { contains: filters.q, mode: 'insensitive' } },
+        { availability: { contains: filters.q, mode: 'insensitive' } },
+        { services: { has: filters.q } },
       ],
     });
   }

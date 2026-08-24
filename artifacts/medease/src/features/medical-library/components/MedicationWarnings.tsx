@@ -11,48 +11,62 @@ interface MedicationWarningsProps {
 export function MedicationWarnings({ medication }: MedicationWarningsProps) {
   return (
     <div className="space-y-4">
-      {medication.warnings.map((warning) => (
-        <Alert key={warning} variant="warning">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Warning</AlertTitle>
-          <AlertDescription>{warning}</AlertDescription>
-        </Alert>
-      ))}
+      {medication.warnings.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          Aucune alerte renseignée pour ce médicament.
+        </p>
+      ) : (
+        medication.warnings.map((warning) => (
+          <Alert key={warning} variant="warning">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertTitle>Alerte</AlertTitle>
+            <AlertDescription>{warning}</AlertDescription>
+          </Alert>
+        ))
+      )}
       <Card>
         <CardHeader>
-          <CardTitle>Contraindications</CardTitle>
+          <CardTitle>Contre-indications</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-            {medication.contraindications.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+          {medication.contraindications.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Non renseigné.</p>
+          ) : (
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+              {medication.contraindications.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>Precautions</CardTitle>
+          <CardTitle>Précautions</CardTitle>
         </CardHeader>
         <CardContent>
-          <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-            {medication.precautions.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
+          {(medication.precautions?.length ?? 0) === 0 ? (
+            <p className="text-sm text-muted-foreground">Non renseigné.</p>
+          ) : (
+            <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+              {medication.precautions.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
       <Card>
         <CardHeader>
-          <CardTitle>Pregnancy & Breastfeeding</CardTitle>
+          <CardTitle>Grossesse & allaitement</CardTitle>
         </CardHeader>
-        <CardContent className="text-sm space-y-2">
+        <CardContent className="space-y-2 text-sm">
           <p>
-            <span className="font-medium">Pregnancy:</span>{' '}
+            <span className="font-medium">Grossesse :</span>{' '}
             {medication.pregnancySafety}
           </p>
           <p>
-            <span className="font-medium">Breastfeeding:</span>{' '}
+            <span className="font-medium">Allaitement :</span>{' '}
             {medication.breastfeedingSafety}
           </p>
         </CardContent>

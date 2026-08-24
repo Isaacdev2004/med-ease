@@ -12,11 +12,7 @@ import {
   useProvider,
   useRelatedProviders,
 } from '@/features/directory/hooks/use-directory';
-import {
-  getDirectoryBasePath,
-  getProviderIdFromPath,
-} from '@/features/directory/utils/directory-path';
-import { MOCK_DIRECTORY_PROVIDERS } from '@/services/directory';
+import { getProviderIdFromPath } from '@/features/directory/utils/directory-path';
 import { useAuth } from '@/services/auth/auth-context';
 import { LoadingView, PageShell } from '@/shared/components';
 import { EmptyState } from '@/shared/ui/empty-state';
@@ -42,10 +38,10 @@ export default function ProviderProfilePage() {
   const associatedFacilities = useMemo(() => {
     const provider = providerQuery.data;
     if (!provider?.associatedFacilityIds?.length) return [];
-    return MOCK_DIRECTORY_PROVIDERS.filter((item) =>
+    return (relatedQuery.data ?? []).filter((item) =>
       provider.associatedFacilityIds?.includes(item.id),
     );
-  }, [providerQuery.data]);
+  }, [providerQuery.data, relatedQuery.data]);
 
   const canTransfer =
     user?.role === 'physician' ||

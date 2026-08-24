@@ -80,7 +80,9 @@ export function PatientRecordsShell({
           healthScore={record.healthScore}
           alerts={record.alerts}
         />
-        {showProfiles ? <MegaProfilesPanel basePath={basePath} /> : null}
+        {showProfiles ? (
+          <MegaProfilesPanel basePath={basePath} patientId={patientId} />
+        ) : null}
         <RecordTabs
           basePath={basePath}
           medicationsOnly={perms.canViewMedicationsOnly}
