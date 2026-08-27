@@ -42,7 +42,7 @@ export function useLaboratoryMutations() {
       ),
     onSuccess: () => {
       invalidateAll(client);
-      appToast.success({ title: 'Lab order created.' });
+      appToast.success({ title: 'Demande de laboratoire créée.' });
     },
   });
 

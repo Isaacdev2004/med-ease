@@ -1,6 +1,12 @@
 import { format } from 'date-fns';
+import type { ReactNode } from 'react';
 
 import type { PatientHealthRecord } from '@/services/patient-records/types';
+import {
+  MegaProfileEditor,
+  MegaProfileView,
+  type MegaProfileId,
+} from '@/features/patient-records/components/MegaProfileEditor';
 import { HealthScoreWidget } from '@/features/patient-records/components/PatientBanner';
 import { ChartPanel, SparklineChart } from '@/shared/charts';
 import { DataTable } from '@/shared/components';
@@ -11,40 +17,69 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { AlertTriangle, FileText, Scan } from 'lucide-react';
 
+function MegaSectionChrome({
+  patientId,
+  profileId,
+  title,
+  children,
+}: {
+  patientId: string;
+  profileId: MegaProfileId;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
+        <MegaProfileEditor patientId={patientId} profileId={profileId} />
+      </div>
+      <MegaProfileView patientId={patientId} profileId={profileId} />
+      {children}
+    </div>
+  );
+}
+
 export function SummarySection({ record }: { record: PatientHealthRecord }) {
   return (
-    <div className="space-y-6">
-      <HealthScoreWidget score={record.healthScore} />
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Problem List</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-2 text-sm">
-              {record.summary.problemList.map((p) => (
-                <li key={p.id} className="flex justify-between">
-                  <span>{p.label}</span>
-                  <Badge variant="outline">{p.status}</Badge>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Active Treatments</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc pl-5 text-sm text-muted-foreground">
-              {record.summary.activeTreatments.map((t) => (
-                <li key={t}>{t}</li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+    <MegaSectionChrome
+      patientId={record.demographics.id}
+      profileId="administratif"
+      title="Profil administratif"
+    >
+      <div className="space-y-6">
+        <HealthScoreWidget score={record.healthScore} />
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>Liste des problèmes</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2 text-sm">
+                {record.summary.problemList.map((p) => (
+                  <li key={p.id} className="flex justify-between">
+                    <span>{p.label}</span>
+                    <Badge variant="outline">{p.status}</Badge>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Traitements actifs</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="list-disc pl-5 text-sm text-muted-foreground">
+                {record.summary.activeTreatments.map((t) => (
+                  <li key={t}>{t}</li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </MegaSectionChrome>
   );
 }
 
@@ -52,33 +87,39 @@ export function ProfileSection({ record }: { record: PatientHealthRecord }) {
   const d = record.demographics;
   const rows = [
     [
-      'Address',
+      'Adresse',
       `${d.address.street}, ${d.address.postalCode} ${d.address.city}`,
     ],
-    ['Language', d.language],
-    ['Marital status', d.maritalStatus],
-    ['Occupation', d.occupation],
-    ['Nationality', d.nationality],
-    ['Primary physician', d.primaryPhysician],
-    ['Insurance', `${d.insurance.provider} (${d.insurance.policyNumber})`],
-    ['Smoking', d.smoking],
-    ['Alcohol', d.alcohol],
-    ['Weight / Height', `${d.weightKg} kg / ${d.heightCm} cm`],
+    ['Langue', d.language],
+    ['Situation familiale', d.maritalStatus],
+    ['Profession', d.occupation],
+    ['Nationalité', d.nationality],
+    ['Médecin traitant', d.primaryPhysician],
+    ['Assurance', `${d.insurance.provider} (${d.insurance.policyNumber})`],
+    ['Tabac', d.smoking],
+    ['Alcool', d.alcohol],
+    ['Poids / Taille', `${d.weightKg} kg / ${d.heightCm} cm`],
   ];
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Personal Information</CardTitle>
-      </CardHeader>
-      <CardContent className="grid gap-3 sm:grid-cols-2 text-sm">
-        {rows.map(([label, value]) => (
-          <div key={label}>
-            <p className="text-muted-foreground">{label}</p>
-            <p className="font-medium">{value}</p>
-          </div>
-        ))}
-      </CardContent>
-    </Card>
+    <MegaSectionChrome
+      patientId={d.id}
+      profileId="general"
+      title="Profil général"
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle>Informations personnelles (dossier)</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-3 text-sm sm:grid-cols-2">
+          {rows.map(([label, value]) => (
+            <div key={label}>
+              <p className="text-muted-foreground">{label}</p>
+              <p className="font-medium">{value}</p>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+    </MegaSectionChrome>
   );
 }
 
@@ -100,50 +141,57 @@ export function VitalsSection({ record }: { record: PatientHealthRecord }) {
     }));
 
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 lg:grid-cols-2">
-        <ChartPanel title="Blood Pressure Trend" description="Systolic mmHg">
-          <SparklineChart data={bpData} />
-        </ChartPanel>
-        {glucoseData.length > 0 ? (
-          <ChartPanel title="Glucose Trend" description="mg/dL">
-            <SparklineChart data={glucoseData} />
+    <MegaSectionChrome
+      patientId={record.demographics.id}
+      profileId="physique"
+      title="Profil physique"
+    >
+      <div className="space-y-6">
+        <div className="grid gap-4 lg:grid-cols-2">
+          <ChartPanel title="Tension artérielle" description="Systolique mmHg">
+            <SparklineChart data={bpData} />
           </ChartPanel>
-        ) : null}
+          {glucoseData.length > 0 ? (
+            <ChartPanel title="Glycémie" description="mg/dL">
+              <SparklineChart data={glucoseData} />
+            </ChartPanel>
+          ) : null}
+        </div>
+        <DataTable
+          caption="Historique des constantes"
+          data={record.vitals}
+          getRowId={(r) => r.id}
+          columns={[
+            {
+              id: 'date',
+              header: 'Date',
+              cell: (r) => format(new Date(r.recordedAt), 'PP'),
+            },
+            {
+              id: 'bp',
+              header: 'TA',
+              cell: (r) =>
+                r.bloodPressureSystolic
+                  ? `${r.bloodPressureSystolic}/${r.bloodPressureDiastolic}`
+                  : '—',
+            },
+            { id: 'hr', header: 'FC', cell: (r) => r.heartRate ?? '—' },
+            {
+              id: 'temp',
+              header: 'Temp.',
+              cell: (r) =>
+                r.temperatureC ? `${r.temperatureC.toFixed(1)}°C` : '—',
+            },
+            {
+              id: 'spo2',
+              header: 'SpO₂',
+              cell: (r) =>
+                r.oxygenSaturation ? `${r.oxygenSaturation}%` : '—',
+            },
+          ]}
+        />
       </div>
-      <DataTable
-        caption="Vitals history"
-        data={record.vitals}
-        getRowId={(r) => r.id}
-        columns={[
-          {
-            id: 'date',
-            header: 'Date',
-            cell: (r) => format(new Date(r.recordedAt), 'PP'),
-          },
-          {
-            id: 'bp',
-            header: 'BP',
-            cell: (r) =>
-              r.bloodPressureSystolic
-                ? `${r.bloodPressureSystolic}/${r.bloodPressureDiastolic}`
-                : '—',
-          },
-          { id: 'hr', header: 'HR', cell: (r) => r.heartRate ?? '—' },
-          {
-            id: 'temp',
-            header: 'Temp',
-            cell: (r) =>
-              r.temperatureC ? `${r.temperatureC.toFixed(1)}°C` : '—',
-          },
-          {
-            id: 'spo2',
-            header: 'SpO₂',
-            cell: (r) => (r.oxygenSaturation ? `${r.oxygenSaturation}%` : '—'),
-          },
-        ]}
-      />
-    </div>
+    </MegaSectionChrome>
   );
 }
 
@@ -258,21 +306,31 @@ export function ImmunizationsSection({
   record: PatientHealthRecord;
 }) {
   return (
-    <DataTable
-      caption="Immunizations"
-      data={record.immunizations}
-      getRowId={(r) => r.id}
-      columns={[
-        { id: 'vaccine', header: 'Vaccine', cell: (r) => r.vaccine },
-        { id: 'dose', header: 'Dose', cell: (r) => r.dose },
-        {
-          id: 'date',
-          header: 'Date',
-          cell: (r) => format(new Date(r.date), 'PP'),
-        },
-        { id: 'provider', header: 'Provider', cell: (r) => r.provider },
-      ]}
-    />
+    <MegaSectionChrome
+      patientId={record.demographics.id}
+      profileId="vaccination"
+      title="Vaccination"
+    >
+      <DataTable
+        caption="Carnet vaccinal"
+        data={record.immunizations}
+        getRowId={(r) => r.id}
+        columns={[
+          { id: 'vaccine', header: 'Vaccin', cell: (r) => r.vaccine },
+          { id: 'dose', header: 'Dose', cell: (r) => r.dose },
+          {
+            id: 'date',
+            header: 'Date',
+            cell: (r) => format(new Date(r.date), 'PP'),
+          },
+          {
+            id: 'provider',
+            header: 'Professionnel',
+            cell: (r) => r.provider,
+          },
+        ]}
+      />
+    </MegaSectionChrome>
   );
 }
 
@@ -378,43 +436,49 @@ export function DocumentsSection({ record }: { record: PatientHealthRecord }) {
 export function EmergencySection({ record }: { record: PatientHealthRecord }) {
   const e = record.emergencySummary;
   return (
-    <Card className="border-destructive/50">
-      <CardHeader>
-        <CardTitle className="text-destructive">Emergency Summary</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4 text-sm">
-        <p>
-          <strong>Blood group:</strong> {e.bloodGroup}
-        </p>
-        <div>
-          <strong>Critical allergies:</strong>
-          <ul className="list-disc pl-5">
-            {e.criticalAllergies.map((a) => (
-              <li key={a}>{a}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <strong>Active medications:</strong>
-          <ul className="list-disc pl-5">
-            {e.activeMedications.map((m) => (
-              <li key={m}>{m}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <strong>Chronic conditions:</strong>
-          <ul className="list-disc pl-5">
-            {e.chronicConditions.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-          </ul>
-        </div>
-        <p>
-          <strong>Primary physician:</strong> {e.primaryPhysician}
-        </p>
-      </CardContent>
-    </Card>
+    <MegaSectionChrome
+      patientId={record.demographics.id}
+      profileId="urgence"
+      title="Profil d'urgence"
+    >
+      <Card className="border-destructive/50">
+        <CardHeader>
+          <CardTitle className="text-destructive">Résumé d’urgence</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm">
+          <p>
+            <strong>Groupe sanguin :</strong> {e.bloodGroup}
+          </p>
+          <div>
+            <strong>Allergies critiques :</strong>
+            <ul className="list-disc pl-5">
+              {e.criticalAllergies.map((a) => (
+                <li key={a}>{a}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <strong>Médicaments actifs :</strong>
+            <ul className="list-disc pl-5">
+              {e.activeMedications.map((m) => (
+                <li key={m}>{m}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <strong>Pathologies chroniques :</strong>
+            <ul className="list-disc pl-5">
+              {e.chronicConditions.map((c) => (
+                <li key={c}>{c}</li>
+              ))}
+            </ul>
+          </div>
+          <p>
+            <strong>Médecin traitant :</strong> {e.primaryPhysician}
+          </p>
+        </CardContent>
+      </Card>
+    </MegaSectionChrome>
   );
 }
 

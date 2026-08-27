@@ -114,12 +114,20 @@ export function TodaySection({ filters }: { filters?: MedicationFilters }) {
           <DoseCard
             key={dose.id}
             dose={dose}
-            onLog={() =>
+            onLogTaken={() =>
               void logDose.mutateAsync({
                 medicationId: dose.medicationId,
                 patientId: dose.patientId,
                 scheduledDoseId: dose.id,
                 status: 'taken',
+              })
+            }
+            onLogSkipped={() =>
+              void logDose.mutateAsync({
+                medicationId: dose.medicationId,
+                patientId: dose.patientId,
+                scheduledDoseId: dose.id,
+                status: 'skipped',
               })
             }
           />

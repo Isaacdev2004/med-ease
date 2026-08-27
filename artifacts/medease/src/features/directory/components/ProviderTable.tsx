@@ -58,7 +58,7 @@ export function ProviderTable({
         <DropdownMenuItem asChild>
           <Link href={getProviderProfilePath(portalBase, row.id)}>
             <Eye className="mr-2 h-4 w-4" />
-            View profile
+            Voir la fiche
           </Link>
         </DropdownMenuItem>
       )}
@@ -115,7 +115,7 @@ export function ProviderTable({
           cell: (row) => (
             <Button size="sm" variant="outline" asChild>
               <Link href={getProviderProfilePath(portalBase, row.id)}>
-                View
+                Voir
               </Link>
             </Button>
           ),

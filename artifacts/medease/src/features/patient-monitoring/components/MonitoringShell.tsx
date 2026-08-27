@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useLocation } from 'wouter';
 
+import { AddObservationDialog } from '@/features/patient-monitoring/components/AddObservationDialog';
 import { MonitoringSectionContent } from '@/features/patient-monitoring/components/MonitoringSections';
 import {
   MonitoringTabs,
@@ -22,7 +23,7 @@ interface MonitoringShellProps {
 export function MonitoringShell({
   basePath,
   variant = 'patient',
-  title = 'Patient Monitoring',
+  title = 'Suivi',
   patientId: explicitPatientId,
 }: MonitoringShellProps) {
   const [location] = useLocation();
@@ -30,19 +31,20 @@ export function MonitoringShell({
   const patientResolve = usePatientMonitoringContext();
   const section = getMonitoringSectionFromPath(location);
 
+  const patientId =
+    explicitPatientId ??
+    (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
+
   const scopedFilters = useMemo((): MonitoringFilters => {
-    const patientId =
-      explicitPatientId ??
-      (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
     return patientId ? { patientId } : {};
-  }, [explicitPatientId, patientResolve.data, variant]);
+  }, [patientId]);
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
         <EmptyState
-          title="Access denied"
-          description="You do not have permission to view patient monitoring."
+          title="Accès refusé"
+          description="Vous n’avez pas l’autorisation de consulter le suivi."
         />
       </PageShell>
     );
@@ -51,7 +53,7 @@ export function MonitoringShell({
   if (variant === 'patient' && patientResolve.isLoading) {
     return (
       <PageShell title={title}>
-        <LoadingView label="Loading monitoring…" />
+        <LoadingView label="Chargement du suivi…" />
       </PageShell>
     );
   }
@@ -59,9 +61,20 @@ export function MonitoringShell({
   return (
     <PageShell
       title={title}
-      subtitle="Continuous vital signs, remote patient monitoring, clinical observations, alerts, and early warning scores."
+      subtitle="Constantes vitales, observations, télé-suivi et alertes cliniques."
     >
       <div className="space-y-6">
+        {patientId && perms.canWrite ? (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-base font-semibold">Saisie de suivi</h2>
+              <p className="text-sm text-muted-foreground">
+                Enregistrez une constante ou une observation (Formulaire Studio).
+              </p>
+            </div>
+            <AddObservationDialog patientId={patientId} />
+          </div>
+        ) : null}
         <MonitoringTabs basePath={basePath} variant={variant} />
         <MonitoringSectionContent section={section} filters={scopedFilters} />
       </div>

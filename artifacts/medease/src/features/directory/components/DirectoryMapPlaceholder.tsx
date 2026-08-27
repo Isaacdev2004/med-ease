@@ -213,7 +213,7 @@ export function DirectoryMapPlaceholder({
               {!focusProvider ? (
                 <Button size="sm" asChild>
                   <Link href={getProviderProfilePath(portalBase, selected.id)}>
-                    View profile
+                    Voir la fiche
                   </Link>
                 </Button>
               ) : null}

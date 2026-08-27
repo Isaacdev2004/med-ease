@@ -24,23 +24,23 @@ export type RecordSection =
 
 const PATIENT_TABS: { segment: RecordSection | ''; label: string }[] = [
   { segment: '', label: 'Aperçu' },
-  { segment: 'profile', label: 'Profil' },
-  { segment: 'summary', label: 'Résumé' },
-  { segment: 'vitals', label: 'Constantes' },
+  { segment: 'profile', label: 'Général' },
+  { segment: 'summary', label: 'Administratif' },
+  { segment: 'emergency', label: 'Urgence' },
+  { segment: 'vitals', label: 'Physique' },
+  { segment: 'immunizations', label: 'Vaccination' },
   { segment: 'laboratory', label: 'Laboratoire' },
   { segment: 'medications', label: 'Médicaments' },
   { segment: 'allergies', label: 'Allergies' },
-  { segment: 'immunizations', label: 'Vaccinations' },
   { segment: 'procedures', label: 'Actes' },
   { segment: 'radiology', label: 'Imagerie' },
   { segment: 'notes', label: 'Notes cliniques' },
   { segment: 'care-plans', label: 'Parcours' },
-  { segment: 'timeline', label: 'Timeline' },
+  { segment: 'timeline', label: 'Historique' },
   { segment: 'documents', label: 'Documents' },
   { segment: 'family-history', label: 'Antécédents familiaux' },
   { segment: 'lifestyle', label: 'Mode de vie' },
   { segment: 'social-history', label: 'Histoire sociale' },
-  { segment: 'emergency', label: 'Urgence' },
 ];
 
 interface RecordTabsProps {

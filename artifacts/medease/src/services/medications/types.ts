@@ -261,6 +261,8 @@ export interface CreatePrescriptionInput {
   refillCount?: number;
   controlledSubstance?: boolean;
   diagnosisCode?: string;
+  brandName?: string;
+  scheduleTimes?: string[];
 }
 
 export interface LogDoseInput {

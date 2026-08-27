@@ -37,7 +37,7 @@ export function useMonitoringMutations() {
       ),
     onSuccess: () => {
       invalidateAll(client);
-      appToast.success({ title: 'Observation recorded.' });
+      appToast.success({ title: 'Mesure enregistrée.' });
     },
   });
 

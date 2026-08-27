@@ -15,6 +15,7 @@ import { MedicationCard as SharedMedicationCard } from '@/shared/medical';
 import { MetricCard, StatCard } from '@/shared/components';
 import { BarChartPanel, SparklineChart, ChartPanel } from '@/shared/charts';
 import { Badge } from '@/shared/ui/badge';
+import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { cn } from '@/shared/lib/utils';
 import { getInteractionSeverityColor } from '@/services/medications/interaction-engine';
@@ -110,15 +111,26 @@ export function EnterpriseMedicationCard({
 
 export function DoseCard({
   dose,
-  onLog,
+  onLogTaken,
+  onLogSkipped,
 }: {
   dose: ScheduledDose;
-  onLog?: () => void;
+  onLogTaken?: () => void;
+  onLogSkipped?: () => void;
 }) {
+  const statusLabel =
+    dose.status === 'taken'
+      ? 'Pris'
+      : dose.status === 'skipped'
+        ? 'Non pris'
+        : dose.status === 'missed'
+          ? 'Manqué'
+          : 'À prendre';
+
   return (
     <Card className={cn(dose.status === 'missed' && 'border-destructive/50')}>
       <CardHeader className="pb-2">
-        <div className="flex justify-between items-start">
+        <div className="flex items-start justify-between">
           <CardTitle className="text-base">{dose.medicationName}</CardTitle>
           <Badge
             variant={
@@ -129,7 +141,7 @@ export function DoseCard({
                   : 'warning'
             }
           >
-            {dose.status}
+            {statusLabel}
           </Badge>
         </div>
       </CardHeader>
@@ -137,14 +149,24 @@ export function DoseCard({
         <p>
           {format(new Date(dose.scheduledAt), 'p')} · {dose.slot} · {dose.dose}
         </p>
-        {onLog && dose.status === 'pending' ? (
-          <button
-            type="button"
-            className="mt-2 text-primary underline text-sm"
-            onClick={onLog}
-          >
-            Marquer comme pris
-          </button>
+        {dose.status === 'pending' && (onLogTaken || onLogSkipped) ? (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {onLogTaken ? (
+              <Button type="button" size="sm" onClick={onLogTaken}>
+                ✓ J&apos;ai pris
+              </Button>
+            ) : null}
+            {onLogSkipped ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={onLogSkipped}
+              >
+                ✕ Je n&apos;ai pas pris
+              </Button>
+            ) : null}
+          </div>
         ) : null}
       </CardContent>
     </Card>

@@ -1,0 +1,589 @@
+---PAGE 1---
+Formulaires  “Studios  de  Paramétrage”  
+1.  Principe  UX  du  MVP  
+Je  partirais  sur  un  même  modèle  pour  tous  les  formulaires  :  
+Créer  /  Modifier  →  renseigner  →  prévisualiser  →  enregistrer  →  confirmer  
+Avec  :  
+●  champs  obligatoires  marqués  *  ●  listes  déroulantes  plutôt  que  saisie  libre  lorsque  possible  ●  cases  à  cocher  ●  boutons  Oui  /  Non  ●  recherche  ●  valeurs  par  défaut  ●  possibilité  de  modifier  ultérieurement  ●  autosave  ou  brouillon  ●  barre  de  progression  lorsque  le  formulaire  est  long  ●  résumé  avant  validation  
+Structure  type  ┌──────────────────────────────────────────┐  │  ←  Retour         MON  MÉGA  CARNET           │  │                                           │  │  Complétion  du  profil  :  80  %               │  │  ████████████████░░░░                      │  │                                           │  │  [Général]  [Physique]  [Administratif]      │  │  [Urgence]  [Vaccination]                   │  │                                           │  │         INFORMATIONS  GÉNÉRALES             │  │                                           │  │  Nom  *               [____________]         │  │  Prénom  *            [____________]         │  │  Date  de  naissance   [__/__/____]           │  │                                           │  │                          [Enregistrer]      │  └──────────────────────────────────────────┘   
+---PAGE 2---
+2.  MÉGA  CARNET  —  Formulaire  de  
+création
+ 
+/
+ 
+modification
+ 
+Le  cahier  des  charges  prévoit  déjà  les  cinq  sections  et  un  écran  spécifique  de  gestion  des  
+autorisations/confidentialité.
+ 
+Je  recommande  de  ne  pas  faire  un  formulaire  unique  de  50  champs .  
+Créer  5  mini-formulaires.  
+ 
+2.1  Profil  Général  
+Objectif  
+Permettre  au  patient  d'être  immédiatement  identifiable  et  de  personnaliser  son  parcours.  
+Formulaire  
+Champ  Type  Obligatoire  
+Photo  Upload  Non  
+Nom  Texte  Oui  
+Prénom  Texte  Oui  
+Nom  d'usage  Texte  Non  
+Date  de  naissance  Date  Oui  
+Sexe  Liste  Oui  
+Adresse  Adresse  Non  
+Code  postal  Automatique  Non  
+Ville  Automatique  Non  
+Téléphone  Téléphone  Oui  
+Email  Email  Oui  
+Langue  préférée  Liste  Non  
+---PAGE 3---
+Personne  de  confiance  
+Sélection  contact  
+Non  
+Aidant  principal  Sélection  contact  
+Non  
+UX  
+Bouton  :  
+Enregistrer  mon  profil  
+Puis  :  
+✓  Profil  général  complété  
+et  suggestion  :  
+Complétez  votre  profil  Urgence  pour  mieux  sécuriser  votre  prise  en  
+charge.
+ 
+ 
+2.2  Profil  Physique  
+Le  template  prévoit  également  un  avatar  3D .  Pour  le  MVP,  je  déconseille  de  développer  une  
+véritable
+ 
+modélisation
+ 
+médicale
+ 
+complexe
+ 
+:
+ 
+une
+ 
+représentation
+ 
+graphique
+ 
+simple
+ 
+suffit.
+ 
+Formulaire  
+Taille  
+___  cm  
+Poids  
+___  kg  
+Groupe  sanguin  
+A+  /  A-  /  B+  /  B-  /  AB+  /  AB-  /  O+  /  O-  /  Inconnu  
+Latéralité  
+●  Droitier  ●  Gaucher  ●  Ambidextre  
+---PAGE 4---
+Mobilité  
+●  Autonome  ●  Marche  avec  aide  ●  Fauteuil  ●  Alité  
+Aides  techniques  
+☐  Lunettes  
+☐
+ 
+Appareil
+ 
+auditif
+ 
+☐
+ 
+Prothèse
+ 
+☐
+ 
+Canne
+ 
+☐
+ 
+Déambulateur
+ 
+☐
+ 
+Fauteuil
+ 
+roulant
+ 
+☐
+ 
+Autre
+ 
+Allergies  
++  Ajouter  une  allergie  
+Structure  :  
+Allergie  [  Médicament  ▼  ]   Nom  [___________]   Réaction  [___________]   Gravité  ○  Faible  ○  Modérée  ○  Sévère   
+2.3  Profil  Administratif  
+Coordonnées  
+●  Adresse  ●  Téléphone  ●  Email  ●  Contact  d'urgence  
+---PAGE 5---
+Assurance  
+●  Organisme  ●  Numéro  d'adhérent  ●  Mutuelle  ●  Télétransmission  
+Médecins  
++  Ajouter  un  professionnel  
+Type  :  
+●  Médecin  traitant  ●  Spécialiste  ●  Infirmier  ●  Pharmacien  ●  Autre  
+Recherche  par  :  
+Nom  /  RPPS  /  établissement  
+Cela  rejoint  directement  la  logique  du  Répertoire  professionnel  prévue  dans  le  cahier  des  
+charges.
+ 
+ 
+2.4  Profil  Urgence  
+C'est  probablement  la  fiche  ayant  le  plus  de  valeur  perçue .  
+Titre  :  
+🚨  Mes  informations  essentielles  en  cas  d'urgence  
+Informations  prioritaires  
+Groupe  sanguin  
+Allergies  graves  
+Pathologies  importantes  
+☐  Diabète  
+☐
+ 
+Épilepsie
+ 
+☐
+ 
+Insuffisance
+ 
+cardiaque
+ 
+☐
+ 
+Insuffisance
+ 
+rénale
+ 
+---PAGE 6---
+☐  Asthme  
+☐
+ 
+Anticoagulant
+ 
+☐
+ 
+Autre
+ 
+Traitements  critiques  
++  Ajouter  
+Personne  à  prévenir  
+Nom  /  téléphone  
+Médecin  traitant  
+Nom  /  téléphone  
+Consignes  particulières  
+Zone  texte  :  
+Information  importante  pour  les  professionnels  de  santé...  
+Bouton  
+Enregistrer  mon  profil  d'urgence  
+ 
+2.5  Vaccination  
+Vue  VACCINATION   COVID-19            ✓  À  jour  Tétanos              ⚠  À  renouveler  Grippe               ✓  2025  Hépatite  B           ?  DTP                  ⚠  
+Ajouter  une  vaccination  
+●  Vaccin  ●  Date  ●  Numéro  de  lot  ●  Centre  /  professionnel  ●  Prochaine  dose  
+---PAGE 7---
+●  Document  justificatif  
+Fonction  très  simple  mais  très  valorisante  
+Statut  automatique  :  
+●  🟢  À  jour  ●  🟠  À  renouveler  ●  🔴  Non  renseigné  
+ 
+3.  Gestion  des  autorisations  
+Le  cahier  des  charges  prévoit  déjà  un  écran  de  sécurité/confidentialité  et  de  gestion  des  
+autorisations.
+ 
+Pour  le  MVP  :  
+Qui  peut  accéder  à  mes  données  ?  
+Profil  Accès  
+Médecin  traitant  🟢  
+Professionnels  impliqués  dans  mon  parcours  
+🟢  
+Pharmacie  🟠  
+Établissement  🟠  
+Aidant  🟢  
+Autre  🔴  
+Cliquer  sur  une  ligne  :  
+Autoriser  /  Refuser  
+Et  surtout  :  
+Accès  exceptionnel  en  urgence  
+avec  confirmation  :  
+---PAGE 8---
+Autoriser  temporairement  l'accès  à  mes  informations  essentielles  en  cas  
+d'urgence
+ 
+?
+ 
+ 
+4.  PILULIER  —  Formulaire  Ajouter  un  
+médicament
+ 
+Le  cahier  des  charges  prévoit  déjà  une  fiche  détaillée  médicament,  le  pilulier  
+quotidien/hebdomadaire
+ 
+et
+ 
+le
+ 
+paramétrage
+ 
+du
+ 
+pilulier.
+ 
+Ici,  il  faut  éviter  de  demander  au  patient  de  saisir  lui-même  toutes  les  informations  
+pharmacologiques.
+ 
+Étape  1  —  Rechercher  le  médicament  Ajouter  un  médicament   🔎  Rechercher  [  Doliprane________________  ]   Résultats  :  ○  Doliprane  1000  mg  comprimé  ○  Doliprane  500  mg  comprimé  
+La  recherche  peut  être  connectée  à  la  BDPM ,  prévue  dans  le  cahier  des  charges.  
+ 
+Étape  2  —  Informations  du  traitement  
+Après  sélection  :  
+Médicament  
+Doliprane  1000  mg  
+Forme  
+Comprimé  
+Dose  
+1  comprimé  
+---PAGE 9---
+Voie  
+Orale  
+Fréquence  
+●  ⭕  1  fois/jour  ●  ⭕  2  fois/jour  ●  ⭕  3  fois/jour  ●  ⭕  4  fois/jour  ●  ⭕  Si  besoin  ●  ⭕  Autre  
+ 
+Étape  3  —  Horaires  
+Exemple  :  
+Quand  devez-vous  le  prendre  ?   ☑  Matin       08:00  ☑  Midi        12:00  ☐  Après-midi  16:00  ☑  Soir        20:00  
+Possibilité  :  
++  Ajouter  un  horaire  
+ 
+Étape  4  —  Conditions  de  prise  
+Quand  ?  
+●  Avant  le  repas  ●  Pendant  le  repas  ●  Après  le  repas  ●  À  distance  des  repas  ●  Indifférent  
+Durée  
+●  Traitement  permanent  
+---PAGE 10---
+●  Jusqu'au  :  __/__/____  ●  Pendant  :  __  jours  ●  Jusqu'à  nouvel  ordre  
+ 
+Étape  5  —  Prescripteur  
+●  Médecin  ●  Établissement  ●  Date  de  prescription  
+Document  
++  Ajouter  ordonnance  
+ 
+Étape  6  —  Confirmation  
+RÉSUMÉ  DU  TRAITEMENT   Doliprane  1000  mg   1  comprimé  08:00  —  12:00  —  20:00  Après  les  repas  Du  26/08/2026  au  30/08/2026   [Modifier]       [Ajouter  au  pilulier]   
+5.  PILULIER  —  Statut  de  prise  
+C'est  ici  que  doit  se  trouver  la  fonctionnalité  MVP  prioritaire .  
+Le  cahier  des  charges  prévoit  explicitement  une  vue  quotidienne  et  hebdomadaire.  
+Vue  quotidienne  MERCREDI  26  AOÛT   08:00  ✓  Doliprane  
+---PAGE 11---
+✓  Kardégic   12:00  ○  Metformine  ○  Doliprane   20:00  ○  Doliprane  
+Pour  chaque  prise  :  
+Statut  
+●  🟢  Prise  ●  ⚪  À  prendre  ●  🔴  Non  prise  ●  🟠  Reportée  ●  ⚫  Traitement  arrêté  
+ 
+6.  Action  utilisateur  
+Cliquer  sur  un  médicament  :  
+Kardégic  75  mg   08:00   [ ✓  J'ai  pris]  [ ✕  Je  n'ai  pas  pris]  [→  Reporter]   Pourquoi  n'avez-vous  pas  pris  ce  médicament  ?  ○  Oubli  ○  Effet  indésirable  ○  Je  n'avais  plus  le  médicament  ○  Refus  ○  Autre  
+Important  :  pour  le  MVP,  ne  pas  développer  d'algorithme  médical  de  recommandation.  On  
+se
+ 
+limite
+ 
+au
+ 
+suivi
+ 
+déclaratif
+ 
+de
+ 
+l'observance
+.
+ 
+ 
+---PAGE 12---
+7.  E-PARCOURS  —  Création  par  le  
+professionnel
+ 
+Le  cahier  des  charges  prévoit  un  Studio  E-Parcours  et  un  formulaire  de  création/édition.  
+C'est  une  excellente  fonctionnalité  différenciante.  
+Formulaire  
+Informations  générales  
+Nom  du  parcours  
+Prothèse  totale  de  hanche  
+Spécialité  
+Orthopédie  
+Durée  estimée  
+6  semaines  
+Public  
+Patient  adulte  
+ 
+Ajouter  une  étape  +  AJOUTER  UNE  ÉTAPE  
+Formulaire  :  
+Étape  1  
+Titre  :  
+Consultation  pré-opératoire  
+Date  :  
+J-30  
+Professionnel  :  
+---PAGE 13---
+Chirurgien  
+Lieu  :  
+Clinique  
+Actions  patient  :  
+☐  Prendre  rendez-vous  
+☐
+ 
+Apporter
+ 
+documents
+ 
+☐
+ 
+Réaliser
+ 
+examens
+ 
+Documents  :  
++  Ajouter  
+ 
+Timeline  automatique  J-30  │  ●  Consultation  chirurgien  │  J-15  │  ●  Consultation  anesthésiste  │  J-7  │  ●  Examens  pré-opératoires  │  J0  │  ●  Intervention  │  J+2  │  ●  Sortie  │  J+15  │  ●  Consultation  contrôle   
+8.  Les  5  E-Parcours  MVP  
+---PAGE 14---
+Je  recommande  de  livrer  initialement  :  
+1.  Prothèse  totale  de  hanche  2.  Chirurgie  cataracte  3.  Chirurgie  digestive  4.  AVC  /  retour  à  domicile  5.  Hospitalisation  programmée  
+Le  professionnel  pourra  ensuite  dupliquer  un  parcours  existant .  
+C'est  beaucoup  plus  simple  pour  le  développeur  que  de  créer  chaque  parcours  depuis  zéro.  
+ 
+9.  RÉPERTOIRE  —  Critère  MVP  
+Le  cahier  des  charges  prévoit  notamment  les  recherches  d'établissements,  professionnels,  
+urgences
+ 
+et
+ 
+établissements
+ 
+médico-sociaux,
+ 
+avec
+ 
+FINESS,
+ 
+RPPS
+ 
+et
+ 
+BAN
+ 
+comme
+ 
+sources
+ 
+envisagées.
+ 
+Recherche  Que  recherchez-vous  ?   [  Clinique  /  EHPAD  /  Médecin  /  Pharmacie  ]   🔎  [  cardiologie  ]   📍  Autour  de  moi  
+Filtres  
+●  Distance  ●  Spécialité  ●  Type  d'établissement  ●  Urgences  ●  Accessibilité  ●  Conventionnement  ●  Disponibilité  
+Résultat  Clinique  X  ★★★★★   Cardiologie  2,4  km   
+---PAGE 15---
+[Voir]  [Itinéraire]   
+10.  BIBLIOTHÈQUE  
+Le  cahier  des  charges  prévoit  une  recherche  médicament  et  une  fiche  détaillée  alimentées  
+par
+ 
+la
+ 
+BDPM.
+ 
+Recherche  🔎  Rechercher  un  médicament   Nom  commercial  ou  DCI  
+Résultat  :  
+Doliprane  1000  mg  
+Fiche  
+●  Nom  ●  DCI  ●  Dosage  ●  Forme  ●  Laboratoire  ●  Présentation  ●  Statut  ●  Notice  
+MVP  :  aucune  interprétation  médicale  générée  par  Med'ease.  
+ 
+11.  CONCIERGERIE  
+Le  template  prévoit  déjà  :  
+●  accueil  ●  nouvelle  demande  ●  suivi  des  demandes.  
+Créer  une  demande  
+Catégorie  
+●  Rendez-vous  
+---PAGE 16---
+●  Transport  ●  Pharmacie  ●  Administratif  ●  Aide  à  domicile  ●  Document  ●  Autre  
+Besoin  
+Je  souhaite...  
+Urgence  
+●  Normal  ●  Important  ●  Urgent  
+Date  souhaitée  
+__/__/____  
+Pièce  jointe  
++  Ajouter  
+Confirmation  
+✓  Votre  demande  a  été  enregistrée  
+N°  demande  :  MED-000123  
+Statut  :  
+Reçue  →  En  cours  →  Traitée  
+Notification  email.  
+ 
+12.  RENDEZ-VOUS  
+Pour  le  MVP  :  
+Mes  rendez-vous  26  AOÛT  09:30  Dr  Martin  
+---PAGE 17---
+Cardiologie   [Voir]  [Modifier]  [Annuler]   ──────────────   03  SEPTEMBRE  14:00  IRM  Hôpital  X  
+Ajouter  
+●  Professionnel  ●  Établissement  ●  Motif  ●  Date  ●  Heure  ●  Adresse  ●  Documents  ●  Rappel  
+ 
+13.  LABORATOIRE  
+Pour  rester  MVP  :  
+Mes  résultats  Bilan  sanguin  25/08/2026   ✓  Disponible   Hémoglobine  13,8  g/dL   Glycémie  0,92  g/L   [Voir  le  compte  rendu]  
+Fonctionnalité  principale  :  
+Importer  /  recevoir  →  consulter  →  archiver  
+---PAGE 18---
+Pas  d'interprétation  médicale  automatique  dans  la  V1.  
+ 
+14.  DEMANDE  DE  TRANSFERT  /  
+HOSPITALISATION
+ 
+Le  cahier  des  charges  prévoit  déjà  la  recherche  de  lits,  les  résultats,  la  demande  
+d'admission,
+ 
+la
+ 
+gestion
+ 
+des
+ 
+demandes
+ 
+et
+ 
+la
+ 
+lettre
+ 
+de
+ 
+liaison.
+ 
+Formulaire  Patient  /  Professionnel  
+Patient  
+●  Nom  ●  Prénom  ●  Date  naissance  ●  Identifiant  ●  Téléphone  
+Demande  
+Type  
+●  Hospitalisation  ●  Transfert  ●  SSR  ●  EHPAD  ●  Retour  domicile  
+Spécialité  
+Orthopédie  
+Motif  
+________  
+Date  souhaitée  
+________  
+Niveau  
+●  Normal  ●  Urgent  
+---PAGE 19---
+ 
+Informations  médicales  
+●  Diagnostic  ●  Antécédents  ●  Allergies  ●  Traitements  ●  Autonomie  ●  Besoins  spécifiques  
+Documents  
++  Ajouter  lettre  médicale  
++  Ajouter  ordonnance  
++  Ajouter  compte  rendu  
+ 
+15.  Génération  automatique  de  la  lettre  
+de
+ 
+liaison
+ 
+Après  validation  :  
+Générer  la  lettre  de  liaison  
+PDF  automatique  :  
+MED'EASE  LETTRE  DE  LIAISON   Patient  Date  de  naissance   Établissement  demandeur   Motif  d'hospitalisation  /  transfert   Diagnostic   Antécédents   Traitements  
+---PAGE 20---
+ Allergies   Autonomie   Examens   Documents  joints   Professionnel  demandeur  Date  
+Puis  :  
+Envoyer  aux  établissements  sélectionnés  
+ 
+16.  Côté  établissement  :  réception  
+Le  cahier  des  charges  prévoit  une  interface  établissement  avec  recherche  de  lits,  attribution,  
+configuration
+ 
+des
+ 
+capacités
+ 
+et
+ 
+gestion
+ 
+des
+ 
+demandes
+ 
+de
+ 
+transfert.
+ 
+Tableau  simple  DEMANDES  DE  TRANSFERT   #1234    SSR  Patient  X  Orthopédie  26/08  URGENT   [Voir  dossier]  [Accepter]  [Refuser]  
+Lorsqu'un  établissement  accepte  
+Le  patient  /  professionnel  reçoit  :  
+Votre  demande  de  transfert  a  été  acceptée  par  Clinique  X.  
+ 
+17.  Critères  de  succès  MVP  
+---PAGE 21---
+Je  transformerais  vos  critères  en  tests  d'acceptation  développeur .  
+Module  Critère  de  succès  MVP  
+Méga  Carnet  Les  5  profils  peuvent  être  créés,  modifiés  et  consultés  
+Général  ≥  8  informations  enregistrables  
+Physique  Taille,  poids,  mobilité,  allergies  et  aides  enregistrables  
+Administratif  Coordonnées  +  assurance  +  professionnels  
+Urgence  Informations  critiques  accessibles  rapidement  
+Vaccination  Vaccins  +  dates  +  statut  
+Pilulier  Ajouter  un  médicament  depuis  la  bibliothèque  
+Pilulier  Paramétrer  dose  +  fréquence  +  horaires  
+Pilulier  Marquer  prise  /  non  prise  
+Pilulier  Vue  quotidienne  fonctionnelle  
+Pilulier  Vue  hebdomadaire  fonctionnelle  
+Répertoire  ≥  1  source  établissements  indexée  
+Répertoire  Recherche  par  nom/spécialité  
+Répertoire  Recherche  géographique  fonctionnelle  
+Bibliothèque  Recherche  médicament  par  nom  
+Bibliothèque  Recherche  par  DCI  
+Bibliothèque  Fiche  médicament  consultable  
+E-Parcours  ≥  5  parcours  types  
+E-Parcours  Timeline  visible  
+E-Parcours  professionnel  
+Créer  un  parcours  
+E-Parcours  professionnel  
+Ajouter  /  modifier  /  supprimer  une  étape  
+Rendez-vous  Créer  /  modifier  /  consulter  
+Laboratoire  Résultat/document  consultable  
+---PAGE 22---
+Conciergerie  Demande  créée  
+Conciergerie  Statut  consultable  
+Conciergerie  Email  envoyé  
+Transfert  Formulaire  fonctionnel  
+Transfert  Recherche  de  lits  
+Transfert  PDF  lettre  de  liaison  
+Transfert  Réception  côté  établissement  
+Transfert  Acceptation/refus    
+18.  Le  point  clé  pour  impressionner  
+malgré
+ 
+un
+ 
+MVP
+ 
+Je  ne  chercherais  pas  à  multiplier  les  fonctionnalités .  
+Je  créerais  plutôt  une  expérience  extrêmement  cohérente  :  
+"Med'ease  connaît  mon  parcours."  
+Le  patient  ouvre  son  dashboard  et  voit  :  
+Bonjour  Sylvère  👋   Votre  parcours  santé   ┌──────────────────────────────┐  │  🟢  Aujourd'hui                │  │                               │  │  08:00  ✓  Médicament            │  │  10:30  Consultation            │  │                               │  │  Demain                        │  │  08:00  💊  Médicament           │  └──────────────────────────────┘   MON  PARCOURS  ██████████████░░░░  72  %   ●  Consultation  
+---PAGE 23---
+✓  Examens  ✓  Intervention  ○  Sortie  ○  Suivi   ──────────────────────────────   [Méga  Carnet]  [Pilulier]   [Mes  RDV]  [E-Parcours]   [Répertoire]  [Conciergerie]   [Transfert]  [Bibliothèque]  
+Et  côté  professionnel  :  
+PATIENT  X   🟢  Parcours  actif  🟢  Informations  urgence  complètes  🟢  Traitement  renseigné  🟠  Vaccination  incomplète   PARCOURS   ✓  Consultation  ✓  Examens  →  Intervention  ○  Sortie  ○  Suivi   [Voir  Méga  Carnet]  [Créer  une  demande]  [Créer  E-Parcours]   

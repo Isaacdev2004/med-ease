@@ -16,12 +16,12 @@ export default function PatientMonitoringPage() {
   const [location] = useLocation();
   const basePath = resolvePatientBasePath(location);
   const title = location.includes('/vitals')
-    ? 'Vital Signs'
+    ? 'Constantes vitales'
     : location.includes('/observations')
       ? 'Observations'
       : location.includes('/rpm')
-        ? 'Remote Monitoring'
-        : 'My Monitoring';
+        ? 'Télé-suivi'
+        : 'Mon suivi';
   return (
     <MonitoringShell basePath={basePath} variant="patient" title={title} />
   );

@@ -1,6 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocation } from 'wouter';
 
+import {
+  AddBiologicalDataDialog,
+  loadBiologicalEntries,
+} from '@/features/laboratory/components/AddBiologicalDataDialog';
 import { LaboratorySectionContent } from '@/features/laboratory/components/LaboratorySections';
 import {
   LaboratoryTabs,
@@ -10,6 +14,7 @@ import { useLaboratoryPermissions } from '@/features/laboratory/hooks/use-labora
 import { usePatientLaboratoryContext } from '@/features/laboratory/hooks/use-laboratory';
 import type { LabOrderFilters } from '@/services/laboratory/types';
 import { LoadingView, PageShell } from '@/shared/components';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { EmptyState } from '@/shared/ui/empty-state';
 
 interface LaboratoryShellProps {
@@ -22,27 +27,31 @@ interface LaboratoryShellProps {
 export function LaboratoryShell({
   basePath,
   variant = 'patient',
-  title = 'Laboratory',
+  title = 'Laboratoire',
   patientId: explicitPatientId,
 }: LaboratoryShellProps) {
   const [location] = useLocation();
   const perms = useLaboratoryPermissions();
   const patientResolve = usePatientLaboratoryContext();
   const section = getLaboratorySectionFromPath(location);
+  const [, setTick] = useState(0);
+
+  const patientId =
+    explicitPatientId ??
+    (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
 
   const scopedFilters = useMemo((): LabOrderFilters => {
-    const patientId =
-      explicitPatientId ??
-      (variant === 'patient' ? (patientResolve.data ?? undefined) : undefined);
     return patientId ? { patientId } : {};
-  }, [explicitPatientId, patientResolve.data, variant]);
+  }, [patientId]);
+
+  const localBio = patientId ? loadBiologicalEntries(patientId) : [];
 
   if (!perms.canView) {
     return (
       <PageShell title={title}>
         <EmptyState
-          title="Access denied"
-          description="You do not have permission to view laboratory records."
+          title="Accès refusé"
+          description="Vous n’avez pas l’autorisation de consulter le laboratoire."
         />
       </PageShell>
     );
@@ -51,7 +60,7 @@ export function LaboratoryShell({
   if (variant === 'patient' && patientResolve.isLoading) {
     return (
       <PageShell title={title}>
-        <LoadingView label="Loading laboratory records…" />
+        <LoadingView label="Chargement du laboratoire…" />
       </PageShell>
     );
   }
@@ -59,9 +68,44 @@ export function LaboratoryShell({
   return (
     <PageShell
       title={title}
-      subtitle="Laboratory orders, specimens, diagnostic results, trends, and clinical alerts."
+      subtitle="Demandes d’analyses, résultats biologiques, tendances et alertes."
     >
       <div className="space-y-6">
+        {patientId && perms.canOrder ? (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-base font-semibold">Données biologiques</h2>
+              <p className="text-sm text-muted-foreground">
+                Ajoutez vos résultats d’examens (Formulaire Studio).
+              </p>
+            </div>
+            <AddBiologicalDataDialog
+              patientId={patientId}
+              onSaved={() => setTick((t) => t + 1)}
+            />
+          </div>
+        ) : null}
+        {localBio.length > 0 ? (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">Saisies récentes</CardTitle>
+            </CardHeader>
+            <CardContent className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {localBio.slice(0, 6).map((e) => (
+                <div
+                  key={e.id}
+                  className="rounded-lg border border-border/60 p-3 text-sm"
+                >
+                  <p className="font-medium">{e.examName}</p>
+                  <p className="text-muted-foreground">
+                    {e.value} {e.unit} · {e.collectedAt}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{e.labName}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        ) : null}
         <LaboratoryTabs basePath={basePath} variant={variant} />
         <LaboratorySectionContent section={section} filters={scopedFilters} />
       </div>

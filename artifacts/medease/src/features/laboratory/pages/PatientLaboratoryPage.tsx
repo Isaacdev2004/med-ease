@@ -15,7 +15,7 @@ export default function PatientLaboratoryPage() {
     !location.endsWith('/trends')
   ) {
     return (
-      <PageShell title="Lab Result Details">
+      <PageShell title="Détail du résultat">
         <ResultDetailSection />
       </PageShell>
     );
@@ -25,7 +25,7 @@ export default function PatientLaboratoryPage() {
     <LaboratoryShell
       basePath={basePath}
       variant="patient"
-      title="My Laboratory"
+      title="Mon laboratoire"
     />
   );
 }

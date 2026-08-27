@@ -1,50 +1,57 @@
+import { useState } from 'react';
 import { Link } from 'wouter';
-import { FileText, HeartPulse, Shield, Users, Activity } from 'lucide-react';
+import {
+  FileText,
+  HeartPulse,
+  Shield,
+  Syringe,
+  Landmark,
+} from 'lucide-react';
 
 import {
   MegaProfileEditor,
   MegaProfileView,
+  megaProfileCompletion,
   type MegaProfileId,
 } from '@/features/patient-records/components/MegaProfileEditor';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 
-/** Five fillable/viewable Mega Carnet profiles (client success criterion). */
 export const MEGA_PROFILES = [
   {
-    id: 'medical' as const satisfies MegaProfileId,
-    label: 'Profil médical',
-    description: 'Identité, résumé clinique, allergies, traitements.',
+    id: 'general' as const satisfies MegaProfileId,
+    label: 'Général',
+    description: 'Identité, contacts, langue, personne de confiance.',
     segment: 'profile',
     icon: FileText,
   },
   {
-    id: 'emergency' as const satisfies MegaProfileId,
-    label: "Profil d'urgence",
-    description: 'Contacts d’urgence, directives, alertes critiques.',
+    id: 'administratif' as const satisfies MegaProfileId,
+    label: 'Administratif',
+    description: 'Adresse, assurance, mutuelle, médecins.',
+    segment: 'summary',
+    icon: Landmark,
+  },
+  {
+    id: 'urgence' as const satisfies MegaProfileId,
+    label: 'Urgence',
+    description: 'Groupe sanguin, allergies graves, consignes critiques.',
     segment: 'emergency',
     icon: Shield,
   },
   {
-    id: 'family' as const satisfies MegaProfileId,
-    label: 'Profil familial',
-    description: 'Antécédents familiaux renseignables et consultables.',
-    segment: 'family-history',
-    icon: Users,
-  },
-  {
-    id: 'lifestyle' as const satisfies MegaProfileId,
-    label: 'Profil mode de vie',
-    description: 'Habitudes, activité, facteurs de risque.',
-    segment: 'lifestyle',
-    icon: Activity,
-  },
-  {
-    id: 'vitals' as const satisfies MegaProfileId,
-    label: 'Profil constantes',
-    description: 'Constantes vitales et suivi longitudinal.',
+    id: 'physique' as const satisfies MegaProfileId,
+    label: 'Physique',
+    description: 'Taille, poids, mobilité, aides techniques.',
     segment: 'vitals',
     icon: HeartPulse,
+  },
+  {
+    id: 'vaccination' as const satisfies MegaProfileId,
+    label: 'Vaccination',
+    description: 'Carnet vaccinal — dates, lots, prochaines doses.',
+    segment: 'immunizations',
+    icon: Syringe,
   },
 ];
 
@@ -57,16 +64,30 @@ export function MegaProfilesPanel({
   basePath,
   patientId,
 }: MegaProfilesPanelProps) {
+  const [, setTick] = useState(0);
+  const completion = megaProfileCompletion(patientId);
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <div>
         <h2 className="text-lg font-semibold tracking-tight">
           Mega carnet — 5 profils
         </h2>
         <p className="text-sm text-muted-foreground">
-          Profils renseignables et consultables — créez ou modifiez chaque
-          profil, puis consultez le détail.
+          Formulaires Studio : créer, modifier et consulter chaque profil.
         </p>
+        <div className="mt-3">
+          <div className="mb-1 flex justify-between text-xs text-muted-foreground">
+            <span>Complétude du profil</span>
+            <span>{completion} %</span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-primary transition-all"
+              style={{ width: `${completion}%` }}
+            />
+          </div>
+        </div>
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {MEGA_PROFILES.map((profile) => (
@@ -87,6 +108,7 @@ export function MegaProfilesPanel({
                   patientId={patientId}
                   profileId={profile.id}
                   triggerLabel="Créer / Modifier"
+                  onSaved={() => setTick((t) => t + 1)}
                 />
                 <Button asChild size="sm" variant="outline" className="w-full">
                   <Link href={`${basePath}/${profile.segment}`}>

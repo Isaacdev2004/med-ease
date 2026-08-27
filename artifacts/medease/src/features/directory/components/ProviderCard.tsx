@@ -78,12 +78,12 @@ export function ProviderCard({
           <Button size="sm" variant="outline" asChild>
             <Link href={profilePath}>
               <Eye className="mr-2 h-4 w-4" />
-              View
+              Voir la fiche
             </Link>
           </Button>
           <Button size="sm" variant="ghost">
             <Route className="mr-2 h-4 w-4" />
-            Care Pathway
+            Parcours de soins
           </Button>
         </>
       }
