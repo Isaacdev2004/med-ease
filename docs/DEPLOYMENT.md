@@ -45,7 +45,7 @@ Copy from local `.env` / `database/.env` and [GITHUB-SECRETS.md](./GITHUB-SECRET
 | `JWT_SECRET`                | **Rotate** — min 32 chars, not the dev default      |
 | `NODE_ENV`                  | `production`                                        |
 | `AUTH_COOKIE_SECURE`        | `true`                                              |
-| `CORS_ORIGIN`               | Your Vercel URL, e.g. `https://med-ease.vercel.app` |
+| `CORS_ORIGIN`               | Exact Vercel URL: `https://med-ease-api.vercel.app` |
 | `OTEL_ENABLED`              | `false` (unless you have an OTLP collector)         |
 
 ## 2. Render — Worker service
@@ -125,7 +125,8 @@ Refresh tokens are stored in `sessionStorage` / `localStorage` (remember me), no
 
 | Symptom                          | Fix                                                           |
 | -------------------------------- | ------------------------------------------------------------- |
-| CORS error in browser            | Set `CORS_ORIGIN` on Render to exact Vercel URL               |
+| CORS error in browser            | Set `CORS_ORIGIN` on Render to `https://med-ease-api.vercel.app`. If the API returns **503 / Service Suspended**, resume the Render web service first — a down API looks like a CORS failure in the browser. |
+| Login shows “Something went wrong” | Confirm `https://medease-api.onrender.com/api/healthz` is reachable; resume/redeploy `medease-api` on Render if suspended |
 | `build:libs` not found on Vercel | Set Root Directory to **`artifacts/medease`**, not `apps/api` |
 | Prisma build fails on Vercel     | Frontend uses `build:web-libs` (contracts only), not full `build:libs` |
 | Login works locally, not in prod | Check `VITE_API_BASE_URL` at **build** time on Vercel         |

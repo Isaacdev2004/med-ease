@@ -37,7 +37,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: CORS_ORIGIN
-        sync: false
+        value: https://med-ease-api.vercel.app
       - key: MARKETING_LEADS_NOTIFY_EMAIL
         sync: false
       - key: MAIL_HOST

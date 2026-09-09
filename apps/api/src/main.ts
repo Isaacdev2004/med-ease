@@ -42,12 +42,34 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.use(compression());
+
+  // Known production frontends (always allowed in addition to CORS_ORIGIN).
+  const defaultOrigins = [
+    'https://med-ease-api.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:4173',
+  ];
+  const configuredOrigins =
+    !corsOrigin || corsOrigin === '*'
+      ? null
+      : corsOrigin
+          .split(',')
+          .map((value) => value.trim())
+          .filter(Boolean);
+  const allowedOrigins = configuredOrigins
+    ? Array.from(new Set([...configuredOrigins, ...defaultOrigins]))
+    : true;
+
   app.enableCors({
-    origin:
-      corsOrigin === '*'
-        ? true
-        : corsOrigin.split(',').map((value) => value.trim()),
+    origin: allowedOrigins,
     credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'X-Requested-With',
+    ],
   });
 
   app.useGlobalPipes(
