@@ -70,6 +70,8 @@ export function buildDirectoryListWhere(
         'Ouvert maintenant',
         'Disponible aujourd’hui',
         'Dispatch 24/7',
+        'Accepting patients',
+        'Accepting new patients',
       ],
     };
   }
