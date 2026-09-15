@@ -64,4 +64,12 @@ export class AuthHttpException extends HttpException {
       HttpStatus.BAD_REQUEST,
     );
   }
+
+  static sessionStoreUnavailable() {
+    return new AuthHttpException(
+      AUTH_ERROR_CODES.service_unavailable,
+      'Authentication service is temporarily unavailable (session store). Please retry in a moment.',
+      HttpStatus.SERVICE_UNAVAILABLE,
+    );
+  }
 }

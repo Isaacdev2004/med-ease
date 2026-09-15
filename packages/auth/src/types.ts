@@ -65,6 +65,7 @@ export const AUTH_ERROR_CODES = {
   invite_invalid: 'invite_invalid',
   invite_expired: 'invite_expired',
   too_many_requests: 'too_many_requests',
+  service_unavailable: 'service_unavailable',
 } as const;
 
 export type AuthErrorCode =

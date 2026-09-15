@@ -53,9 +53,24 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
       provide: RefreshTokenStore,
       inject: [MedeaseConfigService],
       useFactory: (config: MedeaseConfigService) => {
+        // Login stores refresh tokens in Redis — keep the client resilient so a
+        // dropped Upstash connection does not permanently break /auth/login.
         const redis = new Redis(config.redis.url, {
-          maxRetriesPerRequest: 1,
-          lazyConnect: true,
+          maxRetriesPerRequest: 3,
+          enableReadyCheck: true,
+          lazyConnect: false,
+          retryStrategy: (times) => Math.min(times * 200, 5_000),
+          reconnectOnError: (err) => {
+            const message = err.message ?? '';
+            return (
+              message.includes('READONLY') ||
+              message.includes('Connection is closed') ||
+              message.includes('ECONNRESET')
+            );
+          },
+        });
+        redis.on('error', () => {
+          // Prevent unhandled error events from crashing the process.
         });
         return new RefreshTokenStore(redis);
       },

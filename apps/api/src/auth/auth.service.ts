@@ -318,18 +318,22 @@ export class AuthService {
       });
     });
 
-    await this.refreshStore.store(
-      refreshToken,
-      {
-        sessionId,
-        userId: user.id,
-        tenantId: user.tenantId,
-        familyId,
-        rememberMe,
-        version: 1,
-      },
-      Math.floor(refreshMaxAgeMs / 1_000),
-    );
+    try {
+      await this.refreshStore.store(
+        refreshToken,
+        {
+          sessionId,
+          userId: user.id,
+          tenantId: user.tenantId,
+          familyId,
+          rememberMe,
+          version: 1,
+        },
+        Math.floor(refreshMaxAgeMs / 1_000),
+      );
+    } catch {
+      throw AuthHttpException.sessionStoreUnavailable();
+    }
 
     const access = await this.issueAccessToken(user, sessionId);
 
