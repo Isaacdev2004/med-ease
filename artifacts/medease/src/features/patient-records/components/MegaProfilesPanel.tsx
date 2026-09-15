@@ -107,7 +107,11 @@ export function MegaProfilesPanel({
                 <MegaProfileEditor
                   patientId={patientId}
                   profileId={profile.id}
-                  triggerLabel="Créer / Modifier"
+                  triggerLabel={
+                    profile.id === 'vaccination'
+                      ? 'Ajouter une vaccination'
+                      : 'Créer / Modifier'
+                  }
                   onSaved={() => setTick((t) => t + 1)}
                 />
                 <Button asChild size="sm" variant="outline" className="w-full">

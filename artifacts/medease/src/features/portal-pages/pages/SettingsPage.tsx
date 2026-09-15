@@ -50,17 +50,17 @@ export default function SettingsPage() {
   });
 
   if (useApiAuth && remote.isLoading) {
-    return <LoadingView label="Loading settings…" />;
+    return <LoadingView label="Chargement des paramètres…" />;
   }
 
   return (
     <PageShell
-      title="Settings"
-      subtitle="Manage notifications, security, and display preferences."
+      title="Paramètres"
+      subtitle="Notifications, sécurité et affichage."
       primaryAction={
         <PortalActionButton
-          label={save.isPending ? 'Saving…' : 'Save all settings'}
-          successTitle="Settings saved"
+          label={save.isPending ? 'Enregistrement…' : 'Enregistrer'}
+          successTitle="Paramètres enregistrés"
           onClick={() => {
             if (useApiAuth) save.mutate();
           }}
@@ -69,13 +69,13 @@ export default function SettingsPage() {
     >
       <SectionHeader
         title="Notifications"
-        description="Choose how you receive alerts."
+        description="Choisissez comment recevoir les alertes."
       />
       <div className="grid gap-4 lg:grid-cols-2">
         <PortalSettingsToggle
           id="email-alerts"
-          label="Email alerts"
-          description="Critical patient and system notifications"
+          label="Alertes e-mail"
+          description="Notifications importantes sur votre parcours"
           checked={prefs.emailAlerts}
           onCheckedChange={(emailAlerts) =>
             setPrefs((p) => ({ ...p, emailAlerts }))
@@ -83,36 +83,36 @@ export default function SettingsPage() {
         />
         <PortalSettingsToggle
           id="sms-alerts"
-          label="SMS alerts"
-          description="Urgent escalations only"
+          label="Alertes SMS"
+          description="Urgences uniquement"
           checked={prefs.smsAlerts}
           onCheckedChange={(smsAlerts) => setPrefs((p) => ({ ...p, smsAlerts }))}
         />
       </div>
 
       <SectionHeader
-        title="Security"
-        description="Authentication and session controls."
+        title="Sécurité"
+        description="Authentification et session."
       />
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Account security</CardTitle>
+          <CardTitle className="text-base">Sécurité du compte</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-2">
           <PortalFormField
             id="current-password"
-            label="Current password"
+            label="Mot de passe actuel"
             type="password"
           />
           <PortalFormField
             id="new-password"
-            label="New password"
+            label="Nouveau mot de passe"
             type="password"
           />
           <PortalSettingsToggle
             id="auto-logout"
-            label="Auto logout"
-            description="Sign out after 30 minutes of inactivity"
+            label="Déconnexion automatique"
+            description="Se déconnecter après 30 min d’inactivité"
             checked={prefs.autoLogout}
             onCheckedChange={(autoLogout) =>
               setPrefs((p) => ({ ...p, autoLogout }))
@@ -121,11 +121,11 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
-      <SectionHeader title="Display" description="Appearance and localization." />
+      <SectionHeader title="Affichage" description="Apparence de l’interface." />
       <PortalSettingsToggle
         id="dark-mode"
-        label="Dark mode"
-        description="Use a darker color scheme"
+        label="Mode sombre"
+        description="Utiliser un thème sombre"
         checked={prefs.darkMode}
         onCheckedChange={(darkMode) => setPrefs((p) => ({ ...p, darkMode }))}
       />

@@ -28,23 +28,33 @@ function normalizeQuery(q?: string) {
   return q?.trim().toLowerCase() ?? '';
 }
 
+function fold(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
 function matchesQuery(provider: DirectoryProvider, q: string) {
   if (!q) return true;
-  const haystack = [
-    provider.name,
-    provider.title,
-    provider.specialty,
-    provider.medicalSpecialty,
-    provider.facilityType,
-    provider.address.city,
-    provider.address.department,
-    provider.address.postalCode,
-    provider.finessNumber,
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
-  return haystack.includes(q);
+  const needle = fold(q);
+  const haystack = fold(
+    [
+      provider.name,
+      provider.title,
+      provider.specialty,
+      provider.medicalSpecialty,
+      provider.facilityType,
+      provider.address.city,
+      provider.address.department,
+      provider.address.postalCode,
+      provider.finessNumber,
+      ...(provider.services ?? []),
+    ]
+      .filter(Boolean)
+      .join(' '),
+  );
+  return needle.split(/\s+/).every((token) => haystack.includes(token));
 }
 
 function applyFilters(
@@ -55,27 +65,47 @@ function applyFilters(
   const q = normalizeQuery(filters.q);
 
   return providers.filter((provider) => {
-    if (
-      filters.type &&
-      filters.type !== 'all' &&
-      provider.type !== filters.type
-    ) {
-      return false;
+    if (filters.type && filters.type !== 'all') {
+      if (filters.type === 'facility') {
+        // Onglet Établissements : hôpitaux, EHPAD, centres de santé
+        if (
+          provider.type !== 'facility' &&
+          provider.type !== 'nursing_home' &&
+          provider.type !== 'medical_center'
+        ) {
+          return false;
+        }
+      } else if (provider.type !== filters.type) {
+        return false;
+      }
     }
     if (
       filters.specialty &&
       provider.specialty !== filters.specialty &&
-      provider.medicalSpecialty !== filters.specialty
+      provider.medicalSpecialty !== filters.specialty &&
+      !(provider.specialty ?? '')
+        .toLowerCase()
+        .includes(filters.specialty.toLowerCase()) &&
+      !(provider.medicalSpecialty ?? '')
+        .toLowerCase()
+        .includes(filters.specialty.toLowerCase())
     ) {
       return false;
     }
     if (
       filters.department &&
-      provider.address.department !== filters.department
+      !provider.address.department
+        .toLowerCase()
+        .includes(filters.department.toLowerCase())
     ) {
       return false;
     }
-    if (filters.city && provider.address.city !== filters.city) {
+    if (
+      filters.city &&
+      !provider.address.city
+        .toLowerCase()
+        .includes(filters.city.toLowerCase())
+    ) {
       return false;
     }
     if (
@@ -92,12 +122,15 @@ function applyFilters(
     }
     if (filters.teleconsultation && !provider.teleconsultation) return false;
     if (filters.emergency && !provider.emergencyServices) return false;
-    if (
-      filters.openNow &&
-      provider.availability !== 'Open now' &&
-      provider.availability !== '24/7 dispatch'
-    ) {
-      return false;
+    if (filters.openNow) {
+      const availability = (provider.availability ?? '').toLowerCase();
+      const openLike =
+        availability.includes('open') ||
+        availability.includes('ouvert') ||
+        availability.includes('accepting') ||
+        availability.includes('24/7') ||
+        availability.includes('disponible');
+      if (!openLike) return false;
     }
     if (filters.favoritesOnly && !favoriteIds.has(provider.id)) return false;
     return matchesQuery(provider, q);

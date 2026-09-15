@@ -12,7 +12,11 @@ export function buildDirectoryListWhere(
   };
 
   if (filters.type && filters.type !== 'all') {
-    where.type = filters.type;
+    if (filters.type === 'facility') {
+      where.type = { in: ['facility', 'nursing_home', 'medical_center'] };
+    } else {
+      where.type = filters.type;
+    }
   }
 
   const and: Prisma.DirectoryProviderWhereInput[] = [];
@@ -20,18 +24,26 @@ export function buildDirectoryListWhere(
   if (filters.specialty) {
     and.push({
       OR: [
-        { specialty: filters.specialty },
-        { medicalSpecialty: filters.specialty },
+        { specialty: { contains: filters.specialty, mode: 'insensitive' } },
+        {
+          medicalSpecialty: {
+            contains: filters.specialty,
+            mode: 'insensitive',
+          },
+        },
       ],
     });
   }
 
   if (filters.department) {
-    where.department = filters.department;
+    where.department = {
+      contains: filters.department,
+      mode: 'insensitive',
+    };
   }
 
   if (filters.city) {
-    where.city = { equals: filters.city, mode: 'insensitive' };
+    where.city = { contains: filters.city, mode: 'insensitive' };
   }
 
   if (filters.postalCode) {

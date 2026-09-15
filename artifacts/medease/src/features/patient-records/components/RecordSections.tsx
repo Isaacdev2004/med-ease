@@ -32,7 +32,15 @@ function MegaSectionChrome({
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-        <MegaProfileEditor patientId={patientId} profileId={profileId} />
+        <MegaProfileEditor
+          patientId={patientId}
+          profileId={profileId}
+          triggerLabel={
+            profileId === 'vaccination'
+              ? 'Ajouter une vaccination'
+              : 'Créer / Modifier'
+          }
+        />
       </div>
       <MegaProfileView patientId={patientId} profileId={profileId} />
       {children}

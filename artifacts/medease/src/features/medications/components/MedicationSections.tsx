@@ -49,9 +49,9 @@ export function DashboardSection({ filters }: { filters?: MedicationFilters }) {
   const dashboard = useMedicationDashboard(patientId);
   const interactions = useMedicationInteractions(patientId);
   if (!patientId || dashboard.isLoading)
-    return <LoadingView label="Loading medications…" />;
+    return <LoadingView label="Chargement du pilulier…" />;
   if (!dashboard.data)
-    return <EmptyState icon={Pill} title="No medication data" />;
+    return <EmptyState icon={Pill} title="Aucune donnée médicament" />;
   return (
     <div className="space-y-6">
       <MedicationKpiCards dashboard={dashboard.data} />
@@ -63,7 +63,7 @@ export function DashboardSection({ filters }: { filters?: MedicationFilters }) {
               <p className="text-2xl font-bold">
                 {dashboard.data.refillAlerts}
               </p>
-              <p className="text-xs text-muted-foreground">Refill alerts</p>
+              <p className="text-xs text-muted-foreground">Alertes renouvellement</p>
             </CardContent>
           </Card>
           <Card>

@@ -133,22 +133,43 @@ export function PortalSidebar({
       <div className="mt-auto border-t p-3 space-y-2">
         {!collapsed ? (
           <>
-            <Button variant="ghost" className="w-full justify-start" size="sm">
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              size="sm"
+              asChild
+            >
+              <Link
+                href={
+                  portalBasePath === '/patient'
+                    ? `${portalBasePath}/settings`
+                    : `${portalBasePath}/settings`
+                }
+                onClick={onNavigate}
+              >
+                <Settings className="mr-2 h-4 w-4" />
+                Paramètres
+              </Link>
             </Button>
-            <Button variant="ghost" className="w-full justify-start" size="sm">
-              <HelpCircle className="mr-2 h-4 w-4" />
-              Support
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              size="sm"
+              asChild
+            >
+              <Link href="/help" onClick={onNavigate}>
+                <HelpCircle className="mr-2 h-4 w-4" />
+                Aide
+              </Link>
             </Button>
             <Button
               variant="ghost"
               className="w-full justify-start text-destructive hover:text-destructive"
               size="sm"
-              onClick={() => setLocation('/')}
+              onClick={() => setLocation('/logout')}
             >
               <LogOut className="mr-2 h-4 w-4" />
-              Log out
+              Déconnexion
             </Button>
             <RoleSwitcher className="pt-2" />
           </>

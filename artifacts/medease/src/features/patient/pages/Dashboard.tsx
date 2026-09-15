@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { Calendar, FlaskConical } from 'lucide-react';
 
 import {
@@ -51,10 +52,12 @@ export default function Dashboard() {
         <PageShell
           title={`Bon retour, ${data.greetingName}`}
           subtitle="Voici votre résumé santé du jour."
-          status={<StatusBadge status="stable" label="Stable" />}
+          status={<StatusBadge status="stable" label="État stable" />}
           lastUpdated={
             dashboardQuery.dataUpdatedAt
-              ? format(new Date(dashboardQuery.dataUpdatedAt), 'PPp')
+              ? format(new Date(dashboardQuery.dataUpdatedAt), 'PPp', {
+                  locale: fr,
+                })
               : undefined
           }
           primaryAction={<Button>Prendre rendez-vous</Button>}
@@ -67,7 +70,8 @@ export default function Dashboard() {
                   specialty={data.nextAppointment.specialty}
                   scheduledAt={format(
                     new Date(data.nextAppointment.scheduledAt),
-                    "EEEE, MMM d 'at' h:mm a",
+                    "EEEE d MMMM 'à' HH:mm",
+                    { locale: fr },
                   )}
                   location={data.nextAppointment.location}
                   status="pending"
@@ -119,7 +123,7 @@ export default function Dashboard() {
                         name={medication.name}
                         dosage={medication.dosage}
                         frequency={medication.schedule}
-                        prescribedBy="Emily Chen"
+                        prescribedBy="Dr Emily Chen"
                         status="active"
                         refillsRemaining={medication.refillsRemaining}
                         instructions={medication.schedule}

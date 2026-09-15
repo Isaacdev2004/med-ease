@@ -17,32 +17,32 @@ export type AppointmentTabSection =
   | 'follow-ups';
 
 const PATIENT_TABS: { segment: AppointmentTabSection | ''; label: string }[] = [
-  { segment: '', label: 'Overview' },
-  { segment: 'book', label: 'Book' },
-  { segment: 'calendar', label: 'Calendar' },
-  { segment: 'upcoming', label: 'Upcoming' },
-  { segment: 'history', label: 'History' },
-  { segment: 'telemedicine', label: 'Telemedicine' },
+  { segment: '', label: 'Aperçu' },
+  { segment: 'book', label: 'Prendre RDV' },
+  { segment: 'calendar', label: 'Calendrier' },
+  { segment: 'upcoming', label: 'À venir' },
+  { segment: 'history', label: 'Historique' },
+  { segment: 'telemedicine', label: 'Téléconsultation' },
 ];
 
 const CLINICIAN_TABS: { segment: AppointmentTabSection | ''; label: string }[] =
   [
-    { segment: '', label: 'Dashboard' },
-    { segment: 'schedule', label: 'Schedule' },
-    { segment: 'calendar', label: 'Calendar' },
-    { segment: 'queue', label: 'Queue' },
-    { segment: 'waitlist', label: 'Waitlist' },
-    { segment: 'analytics', label: 'Analytics' },
-    { segment: 'follow-ups', label: 'Follow-ups' },
+    { segment: '', label: 'Tableau de bord' },
+    { segment: 'schedule', label: 'Planning' },
+    { segment: 'calendar', label: 'Calendrier' },
+    { segment: 'queue', label: 'File d’attente' },
+    { segment: 'waitlist', label: 'Liste d’attente' },
+    { segment: 'analytics', label: 'Analyses' },
+    { segment: 'follow-ups', label: 'Suivis' },
   ];
 
 const FACILITY_TABS: { segment: AppointmentTabSection | ''; label: string }[] =
   [
-    { segment: '', label: 'Schedule' },
-    { segment: 'resources', label: 'Resources' },
-    { segment: 'calendar', label: 'Calendar' },
-    { segment: 'queue', label: 'Queue' },
-    { segment: 'analytics', label: 'Analytics' },
+    { segment: '', label: 'Planning' },
+    { segment: 'resources', label: 'Ressources' },
+    { segment: 'calendar', label: 'Calendrier' },
+    { segment: 'queue', label: 'File d’attente' },
+    { segment: 'analytics', label: 'Analyses' },
   ];
 
 interface AppointmentTabsProps {

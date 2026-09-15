@@ -31,11 +31,15 @@ const FIELD_SETS: Record<
   general: {
     title: 'Profil général',
     fields: [
+      { key: 'photoDataUrl', label: 'Photo', type: 'photo' },
       { key: 'lastName', label: 'Nom', required: true },
       { key: 'firstName', label: 'Prénom', required: true },
       { key: 'usageName', label: "Nom d'usage" },
       { key: 'birthDate', label: 'Date de naissance', required: true, type: 'date' },
       { key: 'sex', label: 'Sexe', required: true, placeholder: 'F / M / Autre' },
+      { key: 'address', label: 'Adresse' },
+      { key: 'postalCode', label: 'Code postal' },
+      { key: 'city', label: 'Ville' },
       { key: 'phone', label: 'Téléphone', required: true },
       { key: 'email', label: 'E-mail', required: true },
       { key: 'language', label: 'Langue préférée', placeholder: 'Français' },
@@ -206,7 +210,36 @@ export function MegaProfileEditor({
                 {field.label}
                 {field.required ? ' *' : ''}
               </Label>
-              {field.type === 'textarea' ? (
+              {field.type === 'photo' ? (
+                <div className="space-y-2">
+                  {values[field.key] ? (
+                    <img
+                      src={values[field.key]}
+                      alt="Photo de profil"
+                      className="h-20 w-20 rounded-full object-cover border"
+                    />
+                  ) : null}
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        setValues((v) => ({
+                          ...v,
+                          [field.key]: String(reader.result ?? ''),
+                        }));
+                      };
+                      reader.readAsDataURL(file);
+                    }}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    JPG ou PNG — stockée localement pour le MVP.
+                  </p>
+                </div>
+              ) : field.type === 'textarea' ? (
                 <Textarea
                   value={values[field.key] ?? ''}
                   onChange={(e) =>
@@ -248,11 +281,12 @@ export function MegaProfileView({
   const entries = useMemo(() => {
     if (!data) return [];
     return meta.fields
+      .filter((f) => f.type !== 'photo')
       .map((f) => ({ label: f.label, value: data[f.key] }))
       .filter((e) => e.value);
   }, [data, meta.fields]);
 
-  if (!entries.length) {
+  if (!entries.length && !data?.photoDataUrl) {
     return (
       <p className="text-sm text-muted-foreground">
         Aucune information renseignée. Cliquez sur Créer / Modifier.
@@ -261,18 +295,27 @@ export function MegaProfileView({
   }
 
   return (
-    <div className="grid gap-2 text-sm sm:grid-cols-2">
-      {entries.map((e) => (
-        <div key={e.label}>
-          <p className="text-muted-foreground">{e.label}</p>
-          <p className="font-medium whitespace-pre-wrap">{e.value}</p>
-        </div>
-      ))}
-      {data?.updatedAt ? (
-        <p className="sm:col-span-2 text-xs text-muted-foreground">
-          Mis à jour le {new Date(data.updatedAt).toLocaleString('fr-FR')}
-        </p>
+    <div className="space-y-3">
+      {data?.photoDataUrl ? (
+        <img
+          src={data.photoDataUrl}
+          alt="Photo"
+          className="h-16 w-16 rounded-full object-cover border"
+        />
       ) : null}
+      <div className="grid gap-2 text-sm sm:grid-cols-2">
+        {entries.map((e) => (
+          <div key={e.label}>
+            <p className="text-muted-foreground">{e.label}</p>
+            <p className="font-medium whitespace-pre-wrap">{e.value}</p>
+          </div>
+        ))}
+        {data?.updatedAt ? (
+          <p className="sm:col-span-2 text-xs text-muted-foreground">
+            Mis à jour le {new Date(data.updatedAt).toLocaleString('fr-FR')}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

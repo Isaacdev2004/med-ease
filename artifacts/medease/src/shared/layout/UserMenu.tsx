@@ -9,9 +9,10 @@ import {
   User,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 
-import { ROUTES } from '@/config/routes';
+import { PORTAL_PATHS, ROUTES } from '@/config/routes';
+import { getPortalForRole } from '@/config/permissions/portal-roles';
 import { useAuth } from '@/services/auth/auth-context';
 import { Avatar, AvatarFallback } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
@@ -34,9 +35,30 @@ interface UserMenuProps {
   organization?: string;
 }
 
+function resolvePortalBase(pathname: string, role?: string): string {
+  const segment = pathname.split('/').filter(Boolean)[0];
+  if (
+    segment === 'patient' ||
+    segment === 'professional' ||
+    segment === 'facility' ||
+    segment === 'admin' ||
+    segment === 'pharmacy' ||
+    segment === 'transport'
+  ) {
+    return `/${segment}`;
+  }
+  if (role) {
+    const portalId = getPortalForRole(role as never);
+    return PORTAL_PATHS[portalId] ?? '/patient';
+  }
+  return '/patient';
+}
+
 export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
   const { setTheme } = useTheme();
-  const { organization: authOrg } = useAuth();
+  const { organization: authOrg, user, logout } = useAuth();
+  const [location] = useLocation();
+  const portalBase = resolvePortalBase(location, user?.role);
   const initials = userName
     .split(' ')
     .map((n) => n[0])
@@ -44,6 +66,12 @@ export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
     .substring(0, 2);
 
   const orgLabel = organization ?? authOrg?.name ?? "Med'ease Network";
+  const profileHref =
+    portalBase === '/patient'
+      ? `${portalBase}/records/profile`
+      : `${portalBase}/profile`;
+  const settingsHref = `${portalBase}/settings`;
+  const helpHref = '/help';
 
   return (
     <DropdownMenu>
@@ -51,7 +79,7 @@ export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
         <Button
           variant="ghost"
           className="relative h-9 w-9 rounded-full"
-          aria-label="User menu"
+          aria-label="Menu utilisateur"
         >
           <Avatar className="h-9 w-9">
             <AvatarFallback>{initials}</AvatarFallback>
@@ -71,41 +99,47 @@ export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          Profile
+        <DropdownMenuItem asChild>
+          <Link href={profileHref}>
+            <User className="mr-2 h-4 w-4" />
+            Profil
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Settings className="mr-2 h-4 w-4" />
-          Settings
+        <DropdownMenuItem asChild>
+          <Link href={settingsHref}>
+            <Settings className="mr-2 h-4 w-4" />
+            Paramètres
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <HelpCircle className="mr-2 h-4 w-4" />
-          Help
+        <DropdownMenuItem asChild>
+          <Link href={helpHref}>
+            <HelpCircle className="mr-2 h-4 w-4" />
+            Aide
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
+        <DropdownMenuItem disabled>
           <Keyboard className="mr-2 h-4 w-4" />
-          Keyboard Shortcuts
+          Raccourcis clavier
         </DropdownMenuItem>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Sun className="mr-2 h-4 w-4 dark:hidden" />
             <Moon className="mr-2 h-4 w-4 hidden dark:block" />
-            Theme
+            Thème
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
               <DropdownMenuItem onClick={() => setTheme('light')}>
                 <Sun className="mr-2 h-4 w-4" />
-                Light
+                Clair
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme('dark')}>
                 <Moon className="mr-2 h-4 w-4" />
-                Dark
+                Sombre
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setTheme('system')}>
                 <Monitor className="mr-2 h-4 w-4" />
-                System
+                Système
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>
@@ -115,9 +149,14 @@ export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
           className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
           asChild
         >
-          <Link href={ROUTES.logout}>
+          <Link
+            href={ROUTES.logout}
+            onClick={() => {
+              void logout?.();
+            }}
+          >
             <LogOut className="mr-2 h-4 w-4" />
-            Log out
+            Déconnexion
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

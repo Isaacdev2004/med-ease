@@ -24,7 +24,7 @@ interface AppointmentsShellProps {
 export function AppointmentsShell({
   basePath,
   variant = 'patient',
-  title = 'Appointments',
+  title = 'Rendez-vous',
 }: AppointmentsShellProps) {
   const [location] = useLocation();
   const perms = useAppointmentPermissions();
@@ -43,8 +43,8 @@ export function AppointmentsShell({
     return (
       <PageShell title={title}>
         <EmptyState
-          title="Access denied"
-          description="You do not have permission to view appointments."
+          title="Accès refusé"
+          description="Vous n’avez pas l’autorisation de consulter les rendez-vous."
         />
       </PageShell>
     );
@@ -53,7 +53,7 @@ export function AppointmentsShell({
   if (variant === 'patient' && patientResolve.isLoading) {
     return (
       <PageShell title={title}>
-        <LoadingView label="Loading appointments…" />
+        <LoadingView label="Chargement des rendez-vous…" />
       </PageShell>
     );
   }
@@ -61,11 +61,11 @@ export function AppointmentsShell({
   return (
     <PageShell
       title={title}
-      subtitle="Enterprise scheduling — book, manage, and track healthcare appointments."
+      subtitle="Réservez, consultez et suivez vos rendez-vous de santé."
       primaryAction={
         perms.canBook ? (
           <Button asChild>
-            <Link href={`${basePath}/book`}>Book Appointment</Link>
+            <Link href={`${basePath}/book`}>Prendre rendez-vous</Link>
           </Button>
         ) : undefined
       }

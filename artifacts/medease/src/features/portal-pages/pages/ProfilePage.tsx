@@ -1,109 +1,72 @@
-import { useState } from 'react';
+import { Link } from 'wouter';
 
 import {
-  PortalActionButton,
-  PortalField,
-  PortalFormField,
-  PortalInfoCard,
-  PortalMetricsGrid,
-} from '@/features/portal-pages/components/PortalUtilityComponents';
-import { MOCK_PROFILE } from '@/features/portal-pages/data/mock-data';
-import { PageShell, SectionHeader } from '@/shared/components';
-import { Badge } from '@/shared/ui/badge';
+  MegaProfileEditor,
+  MegaProfileView,
+  loadMegaProfile,
+} from '@/features/patient-records/components/MegaProfileEditor';
+import { useAuth } from '@/services/auth/auth-context';
+import { PageShell } from '@/shared/components';
+import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 
+/** Compte → Profil : lié au Profil général du Mega carnet (patient). */
 export default function ProfilePage() {
-  const [profile, setProfile] = useState(MOCK_PROFILE);
+  const { user } = useAuth();
+  const patientId =
+    user?.id ?? '01930000-0000-7000-8000-000000000301';
+  const general = loadMegaProfile(patientId, 'general');
+  const photo = general?.photoDataUrl;
+  const displayName =
+    [general?.firstName, general?.lastName].filter(Boolean).join(' ') ||
+    user?.fullName ||
+    'Patient';
+  const initials = displayName
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <PageShell
-      title="Profile"
-      subtitle="Your professional identity and contact details."
+      title="Mon profil"
+      subtitle="Identité et coordonnées — synchronisé avec le Profil général du Mega carnet."
       primaryAction={
-        <PortalActionButton
-          label="Save profile"
-          successTitle="Profile updated"
-          successDescription="Your changes have been saved."
-          onClick={() => setProfile((prev) => ({ ...prev, phone: prev.phone }))}
-        />
+        <div className="flex flex-wrap gap-2">
+          <MegaProfileEditor
+            patientId={patientId}
+            profileId="general"
+            triggerLabel="Modifier le profil général"
+          />
+          <Button asChild variant="outline" size="sm">
+            <Link href="/patient/records">Ouvrir le Mega carnet</Link>
+          </Button>
+        </div>
       }
     >
-      <PortalMetricsGrid
-        columns={3}
-        metrics={[
-          { title: 'Role', value: profile.role },
-          { title: 'Department', value: profile.department, status: 'stable' },
-          { title: 'Facility', value: profile.facility },
-        ]}
-      />
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Personal information</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-2">
-            <PortalFormField
-              id="profile-name"
-              label="Full name"
-              defaultValue={profile.name}
-            />
-            <PortalFormField
-              id="profile-email"
-              label="Email"
-              defaultValue={profile.email}
-              type="email"
-            />
-            <PortalFormField
-              id="profile-phone"
-              label="Phone"
-              defaultValue={profile.phone}
-            />
-            <PortalFormField
-              id="profile-license"
-              label="License"
-              defaultValue={profile.license}
-            />
-          </CardContent>
-        </Card>
-
-        <PortalInfoCard title="Credentials & languages">
-          <PortalField label="Primary facility" value={profile.facility} />
-          <div className="space-y-2">
-            <span className="text-muted-foreground text-sm">Credentials</span>
-            <div className="flex flex-wrap gap-2">
-              {profile.credentials.map((item) => (
-                <Badge key={item} variant="secondary">
-                  {item}
-                </Badge>
-              ))}
-            </div>
+      <Card>
+        <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+          <Avatar className="h-16 w-16">
+            {photo ? <AvatarImage src={photo} alt={displayName} /> : null}
+            <AvatarFallback className="text-lg">{initials}</AvatarFallback>
+          </Avatar>
+          <div>
+            <CardTitle className="text-xl">{displayName}</CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {general?.email || user?.email || '—'}
+            </p>
           </div>
-          <div className="space-y-2">
-            <span className="text-muted-foreground text-sm">Languages</span>
-            <div className="flex flex-wrap gap-2">
-              {profile.languages.map((item) => (
-                <Badge key={item} variant="outline">
-                  {item}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        </PortalInfoCard>
-      </div>
-
-      <SectionHeader
-        title="Recent activity"
-        description="Account changes and verifications."
-      />
-      <PortalInfoCard
-        title="Verification status"
-        actionLabel="Request verification"
-      >
-        <PortalField label="Identity" value="Verified" />
-        <PortalField label="License" value="Verified — expires Dec 2027" />
-        <PortalField label="Two-factor auth" value="Enabled" />
-      </PortalInfoCard>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <MegaProfileView patientId={patientId} profileId="general" />
+          <p className="text-xs text-muted-foreground">
+            Les modifications passent par le formulaire Studio du Profil général
+            (photo, identité, contacts).
+          </p>
+        </CardContent>
+      </Card>
     </PageShell>
   );
 }

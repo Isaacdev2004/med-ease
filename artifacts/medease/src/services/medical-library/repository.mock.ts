@@ -32,20 +32,35 @@ function normalizeQuery(q?: string) {
   return q?.trim().toLowerCase() ?? '';
 }
 
+function fold(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
 function matchesQuery(med: MedicationRecord, q: string) {
   if (!q) return true;
-  const haystack = [
-    med.name,
-    med.brandName,
-    med.genericName,
-    med.atcCode,
-    med.therapeuticClass,
-    ...med.activeIngredients,
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
-  return haystack.includes(q);
+  const needle = fold(q);
+  const haystack = fold(
+    [
+      med.name,
+      med.brandName,
+      med.genericName,
+      med.strength,
+      med.dosageForm,
+      med.atcCode,
+      med.bdpmId,
+      med.therapeuticClass,
+      med.manufacturer,
+      med.description,
+      ...med.activeIngredients,
+      ...med.indications,
+    ]
+      .filter(Boolean)
+      .join(' '),
+  );
+  return needle.split(/\s+/).every((token) => haystack.includes(token));
 }
 
 function applyFilters(
