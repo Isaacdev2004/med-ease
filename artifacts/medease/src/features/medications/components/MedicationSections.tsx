@@ -54,6 +54,15 @@ export function DashboardSection({ filters }: { filters?: MedicationFilters }) {
     return <EmptyState icon={Pill} title="Aucune donnée médicament" />;
   return (
     <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h2 className="text-lg font-semibold">Mon pilulier</h2>
+          <p className="text-sm text-muted-foreground">
+            Ajoutez un traitement ou consultez vos indicateurs.
+          </p>
+        </div>
+        <AddMedicationDialog patientId={patientId} />
+      </div>
       <MedicationKpiCards dashboard={dashboard.data} />
       <div className="flex flex-col items-center gap-4 sm:flex-row">
         <MedicationProgressRing percent={dashboard.data.adherencePercent} />

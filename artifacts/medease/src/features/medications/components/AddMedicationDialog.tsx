@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useMedicationMutations } from '@/features/medications/mutations/medications.mutations';
 import {
@@ -92,7 +92,7 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
 
-  const [query, setQuery] = useState('Doliprane');
+  const [query, setQuery] = useState('');
   const [results, setResults] = useState<MedicationRecord[]>([]);
   const [searching, setSearching] = useState(false);
   const [selected, setSelected] = useState<MedicationRecord | null>(null);
@@ -127,17 +127,17 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
   const reset = () => {
     setStep(0);
     setSelected(null);
-    setQuery('Doliprane');
+    setQuery('');
     setResults([]);
   };
 
-  const runSearch = async () => {
+  const runSearch = async (term = query) => {
     setSearching(true);
     try {
       let items: MedicationRecord[] = [];
       try {
         const page = await medicalLibraryService.search({
-          q: query,
+          q: term.trim() || undefined,
           page: 1,
           pageSize: 12,
         });
@@ -145,12 +145,17 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
       } catch {
         items = [];
       }
-      if (!items.length) items = localSearch(query);
+      if (!items.length) items = localSearch(term);
       setResults(items);
     } finally {
       setSearching(false);
     }
   };
+
+  useEffect(() => {
+    if (!open) return;
+    void runSearch(query);
+  }, [open]);
 
   const selectMed = (med: MedicationRecord) => {
     setSelected(med);
@@ -271,7 +276,11 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Nom commercial ou DCI"
                 />
-                <Button type="button" onClick={() => void runSearch()} disabled={searching}>
+                <Button
+                  type="button"
+                  onClick={() => void runSearch(query)}
+                  disabled={searching || query.trim().length < 2}
+                >
                   {searching ? '…' : 'Chercher'}
                 </Button>
               </div>

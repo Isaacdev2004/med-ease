@@ -4,9 +4,19 @@ import { useQuery } from '@tanstack/react-query';
 import { medicalLibraryQueries } from '@/features/medical-library/queries/medical-library.queries';
 import type { MedicationFilters } from '@/services/medical-library/medical-library.types';
 import { useAuth } from '@/services/auth/auth-context';
+import { useApiAuth } from '@/services/auth/auth-service';
+
+function useApiQueryReady() {
+  const { session } = useAuth();
+  return !useApiAuth || Boolean(session?.accessToken);
+}
 
 export function useMedicalLibrary(filters?: MedicationFilters) {
-  return useQuery(medicalLibraryQueries.search(filters));
+  const apiReady = useApiQueryReady();
+  return useQuery({
+    ...medicalLibraryQueries.search(filters),
+    enabled: apiReady,
+  });
 }
 
 export function useMedicationSearch(filters?: MedicationFilters) {

@@ -47,16 +47,16 @@ export default function MedicalLibraryPage() {
   const activeFilters = useMemo(() => {
     const chips = [];
     if (filterState.q)
-      chips.push({ key: 'q', label: 'Search', value: filterState.q });
+      chips.push({ key: 'q', label: 'Recherche', value: filterState.q });
     if (filterState.therapeuticClass) {
       chips.push({
         key: 'status',
-        label: 'Class',
+        label: 'Classe',
         value: filterState.therapeuticClass,
       });
     }
     if (filterState.favoritesOnly)
-      chips.push({ key: 'favorites', label: 'Favorites', value: 'Yes' });
+      chips.push({ key: 'favorites', label: 'Favoris', value: 'Oui' });
     return chips;
   }, [filterState]);
 
@@ -133,12 +133,12 @@ export default function MedicalLibraryPage() {
         <>
           <div className="flex flex-wrap gap-2 mb-4">
             <Button variant="outline" size="sm" asChild>
-              <Link href={libraryHref}>All</Link>
+              <Link href={libraryHref}>Tous</Link>
             </Button>
             <Button variant="outline" size="sm" asChild>
               <Link href={`${libraryHref}/categories`}>
                 <BookOpen className="mr-2 h-4 w-4" />
-                Categories
+                Catégories
               </Link>
             </Button>
           </div>
@@ -227,7 +227,7 @@ export default function MedicalLibraryPage() {
       filterState.view !== 'table' &&
       medications.length > 0 ? (
         <p className="mt-4 text-sm text-muted-foreground">
-          Showing {medications.length} of {query.data?.total ?? 0} medications
+          {medications.length} sur {query.data?.total ?? 0} médicaments affichés
         </p>
       ) : null}
 

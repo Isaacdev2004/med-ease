@@ -27,6 +27,9 @@ export function createPatientMedicationsRoutes(options: {
       analyticsName: `${analyticsPrefix}_medications_today`,
       lazy: patientPage,
       permission: 'medications.read',
+      nav: nav
+        ? { ...nav, label: nav.label ?? 'Pilulier' }
+        : undefined,
     },
     {
       path: '/medications/history',
@@ -66,7 +69,6 @@ export function createPatientMedicationsRoutes(options: {
       breadcrumb: 'Pilulier',
       analyticsName: `${analyticsPrefix}_medications`,
       lazy: patientPage,
-      nav,
       permission: 'medications.read',
     },
   ];

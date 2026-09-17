@@ -4,9 +4,19 @@ import { useQuery } from '@tanstack/react-query';
 import { directoryQueries } from '@/features/directory/queries/directory.queries';
 import type { DirectoryFilters } from '@/services/directory/directory.types';
 import { useAuth } from '@/services/auth/auth-context';
+import { useApiAuth } from '@/services/auth/auth-service';
+
+function useApiQueryReady() {
+  const { session } = useAuth();
+  return !useApiAuth || Boolean(session?.accessToken);
+}
 
 export function useDirectory(filters?: DirectoryFilters) {
-  return useQuery(directoryQueries.search(filters));
+  const apiReady = useApiQueryReady();
+  return useQuery({
+    ...directoryQueries.search(filters),
+    enabled: apiReady,
+  });
 }
 
 export function useProvider(providerId: string) {
