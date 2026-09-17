@@ -5,6 +5,7 @@ import { ROUTES } from '@/config/routes';
 import type { Permission } from '@/config/permissions';
 import { trackAuthEvent } from '@/services/auth/audit-events';
 import { useAuth } from '@/services/auth/auth-context';
+import { absoluteAppPath } from '@/shared/hooks/use-portal-path';
 
 interface PermissionGuardProps {
   permission?: Permission | string;
@@ -39,5 +40,5 @@ export function PermissionGuard({
     permission: permissions.join(','),
   });
 
-  return <Redirect to={ROUTES.forbidden} />;
+  return <Redirect to={absoluteAppPath(ROUTES.forbidden)} />;
 }

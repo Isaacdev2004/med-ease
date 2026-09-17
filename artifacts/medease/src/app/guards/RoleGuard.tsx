@@ -5,6 +5,7 @@ import { ROUTES, type PortalId } from '@/config/routes';
 import { env } from '@/config/env';
 import { trackAuthEvent } from '@/services/auth/audit-events';
 import { useAuth } from '@/services/auth/auth-context';
+import { absoluteAppPath } from '@/shared/hooks/use-portal-path';
 import type { UserRole } from '@/types/auth';
 
 interface RoleGuardProps {
@@ -24,7 +25,7 @@ export function RoleGuard({ portalId, children }: RoleGuardProps) {
     portal: portalId,
     role: activeRole ?? 'none',
   });
-  return <Redirect to={ROUTES.forbidden} />;
+  return <Redirect to={absoluteAppPath(ROUTES.forbidden)} />;
 }
 
 interface RoleGateGuardProps {
@@ -44,5 +45,5 @@ export function RoleRequiredGuard({ role, children }: RoleGateGuardProps) {
     requiredRole: role,
     role: activeRole ?? 'none',
   });
-  return <Redirect to={ROUTES.forbidden} />;
+  return <Redirect to={absoluteAppPath(ROUTES.forbidden)} />;
 }

@@ -6,6 +6,7 @@ import { LoggingOutScreen } from '@/app/auth-ui/LoggingOutScreen';
 import { ROUTES } from '@/config/routes';
 import { getPortalLoginPathFromPathname } from '@/config/routes/portal-login';
 import { useAuth } from '@/services/auth/auth-context';
+import { absoluteAppPath } from '@/shared/hooks/use-portal-path';
 
 interface AuthenticatedGuardProps {
   children: ReactNode;
@@ -25,11 +26,19 @@ export function AuthenticatedGuard({ children }: AuthenticatedGuardProps) {
   }
 
   if (authState === 'session_expired') {
-    return <Redirect to={ROUTES.sessionExpired} />;
+    return (
+      <Redirect
+        to={absoluteAppPath(getPortalLoginPathFromPathname(location))}
+      />
+    );
   }
 
   if (!isAuthenticated) {
-    return <Redirect to={getPortalLoginPathFromPathname(location)} />;
+    return (
+      <Redirect
+        to={absoluteAppPath(getPortalLoginPathFromPathname(location))}
+      />
+    );
   }
 
   return children;

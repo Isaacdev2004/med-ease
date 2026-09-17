@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { ROUTES } from '@/config/routes';
 import { isFeatureEnabled, type FeatureFlag } from '@/config/feature-flags';
 import { trackAuthEvent } from '@/services/auth/audit-events';
+import { absoluteAppPath } from '@/shared/hooks/use-portal-path';
 
 interface FeatureFlagGuardProps {
   flag?: FeatureFlag;
@@ -17,5 +18,5 @@ export function FeatureFlagGuard({ flag, children }: FeatureFlagGuardProps) {
   }
 
   trackAuthEvent('feature_unavailable', { feature: flag });
-  return <Redirect to={ROUTES.notFound} />;
+  return <Redirect to={absoluteAppPath(ROUTES.notFound)} />;
 }

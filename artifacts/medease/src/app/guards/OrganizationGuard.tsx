@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 
 import { ROUTES } from '@/config/routes';
 import { useAuth } from '@/services/auth/auth-context';
+import { absoluteAppPath } from '@/shared/hooks/use-portal-path';
 
 interface OrganizationGuardProps {
   organizationId?: string;
@@ -17,11 +18,11 @@ export function OrganizationGuard({
   const { organization } = useAuth();
 
   if (!organization) {
-    return <Redirect to={ROUTES.login} />;
+    return <Redirect to={absoluteAppPath(ROUTES.login)} />;
   }
 
   if (organizationId && organization.id !== organizationId) {
-    return <Redirect to={ROUTES.forbidden} />;
+    return <Redirect to={absoluteAppPath(ROUTES.forbidden)} />;
   }
 
   return children;

@@ -1,4 +1,13 @@
 /**
+ * Escape a nested wouter router and navigate to an app-root path.
+ * Without `~`, `/session-expired` inside `/patient` becomes `/patient/session-expired`.
+ */
+export function absoluteAppPath(path: string): string {
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  return `~${normalized}`;
+}
+
+/**
  * Build sidebar/nav hrefs for nested portal routers (wouter `nest`).
  * Links must be relative to the portal mount — not `${basePath}${route.path}`,
  * or wouter resolves `/patient/...` as `/patient` + `/patient/...`.

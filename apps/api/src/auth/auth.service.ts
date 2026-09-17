@@ -232,7 +232,7 @@ export class AuthService {
   }
 
   async getMe(userId: string): Promise<LoginResultDto> {
-    const user = await this.prisma.runInTransaction(async (tx) =>
+    const user = await this.prisma.runInSystemTransaction(async (tx) =>
       tx.user.findUnique({
         where: { id: userId },
         include: { organization: true },

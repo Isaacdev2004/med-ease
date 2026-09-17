@@ -116,6 +116,13 @@ export function LoginForm({
             </Link>
           </div>
 
+          {authState === 'session_expired' ? (
+            <p className="text-sm text-muted-foreground" role="status">
+              Your session has expired for security reasons. Please sign in
+              again to continue.
+            </p>
+          ) : null}
+
           {error ? (
             <p className="text-sm text-destructive" role="alert">
               {error.message}
