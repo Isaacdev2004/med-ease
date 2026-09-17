@@ -86,7 +86,7 @@ export function DashboardSection({ filters }: { filters?: LabOrderFilters }) {
         title="Orders by category"
         data={dashboard.data.chartData}
       />
-      <LabTimeline entries={dashboard.data.recentActivity} />
+      <LabTimeline entries={dashboard.data.recentActivity ?? []} />
       {(alerts.data ?? [])
         .filter((a) => !a.acknowledged)
         .slice(0, 3)

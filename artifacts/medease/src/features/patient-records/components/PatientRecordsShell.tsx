@@ -63,7 +63,7 @@ export function PatientRecordsShell({
     );
   }
 
-  const record = recordQuery.data;
+  const record = recordQuery.data!;
   const showProfiles =
     section === 'dashboard' ||
     location === basePath ||

@@ -173,7 +173,7 @@ function mapMedications(items: DomainMedication[]): PatientMedication[] {
     dosage: med.dose || med.strength,
     frequency: med.frequency,
     status: mapMedicationStatus(med.status),
-    prescribedBy: med.prescribingPhysician,
+    prescribedBy: med.prescribingPhysician ?? '—',
     startDate: med.startDate,
     endDate: med.endDate,
     instructions: med.instructions,
@@ -247,7 +247,7 @@ function mapRadiology(
         date: study.studyDate,
         report: impression || findings || study.clinicalIndication || study.reason,
         radiologist: study.radiologistName ?? report?.radiologistName ?? '—',
-        imageUrl: study.series[0]?.instances[0]?.imageUrl,
+        imageUrl: study.series?.[0]?.instances?.[0]?.imageUrl,
       };
     });
 }
@@ -362,7 +362,7 @@ function mapTeleEncounters(sessions: TelemedicineSession[]): Encounter[] {
     department: session.specialty,
     physician: session.clinicianName,
     facility: 'Telemedicine',
-    reason: `${session.sessionType.replaceAll('_', ' ')} visit`,
+    reason: `${(session.sessionType ?? 'consultation').replaceAll('_', ' ')} visit`,
     summary: session.notes,
   }));
 }
@@ -543,7 +543,7 @@ export function buildPatientHealthRecordFromApi(input: {
   telemedicineSessions?: TelemedicineSession[];
 }): PatientHealthRecord {
   const demographics = buildDemographics(input);
-  const allergies = input.allergies.map(mapAllergy);
+  const allergies = (input.allergies ?? []).map(mapAllergy);
   const medications = mapMedications(input.medications ?? []);
   const labs = mapLabs(input.labObservations ?? []);
   const radiology = mapRadiology(

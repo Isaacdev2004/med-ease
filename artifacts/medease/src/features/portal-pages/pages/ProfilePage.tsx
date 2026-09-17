@@ -41,7 +41,7 @@ export default function ProfilePage() {
             triggerLabel="Modifier le profil général"
           />
           <Button asChild variant="outline" size="sm">
-            <Link href="/patient/records">Ouvrir le Mega carnet</Link>
+            <Link href="/records">Ouvrir le Mega carnet</Link>
           </Button>
         </div>
       }

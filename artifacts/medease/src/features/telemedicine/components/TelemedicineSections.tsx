@@ -49,7 +49,7 @@ export function DashboardSection({
     <div className="space-y-6">
       <TelemedicineMetrics dashboard={dashboard.data} />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {dashboard.data.recentSessions.map((s) => (
+        {(dashboard.data.recentSessions ?? []).map((s) => (
           <SessionCard key={s.sessionId} session={s} />
         ))}
       </div>

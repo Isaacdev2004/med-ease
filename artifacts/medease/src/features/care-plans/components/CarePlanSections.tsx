@@ -81,7 +81,7 @@ export function DashboardSection({ filters }: { filters?: CarePlanFilters }) {
         <RiskIndicator key={r.id} risk={r} />
       ))}
       <ActivityFeed
-        items={dashboard.data.recentActivity.map((a) => ({
+        items={(dashboard.data.recentActivity ?? []).map((a) => ({
           id: a.id,
           type: 'task',
           title: a.title,

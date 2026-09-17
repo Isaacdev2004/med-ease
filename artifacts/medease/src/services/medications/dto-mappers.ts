@@ -1,3 +1,5 @@
+import { ensureArray } from '@/shared/lib/ensure-array';
+
 import type {
   DoseLog,
   MedicationFilters,
@@ -236,5 +238,5 @@ export function mapArray<T>(
   dto: unknown,
   mapper: (item: unknown) => T,
 ): T[] {
-  return Array.isArray(dto) ? dto.map(mapper) : [];
+  return ensureArray(dto).map(mapper);
 }

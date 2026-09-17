@@ -93,7 +93,10 @@ export function EnterpriseMedicationCard({
         name={medication.name}
         dosage={medication.dose}
         frequency={medication.frequency}
-        prescribedBy={medication.prescribingPhysician.replace('Dr. ', '')}
+        prescribedBy={(medication.prescribingPhysician ?? '—').replace(
+          'Dr. ',
+          '',
+        )}
         status={
           medication.status === 'active'
             ? 'active'

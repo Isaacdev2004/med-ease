@@ -254,7 +254,7 @@ export function MedicationsSection({
           name={med.name}
           dosage={med.dosage}
           frequency={med.frequency}
-          prescribedBy={med.prescribedBy.replace('Dr. ', '')}
+          prescribedBy={(med.prescribedBy ?? '—').replace('Dr. ', '')}
           status={
             med.status === 'active'
               ? 'active'

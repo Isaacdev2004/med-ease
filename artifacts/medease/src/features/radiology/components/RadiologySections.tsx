@@ -70,16 +70,16 @@ export function DashboardSection({ filters }: { filters?: StudyFilters }) {
         data={dashboard.data.chartData}
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {dashboard.data.recentStudies.map((s) => (
+        {(dashboard.data.recentStudies ?? []).map((s) => (
           <RadiologyStudyCard key={s.id} study={s} />
         ))}
       </div>
-      <StudyTimeline entries={dashboard.data.recentActivity} />
+      <StudyTimeline entries={dashboard.data.recentActivity ?? []} />
       {(critical.data ?? []).slice(0, 2).map((r) => (
         <CriticalFindingBanner
           key={r.id}
           title={r.title}
-          message={r.impression.summary}
+          message={r.impression?.summary ?? r.title}
         />
       ))}
     </div>

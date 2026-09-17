@@ -9,6 +9,7 @@ import {
   buildDemographicsFromPatient,
   buildPatientHealthRecordFromApi,
 } from '@/services/patient-records/live-record.mapper';
+import { normalizePatientHealthRecord } from '@/services/patient-records/normalize-record';
 import { patientRecordRepository } from '@/services/patient-records/repository';
 import { patientsService } from '@/services/patients';
 import { resolveClinicalPatientId } from '@/services/patients/resolve-patient-id';
@@ -178,7 +179,7 @@ async function loadLiveRecord(
     if (error instanceof NotFoundError) {
       return null;
     }
-    throw error;
+    return null;
   }
 }
 
@@ -187,9 +188,10 @@ async function loadRecord(
 ): Promise<PatientHealthRecord | null> {
   const liveRecord = await loadLiveRecord(patientId);
   if (liveRecord) {
-    return liveRecord;
+    return normalizePatientHealthRecord(liveRecord);
   }
-  return patientRecordRepository.getById(patientId);
+  const mockRecord = patientRecordRepository.getById(patientId);
+  return mockRecord ? normalizePatientHealthRecord(mockRecord) : null;
 }
 
 function filterTimeline(

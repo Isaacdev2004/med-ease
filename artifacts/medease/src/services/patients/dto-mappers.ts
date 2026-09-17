@@ -1,3 +1,5 @@
+import { ensureArray } from '@/shared/lib/ensure-array';
+
 import type {
   ExportResult,
   PaginatedResult,
@@ -205,7 +207,7 @@ export function mapArrayDto<T>(
   dto: unknown,
   mapItem: (item: unknown) => T,
 ): T[] {
-  return Array.isArray(dto) ? dto.map(mapItem) : [];
+  return ensureArray(dto).map(mapItem);
 }
 
 export function filtersToQuery(

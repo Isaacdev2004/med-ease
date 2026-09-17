@@ -178,7 +178,7 @@ export function DiagnosticReportPanel({
       </div>
       <section>
         <h4 className="font-medium mb-2">Findings</h4>
-        {report.findings.map((f) => (
+        {(report.findings ?? []).map((f) => (
           <div key={f.id} className="mb-2 text-sm">
             <p className="font-medium">{f.title}</p>
             <p className="text-muted-foreground">{f.description}</p>
@@ -187,13 +187,13 @@ export function DiagnosticReportPanel({
       </section>
       <section>
         <h4 className="font-medium mb-2">Impression</h4>
-        <p className="text-sm">{report.impression.summary}</p>
+        <p className="text-sm">{report.impression?.summary ?? '—'}</p>
       </section>
-      {report.recommendations.length ? (
+      {(report.recommendations ?? []).length ? (
         <section>
           <h4 className="font-medium mb-2">Recommendations</h4>
           <ul className="list-disc pl-5 text-sm space-y-1">
-            {report.recommendations.map((r) => (
+            {(report.recommendations ?? []).map((r) => (
               <li key={r.id}>{r.text}</li>
             ))}
           </ul>
@@ -212,8 +212,8 @@ export function ImageThumbnailGrid({
   activeInstanceId?: string;
   onSelect: (seriesId: string, instanceId: string) => void;
 }) {
-  const instances = study.series.flatMap((s) =>
-    s.instances.map((i) => ({ ...i, seriesId: s.id })),
+  const instances = (study.series ?? []).flatMap((s) =>
+    (s.instances ?? []).map((i) => ({ ...i, seriesId: s.id })),
   );
   return (
     <div

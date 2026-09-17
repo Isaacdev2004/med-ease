@@ -46,8 +46,8 @@ async function buildLiveDashboard(patientId: string): Promise<CarePlanDashboard>
     overdueTasks: tasks.filter((t) => t.status === 'overdue').length,
     missedTasks: tasks.filter((t) => t.status === 'missed').length,
     assignedProfessionals: activePlan ? 1 : 0,
-    upcomingAppointments: activePlan?.linkedAppointmentIds.length ?? 0,
-    activeMedications: activePlan?.linkedMedicationIds.length ?? 0,
+    upcomingAppointments: activePlan?.linkedAppointmentIds?.length ?? 0,
+    activeMedications: activePlan?.linkedMedicationIds?.length ?? 0,
     outstandingLabs: 0,
     outstandingImaging: 0,
     recentActivity: plans.slice(0, 5).map((p) => ({

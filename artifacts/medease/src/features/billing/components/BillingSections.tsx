@@ -51,7 +51,7 @@ export function DashboardSection({ filters }: { filters?: BillingFilters }) {
         outstanding={dashboard.data.outstandingBalances}
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {dashboard.data.recentInvoices.map((i) => (
+        {(dashboard.data.recentInvoices ?? []).map((i) => (
           <InvoiceCard key={i.invoiceId} invoice={i} />
         ))}
       </div>
