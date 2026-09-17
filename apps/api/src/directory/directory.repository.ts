@@ -15,6 +15,7 @@ import {
 } from '@medease/prisma';
 import { newId } from '@medease/uuid';
 
+import { FinessExternalService } from '../integrations/finess-external.service';
 import { RequestContextService } from '../tenant/request-context.service';
 import {
   assertProviderFound,
@@ -22,11 +23,29 @@ import {
   POPULAR_SEARCHES,
   toContractPaginated,
 } from './directory.helpers';
-import { mapDirectoryProvider } from './mappers/directory.mapper';
+import {
+  mapDirectoryProvider,
+  mapProviderType,
+} from './mappers/directory.mapper';
 import {
   buildDirectoryListWhere,
   buildDirectoryOrderBy,
 } from './queries/directory.queries';
+
+function mergeDirectoryProviders(
+  primary: DirectoryProvider[],
+  extras: DirectoryProvider[],
+): DirectoryProvider[] {
+  const seen = new Set<string>();
+  const out: DirectoryProvider[] = [];
+  for (const item of [...primary, ...extras]) {
+    const key = item.finessNumber ?? item.id;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+  return out;
+}
 
 function uniqueSorted(values: Array<string | null | undefined>): string[] {
   return [...new Set(values.filter((value): value is string => Boolean(value)))]
@@ -41,16 +60,17 @@ export class DirectoryRepository
   constructor(
     private readonly prisma: PrismaService,
     private readonly requestContext: RequestContextService,
+    private readonly finessExternal: FinessExternalService,
   ) {
     super();
   }
 
-  search(filters: DirectoryFilters = {}): Promise<DirectorySearchResult> {
+  async search(filters: DirectoryFilters = {}): Promise<DirectorySearchResult> {
     const { page, pageSize, skip, take } = normalizePagination(filters);
     const orderBy = buildDirectoryOrderBy(filters.sort);
     const userId = this.requestContext.require().userId;
 
-    return this.prisma.runInTransaction(async (tx) => {
+    const result = await this.prisma.runInTransaction(async (tx) => {
       let favoriteProviderIds: string[] | undefined;
       if (filters.favoritesOnly && userId) {
         const favorites = await tx.directoryFavorite.findMany({
@@ -100,6 +120,44 @@ export class DirectoryRepository
         },
       };
     });
+
+    const q = filters.q?.trim();
+    if (!q || q.length < 2) return result;
+
+    const external = await this.finessExternal.search(q, Math.max(pageSize, 25));
+    if (!external.length) return result;
+
+    const externalProviders: DirectoryProvider[] = external.map((row) => ({
+      id: row.id,
+      finessNumber: row.finessNumber,
+      type: mapProviderType(row.type),
+      name: row.name,
+      facilityType: 'Établissement de santé',
+      address: {
+        street: row.street,
+        city: row.city,
+        department: row.department,
+        postalCode: row.postalCode,
+        country: 'France',
+        latitude: row.latitude,
+        longitude: row.longitude,
+      },
+      availability: 'Open data FINESS',
+      status: 'stable',
+      languages: ['French'],
+      emergencyServices: /hopital|urgence|ap-hp/i.test(row.name),
+      updatedAt: new Date().toISOString(),
+    }));
+
+    const merged = mergeDirectoryProviders(result.items, externalProviders);
+    const start = (page - 1) * pageSize;
+    return {
+      ...result,
+      items: merged.slice(start, start + pageSize),
+      total: Math.max(result.total, merged.length),
+      page,
+      pageSize,
+    };
   }
 
   async getById(id: string): Promise<DirectoryProvider> {

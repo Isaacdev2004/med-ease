@@ -22,6 +22,7 @@ import {
 } from '@medease/prisma';
 import { newId } from '@medease/uuid';
 
+import { BdpmExternalService } from '../integrations/bdpm-external.service';
 import { RequestContextService } from '../tenant/request-context.service';
 import {
   assertMedicationFound,
@@ -47,11 +48,12 @@ export class MedicalLibraryRepository
   constructor(
     private readonly prisma: PrismaService,
     private readonly requestContext: RequestContextService,
+    private readonly bdpmExternal: BdpmExternalService,
   ) {
     super();
   }
 
-  search(filters: MedicationFilters = {}): Promise<MedicationSearchResult> {
+  async search(filters: MedicationFilters = {}): Promise<MedicationSearchResult> {
     const { page, pageSize, skip, take } = normalizePagination(filters);
     const favoriteUserId = filters.favoritesOnly
       ? this.actorId()
@@ -63,7 +65,7 @@ export class MedicalLibraryRepository
     );
     const orderBy = buildMedicationCatalogOrderBy(filters.sort);
 
-    return this.prisma.runInTransaction(async (tx) => {
+    const result = await this.prisma.runInTransaction(async (tx) => {
       const [items, total, facetRows] = await Promise.all([
         tx.medicationCatalog.findMany({
           where,
@@ -97,6 +99,61 @@ export class MedicalLibraryRepository
         facets: buildFacets(facetRows),
       };
     });
+
+    const q = filters.q?.trim();
+    if (!q || q.length < 3) return result;
+
+    const external = await this.bdpmExternal.search(q, Math.max(pageSize, 25));
+    if (!external.length) return result;
+
+    const externalRecords: MedicationRecord[] = external.map((row) => ({
+      id: row.id,
+      bdpmId: row.bdpmId,
+      name: row.name,
+      brandName: row.brandName,
+      genericName: row.genericName,
+      strength: row.strength,
+      dosageForm: row.dosageForm,
+      route: mapRoute(row.route),
+      atcCode: '',
+      therapeuticClass: row.genericName,
+      category: mapCategory('pain_relief'),
+      manufacturer: row.manufacturer,
+      prescriptionRequired: true,
+      controlledSubstance: false,
+      pregnancySafety: 'unknown',
+      breastfeedingSafety: 'unknown',
+      pediatricApproved: false,
+      geriatricApproved: true,
+      available: true,
+      searchCount: 0,
+      description: row.description,
+      activeIngredients: row.activeIngredients,
+      indications: [],
+      contraindications: [],
+      warnings: [],
+      precautions: [],
+      sideEffects: [],
+      administration: [],
+      storage: 'Voir notice BDPM',
+      patientInformation: row.description,
+      professionalInformation: 'Source BDPM',
+      references: ['BDPM'],
+      dosages: [],
+      interactions: [],
+      relatedMedicationIds: [],
+      updatedAt: new Date().toISOString(),
+    }));
+
+    const merged = mergeMedicationRecords(result.items, externalRecords);
+    const start = (page - 1) * pageSize;
+    return {
+      ...result,
+      items: merged.slice(start, start + pageSize),
+      total: merged.length,
+      page,
+      pageSize,
+    };
   }
 
   async getById(id: string): Promise<MedicationRecord> {
@@ -310,6 +367,21 @@ export class MedicalLibraryRepository
       '00000000-0000-0000-0000-000000000000'
     );
   }
+}
+
+function mergeMedicationRecords(
+  primary: MedicationRecord[],
+  extras: MedicationRecord[],
+): MedicationRecord[] {
+  const seen = new Set<string>();
+  const out: MedicationRecord[] = [];
+  for (const item of [...primary, ...extras]) {
+    const key = item.bdpmId ?? item.id;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+  return out;
 }
 
 function buildFacets(

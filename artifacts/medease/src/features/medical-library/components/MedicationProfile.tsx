@@ -69,9 +69,17 @@ export function MedicationProfile({
               </div>
             ))}
             {medication.bdpmId ? (
-              <div className="sm:col-span-2">
+              <div className="sm:col-span-2 space-y-1">
                 <p className="text-muted-foreground">Identifiant BDPM / CIS</p>
                 <p className="font-medium">{medication.bdpmId}</p>
+                <a
+                  className="text-sm text-primary underline"
+                  href={`https://base-donnees-publique.medicaments.gouv.fr/affichageDoc.php?specid=${medication.bdpmId}&typedoc=N`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Voir la notice officielle (BDPM)
+                </a>
               </div>
             ) : null}
           </CardContent>

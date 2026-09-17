@@ -1,4 +1,6 @@
 import type { DirectoryFilters } from '@/services/directory/directory.types';
+import { searchFinessExternal } from '@/services/external/finess-external';
+import { mergeDirectorySearchResults } from '@/services/external/search-merge';
 import { directoryRepository } from '@/services/directory/repository';
 
 const DELAY = 250;
@@ -7,12 +9,30 @@ const delay = (ms = DELAY) => new Promise((r) => setTimeout(r, ms));
 export const directoryService = {
   async search(filters: DirectoryFilters = {}) {
     await delay();
-    return directoryRepository.search(filters);
+    const page = filters.page ?? 1;
+    const pageSize = filters.pageSize ?? 12;
+    const local = await directoryRepository.search(filters);
+    const q = filters.q?.trim();
+
+    if (!q || q.length < 2) return local;
+
+    const external = await searchFinessExternal({ ...filters, page: 1, pageSize: 50 });
+    if (!external.length) return local;
+
+    return mergeDirectorySearchResults(local, external, page, pageSize);
   },
 
   async getProvider(id: string) {
     await delay();
-    return directoryRepository.getProvider(id);
+    const local = await directoryRepository.getProvider(id);
+    if (local) return local;
+
+    if (id.startsWith('finess-ext-')) {
+      const finess = id.replace('finess-ext-', '');
+      const results = await searchFinessExternal({ q: finess, pageSize: 5 });
+      return results.find((p) => p.finessNumber === finess) ?? results[0] ?? null;
+    }
+    return null;
   },
 
   async getRelatedProviders(id: string) {

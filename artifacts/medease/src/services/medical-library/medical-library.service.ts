@@ -1,6 +1,11 @@
 import type {
   MedicationFilters,
 } from '@/services/medical-library/medical-library.types';
+import {
+  getBdpmMedicationByCis,
+  searchBdpmExternal,
+} from '@/services/external/bdpm-external';
+import { mergeMedicationSearchResults } from '@/services/external/search-merge';
 import { medicalLibraryRepository } from '@/services/medical-library/repository';
 
 const SIMULATED_DELAY_MS = 250;
@@ -12,12 +17,29 @@ function delay(ms = SIMULATED_DELAY_MS) {
 export const medicalLibraryService = {
   async search(filters: MedicationFilters = {}) {
     await delay();
-    return medicalLibraryRepository.search(filters);
+    const page = filters.page ?? 1;
+    const pageSize = filters.pageSize ?? 12;
+    const local = await medicalLibraryRepository.search(filters);
+    const q = filters.q?.trim();
+
+    if (!q || q.length < 3) return local;
+
+    const external = await searchBdpmExternal(q, Math.max(pageSize, 20));
+    if (!external.length) return local;
+
+    return mergeMedicationSearchResults(local, external, page, pageSize);
   },
 
   async getMedication(id: string) {
     await delay();
-    return medicalLibraryRepository.getMedication(id);
+    const local = await medicalLibraryRepository.getMedication(id);
+    if (local) return local;
+
+    const cis = id.startsWith('bdpm-') ? id.slice(5) : id;
+    if (/^\d+$/.test(cis)) {
+      return getBdpmMedicationByCis(cis);
+    }
+    return null;
   },
 
   async getRelatedMedications(id: string) {
