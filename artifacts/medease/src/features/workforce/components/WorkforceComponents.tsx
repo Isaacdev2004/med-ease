@@ -102,9 +102,10 @@ export function ShiftCard({ shift }: { shift: Shift }) {
 }
 
 export function ScheduleGrid({ shifts }: { shifts: Shift[] }) {
+  const rows = Array.isArray(shifts) ? shifts : [];
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {shifts.slice(0, 12).map((s) => (
+      {rows.slice(0, 12).map((s) => (
         <ShiftCard key={s.shiftId} shift={s} />
       ))}
     </div>
@@ -343,9 +344,10 @@ export const AvailabilityCard = ({
 );
 
 export function CoverageDashboard({ metrics }: { metrics: CoverageMetrics[] }) {
+  const rows = Array.isArray(metrics) ? metrics : [];
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {metrics.map((m) => (
+      {rows.map((m) => (
         <Card key={m.departmentId}>
           <CardContent className="pt-4 text-sm">
             <p className="font-medium truncate">{m.departmentName}</p>
@@ -368,7 +370,7 @@ export function WorkforceMetrics({
   const kpis = [
     {
       label: 'Total staff',
-      value: dashboard.totalStaff.toLocaleString(),
+      value: (dashboard.totalStaff ?? 0).toLocaleString(),
       icon: Users,
     },
     { label: 'Active', value: dashboard.activeStaff, icon: Users },
@@ -454,9 +456,10 @@ export function AnalyticsPanel({
 }
 
 export function OrganizationChart({ units }: { units: OrganizationUnit[] }) {
+  const rows = Array.isArray(units) ? units : [];
   return (
     <div className="space-y-2">
-      {units.slice(0, 15).map((u) => (
+      {rows.slice(0, 15).map((u) => (
         <div
           key={u.unitId}
           className="flex items-center gap-2 text-sm border-l-2 border-primary/30 pl-3 py-1"

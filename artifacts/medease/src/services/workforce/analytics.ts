@@ -11,6 +11,52 @@ import type {
   WorkforceAnalytics,
 } from '@/services/workforce/types';
 
+const WORKFORCE_ANALYTICS_ARRAY_KEYS = [
+  'staffTrends',
+  'coverageByDepartment',
+  'absenteeismTrend',
+  'trainingCompliance',
+  'utilizationByDepartment',
+] as const;
+
+export function emptyWorkforceAnalytics(): WorkforceAnalytics {
+  return {
+    staffTrends: [],
+    coverageByDepartment: [],
+    absenteeismTrend: [],
+    trainingCompliance: [],
+    credentialCompliance: 0,
+    overtimeHours: 0,
+    turnoverRate: 0,
+    burnoutIndicator: 0,
+    payrollCost: 0,
+    utilizationByDepartment: [],
+  };
+}
+
+export function normalizeWorkforceAnalytics(raw: unknown): WorkforceAnalytics {
+  const defaults = emptyWorkforceAnalytics();
+  if (!raw || typeof raw !== 'object') return defaults;
+
+  const row = raw as Record<string, unknown>;
+  const merged: WorkforceAnalytics = {
+    ...defaults,
+    ...(row as Partial<WorkforceAnalytics>),
+  };
+
+  for (const key of WORKFORCE_ANALYTICS_ARRAY_KEYS) {
+    if (!Array.isArray(merged[key])) {
+      merged[key] = defaults[key];
+    }
+  }
+
+  return merged;
+}
+
+export function isCoverageMetricsList(value: unknown): value is CoverageMetrics[] {
+  return Array.isArray(value);
+}
+
 export function computeWorkforceAnalytics(): WorkforceAnalytics {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
   const staffTrends = months.map((label, i) => ({

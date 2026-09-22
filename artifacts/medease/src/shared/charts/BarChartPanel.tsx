@@ -28,7 +28,7 @@ export function BarChartPanel({
   loading,
   className,
 }: BarChartPanelProps) {
-  const series = data ?? [];
+  const series = Array.isArray(data) ? data : [];
   return (
     <ChartPanel
       title={title}

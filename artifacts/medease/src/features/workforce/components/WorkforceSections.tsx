@@ -32,7 +32,11 @@ import {
   useWorkforceDashboard,
 } from '@/features/workforce/hooks/use-workforce';
 import { useWorkforceMutations } from '@/features/workforce/mutations/workforce.mutations';
-import type { WorkforceFilters } from '@/services/workforce/types';
+import { isCoverageMetricsList } from '@/services/workforce/analytics';
+import type {
+  OrganizationUnit,
+  WorkforceFilters,
+} from '@/services/workforce/types';
 import { useAuth } from '@/services/auth/auth-context';
 import { LoadingView } from '@/shared/components';
 import { EmptyState } from '@/shared/ui/empty-state';
@@ -67,7 +71,9 @@ export function DashboardSection({ filters }: { filters?: WorkforceFilters }) {
   return (
     <div className="space-y-6">
       <WorkforceMetrics dashboard={dashboard.data} />
-      {coverage.data ? <CoverageDashboard metrics={coverage.data} /> : null}
+      {isCoverageMetricsList(coverage.data) ? (
+        <CoverageDashboard metrics={coverage.data} />
+      ) : null}
       <ScheduleGrid shifts={dashboard.data.recentShifts ?? []} />
     </div>
   );
@@ -206,7 +212,12 @@ export function DepartmentsSection({
 export function OrganizationSection() {
   const query = useOrganization();
   if (query.isLoading) return <LoadingView />;
-  return <OrganizationChart units={query.data ?? []} />;
+  const units: OrganizationUnit[] = Array.isArray(query.data)
+    ? query.data
+    : Array.isArray((query.data as { items?: OrganizationUnit[] } | undefined)?.items)
+      ? (query.data as { items: OrganizationUnit[] }).items
+      : [];
+  return <OrganizationChart units={units} />;
 }
 
 export function PayrollSection({ filters }: { filters?: WorkforceFilters }) {
@@ -247,7 +258,9 @@ export function AnalyticsSection() {
   return (
     <div className="space-y-6">
       {analytics.data ? <AnalyticsPanel analytics={analytics.data} /> : null}
-      {coverage.data ? <CoverageDashboard metrics={coverage.data} /> : null}
+      {isCoverageMetricsList(coverage.data) ? (
+        <CoverageDashboard metrics={coverage.data} />
+      ) : null}
       <ExportToolbar />
     </div>
   );

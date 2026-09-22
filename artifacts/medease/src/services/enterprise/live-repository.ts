@@ -1,6 +1,8 @@
 import type { QueryParams } from '@workspace/repository-transport';
 import { httpTransport } from '@workspace/repository-transport';
 
+import { normalizeWorkforceAnalytics } from '@/services/workforce/analytics';
+
 function camelToKebab(value: string): string {
   return value
     .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
@@ -380,6 +382,20 @@ function emptyPage(page = 1, pageSize = 25) {
   return { items: [] as unknown[], total: 0, page, pageSize };
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object'
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function asString(value: unknown, fallback = ''): string {
+  return typeof value === 'string' ? value : fallback;
+}
+
+function asNumber(value: unknown, fallback = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
 function asPage(raw: unknown, page = 1, pageSize = 25) {
   if (Array.isArray(raw)) {
     return { items: raw, total: raw.length, page, pageSize };
@@ -439,9 +455,64 @@ export function createEnterpriseLiveRepository<T extends object>(
             const raw = await transport.get(`${base}/analytics`, {
               query: scopeKey ? { scopeKey: String(scopeKey) } : undefined,
             });
-            return normalizeDashboard(module, raw);
+            return module === 'workforce'
+              ? normalizeWorkforceAnalytics(raw)
+              : normalizeDashboard(module, raw);
           } catch {
-            return normalizeDashboard(module, null);
+            return module === 'workforce'
+              ? normalizeWorkforceAnalytics(null)
+              : normalizeDashboard(module, null);
+          }
+        };
+      }
+
+      if (prop === 'coverage' && module === 'workforce') {
+        return async (departmentId?: string) => {
+          try {
+            const page = asPage(
+              await transport.get(`${base}/resources/departments`, {
+                query: {
+                  page: 1,
+                  pageSize: 50,
+                  ...(departmentId ? { departmentId: String(departmentId) } : {}),
+                },
+              }),
+            );
+            return page.items.map((dept) => {
+              const row = asRecord(dept);
+              const staffCount = asNumber(row.staffCount);
+              const scheduled = asNumber(row.scheduledShifts);
+              const required = Math.max(staffCount * 5, 1);
+              return {
+                departmentId: asString(row.departmentId, asString(row.id)),
+                departmentName: asString(row.name, 'Department'),
+                required,
+                scheduled,
+                coveragePercent: Math.min(
+                  100,
+                  Math.round((scheduled / required) * 100),
+                ),
+                gaps: Math.max(0, required - scheduled),
+                overtimeShifts: asNumber(row.overtimeShifts),
+              };
+            });
+          } catch {
+            return [];
+          }
+        };
+      }
+
+      if (prop === 'getOrganization') {
+        return async () => {
+          try {
+            const page = asPage(
+              await transport.get(`${base}/resources/organization`, {
+                query: { page: 1, pageSize: 100 },
+              }),
+            );
+            return page.items;
+          } catch {
+            return [];
           }
         };
       }
