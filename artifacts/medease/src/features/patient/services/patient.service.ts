@@ -72,7 +72,7 @@ export const patientService = {
       await import('@/services/laboratory/laboratory.service');
 
     const [patient, upcoming, medications, laboratory] = await Promise.all([
-      patientsService.getPatient(clinicalPatientId),
+      patientsService.getPatient(clinicalPatientId).catch(() => null),
       appointmentService.getUpcoming({ patientId: clinicalPatientId }),
       medicationService
         .getMedications({ patientId: clinicalPatientId, status: 'active' })
@@ -90,7 +90,7 @@ export const patientService = {
 
     return {
       patientId: clinicalPatientId,
-      greetingName: firstName(patient.fullName),
+      greetingName: patient ? firstName(patient.fullName) : 'there',
       nextAppointment,
       recentTestLabel: recentObservation
         ? `${recentObservation.testName}: ${recentObservation.value} ${recentObservation.unit}`

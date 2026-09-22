@@ -46,6 +46,10 @@ function shouldFallbackToMock(method: string, result: unknown): boolean {
     return total === 0 && items.length === 0;
   }
 
+  if (method === 'getPatient') {
+    return result == null;
+  }
+
   if (method === 'getProvider' || method === 'getMedication') {
     return result == null;
   }

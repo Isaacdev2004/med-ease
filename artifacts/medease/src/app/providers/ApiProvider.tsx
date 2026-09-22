@@ -39,9 +39,8 @@ import { useEffect } from 'react';
 export function ApiProvider({ children }: { children: ReactNode }) {
   const { session } = useAuth();
 
-  useEffect(() => {
-    configureApiClient(() => session?.accessToken ?? null);
-  }, [session?.accessToken]);
+  // Update before children render — useEffect runs too late for first queries.
+  configureApiClient(() => session?.accessToken ?? null);
 
   useEffect(() => {
     const flush = () => {

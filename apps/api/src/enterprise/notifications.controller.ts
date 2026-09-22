@@ -24,6 +24,7 @@ const READ = [
   'iam.read',
   'patients.read',
   'appointments.read',
+  'notifications.read',
 ] as const;
 const WRITE = ['platform.write', 'platform.admin', 'iam.write'] as const;
 

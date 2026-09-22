@@ -37,8 +37,11 @@ import {
   mapPatientIdentifierDto,
   mapPatientPreferenceDto,
 } from '@/services/patients/dto-mappers';
+import { useApiAuth } from '@/services/auth/auth-service';
+import { createHybridRepository } from '@/services/repository-hybrid';
+import { patientsMockRepository } from '@/services/patients/repository.mock';
 
-class PatientsRepository implements PatientsRepositoryContract {
+class PatientsHttpRepository implements PatientsRepositoryContract {
   private readonly transport = httpTransport;
 
   async listPatients(filters?: PatientFilters) {
@@ -154,4 +157,10 @@ class PatientsRepository implements PatientsRepositoryContract {
   }
 }
 
-export const patientsRepository = new PatientsRepository();
+const patientsHttpRepository = new PatientsHttpRepository();
+
+export const patientsRepository = (
+  useApiAuth
+    ? createHybridRepository(patientsHttpRepository, patientsMockRepository)
+    : patientsMockRepository
+) as PatientsRepositoryContract;
