@@ -8,6 +8,7 @@ import { Link, useLocation } from 'wouter';
 
 import type { NavItem } from '@/config/navigation/types';
 import { useUnreadNotificationCount } from '@/features/notifications/hooks/use-notifications';
+import { useAuth } from '@/services/auth/auth-context';
 import {
   portalNavHref,
   toPortalRelativePath,
@@ -37,7 +38,8 @@ export function PortalSidebar({
   onNavigate,
   className,
 }: PortalSidebarProps) {
-  const [location, setLocation] = useLocation();
+  const [location] = useLocation();
+  const { logout } = useAuth();
   const relativeLocation = toPortalRelativePath(location, portalBasePath);
   const unreadQuery = useUnreadNotificationCount();
   const unreadCount = unreadQuery.data ?? 0;
@@ -150,7 +152,7 @@ export function PortalSidebar({
               variant="ghost"
               className="w-full justify-start text-destructive hover:text-destructive"
               size="sm"
-              onClick={() => setLocation('/logout')}
+              onClick={() => void logout()}
             >
               <LogOut className="mr-2 h-4 w-4" />
               Déconnexion

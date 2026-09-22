@@ -11,7 +11,7 @@ import {
 import { useTheme } from 'next-themes';
 import { Link, useLocation } from 'wouter';
 
-import { PORTAL_PATHS, ROUTES } from '@/config/routes';
+import { PORTAL_PATHS } from '@/config/routes';
 import { getPortalForRole } from '@/config/permissions/portal-roles';
 import { useAuth } from '@/services/auth/auth-context';
 import { portalNavHref } from '@/shared/hooks/use-portal-path';
@@ -148,17 +148,10 @@ export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
-          asChild
+          onClick={() => void logout()}
         >
-          <Link
-            href={ROUTES.logout}
-            onClick={() => {
-              void logout?.();
-            }}
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            Déconnexion
-          </Link>
+          <LogOut className="mr-2 h-4 w-4" />
+          Déconnexion
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
