@@ -14,6 +14,7 @@ import {
   megaProfileCompletion,
   type MegaProfileId,
 } from '@/features/patient-records/components/MegaProfileEditor';
+import { nestedModuleTabHref } from '@/shared/hooks/use-portal-path';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 
@@ -115,7 +116,7 @@ export function MegaProfilesPanel({
                   onSaved={() => setTick((t) => t + 1)}
                 />
                 <Button asChild size="sm" variant="outline" className="w-full">
-                  <Link href={`${basePath}/${profile.segment}`}>
+                  <Link href={nestedModuleTabHref(basePath, profile.segment)}>
                     Consulter la fiche
                   </Link>
                 </Button>

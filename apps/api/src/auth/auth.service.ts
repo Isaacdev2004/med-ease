@@ -231,11 +231,14 @@ export class AuthService {
     });
   }
 
-  async getMe(userId: string): Promise<LoginResultDto> {
+  async getMe(
+    userId: string,
+    accessToken = '',
+  ): Promise<LoginResultDto> {
     const user = await this.prisma.runInSystemTransaction(async (tx) =>
       tx.user.findUnique({
         where: { id: userId },
-        include: { organization: true },
+        include: { organization: true, tenant: true },
       }),
     );
 
@@ -243,17 +246,39 @@ export class AuthService {
       throw AuthHttpException.sessionExpired();
     }
 
+    const organization = user.organization
+      ? {
+          id: user.organization.id,
+          name: user.organization.name,
+          slug: user.organization.slug,
+        }
+      : {
+          id: user.organizationId,
+          name: user.tenant?.name ?? "Med'ease",
+          slug: user.tenant?.slug ?? 'medease',
+        };
+
+    let expiresAt = Date.now() + 15 * 60_000;
+    if (accessToken) {
+      try {
+        const decoded = this.jwtService.decode(accessToken) as
+          | { exp?: number }
+          | null;
+        if (decoded?.exp) {
+          expiresAt = decoded.exp * 1000;
+        }
+      } catch {
+        // Keep default expiry when token decode fails.
+      }
+    }
+
     return {
       user: this.toAuthUser(user),
       session: {
-        accessToken: '',
-        expiresAt: Date.now(),
+        accessToken,
+        expiresAt,
       },
-      organization: {
-        id: user.organization.id,
-        name: user.organization.name,
-        slug: user.organization.slug,
-      },
+      organization,
     };
   }
 

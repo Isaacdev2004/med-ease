@@ -41,7 +41,6 @@ import type { JwtAccessPayload } from '@medease/auth';
 
 @ApiTags('auth')
 @Controller('auth')
-@Public()
 @UseGuards(ThrottlerGuard)
 export class AuthController {
   constructor(
@@ -50,6 +49,7 @@ export class AuthController {
   ) {}
 
   @Post('login')
+  @Public()
   @Throttle({ auth: { limit: 10, ttl: 60_000 } })
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Authenticate with email and password' })
@@ -66,6 +66,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @Public()
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Rotate refresh token and issue a new access token',
@@ -89,6 +90,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @Public()
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Revoke the current session' })
   @ApiCookieAuth(REFRESH_COOKIE_NAME)
@@ -110,11 +112,17 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Return the authenticated user profile' })
   @ApiOkResponse({ type: LoginResponseDto })
-  async me(@CurrentUser() user: JwtAccessPayload) {
-    return this.authService.getMe(user.sub);
+  async me(@CurrentUser() user: JwtAccessPayload, @Req() req: Request) {
+    const header = req.headers.authorization;
+    const accessToken =
+      typeof header === 'string' && header.startsWith('Bearer ')
+        ? header.slice('Bearer '.length)
+        : '';
+    return this.authService.getMe(user.sub, accessToken);
   }
 
   @Get('invite')
+  @Public()
   @Throttle({ auth: { limit: 20, ttl: 60_000 } })
   @ApiOperation({ summary: 'Preview a pending invite by token' })
   @ApiOkResponse({ type: InvitePreviewResponseDto })
@@ -123,6 +131,7 @@ export class AuthController {
   }
 
   @Post('accept-invite')
+  @Public()
   @Throttle({ auth: { limit: 10, ttl: 60_000 } })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Accept an invite and set account password' })
