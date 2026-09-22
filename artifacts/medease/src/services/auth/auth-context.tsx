@@ -17,7 +17,7 @@ import { env } from '@/config/env';
 import { PORTAL_PATHS, type PortalId } from '@/config/routes';
 import { trackAuthEvent } from '@/services/auth/audit-events';
 import { authService } from '@/services/auth/auth-service';
-import { persistAuthSession } from '@/services/auth/auth-persistence';
+import { persistAuthLoginResult } from '@/services/auth/auth-persistence';
 import { clearAuthCache } from '@/services/auth/clear-auth-cache';
 import { toFriendlyAuthError } from '@/services/auth/types';
 import type {
@@ -64,7 +64,7 @@ function applyAuthResult(
   setUser(result.user);
   setSession(result.session);
   setOrganization(result.organization);
-  persistAuthSession(result.user.id, result.session);
+  persistAuthLoginResult(result);
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -155,7 +155,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       setSession(refreshed);
-      if (user) persistAuthSession(user.id, refreshed);
+      if (user && organization) {
+        persistAuthLoginResult({
+          user,
+          organization,
+          session: refreshed,
+        });
+      }
       setAuthState(navigator.onLine ? 'authenticated' : 'offline');
       trackAuthEvent('session_refresh');
       return true;
@@ -168,7 +174,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setAuthState('session_expired');
       return false;
     }
-  }, [session, user]);
+  }, [session, user, organization]);
 
   useEffect(() => {
     if (authState !== 'authenticated' && authState !== 'offline') return;
@@ -194,7 +200,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const result = await authService.signIn(credentials);
       applyAuthResult(result, setUser, setSession, setOrganization);
-      persistAuthSession(result.user.id, result.session);
+      persistAuthLoginResult(result);
       setAuthState(navigator.onLine ? 'authenticated' : 'offline');
       trackAuthEvent('login', { rememberMe: Boolean(credentials.rememberMe) });
       return PORTAL_PATHS[getPortalForRole(result.user.role)];

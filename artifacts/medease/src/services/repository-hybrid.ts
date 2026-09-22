@@ -76,5 +76,23 @@ function shouldFallbackToMock(method: string, result: unknown): boolean {
     return Array.isArray(result) && result.length === 0;
   }
 
+  if (
+    method === 'getUpcoming' ||
+    method === 'getPast' ||
+    method === 'getToday' ||
+    method === 'getTelemedicine' ||
+    method === 'getAll'
+  ) {
+    return !Array.isArray(result) || result.length === 0;
+  }
+
+  if (method === 'getById') {
+    return result == null;
+  }
+
+  if (method === 'getWaitlist' || method === 'getQueue') {
+    return !Array.isArray(result) || result.length === 0;
+  }
+
   return false;
 }

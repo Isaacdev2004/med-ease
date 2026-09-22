@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { Label } from '@/shared/ui/label';
 import {
   Select,
@@ -6,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/select';
+import { resolveSelectValue } from '@/shared/ui/select-utils';
 import { Switch } from '@/shared/ui/switch';
 import { FilterPanel } from '@/shared/components';
 import type {
@@ -62,23 +65,58 @@ export function MedicationFilters({
   onPediatricChange,
   onGeriatricChange,
 }: MedicationFiltersProps) {
+  const categoryOptions = useMemo(() => {
+    const options = new Set<string>(['all']);
+    for (const item of facets?.categories ??
+      (Object.keys(MEDICATION_CATEGORY_LABELS) as MedicationCategory[])) {
+      options.add(item);
+    }
+    if (category !== 'all') {
+      options.add(category);
+    }
+    return [...options];
+  }, [category, facets?.categories]);
+
+  const therapeuticClassOptions = useMemo(() => {
+    const options = new Set<string>(['all']);
+    for (const item of facets?.therapeuticClasses ?? []) {
+      options.add(item);
+    }
+    if (therapeuticClass) {
+      options.add(therapeuticClass);
+    }
+    return [...options];
+  }, [facets?.therapeuticClasses, therapeuticClass]);
+
+  const sortOptions = useMemo(
+    () => SORT_OPTIONS.map((option) => option.value),
+    [],
+  );
+
+  const categoryValue = resolveSelectValue(category, categoryOptions, 'all');
+  const therapeuticClassValue = resolveSelectValue(
+    therapeuticClass || 'all',
+    therapeuticClassOptions,
+    'all',
+  );
+  const sortValue = resolveSelectValue(sort, sortOptions, 'alphabetical');
+
   return (
     <FilterPanel activeCount={activeCount}>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="med-category">Category</Label>
-          <Select value={category} onValueChange={onCategoryChange}>
+          <Select value={categoryValue} onValueChange={onCategoryChange}>
             <SelectTrigger id="med-category">
               <SelectValue placeholder="All categories" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All categories</SelectItem>
-              {(
-                facets?.categories ?? Object.keys(MEDICATION_CATEGORY_LABELS)
-              ).map((item) => (
+            <SelectContent portalled={false}>
+              {categoryOptions.map((item) => (
                 <SelectItem key={item} value={item}>
-                  {MEDICATION_CATEGORY_LABELS[item as MedicationCategory] ??
-                    item}
+                  {item === 'all'
+                    ? 'All categories'
+                    : (MEDICATION_CATEGORY_LABELS[item as MedicationCategory] ??
+                      item)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -87,13 +125,13 @@ export function MedicationFilters({
         <div className="space-y-2">
           <Label htmlFor="med-sort">Sort by</Label>
           <Select
-            value={sort}
+            value={sortValue}
             onValueChange={(v) => onSortChange(v as MedicationSort)}
           >
             <SelectTrigger id="med-sort">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent portalled={false}>
               {SORT_OPTIONS.map((o) => (
                 <SelectItem key={o.value} value={o.value}>
                   {o.label}
@@ -105,7 +143,7 @@ export function MedicationFilters({
         <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="med-class">Therapeutic class</Label>
           <Select
-            value={therapeuticClass || 'all'}
+            value={therapeuticClassValue}
             onValueChange={(v) =>
               onTherapeuticClassChange(v === 'all' ? '' : v)
             }
@@ -113,11 +151,10 @@ export function MedicationFilters({
             <SelectTrigger id="med-class">
               <SelectValue placeholder="All classes" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All classes</SelectItem>
-              {(facets?.therapeuticClasses ?? []).map((item) => (
+            <SelectContent portalled={false}>
+              {therapeuticClassOptions.map((item) => (
                 <SelectItem key={item} value={item}>
-                  {item}
+                  {item === 'all' ? 'All classes' : item}
                 </SelectItem>
               ))}
             </SelectContent>

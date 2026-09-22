@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/select';
+import { resolveSelectValue } from '@/shared/ui/select-utils';
 import {
   Sheet,
   SheetContent,
@@ -89,14 +90,17 @@ export function ComparisonDrawer({
     setSecondaryId(defaultSecondary);
   }, [open, primary, options]);
 
+  const optionIds = useMemo(() => options.map((medication) => medication.id), [options]);
+  const secondarySelectValue = resolveSelectValue(secondaryId, optionIds, optionIds[0] ?? '');
   const secondary =
-    options.find((medication) => medication.id === secondaryId) ?? null;
+    options.find((medication) => medication.id === secondarySelectValue) ?? null;
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
         className="w-full overflow-y-auto sm:max-w-2xl"
+        onOpenAutoFocus={(event) => event.preventDefault()}
       >
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
@@ -108,7 +112,7 @@ export function ComparisonDrawer({
           </SheetDescription>
         </SheetHeader>
 
-        {!primary ? (
+        {!open ? null : !primary ? (
           <p className="text-muted-foreground mt-6 text-sm">
             Select a medication to compare.
           </p>
@@ -126,11 +130,15 @@ export function ComparisonDrawer({
               </div>
               <div className="space-y-2">
                 <Label htmlFor="compare-secondary">Compare with</Label>
-                <Select value={secondaryId} onValueChange={setSecondaryId}>
+                <Select
+                  value={secondarySelectValue || undefined}
+                  onValueChange={setSecondaryId}
+                  disabled={optionIds.length === 0}
+                >
                   <SelectTrigger id="compare-secondary">
                     <SelectValue placeholder="Choose medication" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent portalled={false}>
                     {options.map((medication) => (
                       <SelectItem key={medication.id} value={medication.id}>
                         {medication.name} · {medication.strength}

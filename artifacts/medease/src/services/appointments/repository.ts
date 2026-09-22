@@ -29,8 +29,11 @@ import {
   mapQueueArrayDto,
   mapWaitlistArrayDto,
 } from '@/services/appointments/dto-mappers';
+import { useApiAuth } from '@/services/auth/auth-service';
+import { createHybridRepository } from '@/services/repository-hybrid';
+import { appointmentMockRepository } from '@/services/appointments/repository.mock';
 
-class AppointmentsRepository {
+class AppointmentsHttpRepository {
   private readonly transport = httpTransport;
 
   async search(filters?: AppointmentFilters) {
@@ -127,4 +130,15 @@ class AppointmentsRepository {
   }
 }
 
-export const appointmentRepository = new AppointmentsRepository();
+const appointmentsHttpRepository = new AppointmentsHttpRepository();
+
+export const appointmentHttpRepository = appointmentsHttpRepository;
+
+export const appointmentRepository = (
+  useApiAuth
+    ? createHybridRepository(
+        appointmentsHttpRepository,
+        appointmentMockRepository as unknown as AppointmentsHttpRepository,
+      )
+    : appointmentMockRepository
+) as AppointmentsHttpRepository;

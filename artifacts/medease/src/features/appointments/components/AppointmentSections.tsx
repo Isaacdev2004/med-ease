@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { safeFormatDate } from '@/shared/lib/format-date';
 
 import {
   AppointmentDetails,
@@ -93,7 +93,7 @@ export function HistorySection({ filters }: { filters?: AppointmentFilters }) {
         {
           id: 'date',
           header: 'Date',
-          cell: (a) => format(new Date(a.scheduledAt), 'PP'),
+          cell: (a) => safeFormatDate(a.scheduledAt, 'PP'),
         },
         {
           id: 'provider',

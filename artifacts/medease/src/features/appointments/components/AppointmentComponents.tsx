@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { safeFormatDate } from '@/shared/lib/format-date';
 import {
   AlertCircle,
   Calendar,
@@ -45,7 +45,7 @@ export function AppointmentStatusBadge({
 }) {
   return (
     <Badge
-      variant={STATUS_VARIANT[status]}
+      variant={STATUS_VARIANT[status] ?? 'secondary'}
       className="capitalize"
       aria-label={`Status: ${status.replace('_', ' ')}`}
     >
@@ -100,7 +100,7 @@ export function EnterpriseAppointmentCard({
       <CardContent className="space-y-2 text-sm">
         <p className="flex items-center gap-2">
           <Calendar className="h-4 w-4" aria-hidden="true" />
-          {format(new Date(appointment.scheduledAt), 'PPp')}
+          {safeFormatDate(appointment.scheduledAt, 'PPp')}
         </p>
         <p className="flex items-center gap-2">
           <MapPin className="h-4 w-4" aria-hidden="true" />
@@ -128,7 +128,7 @@ export function UpcomingAppointmentCard({
     <SharedAppointmentCard
       providerName={appointment.provider.fullName}
       specialty={appointment.specialty}
-      scheduledAt={format(new Date(appointment.scheduledAt), 'PPp')}
+      scheduledAt={safeFormatDate(appointment.scheduledAt, 'PPp')}
       location={`${appointment.facility.name}, ${appointment.room}`}
       status={
         appointment.status === 'completed'
@@ -160,7 +160,7 @@ export function AppointmentDetails({
     ['Facility', appointment.facility.name],
     ['Department', appointment.department],
     ['Room', appointment.room],
-    ['Date & Time', format(new Date(appointment.scheduledAt), 'PPpp')],
+    ['Date & Time', safeFormatDate(appointment.scheduledAt, 'PPpp')],
     ['Duration', `${appointment.durationMinutes} minutes`],
     ['Visit Type', appointment.visitType.replace('_', ' ')],
     ['Priority', appointment.priority],
@@ -317,7 +317,7 @@ export function WaitlistCard({ entry }: { entry: WaitlistEntry }) {
         <p>
           {entry.providerName} · {entry.specialty}
         </p>
-        <p>Requested: {format(new Date(entry.requestedDate), 'PP')}</p>
+        <p>Requested: {safeFormatDate(entry.requestedDate, 'PP')}</p>
       </CardContent>
     </Card>
   );
@@ -345,7 +345,7 @@ export function CheckInCard({
       <CardContent className="space-y-2 text-sm">
         <p>
           {appointment.specialty} ·{' '}
-          {format(new Date(appointment.scheduledAt), 'p')}
+          {safeFormatDate(appointment.scheduledAt, 'p')}
         </p>
         <AppointmentStatusBadge status={appointment.status} />
         {onCheckIn && appointment.checkInStatus === 'not_checked_in' ? (
@@ -368,7 +368,7 @@ export function ReminderCard({ appointment }: { appointment: Appointment }) {
       <CardContent className="pt-4 text-sm">
         <p className="font-medium">Reminder: {appointment.specialty}</p>
         <p className="text-muted-foreground">
-          {format(new Date(appointment.scheduledAt), 'PPp')}
+          {safeFormatDate(appointment.scheduledAt, 'PPp')}
         </p>
         <p className="text-muted-foreground">
           {appointment.provider.fullName} at {appointment.facility.name}

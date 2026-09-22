@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 
 import {
   Sheet,
@@ -38,8 +38,10 @@ export function FilterPanel({
     );
   }
 
+  const [open, setOpen] = useState(false);
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="sm" className={className}>
           <SlidersHorizontal className="mr-2 h-4 w-4" />
@@ -51,11 +53,15 @@ export function FilterPanel({
           ) : null}
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-full sm:max-w-md">
+      <SheetContent
+        side="right"
+        className="w-full sm:max-w-md"
+        onOpenAutoFocus={(event) => event.preventDefault()}
+      >
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
         </SheetHeader>
-        <div className="mt-6 space-y-4">{children}</div>
+        {open ? <div className="mt-6 space-y-4">{children}</div> : null}
       </SheetContent>
     </Sheet>
   );

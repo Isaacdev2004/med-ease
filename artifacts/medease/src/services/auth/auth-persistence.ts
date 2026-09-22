@@ -1,5 +1,9 @@
-import type { AuthSession } from '@/types/auth';
+import type { AuthSession, LoginResult } from '@/types/auth';
 
+import {
+  clearAuthSnapshot,
+  persistAuthSnapshot,
+} from '@/services/auth/auth-snapshot';
 import {
   clearStoredSession,
   persistSessionRef,
@@ -22,6 +26,16 @@ export function toStoredRef(
 
 export function persistAuthSession(userId: string, session: AuthSession): void {
   persistSessionRef(toStoredRef(userId, session));
+}
+
+export function persistAuthLoginResult(result: LoginResult): void {
+  persistAuthSession(result.user.id, result.session);
+  persistAuthSnapshot(result);
+}
+
+export function clearPersistedAuth(): void {
+  clearStoredSession();
+  clearAuthSnapshot();
 }
 
 export { clearStoredSession, readStoredSessionRef };

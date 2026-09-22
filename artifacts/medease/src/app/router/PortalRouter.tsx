@@ -1,4 +1,4 @@
-import { Route, Switch } from 'wouter';
+import { Route, Switch, useLocation } from 'wouter';
 import { useMemo } from 'react';
 
 import { RouteErrorBoundary } from '@/app/error-boundaries/RouteErrorBoundary';
@@ -39,6 +39,7 @@ function RouteMetadataEffects({
 }
 
 export function PortalRouter({ group }: PortalRouterProps) {
+  const [location] = useLocation();
   const { permissions, user, organization } = useAuth();
 
   const authCtx = useMemo(() => ({ permissions }), [permissions]);
@@ -60,7 +61,10 @@ export function PortalRouter({ group }: PortalRouterProps) {
       <OrganizationGuard organizationId={organization?.id}>
         <RoleGuard portalId={group.id}>
           <PortalLayout config={{ ...config, userName: displayName }}>
-            <RouteErrorBoundary moduleName={`${group.roleName} Portal`}>
+            <RouteErrorBoundary
+              key={location}
+              moduleName={`${group.roleName} Portal`}
+            >
               <Switch>
                 {authorizedRoutes.map((route) => (
                   <Route key={route.path} path={route.path}>

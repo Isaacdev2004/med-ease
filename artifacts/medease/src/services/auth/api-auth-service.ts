@@ -7,7 +7,11 @@ import type {
 
 import { getApiBaseUrl } from '@/services/api/configure-api-client';
 import {
-  clearStoredSession,
+  buildLoginResultFromSnapshot,
+  readAuthSnapshot,
+} from '@/services/auth/auth-snapshot';
+import {
+  clearPersistedAuth,
   readStoredSessionRef,
 } from '@/services/auth/auth-persistence';
 import type { AuthService, StoredSessionRef } from '@/services/auth/types';
@@ -125,6 +129,18 @@ async function fetchMe(accessToken: string): Promise<LoginResult | null> {
   };
 }
 
+function restoreFromSnapshot(
+  ref: StoredSessionRef,
+  session: AuthSession,
+): LoginResult | null {
+  const snapshot = readAuthSnapshot();
+  if (!snapshot || snapshot.user.id !== ref.userId) {
+    return null;
+  }
+
+  return buildLoginResultFromSnapshot(ref, snapshot, session);
+}
+
 async function restoreFromRef(
   ref: StoredSessionRef,
 ): Promise<LoginResult | null> {
@@ -144,6 +160,16 @@ async function restoreFromRef(
         },
       };
     }
+
+    const snapshotSession = restoreFromSnapshot(ref, {
+      accessToken: ref.accessToken,
+      expiresAt: ref.expiresAt,
+      rememberMe: ref.rememberMe,
+      refreshToken: ref.refreshToken,
+    });
+    if (snapshotSession) {
+      return snapshotSession;
+    }
   }
 
   if (!ref.refreshToken) {
@@ -156,17 +182,20 @@ async function restoreFromRef(
   }
 
   const me = await fetchMe(refreshed.accessToken);
-  if (!me) {
-    return null;
+  if (me) {
+    return {
+      ...me,
+      session: {
+        ...refreshed,
+        rememberMe: ref.rememberMe,
+      },
+    };
   }
 
-  return {
-    ...me,
-    session: {
-      ...refreshed,
-      rememberMe: ref.rememberMe,
-    },
-  };
+  return restoreFromSnapshot(ref, {
+    ...refreshed,
+    rememberMe: ref.rememberMe,
+  });
 }
 
 /** NestJS JWT auth — used when VITE_API_BASE_URL is configured. */
@@ -200,7 +229,7 @@ export const apiAuthService: AuthService = {
         // Best-effort revoke; clear local session regardless.
       }
     }
-    clearStoredSession();
+    clearPersistedAuth();
   },
 
   async refreshSession(session: AuthSession) {

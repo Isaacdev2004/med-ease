@@ -111,7 +111,11 @@ export function mapAppointmentDto(dto: unknown): Appointment {
     department: asString(raw.department),
     specialty: asString(raw.specialty),
     room: asString(raw.room),
-    scheduledAt: asString(raw.scheduledAt),
+    scheduledAt:
+      asString(raw.scheduledAt) ||
+      asString(raw.scheduled_at) ||
+      asString(raw.startTime) ||
+      asString(raw.start_time),
     durationMinutes: asNumber(raw.durationMinutes, 30),
     status: asAppointmentStatus(raw.status),
     visitType: asVisitType(raw.visitType),
@@ -174,7 +178,21 @@ export function mapPaginatedAppointmentsDto(dto: unknown): AppointmentListResult
 }
 
 export function mapAppointmentArrayDto(dto: unknown): Appointment[] {
-  return Array.isArray(dto) ? dto.map(mapAppointmentDto) : [];
+  if (Array.isArray(dto)) {
+    return dto.map(mapAppointmentDto);
+  }
+
+  if (dto && typeof dto === 'object') {
+    const raw = dto as Record<string, unknown>;
+    if (Array.isArray(raw.items)) {
+      return raw.items.map(mapAppointmentDto);
+    }
+    if (Array.isArray(raw.data)) {
+      return raw.data.map(mapAppointmentDto);
+    }
+  }
+
+  return [];
 }
 
 export function mapQueueArrayDto(dto: unknown): QueueEntry[] {

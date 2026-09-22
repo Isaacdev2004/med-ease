@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from '@/shared/ui/select';
 import { cn } from '@/shared/lib/utils';
+import { resolveSelectValue } from '@/shared/ui/select-utils';
 
 interface DataPaginationProps {
   page: number;
@@ -53,6 +54,12 @@ export function DataPagination({
   const from = total === 0 ? 0 : (safePage - 1) * pageSize + 1;
   const to = Math.min(safePage * pageSize, total);
   const visiblePages = getVisiblePages(safePage, totalPages);
+  const pageSizeOptionValues = pageSizeOptions.map(String);
+  const pageSizeValue = resolveSelectValue(
+    String(pageSize),
+    pageSizeOptionValues,
+    String(pageSizeOptions[0] ?? DEFAULT_PAGE_SIZE),
+  );
 
   return (
     <div
@@ -69,7 +76,7 @@ export function DataPagination({
           <div className="flex items-center gap-2">
             <span>Rows per page</span>
             <Select
-              value={String(pageSize)}
+              value={pageSizeValue}
               onValueChange={(value) => onPageSizeChange(Number(value))}
             >
               <SelectTrigger className="h-8 w-[72px]">
