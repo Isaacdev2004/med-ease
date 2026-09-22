@@ -8,6 +8,10 @@ import {
 } from '@/features/portal-pages/components/PortalUtilityComponents';
 import { useApiAuth } from '@/services/auth/auth-service';
 import { fetchPreferences, savePreferences } from '@/services/enterprise';
+import {
+  DEFAULT_USER_PREFERENCES,
+  readLocalPreferences,
+} from '@/services/enterprise/preferences-storage';
 import { LoadingView, PageShell, SectionHeader } from '@/shared/components';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 
@@ -18,12 +22,7 @@ type Prefs = {
   autoLogout: boolean;
 };
 
-const DEFAULTS: Prefs = {
-  emailAlerts: true,
-  smsAlerts: false,
-  darkMode: false,
-  autoLogout: true,
-};
+const DEFAULTS: Prefs = { ...DEFAULT_USER_PREFERENCES };
 
 export default function SettingsPage() {
   const client = useQueryClient();
@@ -34,9 +33,13 @@ export default function SettingsPage() {
       return { ...DEFAULTS, ...raw };
     },
     enabled: useApiAuth,
+    retry: false,
   });
 
-  const [prefs, setPrefs] = useState<Prefs>(DEFAULTS);
+  const [prefs, setPrefs] = useState<Prefs>(() => {
+    const local = readLocalPreferences();
+    return local ? { ...DEFAULTS, ...(local as Partial<Prefs>) } : DEFAULTS;
+  });
 
   useEffect(() => {
     if (remote.data) setPrefs(remote.data);
@@ -61,9 +64,7 @@ export default function SettingsPage() {
         <PortalActionButton
           label={save.isPending ? 'Enregistrement…' : 'Enregistrer'}
           successTitle="Paramètres enregistrés"
-          onClick={() => {
-            if (useApiAuth) save.mutate();
-          }}
+          onClick={() => save.mutate()}
         />
       }
     >

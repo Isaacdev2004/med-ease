@@ -1,5 +1,9 @@
 import { useApiAuth } from '@/services/auth/auth-service';
 import { createEnterpriseLiveRepository } from '@/services/enterprise/live-repository';
+import {
+  resolvePreferences,
+  writeLocalPreferences,
+} from '@/services/enterprise/preferences-storage';
 import { httpTransport } from '@workspace/repository-transport';
 
 /**
@@ -51,11 +55,25 @@ export async function markAllNotificationsRead() {
 }
 
 export async function fetchPreferences() {
-  return httpTransport.get('/api/settings/preferences');
+  try {
+    const remote = (await httpTransport.get('/api/settings/preferences')) as
+      | Record<string, unknown>
+      | undefined;
+    const merged = resolvePreferences(remote);
+    writeLocalPreferences(merged);
+    return merged;
+  } catch {
+    return resolvePreferences();
+  }
 }
 
 export async function savePreferences(preferences: Record<string, unknown>) {
-  return httpTransport.put('/api/settings/preferences', {
-    body: { preferences },
-  });
+  writeLocalPreferences(preferences);
+  try {
+    return await httpTransport.put('/api/settings/preferences', {
+      body: { preferences },
+    });
+  } catch {
+    return preferences;
+  }
 }
