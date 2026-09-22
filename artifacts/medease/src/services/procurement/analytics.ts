@@ -8,8 +8,78 @@ import {
 import { rankSuppliers } from '@/services/procurement/supplier-engine';
 import type {
   ProcurementAnalytics,
+  PurchaseOrder,
   SpendAnalysis,
 } from '@/services/procurement/types';
+
+export function emptySpendAnalysis(): SpendAnalysis {
+  return {
+    totalSpend: 0,
+    committedSpend: 0,
+    savings: 0,
+    byDepartment: [],
+    bySupplier: [],
+  };
+}
+
+export function isSpendAnalysis(value: unknown): value is SpendAnalysis {
+  return (
+    value != null &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    'totalSpend' in value &&
+    'committedSpend' in value &&
+    'savings' in value
+  );
+}
+
+export function buildSpendAnalysisFromOrders(
+  orders: PurchaseOrder[],
+): SpendAnalysis {
+  const totalSpend = orders.reduce(
+    (sum, order) => sum + (Number(order.total) || 0),
+    0,
+  );
+  const committedSpend = orders
+    .filter((order) => ['approved', 'ordered'].includes(order.status))
+    .reduce((sum, order) => sum + (Number(order.total) || 0), 0);
+
+  const deptMap = new Map<string, number>();
+  for (const order of orders) {
+    deptMap.set(
+      order.department,
+      (deptMap.get(order.department) ?? 0) + (Number(order.total) || 0),
+    );
+  }
+
+  const supMap = new Map<string, { name: string; amount: number }>();
+  for (const order of orders) {
+    const current = supMap.get(order.supplierId) ?? {
+      name: order.supplierName,
+      amount: 0,
+    };
+    current.amount += Number(order.total) || 0;
+    supMap.set(order.supplierId, current);
+  }
+
+  return {
+    totalSpend: Math.round(totalSpend),
+    committedSpend: Math.round(committedSpend),
+    savings: Math.round(totalSpend * 0.05),
+    byDepartment: [...deptMap.entries()].map(([department, amount]) => ({
+      department: department as SpendAnalysis['byDepartment'][0]['department'],
+      amount: Math.round(amount),
+    })),
+    bySupplier: [...supMap.entries()]
+      .map(([supplierId, value]) => ({
+        supplierId,
+        name: value.name,
+        amount: Math.round(value.amount),
+      }))
+      .sort((a, b) => b.amount - a.amount)
+      .slice(0, 20),
+  };
+}
 
 export function computeProcurementAnalytics(): ProcurementAnalytics {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
@@ -83,40 +153,7 @@ export function computeProcurementAnalytics(): ProcurementAnalytics {
 export function computeSpendAnalysis(department?: string): SpendAnalysis {
   let orders = MOCK_PURCHASE_ORDERS;
   if (department) orders = orders.filter((o) => o.department === department);
-  const totalSpend = orders.reduce((s, o) => s + o.total, 0);
-  const committedSpend = orders
-    .filter((o) => ['approved', 'ordered'].includes(o.status))
-    .reduce((s, o) => s + o.total, 0);
-
-  const deptMap = new Map<string, number>();
-  for (const o of orders.slice(0, 2000)) {
-    deptMap.set(o.department, (deptMap.get(o.department) ?? 0) + o.total);
-  }
-
-  const supMap = new Map<string, { name: string; amount: number }>();
-  for (const o of orders.slice(0, 2000)) {
-    const cur = supMap.get(o.supplierId) ?? { name: o.supplierName, amount: 0 };
-    cur.amount += o.total;
-    supMap.set(o.supplierId, cur);
-  }
-
-  return {
-    totalSpend: Math.round(totalSpend),
-    committedSpend: Math.round(committedSpend),
-    savings: Math.round(totalSpend * 0.05),
-    byDepartment: [...deptMap.entries()].map(([department, amount]) => ({
-      department: department as SpendAnalysis['byDepartment'][0]['department'],
-      amount: Math.round(amount),
-    })),
-    bySupplier: [...supMap.entries()]
-      .map(([supplierId, v]) => ({
-        supplierId,
-        name: v.name,
-        amount: Math.round(v.amount),
-      }))
-      .sort((a, b) => b.amount - a.amount)
-      .slice(0, 20),
-  };
+  return buildSpendAnalysisFromOrders(orders);
 }
 
 export function countDelayedDeliveries(): number {

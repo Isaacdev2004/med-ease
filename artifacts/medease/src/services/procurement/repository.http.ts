@@ -1,6 +1,7 @@
 import type { QueryParams } from '@workspace/repository-transport';
 import { httpTransport } from '@workspace/repository-transport';
 
+import { buildSpendAnalysisFromOrders } from '@/services/procurement/analytics';
 import type {
   CreateInvoiceInput,
   CreatePOInput,
@@ -464,8 +465,12 @@ class ProcurementHttpRepository {
     };
   }
 
-  spendAnalysis() {
-    return [];
+  async spendAnalysis(department?: string) {
+    const orders = await this.searchOrders({
+      department: department as ProcurementDepartment | undefined,
+      pageSize: 200,
+    });
+    return buildSpendAnalysisFromOrders(orders.items);
   }
 
   async supplierPerformance() {

@@ -36,6 +36,7 @@ import {
   useSuppliers,
 } from '@/features/procurement/hooks/use-procurement';
 import { useProcurementMutations } from '@/features/procurement/mutations/procurement.mutations';
+import { isSpendAnalysis } from '@/services/procurement/analytics';
 import type { ProcurementFilters } from '@/services/procurement/types';
 import { LoadingView } from '@/shared/components';
 import { EmptyState } from '@/shared/ui/empty-state';
@@ -67,7 +68,9 @@ export function DashboardSection({
   return (
     <div className="space-y-6">
       <ProcurementMetrics dashboard={dashboard.data} />
-      {spend.data ? <SpendDashboard analysis={spend.data} /> : null}
+      {isSpendAnalysis(spend.data) ? (
+        <SpendDashboard analysis={spend.data} />
+      ) : null}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {dashboard.data.recentOrders.slice(0, 3).map((o) => (
           <PurchaseOrderCard key={o.purchaseOrderId} order={o} />

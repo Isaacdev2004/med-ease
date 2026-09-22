@@ -32,6 +32,10 @@ import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { cn } from '@/shared/lib/utils';
 
+function formatEuro(value: number | null | undefined): string {
+  return `€${(value ?? 0).toLocaleString()}`;
+}
+
 export function SupplierCard({ supplier }: { supplier: Supplier }) {
   return (
     <Card>
@@ -52,7 +56,7 @@ export function SupplierCard({ supplier }: { supplier: Supplier }) {
           {supplier.onTimeDeliveryRate}%
         </p>
         <p className="text-xs">
-          Spend: €{supplier.totalSpend.toLocaleString()}
+          Spend: {formatEuro(supplier.totalSpend)}
         </p>
       </CardContent>
     </Card>
@@ -85,7 +89,7 @@ export function PurchaseRequestCard({
         <p className="text-muted-foreground">
           {request.requesterName} · {request.department}
         </p>
-        <p className="font-bold">€{request.totalEstimate.toLocaleString()}</p>
+        <p className="font-bold">{formatEuro(request.totalEstimate)}</p>
         {(onApprove || onReject) && request.status === 'pending_approval' ? (
           <div className="flex gap-2 pt-1">
             {onApprove ? (
@@ -122,7 +126,7 @@ export function PurchaseOrderCard({
       </CardHeader>
       <CardContent className="text-sm space-y-1">
         <p>{order.supplierName}</p>
-        <p className="font-bold">€{order.total.toLocaleString()}</p>
+        <p className="font-bold">{formatEuro(order.total)}</p>
         <p className="text-xs text-muted-foreground">
           {order.items.length} line items · {order.department}
         </p>
@@ -170,7 +174,7 @@ export function ContractCard({ contract }: { contract: Contract }) {
         </div>
         <p className="mt-1">{contract.title}</p>
         <p>{contract.supplierName}</p>
-        <p className="font-bold">€{contract.value.toLocaleString()}</p>
+        <p className="font-bold">{formatEuro(contract.value)}</p>
         <p className="text-xs text-muted-foreground">
           Ends {format(new Date(contract.endDate), 'MMM d, yyyy')}
         </p>
@@ -207,7 +211,7 @@ export function BudgetCard({ budget }: { budget: Budget }) {
         <p className="text-muted-foreground capitalize">{budget.department}</p>
         <p className="font-bold">{pct}% utilized</p>
         <p className="text-xs">
-          €{budget.remaining.toLocaleString()} remaining
+          {formatEuro(budget.remaining)} remaining
         </p>
       </CardContent>
     </Card>
@@ -218,11 +222,9 @@ export function SpendCard({ analysis }: { analysis: SpendAnalysis }) {
   return (
     <Card>
       <CardContent className="pt-4">
-        <p className="text-2xl font-bold">
-          €{analysis.totalSpend.toLocaleString()}
-        </p>
+        <p className="text-2xl font-bold">{formatEuro(analysis.totalSpend)}</p>
         <p className="text-xs text-muted-foreground">
-          Total spend · €{analysis.savings.toLocaleString()} savings
+          Total spend · {formatEuro(analysis.savings)} savings
         </p>
       </CardContent>
     </Card>
@@ -299,12 +301,12 @@ export function InvoiceMatchingCard({
           </Badge>
         </div>
         <p>
-          PO {invoice.poNumber} · €{invoice.total.toLocaleString()}
+          PO {invoice.poNumber} · {formatEuro(invoice.total)}
         </p>
         {mismatch ? (
           <p className="text-destructive text-xs flex items-center gap-1">
             <AlertTriangle className="h-3 w-3" />
-            Variance €{invoice.variance.toLocaleString()}
+            Variance {formatEuro(invoice.variance)}
           </p>
         ) : null}
       </CardContent>
@@ -375,7 +377,7 @@ export function ProcurementMetrics({
   const kpis = [
     {
       label: 'Total spend',
-      value: `€${(dashboard.totalSpend ?? 0).toLocaleString()}`,
+      value: formatEuro(dashboard.totalSpend),
       icon: Wallet,
     },
     {
@@ -430,16 +432,14 @@ export function SpendDashboard({ analysis }: { analysis: SpendAnalysis }) {
       <Card>
         <CardContent className="pt-4">
           <p className="text-2xl font-bold">
-            €{analysis.committedSpend.toLocaleString()}
+            {formatEuro(analysis.committedSpend)}
           </p>
           <p className="text-xs text-muted-foreground">Committed spend</p>
         </CardContent>
       </Card>
       <Card>
         <CardContent className="pt-4">
-          <p className="text-2xl font-bold">
-            €{analysis.savings.toLocaleString()}
-          </p>
+          <p className="text-2xl font-bold">{formatEuro(analysis.savings)}</p>
           <p className="text-xs text-muted-foreground">Savings achieved</p>
         </CardContent>
       </Card>
@@ -537,7 +537,7 @@ export function AnalyticsPanel({
         <Card>
           <CardContent className="pt-4 text-center">
             <p className="text-2xl font-bold">
-              €{analytics.savingsAchieved.toLocaleString()}
+              {formatEuro(analytics.savingsAchieved)}
             </p>
             <p className="text-xs text-muted-foreground">Savings</p>
           </CardContent>
@@ -581,7 +581,7 @@ export function RFQComparisonPanel({ rfq }: { rfq: RFQ }) {
         >
           <span>{r.supplierName}</span>
           <span className="font-bold">
-            €{r.totalQuote.toLocaleString()} {r.rank ? `(#${r.rank})` : ''}
+            {formatEuro(r.totalQuote)} {r.rank ? `(#${r.rank})` : ''}
           </span>
         </div>
       ))}
