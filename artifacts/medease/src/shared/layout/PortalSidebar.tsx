@@ -3,13 +3,15 @@ import {
   ChevronRight,
   HelpCircle,
   LogOut,
-  Settings,
 } from 'lucide-react';
 import { Link, useLocation } from 'wouter';
 
 import type { NavItem } from '@/config/navigation/types';
 import { useUnreadNotificationCount } from '@/features/notifications/hooks/use-notifications';
-import { toPortalRelativePath } from '@/shared/hooks/use-portal-path';
+import {
+  portalNavHref,
+  toPortalRelativePath,
+} from '@/shared/hooks/use-portal-path';
 import { NotificationBadge } from '@/shared/notifications/NotificationBadge';
 import { Button } from '@/shared/ui/button';
 import { cn } from '@/shared/lib/utils';
@@ -139,25 +141,7 @@ export function PortalSidebar({
               size="sm"
               asChild
             >
-              <Link
-                href={
-                  portalBasePath === '/patient'
-                    ? `${portalBasePath}/settings`
-                    : `${portalBasePath}/settings`
-                }
-                onClick={onNavigate}
-              >
-                <Settings className="mr-2 h-4 w-4" />
-                Paramètres
-              </Link>
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start"
-              size="sm"
-              asChild
-            >
-              <Link href={`${portalBasePath}/help`} onClick={onNavigate}>
+              <Link href={portalNavHref('/help')} onClick={onNavigate}>
                 <HelpCircle className="mr-2 h-4 w-4" />
                 Aide
               </Link>

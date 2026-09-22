@@ -14,6 +14,7 @@ import { Link, useLocation } from 'wouter';
 import { PORTAL_PATHS, ROUTES } from '@/config/routes';
 import { getPortalForRole } from '@/config/permissions/portal-roles';
 import { useAuth } from '@/services/auth/auth-context';
+import { portalNavHref } from '@/shared/hooks/use-portal-path';
 import { Avatar, AvatarFallback } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import {
@@ -68,10 +69,10 @@ export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
   const orgLabel = organization ?? authOrg?.name ?? "Med'ease Network";
   const profileHref =
     portalBase === '/patient'
-      ? `${portalBase}/records/profile`
-      : `${portalBase}/profile`;
-  const settingsHref = `${portalBase}/settings`;
-  const helpHref = `${portalBase}/help`;
+      ? portalNavHref('/records/profile')
+      : portalNavHref('/profile');
+  const settingsHref = portalNavHref('/settings');
+  const helpHref = portalNavHref('/help');
 
   return (
     <DropdownMenu>
