@@ -353,6 +353,8 @@ export interface EnrollRPMInput {
 
 export const AUTH_USER_PATIENT_MAP: Record<string, string> = {
   'user-patient': 'phr-001',
+  '01930000-0000-7000-8000-000000000106': 'phr-001',
+  '01930000-0000-7000-8000-000000000301': 'phr-001',
 };
 
 export const MONITORED_PATIENT_IDS = Array.from(

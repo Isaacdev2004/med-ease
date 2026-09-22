@@ -100,7 +100,7 @@ function buildDemographics(input: {
     id: patient.patientId,
     mrn: patient.mrn,
     userId: patient.userId,
-    fullName: patient.fullName,
+    fullName: patient.fullName?.trim() || 'Patient',
     gender: asGender(patient.gender),
     dateOfBirth: patient.dateOfBirth,
     bloodGroup: 'unknown',

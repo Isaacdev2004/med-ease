@@ -40,8 +40,51 @@ export function normalizePatientHealthRecord(
     lastUpdated: record.updatedAt,
   };
 
+  const demographics = record.demographics ?? {
+    id: '',
+    mrn: '—',
+    fullName: 'Patient',
+    gender: 'unknown' as const,
+    dateOfBirth: '—',
+    bloodGroup: 'unknown',
+    address: {
+      street: '—',
+      city: '—',
+      postalCode: '—',
+      country: '—',
+    },
+    language: '—',
+    maritalStatus: '—',
+    occupation: '—',
+    nationality: '—',
+    weightKg: 0,
+    heightCm: 0,
+    bmi: 0,
+    smoking: 'never' as const,
+    alcohol: 'none' as const,
+    primaryPhysician: '—',
+    emergencyContacts: [],
+    insurance: { provider: '—', policyNumber: '—' },
+    nationalId: '—',
+  };
+
   return {
     ...record,
+    demographics: {
+      ...demographics,
+      fullName: demographics.fullName || 'Patient',
+      address: {
+        street: demographics.address?.street ?? '—',
+        city: demographics.address?.city ?? '—',
+        postalCode: demographics.address?.postalCode ?? '—',
+        country: demographics.address?.country ?? '—',
+      },
+      insurance: {
+        provider: demographics.insurance?.provider ?? '—',
+        policyNumber: demographics.insurance?.policyNumber ?? '—',
+      },
+      emergencyContacts: ensureArray(demographics.emergencyContacts),
+    },
     summary: {
       ...summary,
       problemList: ensureArray(summary.problemList),

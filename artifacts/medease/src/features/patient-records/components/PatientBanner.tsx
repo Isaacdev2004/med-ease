@@ -22,7 +22,8 @@ export function PatientBanner({
   alerts = [],
   className,
 }: PatientBannerProps) {
-  const initials = demographics.fullName
+  const displayName = demographics.fullName?.trim() || 'Patient';
+  const initials = displayName
     .split(' ')
     .map((p) => p[0])
     .join('')
@@ -38,7 +39,7 @@ export function PatientBanner({
             <AvatarFallback className="text-lg">{initials}</AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-2xl font-bold">{demographics.fullName}</h1>
+            <h1 className="text-2xl font-bold">{displayName}</h1>
             <p className="text-muted-foreground">
               {demographics.mrn} · {demographics.nationalId}
             </p>

@@ -1,5 +1,9 @@
 import type { DirectoryFilters } from '@/services/directory/directory.types';
 import { searchFinessExternal } from '@/services/external/finess-external';
+import {
+  getCachedDirectoryProvider,
+  rememberDirectoryProviders,
+} from '@/services/external/search-result-cache';
 import { mergeDirectorySearchResults } from '@/services/external/search-merge';
 import { directoryRepository } from '@/services/directory/repository';
 
@@ -14,9 +18,13 @@ export const directoryService = {
     const local = await directoryRepository.search(filters);
     const q = filters.q?.trim();
 
-    if (!q || q.length < 2) return local;
+    if (!q || q.length < 2) {
+      rememberDirectoryProviders(local.items);
+      return local;
+    }
 
     const external = await searchFinessExternal({ ...filters, page: 1, pageSize: 50 });
+    rememberDirectoryProviders([...local.items, ...external]);
     if (!external.length) return local;
 
     return mergeDirectorySearchResults(local, external, page, pageSize);
@@ -24,14 +32,30 @@ export const directoryService = {
 
   async getProvider(id: string) {
     await delay();
+    const cached = getCachedDirectoryProvider(id);
+    if (cached) return cached;
+
     const local = await directoryRepository.getProvider(id);
     if (local) return local;
 
     if (id.startsWith('finess-ext-')) {
       const finess = id.replace('finess-ext-', '');
-      const results = await searchFinessExternal({ q: finess, pageSize: 5 });
-      return results.find((p) => p.finessNumber === finess) ?? results[0] ?? null;
+      const results = await searchFinessExternal({ q: finess, pageSize: 25 });
+      rememberDirectoryProviders(results);
+      return (
+        results.find((p) => p.id === id || p.finessNumber === finess) ??
+        results[0] ??
+        null
+      );
     }
+
+    if (id.startsWith('siret-ext-')) {
+      const siret = id.replace('siret-ext-', '');
+      const results = await searchFinessExternal({ q: siret, pageSize: 25 });
+      rememberDirectoryProviders(results);
+      return results.find((p) => p.id === id) ?? results[0] ?? null;
+    }
+
     return null;
   },
 

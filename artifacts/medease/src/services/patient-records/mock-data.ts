@@ -13,6 +13,7 @@ import type {
   RadiologyStudy,
   TimelineEntry,
   VitalReading,
+  AUTH_USER_PATIENT_MAP,
 } from '@/services/patient-records/types';
 
 const FIRST_NAMES = [
@@ -782,10 +783,12 @@ export const MOCK_PATIENT_RECORDS: PatientHealthRecord[] = Array.from(
 );
 
 export function getPatientIdForUser(userId: string): string | null {
+  const mapped =
+    AUTH_USER_PATIENT_MAP[userId as keyof typeof AUTH_USER_PATIENT_MAP];
+  if (mapped) return mapped;
+
   const record = MOCK_PATIENT_RECORDS.find(
     (r) => r.demographics.userId === userId,
   );
-  return (
-    record?.demographics.id ?? (userId === 'user-patient' ? 'phr-001' : null)
-  );
+  return record?.demographics.id ?? null;
 }

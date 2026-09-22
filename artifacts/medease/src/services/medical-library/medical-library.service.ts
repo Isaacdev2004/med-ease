@@ -5,6 +5,10 @@ import {
   getBdpmMedicationByCis,
   searchBdpmExternal,
 } from '@/services/external/bdpm-external';
+import {
+  getCachedMedication,
+  rememberMedications,
+} from '@/services/external/search-result-cache';
 import { mergeMedicationSearchResults } from '@/services/external/search-merge';
 import { medicalLibraryRepository } from '@/services/medical-library/repository';
 
@@ -22,9 +26,11 @@ export const medicalLibraryService = {
     const local = await medicalLibraryRepository.search(filters);
     const q = filters.q?.trim();
 
-    if (!q || q.length < 3) return local;
+    rememberMedications(local.items);
+    if (!q || q.length < 2) return local;
 
     const external = await searchBdpmExternal(q, Math.max(pageSize, 20));
+    rememberMedications([...local.items, ...external]);
     if (!external.length) return local;
 
     return mergeMedicationSearchResults(local, external, page, pageSize);
@@ -32,6 +38,9 @@ export const medicalLibraryService = {
 
   async getMedication(id: string) {
     await delay();
+    const cached = getCachedMedication(id);
+    if (cached) return cached;
+
     const local = await medicalLibraryRepository.getMedication(id);
     if (local) return local;
 

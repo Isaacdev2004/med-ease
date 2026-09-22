@@ -21,10 +21,12 @@ export async function resolveClinicalPatientId(
         page: 1,
         pageSize: 1,
       });
-      return result.items[0]?.patientId ?? null;
+      const liveId = result.items[0]?.patientId;
+      if (liveId) return liveId;
     } catch {
-      return null;
+      // Fall through to demo fallback when the API is empty or unreachable.
     }
+    return options?.demoFallback?.(userId) ?? null;
   }
 
   return options?.demoFallback?.(userId) ?? null;

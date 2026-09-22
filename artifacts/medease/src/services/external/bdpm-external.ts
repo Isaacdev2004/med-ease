@@ -118,7 +118,7 @@ export async function searchBdpmExternal(
   limit = 20,
 ): Promise<MedicationRecord[]> {
   const q = query.trim();
-  if (q.length < 3) return [];
+  if (q.length < 2) return [];
 
   try {
     const url = `${BDPM_SEARCH_URL}?search=${encodeURIComponent(q)}&pageSize=${limit}`;

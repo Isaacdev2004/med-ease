@@ -50,6 +50,28 @@ function shouldFallbackToMock(method: string, result: unknown): boolean {
     return result == null;
   }
 
+  if (method === 'getDashboard') {
+    if (result == null) return true;
+    const dash = result as {
+      recentObservations?: unknown[];
+      activeAlerts?: number;
+    };
+    const observations = Array.isArray(dash.recentObservations)
+      ? dash.recentObservations
+      : [];
+    return observations.length === 0 && (dash.activeAlerts ?? 0) === 0;
+  }
+
+  if (
+    method === 'listVitals' ||
+    method === 'listObservations' ||
+    method === 'listAlerts'
+  ) {
+    if (!result || typeof result !== 'object') return true;
+    const row = result as { items?: unknown[] };
+    return !Array.isArray(row.items) || row.items.length === 0;
+  }
+
   if (method === 'getRelatedProviders' || method === 'getRelatedMedications') {
     return Array.isArray(result) && result.length === 0;
   }

@@ -94,7 +94,7 @@ export function VitalCard({ vital }: { vital: VitalSign }) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium capitalize">
-            {vital.type.replace(/_/g, ' ')}
+            {(vital.type ?? 'vital').replace(/_/g, ' ')}
           </CardTitle>
           <Icon className="h-4 w-4 text-muted-foreground" />
         </div>
@@ -290,7 +290,7 @@ export function MonitoringKpiCards({
 export function VitalTrendChart({ trend }: { trend: PatientTrend }) {
   return (
     <BarChartPanel
-      title={`${trend.metric.replace(/_/g, ' ')} (${trend.period})`}
+      title={`${(trend.metric ?? 'metric').replace(/_/g, ' ')} (${trend.period ?? '—'})`}
       data={trend.points}
     />
   );

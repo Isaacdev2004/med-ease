@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useLocation } from 'wouter';
 
+import { AddMedicationDialog } from '@/features/medications/components/AddMedicationDialog';
 import { MedicationSectionContent } from '@/features/medications/components/MedicationSections';
 import {
   MedicationTabs,
@@ -51,6 +52,8 @@ export function MedicationsShell({
     );
   }
 
+  const patientId = scopedFilters.patientId;
+
   if (variant === 'patient' && patientResolve.isLoading) {
     return (
       <PageShell title={title}>
@@ -63,6 +66,11 @@ export function MedicationsShell({
     <PageShell
       title={title}
       subtitle="Prescriptions, prises du jour, adhérence et renouvelements."
+      primaryAction={
+        variant === 'patient' && patientId ? (
+          <AddMedicationDialog patientId={patientId} />
+        ) : undefined
+      }
       toolbar={
         variant === 'clinician' && !explicitPatientId ? (
           <input

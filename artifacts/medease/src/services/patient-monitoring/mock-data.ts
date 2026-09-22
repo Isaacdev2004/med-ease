@@ -475,7 +475,11 @@ export const MOCK_CALIBRATIONS: DeviceCalibration[] = MOCK_DEVICES.slice(
 }));
 
 export function getPatientIdForUser(userId: string) {
-  return AUTH_USER_PATIENT_MAP[userId] ?? MONITORED_PATIENT_IDS[0]!;
+  return (
+    AUTH_USER_PATIENT_MAP[userId] ??
+    AUTH_USER_PATIENT_MAP['01930000-0000-7000-8000-000000000106'] ??
+    MONITORED_PATIENT_IDS[0]!
+  );
 }
 
 export function buildDashboard(patientId?: string) {

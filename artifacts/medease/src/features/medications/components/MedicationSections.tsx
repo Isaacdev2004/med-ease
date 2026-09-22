@@ -50,8 +50,6 @@ export function DashboardSection({ filters }: { filters?: MedicationFilters }) {
   const interactions = useMedicationInteractions(patientId);
   if (!patientId || dashboard.isLoading)
     return <LoadingView label="Chargement du pilulier…" />;
-  if (!dashboard.data)
-    return <EmptyState icon={Pill} title="Aucune donnée médicament" />;
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -63,7 +61,15 @@ export function DashboardSection({ filters }: { filters?: MedicationFilters }) {
         </div>
         <AddMedicationDialog patientId={patientId} />
       </div>
-      <MedicationKpiCards dashboard={dashboard.data} />
+      {!dashboard.data ? (
+        <EmptyState
+          icon={Pill}
+          title="Aucun traitement enregistré"
+          description="Utilisez le bouton « Ajouter un médicament » pour commencer votre pilulier."
+        />
+      ) : null}
+      {dashboard.data ? <MedicationKpiCards dashboard={dashboard.data} /> : null}
+      {dashboard.data ? (
       <div className="flex flex-col items-center gap-4 sm:flex-row">
         <MedicationProgressRing percent={dashboard.data.adherencePercent} />
         <div className="flex-1 grid gap-2 sm:grid-cols-3 w-full">
@@ -93,6 +99,7 @@ export function DashboardSection({ filters }: { filters?: MedicationFilters }) {
           </Card>
         </div>
       </div>
+      ) : null}
       {(interactions.data ?? [])
         .filter((i) => i.active)
         .map((i) => (
