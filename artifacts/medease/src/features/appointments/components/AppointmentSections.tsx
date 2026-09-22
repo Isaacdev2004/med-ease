@@ -147,7 +147,9 @@ export function CalendarSection({ filters }: { filters?: AppointmentFilters }) {
 }
 
 export function BookSection({ patientId }: { patientId?: string }) {
-  return <BookingWizard defaultPatientId={patientId} />;
+  return (
+    <BookingWizard defaultPatientId={patientId} lockPatient={Boolean(patientId)} />
+  );
 }
 
 export function WaitlistSection() {

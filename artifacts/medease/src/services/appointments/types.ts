@@ -117,6 +117,8 @@ export interface CheckInInput {
 
 export const AUTH_USER_PATIENT_MAP: Record<string, string> = {
   'user-patient': 'phr-001',
+  '01930000-0000-7000-8000-000000000106':
+    '01930000-0000-7000-8000-000000000301',
 };
 
 export const SPECIALTIES = [

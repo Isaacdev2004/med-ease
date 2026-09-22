@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAvailableSlots } from '@/features/appointments/hooks/use-appointments';
@@ -12,6 +13,7 @@ import {
 import { directoryQueries } from '@/features/directory/queries/directory.queries';
 import { patientsQueries } from '@/features/patients/queries/patients.queries';
 import { SPECIALTIES } from '@/services/appointments';
+import { useAuth } from '@/services/auth/auth-context';
 import { FormWizard } from '@/shared/forms/FormWizard';
 import { useZodForm } from '@/shared/forms/use-zod-form';
 import { Label } from '@/shared/ui/label';
@@ -28,15 +30,23 @@ import { cn } from '@/shared/lib/utils';
 
 interface BookingWizardProps {
   defaultPatientId?: string;
+  /** Patient portal: skip clinician patient picker and lock the resolved id. */
+  lockPatient?: boolean;
   onSuccess?: (appointmentId: string) => void;
   className?: string;
 }
 
+function selectValue(value: string | undefined) {
+  return value?.trim() ? value : undefined;
+}
+
 export function BookingWizard({
   defaultPatientId,
+  lockPatient = false,
   onSuccess,
   className,
 }: BookingWizardProps) {
+  const { user } = useAuth();
   const form = useZodForm(bookingSchema, {
     patientId: defaultPatientId ?? '',
     serviceType: '',
@@ -58,7 +68,20 @@ export function BookingWizard({
     watch.date,
   );
 
-  const patientsQuery = useQuery(patientsQueries.list({ pageSize: 50 }));
+  useEffect(() => {
+    if (defaultPatientId) {
+      form.setValue('patientId', defaultPatientId);
+    }
+  }, [defaultPatientId, form]);
+
+  const patientsQuery = useQuery({
+    ...patientsQueries.list({ pageSize: 50 }),
+    enabled: !lockPatient,
+  });
+  const lockedPatientQuery = useQuery({
+    ...patientsQueries.detail(defaultPatientId ?? ''),
+    enabled: lockPatient && Boolean(defaultPatientId),
+  });
   const providersQuery = useQuery(
     directoryQueries.search({
       type: 'professional',
@@ -70,9 +93,20 @@ export function BookingWizard({
     directoryQueries.search({ type: 'facility', pageSize: 50 }),
   );
 
-  const patients = patientsQuery.data?.items ?? [];
-  const providers = providersQuery.data?.items ?? [];
-  const facilities = facilitiesQuery.data?.items ?? [];
+  const patients = lockPatient && defaultPatientId
+    ? [
+        {
+          patientId: defaultPatientId,
+          fullName:
+            lockedPatientQuery.data?.fullName ??
+            user?.fullName ??
+            user?.email ??
+            'Mon dossier patient',
+        },
+      ]
+    : (patientsQuery.data?.items ?? []).filter((p) => p.patientId);
+  const providers = (providersQuery.data?.items ?? []).filter((p) => p.id);
+  const facilities = (facilitiesQuery.data?.items ?? []).filter((f) => f.id);
 
   async function validateStep(stepIndex: number) {
     const fields = bookingStepFields[stepIndex];
@@ -104,22 +138,35 @@ export function BookingWizard({
         return (
           <div className="space-y-2">
             <Label htmlFor="patientId">Patient</Label>
-            <Select
-              value={watch.patientId}
-              onValueChange={(v) => form.setValue('patientId', v)}
-            >
-              <SelectTrigger id="patientId">
-                <SelectValue placeholder="Select patient" />
-              </SelectTrigger>
-              <SelectContent>
-                {patients.map((p) => (
-                  <SelectItem key={p.patientId} value={p.patientId}>
-                    {p.fullName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {patientsQuery.isLoading ? (
+            {lockPatient ? (
+              <Card>
+                <CardContent className="pt-4 text-sm">
+                  <p className="font-medium">
+                    {patients[0]?.fullName ?? 'Mon dossier patient'}
+                  </p>
+                  <p className="text-muted-foreground">
+                    Réservation pour votre compte patient.
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              <Select
+                value={selectValue(watch.patientId)}
+                onValueChange={(v) => form.setValue('patientId', v)}
+              >
+                <SelectTrigger id="patientId">
+                  <SelectValue placeholder="Select patient" />
+                </SelectTrigger>
+                <SelectContent>
+                  {patients.map((p) => (
+                    <SelectItem key={p.patientId} value={p.patientId}>
+                      {p.fullName ?? p.patientId}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+            {!lockPatient && patientsQuery.isLoading ? (
               <p className="text-xs text-muted-foreground">Loading patients…</p>
             ) : null}
           </div>
@@ -129,7 +176,7 @@ export function BookingWizard({
           <div className="space-y-2">
             <Label htmlFor="serviceType">Service</Label>
             <Select
-              value={watch.serviceType}
+              value={selectValue(watch.serviceType)}
               onValueChange={(v) => form.setValue('serviceType', v)}
             >
               <SelectTrigger id="serviceType">
@@ -157,7 +204,7 @@ export function BookingWizard({
             <div className="space-y-2">
               <Label htmlFor="specialty">Specialty</Label>
               <Select
-                value={watch.specialty}
+                value={selectValue(watch.specialty)}
                 onValueChange={(v) => {
                   form.setValue('specialty', v);
                   form.setValue('providerId', '');
@@ -181,7 +228,10 @@ export function BookingWizard({
             </div>
             <div className="space-y-2">
               <Label>Visit type</Label>
-              <Input value={watch.visitType.replace('_', ' ')} readOnly />
+              <Input
+                value={(watch.visitType ?? 'in_person').replaceAll('_', ' ')}
+                readOnly
+              />
             </div>
           </div>
         );
@@ -190,7 +240,7 @@ export function BookingWizard({
           <div className="space-y-2">
             <Label htmlFor="providerId">Provider</Label>
             <Select
-              value={watch.providerId}
+              value={selectValue(watch.providerId)}
               onValueChange={(v) => form.setValue('providerId', v)}
             >
               <SelectTrigger id="providerId">
@@ -217,7 +267,7 @@ export function BookingWizard({
           <div className="space-y-2">
             <Label htmlFor="facilityId">Facility</Label>
             <Select
-              value={watch.facilityId}
+              value={selectValue(watch.facilityId)}
               onValueChange={(v) => form.setValue('facilityId', v)}
             >
               <SelectTrigger id="facilityId">

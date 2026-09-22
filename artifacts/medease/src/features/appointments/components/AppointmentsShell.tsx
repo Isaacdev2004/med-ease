@@ -58,6 +58,21 @@ export function AppointmentsShell({
     );
   }
 
+  if (
+    variant === 'patient' &&
+    section === 'book' &&
+    !patientResolve.data
+  ) {
+    return (
+      <PageShell title={title}>
+        <EmptyState
+          title="Profil patient indisponible"
+          description="Impossible de lier votre compte à un dossier patient. Reconnectez-vous ou contactez le support."
+        />
+      </PageShell>
+    );
+  }
+
   return (
     <PageShell
       title={title}
