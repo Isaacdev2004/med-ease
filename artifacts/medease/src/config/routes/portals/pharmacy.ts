@@ -21,6 +21,7 @@ import {
   createReportsRoute,
   createProfileRoute,
   createSettingsRoute,
+  createHelpRoute,
 } from '@/features/portal-pages/routes';
 import { ROUTES } from '@/config/routes';
 import { registerPortalRoutes } from '@/config/routes/metadata';
@@ -76,6 +77,7 @@ export const pharmacyRouteGroup: PortalRouteGroup = {
     createSettingsRoute('pharmacy', {
       nav: { icon: Settings, order: 7 },
     }),
+    createHelpRoute('pharmacy'),
   ],
 };
 

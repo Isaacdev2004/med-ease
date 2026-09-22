@@ -71,7 +71,7 @@ export function UserMenu({ userName, roleName, organization }: UserMenuProps) {
       ? `${portalBase}/records/profile`
       : `${portalBase}/profile`;
   const settingsHref = `${portalBase}/settings`;
-  const helpHref = '/help';
+  const helpHref = `${portalBase}/help`;
 
   return (
     <DropdownMenu>

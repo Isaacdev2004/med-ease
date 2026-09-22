@@ -67,6 +67,7 @@ import {
   createHealthcareProfessionalsRoute,
   createPatientsListRoute,
   createSettingsRoute,
+  createHelpRoute,
 } from '@/features/portal-pages/routes';
 import { ROUTES } from '@/config/routes';
 import { registerPortalRoutes } from '@/config/routes/metadata';
@@ -251,6 +252,7 @@ export const adminRouteGroup: PortalRouteGroup = {
     createSettingsRoute('admin', {
       nav: { icon: Settings, label: 'Platform Settings', order: 10 },
     }),
+    createHelpRoute('admin'),
   ],
 };
 

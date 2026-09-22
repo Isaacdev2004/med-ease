@@ -102,6 +102,19 @@ export function createSettingsRoute(
   });
 }
 
+const portalHelpPage = () => import('@/features/portal-pages/pages/PortalHelpPage');
+
+export function createHelpRoute(
+  analyticsPrefix: string,
+  options: PortalUtilityRouteOptions = {},
+): RouteDefinition {
+  return portalUtilityRoute('/help', "Centre d'aide", portalHelpPage, {
+    breadcrumb: 'Aide',
+    analyticsName: `${analyticsPrefix}_help`,
+    ...options,
+  });
+}
+
 export function createAdmissionsRoute(
   analyticsPrefix: string,
   options: PortalUtilityRouteOptions = {},

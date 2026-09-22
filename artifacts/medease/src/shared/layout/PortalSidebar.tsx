@@ -157,7 +157,7 @@ export function PortalSidebar({
               size="sm"
               asChild
             >
-              <Link href="/help" onClick={onNavigate}>
+              <Link href={`${portalBasePath}/help`} onClick={onNavigate}>
                 <HelpCircle className="mr-2 h-4 w-4" />
                 Aide
               </Link>

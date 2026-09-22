@@ -75,6 +75,7 @@ import {
   createClinicalTasksRoute,
   createProfileRoute,
   createSettingsRoute,
+  createHelpRoute,
 } from '@/features/portal-pages/routes';
 import { ROUTES } from '@/config/routes';
 import { registerPortalRoutes } from '@/config/routes/metadata';
@@ -247,6 +248,7 @@ export const professionalRouteGroup: PortalRouteGroup = {
     createSettingsRoute('professional', {
       nav: { icon: Settings, order: 10 },
     }),
+    createHelpRoute('professional'),
     ...createDirectoryRoutes({
       analyticsPrefix: 'professional',
       nav: { icon: Stethoscope, label: 'Directory', order: 11 },

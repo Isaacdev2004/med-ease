@@ -23,7 +23,7 @@ const toneClass = {
   green: 'bg-emerald-100 text-emerald-800',
 };
 
-export function HelpCenterPageView() {
+export function HelpCenterPageView({ embedded = false }: { embedded?: boolean }) {
   const page = helpCenterPage;
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<HelpFaqCategoryId>('all');
@@ -56,7 +56,12 @@ export function HelpCenterPageView() {
 
   return (
     <>
-      <section className="pb-12 pt-28 md:pb-16 md:pt-32">
+      <section
+        className={cn(
+          'pb-12 md:pb-16',
+          embedded ? 'pt-0' : 'pt-28 md:pt-32',
+        )}
+      >
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#0b8f9e]">
             {page.hero.eyebrow}

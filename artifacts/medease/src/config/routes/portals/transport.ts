@@ -19,6 +19,7 @@ import {
   createTransportHistoryRoute,
   createReportsRoute,
   createSettingsRoute,
+  createHelpRoute,
 } from '@/features/portal-pages/routes';
 import { ROUTES } from '@/config/routes';
 import { registerPortalRoutes } from '@/config/routes/metadata';
@@ -72,6 +73,7 @@ export const transportRouteGroup: PortalRouteGroup = {
     createSettingsRoute('transport', {
       nav: { icon: Settings, order: 9 },
     }),
+    createHelpRoute('transport'),
   ],
 };
 

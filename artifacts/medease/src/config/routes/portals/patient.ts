@@ -41,6 +41,7 @@ import {
   createVaccinationsRoute,
   createProfileRoute,
   createSettingsRoute,
+  createHelpRoute,
 } from '@/features/portal-pages/routes';
 import { ROUTES } from '@/config/routes';
 import { registerPortalRoutes } from '@/config/routes/metadata';
@@ -138,6 +139,7 @@ export const patientRouteGroup: PortalRouteGroup = {
     createSettingsRoute('patient', {
       nav: { icon: Settings, label: 'Paramètres', order: 19 },
     }),
+    createHelpRoute('patient'),
   ],
 };
 

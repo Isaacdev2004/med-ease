@@ -70,6 +70,7 @@ import {
   createPatientsListRoute,
   createAnalyticsRoute,
   createSettingsRoute,
+  createHelpRoute,
 } from '@/features/portal-pages/routes';
 import { ROUTES } from '@/config/routes';
 import { registerPortalRoutes } from '@/config/routes/metadata';
@@ -239,6 +240,7 @@ export const facilityRouteGroup: PortalRouteGroup = {
     createSettingsRoute('facility', {
       nav: { icon: Settings, order: 9 },
     }),
+    createHelpRoute('facility'),
   ],
 };
 
