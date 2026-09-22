@@ -42,8 +42,14 @@ import {
   useDiagnosticSupport,
 } from '@/features/cdss/hooks/use-cdss';
 import { useCdssMutations } from '@/features/cdss/mutations/cdss.mutations';
-import type { CalculatorResult, CdssFilters } from '@/services/cdss/types';
+import type {
+  CalculatorResult,
+  CdssFilters,
+  DecisionTree,
+  RiskCalculator,
+} from '@/services/cdss/types';
 import { LoadingView } from '@/shared/components';
+import { sliceItems } from '@/shared/lib/enterprise-data';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { Brain } from 'lucide-react';
 import { useState } from 'react';
@@ -256,7 +262,7 @@ export function CalculatorsSection() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(calculators.data ?? []).slice(0, 9).map((c) => (
+        {sliceItems<RiskCalculator>(calculators.data, 9).map((c) => (
           <RiskCalculatorCard
             key={c.calculatorId}
             calculator={c}
@@ -360,7 +366,7 @@ export function RulesSection({ filters }: { filters?: CdssFilters }) {
           />
         ))}
       </div>
-      {(trees.data ?? []).slice(0, 2).map((t) => (
+      {sliceItems<DecisionTree>(trees.data, 2).map((t) => (
         <DecisionTreeViewer key={t.treeId} tree={t} />
       ))}
     </div>

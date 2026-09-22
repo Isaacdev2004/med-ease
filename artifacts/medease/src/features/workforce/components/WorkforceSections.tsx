@@ -39,6 +39,7 @@ import type {
 } from '@/services/workforce/types';
 import { useAuth } from '@/services/auth/auth-context';
 import { LoadingView } from '@/shared/components';
+import { pageItems } from '@/shared/lib/enterprise-data';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { Users } from 'lucide-react';
 
@@ -212,11 +213,7 @@ export function DepartmentsSection({
 export function OrganizationSection() {
   const query = useOrganization();
   if (query.isLoading) return <LoadingView />;
-  const units: OrganizationUnit[] = Array.isArray(query.data)
-    ? query.data
-    : Array.isArray((query.data as { items?: OrganizationUnit[] } | undefined)?.items)
-      ? (query.data as { items: OrganizationUnit[] }).items
-      : [];
+  const units = pageItems<OrganizationUnit>(query.data);
   return <OrganizationChart units={units} />;
 }
 

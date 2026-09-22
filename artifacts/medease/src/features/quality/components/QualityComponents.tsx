@@ -29,6 +29,7 @@ import type {
   RootCauseAnalysis,
 } from '@/services/quality/types';
 import { BarChartPanel } from '@/shared/charts';
+import { formatStatus } from '@/shared/lib/enterprise-data';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -71,7 +72,7 @@ export function IncidentCard({
         </p>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="outline" className="capitalize">
-            {incident.type.replace(/_/g, ' ')}
+            {formatStatus(incident.type)}
           </Badge>
           <Badge className="capitalize">{incident.status}</Badge>
           {incident.anonymous ? (
@@ -135,7 +136,7 @@ export function CAPACard({
         <p className="text-muted-foreground">{capa.actionPlan}</p>
         <div className="flex justify-between text-xs">
           <Badge variant="outline" className="capitalize">
-            {capa.status.replace(/_/g, ' ')}
+            {formatStatus(capa.status)}
           </Badge>
           <span>Due {format(new Date(capa.dueDate), 'MMM d, yyyy')}</span>
         </div>
@@ -155,7 +156,7 @@ export function AuditCard({ audit }: { audit: AuditRecord }) {
       <CardContent className="pt-4 text-sm">
         <div className="flex justify-between">
           <span className="font-medium">{audit.title}</span>
-          <Badge className="capitalize">{audit.status.replace('_', ' ')}</Badge>
+          <Badge className="capitalize">{formatStatus(audit.status)}</Badge>
         </div>
         <p className="text-muted-foreground capitalize">
           {audit.type} · {format(new Date(audit.scheduledDate), 'MMM d, yyyy')}
@@ -232,7 +233,7 @@ export function AccreditationCard({
         <div className="flex justify-between">
           <span className="font-medium">{standard.code}</span>
           <Badge className="capitalize">
-            {standard.status.replace('_', ' ')}
+            {formatStatus(standard.status)}
           </Badge>
         </div>
         <p>{standard.title}</p>
@@ -254,7 +255,7 @@ export function ComplianceScoreCard({ record }: { record: ComplianceRecord }) {
           <p className="font-medium">{record.title}</p>
           <p className="text-2xl font-bold">{record.score}%</p>
           <Badge className="capitalize">
-            {record.status.replace('_', ' ')}
+            {formatStatus(record.status)}
           </Badge>
         </div>
       </CardContent>
@@ -367,7 +368,7 @@ export function RootCauseTimeline({
           <CardContent className="pt-4 text-sm">
             <div className="flex justify-between">
               <span className="font-medium capitalize">
-                {a.method.replace('_', ' ')}
+                {formatStatus(a.method)}
               </span>
               <span className="text-xs text-muted-foreground">
                 {format(new Date(a.createdAt), 'MMM d, yyyy')}

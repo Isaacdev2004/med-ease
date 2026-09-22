@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { FileText } from 'lucide-react';
 
+import { formatCount } from '@/shared/lib/enterprise-data';
+
 import {
   ActivityTimeline,
   ArchiveCard,
@@ -240,7 +242,7 @@ export function CategoriesSection({ filters }: SectionProps) {
         <div key={c.categoryId} className="rounded-lg border p-4 text-sm">
           <p className="font-medium">{c.name}</p>
           <p className="text-xs text-muted-foreground">
-            {c.module} · {c.documentCount.toLocaleString()} docs
+            {c.module} · {formatCount(c.documentCount)} docs
           </p>
         </div>
       ))}

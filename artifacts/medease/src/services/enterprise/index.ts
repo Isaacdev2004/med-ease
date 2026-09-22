@@ -1,5 +1,6 @@
 import { useApiAuth } from '@/services/auth/auth-service';
 import { createEnterpriseLiveRepository } from '@/services/enterprise/live-repository';
+import { createHybridRepository } from '@/services/repository-hybrid';
 import {
   resolvePreferences,
   writeLocalPreferences,
@@ -14,9 +15,13 @@ export function bindEnterpriseRepository<T extends object>(
   module: string,
   mockRepository: T,
 ): T {
-  return useApiAuth
-    ? createEnterpriseLiveRepository(module, mockRepository)
-    : mockRepository;
+  if (!useApiAuth) return mockRepository;
+
+  const live = createEnterpriseLiveRepository(module, mockRepository);
+  return createHybridRepository(
+    live as Record<string, unknown>,
+    mockRepository as Record<string, unknown>,
+  ) as T;
 }
 
 export async function fetchNotifications(filters?: {

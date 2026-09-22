@@ -29,6 +29,10 @@ import type {
   WebhookDelivery,
 } from '@/services/api-platform/types';
 import { BarChartPanel } from '@/shared/charts';
+import {
+  ensureArray,
+  formatCount,
+} from '@/shared/lib/enterprise-data';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -54,32 +58,32 @@ export function DeveloperPortal({ dashboard }: { dashboard: ApiDashboard }) {
   const metrics = [
     {
       label: 'API Endpoints',
-      value: dashboard.totalEndpoints.toLocaleString(),
+      value: formatCount(dashboard.totalEndpoints),
       icon: Globe,
     },
     {
       label: 'Active API Keys',
-      value: dashboard.activeApiKeys.toLocaleString(),
+      value: formatCount(dashboard.activeApiKeys),
       icon: Key,
     },
     {
       label: 'OAuth Apps',
-      value: dashboard.oauthApps.toLocaleString(),
+      value: formatCount(dashboard.oauthApps),
       icon: Shield,
     },
     {
       label: 'Active Webhooks',
-      value: dashboard.activeWebhooks.toLocaleString(),
+      value: formatCount(dashboard.activeWebhooks),
       icon: Webhook,
     },
     {
       label: 'SDK Downloads',
-      value: dashboard.sdkDownloads.toLocaleString(),
+      value: formatCount(dashboard.sdkDownloads),
       icon: Package,
     },
     {
       label: 'Partners',
-      value: dashboard.partners.toLocaleString(),
+      value: formatCount(dashboard.partners),
       icon: Store,
     },
   ];
@@ -126,7 +130,7 @@ export function ApiKeyCard({ apiKey }: { apiKey: ApiKey }) {
           {apiKey.prefix}••••••••
         </p>
         <div className="flex flex-wrap gap-1">
-          {apiKey.scopes.slice(0, 3).map((s) => (
+          {ensureArray<string>(apiKey.scopes).slice(0, 3).map((s) => (
             <Badge key={s} variant="outline">
               {s}
             </Badge>
@@ -156,14 +160,14 @@ export function OAuthAppCard({ app }: { app: OAuthApp }) {
           {app.clientId}
         </p>
         <div className="flex flex-wrap gap-1">
-          {app.scopes.slice(0, 3).map((s) => (
+          {ensureArray<string>(app.scopes).slice(0, 3).map((s) => (
             <Badge key={s} variant="outline">
               {s}
             </Badge>
           ))}
         </div>
         <p className="text-xs text-muted-foreground">
-          {app.redirectUris.length} redirect URI(s)
+          {ensureArray<string>(app.redirectUris).length} redirect URI(s)
         </p>
       </CardContent>
     </Card>
@@ -189,7 +193,7 @@ export function WebhookCard({ webhook }: { webhook: WebhookType }) {
           {webhook.url}
         </p>
         <div className="flex flex-wrap gap-1">
-          {webhook.events.slice(0, 3).map((e) => (
+          {ensureArray<string>(webhook.events).slice(0, 3).map((e) => (
             <Badge key={e} variant="outline">
               {e}
             </Badge>
@@ -211,10 +215,10 @@ export function WebhookDeliveryPanel({
         <CardTitle className="text-base">Recent Deliveries</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {deliveries.length === 0 ? (
+        {ensureArray(deliveries).length === 0 ? (
           <p className="text-sm text-muted-foreground">No deliveries yet.</p>
         ) : (
-          deliveries.slice(0, 8).map((d) => (
+          ensureArray<WebhookDelivery>(deliveries).slice(0, 8).map((d) => (
             <div
               key={d.deliveryId}
               className="flex justify-between text-sm border-b pb-2 last:border-0"
@@ -251,7 +255,7 @@ export function SdkCard({ sdk }: { sdk: SdkPackage }) {
           <Badge variant="outline">v{sdk.version}</Badge>
         </div>
         <p className="text-xs text-muted-foreground">
-          {sdk.downloadCount.toLocaleString()} downloads
+          {formatCount(sdk.downloadCount)} downloads
         </p>
       </CardContent>
     </Card>
@@ -261,7 +265,7 @@ export function SdkCard({ sdk }: { sdk: SdkPackage }) {
 export function RateLimitPanel({ policies }: { policies: RateLimitPolicy[] }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {policies.slice(0, 8).map((p) => (
+      {ensureArray<RateLimitPolicy>(policies).slice(0, 8).map((p) => (
         <Card key={p.policyId}>
           <CardContent className="pt-4 text-sm space-y-2">
             <div className="flex justify-between gap-2">
@@ -293,7 +297,7 @@ export function ApiAnalyticsPanel({ analytics }: { analytics: ApiAnalytics }) {
         {[
           {
             label: 'Total Requests',
-            value: analytics.totalRequests.toLocaleString(),
+            value: formatCount(analytics.totalRequests),
           },
           { label: 'Error Rate', value: `${analytics.errorRate}%` },
           { label: 'Avg Latency (ms)', value: analytics.avgLatencyMs },

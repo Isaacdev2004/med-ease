@@ -34,6 +34,11 @@ import type {
   RiskCalculator,
 } from '@/services/cdss/types';
 import { BarChartPanel } from '@/shared/charts';
+import {
+  ensureArray,
+  formatCount,
+  formatStatus,
+} from '@/shared/lib/enterprise-data';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -51,17 +56,17 @@ export function CDSDashboard({ dashboard }: { dashboard: CdssDashboard }) {
   const metrics = [
     {
       label: 'Active Alerts',
-      value: dashboard.activeAlerts.toLocaleString(),
+      value: formatCount(dashboard.activeAlerts),
       icon: AlertTriangle,
     },
     {
       label: 'Critical Alerts',
-      value: dashboard.criticalAlerts.toLocaleString(),
+      value: formatCount(dashboard.criticalAlerts),
       icon: ShieldAlert,
     },
     {
       label: 'Pending Recommendations',
-      value: dashboard.pendingRecommendations.toLocaleString(),
+      value: formatCount(dashboard.pendingRecommendations),
       icon: Brain,
     },
     {
@@ -71,12 +76,12 @@ export function CDSDashboard({ dashboard }: { dashboard: CdssDashboard }) {
     },
     {
       label: 'Order Sets Applied',
-      value: dashboard.orderSetsApplied.toLocaleString(),
+      value: formatCount(dashboard.orderSetsApplied),
       icon: ClipboardList,
     },
     {
       label: 'Preventive Due',
-      value: dashboard.preventiveDue.toLocaleString(),
+      value: formatCount(dashboard.preventiveDue),
       icon: Stethoscope,
     },
   ];
@@ -478,7 +483,7 @@ export function CdssAnalyticsPanel({
         {[
           {
             label: 'Alert Volume',
-            value: analytics.alertVolume.toLocaleString(),
+            value: formatCount(analytics.alertVolume),
           },
           { label: 'Acceptance Rate', value: `${analytics.acceptanceRate}%` },
           { label: 'Override Rate', value: `${analytics.overrideRate}%` },
@@ -526,11 +531,11 @@ export function DecisionTreeViewer({ tree }: { tree: DecisionTree }) {
 export function AuditTimeline({ audits }: { audits: AlertAudit[] }) {
   return (
     <div className="space-y-2">
-      {audits.slice(0, 10).map((a) => (
+      {ensureArray<AlertAudit>(audits).slice(0, 10).map((a) => (
         <Card key={a.auditId}>
           <CardContent className="pt-4 text-sm flex justify-between">
             <span className="capitalize">
-              {a.action.replace(/_/g, ' ')} — {a.alertId}
+              {formatStatus(a.action)} — {a.alertId}
             </span>
             <span className="text-xs text-muted-foreground">
               {format(new Date(a.timestamp), 'MMM d, yyyy')}

@@ -1,3 +1,8 @@
+import {
+  isEmptyPaginatedResult,
+  isPaginatedResult,
+} from '@/shared/lib/enterprise-data';
+
 /**
  * HTTP repository with local mock fallback (MVP codages pattern).
  * Ensures Répertoire / Bibliothèque / Pilulier search work when the API
@@ -38,12 +43,44 @@ export function createHybridRepository<T extends Record<string, any>>(
 }
 
 function shouldFallbackToMock(method: string, result: unknown): boolean {
+  if (method === 'dashboard' || method === 'analytics') {
+    if (result == null || typeof result !== 'object') return true;
+    const row = result as Record<string, unknown>;
+    const arrays = Object.values(row).filter(Array.isArray) as unknown[][];
+    const numbers = Object.values(row).filter(
+      (value) => typeof value === 'number',
+    ) as number[];
+    const allArraysEmpty =
+      arrays.length === 0 || arrays.every((entry) => entry.length === 0);
+    const allNumbersZero =
+      numbers.length === 0 || numbers.every((value) => value === 0);
+    return allArraysEmpty && allNumbersZero;
+  }
+
+  if (isEmptyPaginatedResult(result)) {
+    return true;
+  }
+
+  if (isPaginatedResult(result)) {
+    return false;
+  }
+
   if (method === 'search') {
     if (!result || typeof result !== 'object') return true;
     const row = result as { items?: unknown[]; total?: number };
     const items = Array.isArray(row.items) ? row.items : [];
     const total = typeof row.total === 'number' ? row.total : items.length;
     return total === 0 && items.length === 0;
+  }
+
+  if (
+    (method.startsWith('list') ||
+      method.startsWith('search') ||
+      method.startsWith('get')) &&
+    Array.isArray(result) &&
+    result.length === 0
+  ) {
+    return true;
   }
 
   if (method === 'getPatient') {

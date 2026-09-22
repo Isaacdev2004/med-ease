@@ -31,6 +31,11 @@ import type {
   AccessLog,
 } from '@/services/documents/types';
 import { BarChartPanel } from '@/shared/charts';
+import {
+  ensureArray,
+  formatCount,
+  formatStatus,
+} from '@/shared/lib/enterprise-data';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -51,32 +56,32 @@ export function DocumentDashboardPanel({
   const metrics = [
     {
       label: 'Total Documents',
-      value: dashboard.totalDocuments.toLocaleString(),
+      value: formatCount(dashboard.totalDocuments),
       icon: FileText,
     },
     {
       label: 'Versions',
-      value: dashboard.totalVersions.toLocaleString(),
+      value: formatCount(dashboard.totalVersions),
       icon: Archive,
     },
     {
       label: 'Pending Signatures',
-      value: dashboard.pendingSignatures.toLocaleString(),
+      value: formatCount(dashboard.pendingSignatures),
       icon: Signature,
     },
     {
       label: 'Active Legal Holds',
-      value: dashboard.activeLegalHolds.toLocaleString(),
+      value: formatCount(dashboard.activeLegalHolds),
       icon: Shield,
     },
     {
       label: 'Shared Links',
-      value: dashboard.sharedLinksActive.toLocaleString(),
+      value: formatCount(dashboard.sharedLinksActive),
       icon: Share2,
     },
     {
       label: 'Storage Used (GB)',
-      value: dashboard.storageUsedGb.toLocaleString(),
+      value: formatCount(dashboard.storageUsedGb),
       icon: Folder,
     },
   ];
@@ -116,7 +121,7 @@ export function DocumentCard({ document }: { document: Document }) {
             variant={statusVariant[document.status]}
             className="capitalize"
           >
-            {document.status.replace('_', ' ')}
+            {formatStatus(document.status)}
           </Badge>
         </div>
         <p className="text-xs text-muted-foreground">
@@ -142,7 +147,7 @@ export function FolderTree({ folders }: { folders: DocumentFolder[] }) {
         <CardTitle className="text-base">Folder Tree</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {folders.slice(0, 12).map((f) => (
+        {ensureArray<DocumentFolder>(folders).slice(0, 12).map((f) => (
           <div
             key={f.folderId}
             className="flex justify-between text-sm border-b pb-2 last:border-0"
@@ -206,7 +211,7 @@ export function VersionTimeline({ versions }: { versions: DocumentVersion[] }) {
         <CardTitle className="text-base">Version Timeline</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {versions.slice(0, 8).map((v) => (
+        {ensureArray<DocumentVersion>(versions).slice(0, 8).map((v) => (
           <div
             key={v.versionId}
             className="flex justify-between text-sm border-b pb-2 last:border-0"
@@ -234,7 +239,7 @@ export function MetadataPanel({ metadata }: { metadata: DocumentMetadata[] }) {
         <CardTitle className="text-base">Metadata</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {metadata.slice(0, 10).map((m) => (
+        {ensureArray<DocumentMetadata>(metadata).slice(0, 10).map((m) => (
           <div
             key={m.metadataId}
             className="flex justify-between text-sm border-b pb-2 last:border-0"
@@ -255,7 +260,7 @@ export function OCRPanel({ results }: { results: OCRResult[] }) {
         <CardTitle className="text-base">OCR Results</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {results.slice(0, 4).map((r) => (
+        {ensureArray<OCRResult>(results).slice(0, 4).map((r) => (
           <div key={r.ocrId} className="text-sm border-b pb-2 last:border-0">
             <div className="flex justify-between gap-2">
               <span className="font-medium">{r.documentId}</span>
@@ -441,7 +446,7 @@ export function ActivityTimeline({ logs }: { logs: AccessLog[] }) {
         <CardTitle className="text-base">Activity Timeline</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {logs.slice(0, 10).map((l) => (
+        {ensureArray<AccessLog>(logs).slice(0, 10).map((l) => (
           <div
             key={l.logId}
             className="flex justify-between text-sm border-b pb-2 last:border-0"
@@ -484,7 +489,7 @@ export function DocumentAnalyticsPanel({
           },
           {
             label: 'Search Queries/Day',
-            value: analytics.searchQueriesDaily.toLocaleString(),
+            value: formatCount(analytics.searchQueriesDaily),
           },
         ].map((m) => (
           <Card key={m.label}>

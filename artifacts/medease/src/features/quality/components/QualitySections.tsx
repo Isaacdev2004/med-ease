@@ -32,8 +32,12 @@ import {
 } from '@/features/quality/hooks/use-quality';
 import { useQualityMutations } from '@/features/quality/mutations/quality.mutations';
 import { qualityService } from '@/services/quality/quality.service';
-import type { QualityFilters } from '@/services/quality/types';
+import type {
+  AccreditationStandard,
+  QualityFilters,
+} from '@/services/quality/types';
 import { LoadingView } from '@/shared/components';
+import { sliceItems } from '@/shared/lib/enterprise-data';
 import { EmptyState } from '@/shared/ui/empty-state';
 import { Shield } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -209,7 +213,7 @@ export function AccreditationSection() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {(accreditation.data ?? []).slice(0, 12).map((s) => (
+        {sliceItems<AccreditationStandard>(accreditation.data, 12).map((s) => (
           <AccreditationCard key={s.standardId} standard={s} />
         ))}
       </div>

@@ -286,6 +286,15 @@ function normalizeDashboard(
     if (Array.isArray(value) && !Array.isArray(merged[key])) {
       merged[key] = value;
     }
+    if (typeof value === 'number') {
+      const current = merged[key];
+      merged[key] =
+        typeof current === 'number' && Number.isFinite(current)
+          ? current
+          : typeof current === 'string'
+            ? Number(current) || 0
+            : 0;
+    }
   }
   return merged;
 }

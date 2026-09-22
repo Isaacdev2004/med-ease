@@ -23,6 +23,11 @@ import type {
   RiskScore,
 } from '@/services/population-health/types';
 import { BarChartPanel } from '@/shared/charts';
+import {
+  ensureArray,
+  formatCount,
+  formatStatus,
+} from '@/shared/lib/enterprise-data';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -48,22 +53,22 @@ export function PopulationDashboard({
   const metrics = [
     {
       label: 'Population',
-      value: dashboard.totalPopulation.toLocaleString(),
+      value: formatCount(dashboard.totalPopulation),
       icon: Users,
     },
     {
       label: 'Open Care Gaps',
-      value: dashboard.openCareGaps.toLocaleString(),
+      value: formatCount(dashboard.openCareGaps),
       icon: AlertTriangle,
     },
     {
       label: 'High Risk',
-      value: dashboard.highRiskCount.toLocaleString(),
+      value: formatCount(dashboard.highRiskCount),
       icon: HeartPulse,
     },
     {
       label: 'Rising Risk',
-      value: dashboard.risingRiskCount.toLocaleString(),
+      value: formatCount(dashboard.risingRiskCount),
       icon: TrendingUp,
     },
     {
@@ -83,7 +88,7 @@ export function PopulationDashboard({
     },
     {
       label: 'Active Outreach',
-      value: dashboard.outreachActive.toLocaleString(),
+      value: formatCount(dashboard.outreachActive),
       icon: Megaphone,
     },
   ];
@@ -126,7 +131,7 @@ export function CareGapCard({
         <p className="text-muted-foreground">{gap.patientName}</p>
         <div className="flex gap-2 flex-wrap">
           <Badge variant="outline" className="capitalize">
-            {gap.type.replace(/_/g, ' ')}
+            {formatStatus(gap.type)}
           </Badge>
           <Badge className="capitalize">{gap.status}</Badge>
           {gap.daysOverdue > 0 ? (
@@ -153,11 +158,11 @@ export function RegistryCard({ registry }: { registry: DiseaseRegistry }) {
         <div className="flex justify-between gap-2">
           <span className="font-medium">{registry.name}</span>
           <Badge variant="outline" className="capitalize">
-            {registry.type.replace(/_/g, ' ')}
+            {formatStatus(registry.type)}
           </Badge>
         </div>
         <p className="text-muted-foreground">
-          {registry.memberCount.toLocaleString()} members · {registry.openGaps}{' '}
+          {formatCount(registry.memberCount)} members · {registry.openGaps}{' '}
           gaps
         </p>
         <p className="text-xs">
@@ -180,10 +185,10 @@ export function PhmRiskCard({ score }: { score: RiskScore }) {
           </Badge>
         </div>
         <p className="text-muted-foreground capitalize">
-          {score.scoreType.replace(/_/g, ' ')} · Score {score.score}
+          {formatStatus(score.scoreType)} · Score {score.score}
         </p>
         <p className="text-xs text-muted-foreground">
-          {score.factors.slice(0, 3).join(' · ')}
+          {ensureArray<string>(score.factors).slice(0, 3).join(' · ')}
         </p>
         <p className="text-xs">
           {format(new Date(score.calculatedAt), 'MMM d, yyyy')}
@@ -238,7 +243,7 @@ export function CohortBuilder({
           {cohort.criteria}
         </pre>
         <p className="text-xs">
-          {cohort.memberCount.toLocaleString()} members · Created{' '}
+          {formatCount(cohort.memberCount)} members · Created{' '}
           {format(new Date(cohort.createdAt), 'MMM d, yyyy')}
         </p>
         {onLaunch ? (
@@ -282,7 +287,7 @@ export function ChronicProgramCard({ program }: { program: ChronicProgram }) {
         <div className="flex justify-between gap-2">
           <span className="font-medium">{program.name}</span>
           <Badge variant="outline" className="capitalize">
-            {program.type.replace(/_/g, ' ')}
+            {formatStatus(program.type)}
           </Badge>
         </div>
         <p className="text-muted-foreground">
@@ -362,14 +367,14 @@ export function PopulationAnalyticsPanel({
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
-          { label: 'Care Gaps', value: analytics.careGaps.toLocaleString() },
+          { label: 'Care Gaps', value: formatCount(analytics.careGaps) },
           {
             label: 'Disease Prevalence',
             value: `${analytics.diseasePrevalence}%`,
           },
           {
             label: 'Readmissions',
-            value: analytics.readmissions.toLocaleString(),
+            value: formatCount(analytics.readmissions),
           },
           {
             label: 'Preventive Compliance',

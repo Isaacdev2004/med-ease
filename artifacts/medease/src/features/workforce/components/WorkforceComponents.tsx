@@ -27,6 +27,7 @@ import type {
   WorkforceDashboard,
 } from '@/services/workforce/types';
 import { BarChartPanel } from '@/shared/charts';
+import { formatStatus } from '@/shared/lib/enterprise-data';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -39,7 +40,7 @@ export function EmployeeCard({ employee }: { employee: Employee }) {
         <div className="flex justify-between gap-2">
           <CardTitle className="text-sm">{employee.fullName}</CardTitle>
           <Badge className="capitalize">
-            {employee.status.replace('_', ' ')}
+            {formatStatus(employee.status)}
           </Badge>
         </div>
       </CardHeader>
@@ -49,7 +50,7 @@ export function EmployeeCard({ employee }: { employee: Employee }) {
         </p>
         <p>{employee.email}</p>
         <p className="text-xs capitalize">
-          {employee.employmentType.replace('_', ' ')}
+          {formatStatus(employee.employmentType)}
         </p>
       </CardContent>
     </Card>
@@ -83,7 +84,7 @@ export function ShiftCard({ shift }: { shift: Shift }) {
         <div className="flex justify-between">
           <span className="font-medium">{shift.employeeName}</span>
           <Badge className="capitalize">
-            {shift.shiftType.replace('_', ' ')}
+            {formatStatus(shift.shiftType)}
           </Badge>
         </div>
         <p className="text-muted-foreground">
@@ -91,7 +92,7 @@ export function ShiftCard({ shift }: { shift: Shift }) {
           {format(new Date(shift.endTime), 'HH:mm')}
         </p>
         <Badge variant="outline" className="capitalize mt-1">
-          {shift.status.replace('_', ' ')}
+          {formatStatus(shift.status)}
         </Badge>
         {shift.isOvertime ? (
           <p className="text-xs text-amber-600 mt-1">Overtime</p>
@@ -183,7 +184,7 @@ export function LeaveRequestCard({
           <Badge className="capitalize">{request.status}</Badge>
         </div>
         <p className="capitalize">
-          {request.leaveType.replace('_', ' ')} · {request.days} day(s)
+          {formatStatus(request.leaveType)} · {request.days} day(s)
         </p>
         <p className="text-xs text-muted-foreground">
           {format(new Date(request.startDate), 'MMM d')} –{' '}
@@ -215,7 +216,7 @@ export function TrainingCard({ training }: { training: Training }) {
         <div className="flex justify-between">
           <span className="font-medium">{training.courseName}</span>
           <Badge className="capitalize">
-            {training.status.replace('_', ' ')}
+            {formatStatus(training.status)}
           </Badge>
         </div>
         <p className="text-muted-foreground">{training.employeeName}</p>
@@ -255,7 +256,7 @@ export function PerformanceCard({ review }: { review: PerformanceReview }) {
       <CardContent className="pt-4 text-sm">
         <p className="font-medium">{review.employeeName}</p>
         <p className="text-2xl font-bold">{review.score}</p>
-        <Badge className="capitalize">{review.rating.replace('_', ' ')}</Badge>
+        <Badge className="capitalize">{formatStatus(review.rating)}</Badge>
         <p className="text-xs text-muted-foreground mt-1">{review.period}</p>
       </CardContent>
     </Card>
