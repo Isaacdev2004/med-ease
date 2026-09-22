@@ -80,7 +80,11 @@ export function RadiologyShell({
         {isStudyDetail ? (
           <StudyDetailSection />
         ) : (
-          <RadiologySectionContent section={section} filters={scopedFilters} />
+          <RadiologySectionContent
+            section={section}
+            filters={scopedFilters}
+            variant={variant}
+          />
         )}
       </div>
     </PageShell>

@@ -327,9 +327,11 @@ export function WorkloadSection() {
 export function RadiologySectionContent({
   section,
   filters,
+  variant = 'patient',
 }: {
   section: RadiologySection;
   filters?: StudyFilters;
+  variant?: 'patient' | 'clinician' | 'facility' | 'admin';
 }) {
   switch (section) {
     case 'history':
@@ -353,8 +355,13 @@ export function RadiologySectionContent({
     case 'devices':
       return <DevicesSection />;
     case 'dashboard_facility':
-    case 'dashboard':
       return <FacilityDashboardSection />;
+    case 'dashboard':
+      return variant === 'facility' ? (
+        <FacilityDashboardSection />
+      ) : (
+        <DashboardSection filters={filters} />
+      );
     case 'analytics':
     case 'catalog':
     case 'workload':
