@@ -17,7 +17,7 @@ export function KpiDashboardGrid({
   return (
     <div
       className={cn(
-        'grid gap-4',
+        'grid gap-4 grid-cols-2',
         columns === 2 && 'md:grid-cols-2',
         columns === 3 && 'md:grid-cols-2 xl:grid-cols-3',
         columns === 4 && 'md:grid-cols-2 xl:grid-cols-4',
