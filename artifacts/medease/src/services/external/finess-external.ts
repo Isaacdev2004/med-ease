@@ -5,6 +5,13 @@ import type {
 } from '@/services/directory/directory.types';
 
 const FINESS_SEARCH_URL = 'https://recherche-entreprises.api.gouv.fr/search';
+/** API Recherche d'entreprises — hard limit documented in OpenAPI. */
+const FINESS_MAX_PER_PAGE = 25;
+
+function clampFinessPageSize(pageSize?: number): number {
+  const size = pageSize ?? 20;
+  return Math.min(Math.max(size, 1), FINESS_MAX_PER_PAGE);
+}
 
 type FinessEstablishment = {
   siret?: string;
@@ -170,8 +177,8 @@ export async function searchFinessExternal(
     const params = new URLSearchParams({
       q,
       est_finess: 'true',
-      per_page: String(filters.pageSize ?? 20),
-      page: String(filters.page ?? 1),
+      per_page: String(clampFinessPageSize(filters.pageSize)),
+      page: String(Math.max(filters.page ?? 1, 1)),
     });
     if (filters.department) params.set('departement', filters.department);
 

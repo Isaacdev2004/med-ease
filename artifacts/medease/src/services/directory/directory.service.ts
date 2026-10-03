@@ -23,7 +23,7 @@ export const directoryService = {
       return local;
     }
 
-    const external = await searchFinessExternal({ ...filters, page: 1, pageSize: 50 });
+    const external = await searchFinessExternal({ ...filters, page: 1, pageSize: 25 });
     rememberDirectoryProviders([...local.items, ...external]);
     if (!external.length) return local;
 

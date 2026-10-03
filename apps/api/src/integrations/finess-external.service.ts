@@ -37,16 +37,21 @@ type SearchOrg = {
 export class FinessExternalService {
   private readonly logger = new Logger(FinessExternalService.name);
   private readonly baseUrl = 'https://recherche-entreprises.api.gouv.fr/search';
+  private static readonly maxPerPage = 25;
 
   async search(query: string, limit = 20): Promise<FinessExternalRecord[]> {
     const q = query.trim();
     if (q.length < 2) return [];
 
     try {
+      const perPage = Math.min(
+        Math.max(limit, 1),
+        FinessExternalService.maxPerPage,
+      );
       const params = new URLSearchParams({
         q,
         est_finess: 'true',
-        per_page: String(limit),
+        per_page: String(perPage),
       });
       const res = await fetch(`${this.baseUrl}?${params.toString()}`, {
         headers: { Accept: 'application/json' },
