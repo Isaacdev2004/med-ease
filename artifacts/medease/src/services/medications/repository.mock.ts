@@ -9,6 +9,7 @@ import type {
   Prescription,
   RefillRequest,
   RefillRequestInput,
+  ScheduledDose,
 } from '@/services/medications/types';
 import {
   MOCK_ADMINISTRATIONS,
@@ -28,6 +29,19 @@ import {
   prescriptionToPatientMedication,
 } from '@/services/medications/mock-data';
 import { buildRefillRequest } from '@/services/medications/refill';
+
+function slotForHour(hour: number): ScheduledDose['slot'] {
+  if (hour < 12) return 'morning';
+  if (hour < 17) return 'afternoon';
+  if (hour < 21) return 'evening';
+  return 'night';
+}
+
+function parseScheduleHour(time: string): number {
+  const [hourPart] = time.split(':');
+  const hour = Number.parseInt(hourPart ?? '', 10);
+  return Number.isFinite(hour) ? hour : 8;
+}
 
 function matchesFilters(
   med: PatientMedication,
@@ -182,18 +196,18 @@ class MedicationMockRepository {
 
   createPrescription(input: CreatePrescriptionInput): Prescription {
     const idx = this.prescriptions.length;
-    const rx = generatePrescription(
-      idx,
-      parseInt(input.patientId.replace(/\D/g, ''), 10) - 1,
-    );
+    const rx = generatePrescription(idx, idx % 40);
+    const genericName = input.genericName?.trim() || input.medicationName;
     const created: Prescription = {
       ...rx,
       id: `rx-${String(idx + 1).padStart(4, '0')}`,
       patientId: input.patientId,
       medication: {
         ...rx.medication,
+        id: `med-${String(idx + 1).padStart(4, '0')}`,
         name: input.medicationName,
-        genericName: input.genericName,
+        genericName,
+        brandName: input.brandName ?? input.medicationName,
         strength: input.strength,
         controlledSubstance: input.controlledSubstance ?? false,
       },
@@ -210,7 +224,40 @@ class MedicationMockRepository {
       updatedAt: new Date().toISOString(),
     };
     this.prescriptions.unshift(created);
-    this.medications.unshift(prescriptionToPatientMedication(created));
+    const patientMedication = prescriptionToPatientMedication(created);
+    this.medications.unshift(patientMedication);
+
+    const times =
+      input.scheduleTimes?.filter(Boolean).length > 0
+        ? input.scheduleTimes!
+        : ['08:00'];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const daysToSchedule = Math.min(input.durationDays, 14);
+
+    for (let dayOffset = 0; dayOffset < daysToSchedule; dayOffset++) {
+      for (const time of times) {
+        const hour = parseScheduleHour(time);
+        const scheduled = new Date(today);
+        scheduled.setDate(scheduled.getDate() + dayOffset);
+        scheduled.setHours(hour, 0, 0, 0);
+        this.schedule.unshift({
+          id: `dose-${created.id}-${dayOffset}-${time.replace(':', '')}`,
+          medicationId: patientMedication.id,
+          patientId: input.patientId,
+          medicationName: input.medicationName,
+          scheduledAt: scheduled.toISOString(),
+          slot: slotForHour(hour),
+          dose: input.dose,
+          status:
+            dayOffset === 0 && scheduled.getTime() < Date.now()
+              ? 'taken'
+              : 'pending',
+          instructions: input.instructions,
+        });
+      }
+    }
+
     return created;
   }
 

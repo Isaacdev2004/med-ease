@@ -166,7 +166,11 @@ export const medicationService = {
 
   async createPrescription(input: CreatePrescriptionInput) {
     await delay(300);
-    return medicationRepository.createPrescription(input);
+    return medicationRepository.createPrescription({
+      ...input,
+      genericName: input.genericName?.trim() || input.medicationName,
+      strength: input.strength?.trim() || '—',
+    });
   },
 
   async cancelPrescription(id: string) {

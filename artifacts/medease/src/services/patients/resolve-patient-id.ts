@@ -14,7 +14,12 @@ export async function resolveClinicalPatientId(
 ): Promise<string | null> {
   if (options?.explicitId) return options.explicitId;
 
+  const demoId = options?.demoFallback?.(userId) ?? null;
+
   if (useApiAuth) {
+    // Seeded demo accounts always use the clinical UUID (matches DB seed).
+    if (demoId) return demoId;
+
     try {
       const result = await patientsService.listPatients({
         userId,
@@ -24,10 +29,10 @@ export async function resolveClinicalPatientId(
       const liveId = result.items[0]?.patientId;
       if (liveId) return liveId;
     } catch {
-      // Fall through to demo fallback when the API is empty or unreachable.
+      // Fall through when the API is empty or unreachable.
     }
-    return options?.demoFallback?.(userId) ?? null;
+    return null;
   }
 
-  return options?.demoFallback?.(userId) ?? null;
+  return demoId;
 }

@@ -198,7 +198,7 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
       {
         patientId,
         medicationName: selected.name,
-        genericName: selected.genericName,
+        genericName: selected.genericName?.trim() || selected.name,
         brandName: selected.brandName ?? selected.name,
         strength: selected.strength || '',
         dose,

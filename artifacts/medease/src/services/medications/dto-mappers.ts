@@ -227,6 +227,9 @@ export function mapPaginatedMedications(dto: unknown): MedicationListResult {
 }
 
 export function mapSearchResult(dto: unknown): MedicationSearchResult {
+  if (dto == null) {
+    return { medications: [], prescriptions: [] };
+  }
   const row = asRecord(dto);
   return {
     medications: mapArray(row.medications, mapMedication),

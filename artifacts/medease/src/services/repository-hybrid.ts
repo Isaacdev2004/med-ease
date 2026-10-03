@@ -26,16 +26,19 @@ export function createHybridRepository<T extends Record<string, any>>(
 
       return async (...args: unknown[]) => {
         try {
-          const result = await httpMethod(...args);
+          const result = await httpMethod.apply(target, args);
           if (shouldFallbackToMock(prop, result)) {
-            return mockMethod(...args);
+            if (typeof mockMethod !== 'function') return result;
+            return mockMethod.apply(mock, args);
           }
           return result;
-        } catch {
+        } catch (error) {
           if (typeof mockMethod === 'function') {
-            return mockMethod(...args);
+            return mockMethod.apply(mock, args);
           }
-          throw new Error(`Repository method "${prop}" failed`);
+          throw error instanceof Error
+            ? error
+            : new Error(`Repository method "${prop}" failed`);
         }
       };
     },
@@ -67,10 +70,35 @@ function shouldFallbackToMock(method: string, result: unknown): boolean {
 
   if (method === 'search') {
     if (!result || typeof result !== 'object') return true;
-    const row = result as { items?: unknown[]; total?: number };
+    const row = result as {
+      items?: unknown[];
+      total?: number;
+      medications?: unknown[];
+      prescriptions?: unknown[];
+    };
+    if ('medications' in row || 'prescriptions' in row) {
+      const medications = Array.isArray(row.medications) ? row.medications : [];
+      const prescriptions = Array.isArray(row.prescriptions)
+        ? row.prescriptions
+        : [];
+      return medications.length === 0 && prescriptions.length === 0;
+    }
     const items = Array.isArray(row.items) ? row.items : [];
     const total = typeof row.total === 'number' ? row.total : items.length;
     return total === 0 && items.length === 0;
+  }
+
+  if (
+    method.startsWith('create') ||
+    method.startsWith('cancel') ||
+    method.startsWith('renew') ||
+    method.startsWith('approve') ||
+    method.startsWith('reject') ||
+    method === 'logDose' ||
+    method === 'dispense' ||
+    method === 'administer'
+  ) {
+    return result == null;
   }
 
   if (

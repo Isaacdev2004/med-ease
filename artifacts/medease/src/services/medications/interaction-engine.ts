@@ -27,10 +27,11 @@ export function checkMedicationInteractions(
   }
 
   for (const med of medications) {
+    const generic = med.genericName?.toLowerCase() ?? '';
     for (const allergen of allergies) {
       if (
         med.name.toLowerCase().includes(allergen.toLowerCase()) ||
-        med.genericName.toLowerCase().includes(allergen.toLowerCase())
+        generic.includes(allergen.toLowerCase())
       ) {
         dynamic.push({
           id: `dyn-allergy-${med.id}`,
