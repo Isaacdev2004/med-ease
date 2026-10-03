@@ -35,7 +35,7 @@ export class BdpmExternalService {
 
   async search(query: string, limit = 20): Promise<BdpmExternalRecord[]> {
     const q = query.trim();
-    if (q.length < 3) return [];
+    if (q.length < 2) return [];
 
     try {
       const url = `${this.baseUrl}?search=${encodeURIComponent(q)}&pageSize=${limit}`;
@@ -48,6 +48,22 @@ export class BdpmExternalService {
     } catch (error) {
       this.logger.warn(`BDPM search failed: ${String(error)}`);
       return [];
+    }
+  }
+
+  async getByCis(cis: string): Promise<BdpmExternalRecord | null> {
+    const id = cis.trim();
+    if (!id) return null;
+    try {
+      const res = await fetch(`${this.baseUrl}/${encodeURIComponent(id)}`, {
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok) return null;
+      const data = (await res.json()) as BdpmItem;
+      return this.mapItem(data);
+    } catch (error) {
+      this.logger.warn(`BDPM lookup failed for CIS ${id}: ${String(error)}`);
+      return null;
     }
   }
 

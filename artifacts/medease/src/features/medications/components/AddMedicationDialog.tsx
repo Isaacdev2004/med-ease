@@ -117,6 +117,7 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
   const [prescriptionDate, setPrescriptionDate] = useState(
     () => new Date().toISOString().slice(0, 10),
   );
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const scheduleTimes = useMemo(() => {
     const fromSlots = SLOT_PRESETS.filter((s) => slots[s.id]).map((s) => s.time);
@@ -192,6 +193,7 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
         : durationMode === 'permanent' || durationMode === 'order'
           ? 90
           : 14;
+    setSaveError(null);
     createPrescription.mutate(
       {
         patientId,
@@ -222,6 +224,13 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
         onSuccess: () => {
           setOpen(false);
           reset();
+        },
+        onError: (error) => {
+          setSaveError(
+            error instanceof Error
+              ? error.message
+              : 'Impossible d’enregistrer le traitement. Réessayez ou reconnectez-vous.',
+          );
         },
       },
     );
@@ -450,6 +459,12 @@ export function AddMedicationDialog({ patientId }: { patientId: string }) {
               Document ordonnance : à joindre ultérieurement (MVP).
             </p>
           </div>
+        ) : null}
+
+        {saveError ? (
+          <p className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            {saveError}
+          </p>
         ) : null}
 
         {step === 5 && selected ? (

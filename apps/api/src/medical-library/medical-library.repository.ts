@@ -101,7 +101,7 @@ export class MedicalLibraryRepository
     });
 
     const q = filters.q?.trim();
-    if (!q || q.length < 3) return result;
+    if (!q || q.length < 2) return result;
 
     const external = await this.bdpmExternal.search(q, Math.max(pageSize, 25));
     if (!external.length) return result;
@@ -157,6 +157,51 @@ export class MedicalLibraryRepository
   }
 
   async getById(id: string): Promise<MedicationRecord> {
+    const cis = id.startsWith('bdpm-') ? id.slice(5) : /^\d+$/.test(id) ? id : null;
+    if (cis) {
+      const external = await this.bdpmExternal.getByCis(cis);
+      if (external) {
+        return {
+          id: external.id,
+          bdpmId: external.bdpmId,
+          name: external.name,
+          brandName: external.brandName,
+          genericName: external.genericName,
+          strength: external.strength,
+          dosageForm: external.dosageForm,
+          route: mapRoute(external.route),
+          atcCode: '',
+          therapeuticClass: external.genericName,
+          category: mapCategory('pain_relief'),
+          manufacturer: external.manufacturer,
+          prescriptionRequired: true,
+          controlledSubstance: false,
+          pregnancySafety: 'unknown',
+          breastfeedingSafety: 'unknown',
+          pediatricApproved: false,
+          geriatricApproved: true,
+          available: true,
+          searchCount: 0,
+          description: external.description,
+          activeIngredients: external.activeIngredients,
+          indications: [],
+          contraindications: [],
+          warnings: [],
+          precautions: [],
+          sideEffects: [],
+          administration: [],
+          storage: 'Voir notice BDPM',
+          patientInformation: external.description,
+          professionalInformation: 'Source BDPM',
+          references: ['BDPM'],
+          dosages: [],
+          interactions: [],
+          relatedMedicationIds: [],
+          updatedAt: new Date().toISOString(),
+        };
+      }
+    }
+
     return this.prisma.runInTransaction(async (tx) => {
       const row = await tx.medicationCatalog.findFirst({
         where: { id, tenantId: this.tenantId },

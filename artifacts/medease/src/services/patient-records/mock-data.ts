@@ -13,8 +13,8 @@ import type {
   RadiologyStudy,
   TimelineEntry,
   VitalReading,
-  AUTH_USER_PATIENT_MAP,
 } from '@/services/patient-records/types';
+import { AUTH_USER_PATIENT_MAP } from '@/services/patient-records/types';
 
 const FIRST_NAMES = [
   'Sarah',
