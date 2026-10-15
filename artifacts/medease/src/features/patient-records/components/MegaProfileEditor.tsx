@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { useMegaProfileRevision } from '@/features/patient-records/lib/mega-profile-events';
+
 import { Button } from '@/shared/ui/button';
 import {
   Dialog,
@@ -12,7 +14,15 @@ import {
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
 import { Textarea } from '@/shared/ui/textarea';
+import { notifyMegaProfileUpdated } from '@/features/patient-records/lib/mega-profile-events';
 import { appToast } from '@/services/api/toast';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui/select';
 
 /** Aligné Formulaire Studio — 5 profils Mega Carnet. */
 export type MegaProfileId =
@@ -26,7 +36,17 @@ export type MegaProfileData = Record<string, string> & { updatedAt?: string };
 
 const FIELD_SETS: Record<
   MegaProfileId,
-  { title: string; fields: { key: string; label: string; required?: boolean; type?: string; placeholder?: string }[] }
+  {
+    title: string;
+    fields: {
+      key: string;
+      label: string;
+      required?: boolean;
+      type?: string;
+      placeholder?: string;
+      options?: { value: string; label: string }[];
+    }[];
+  }
 > = {
   general: {
     title: 'Profil général',
@@ -36,7 +56,13 @@ const FIELD_SETS: Record<
       { key: 'firstName', label: 'Prénom', required: true },
       { key: 'usageName', label: "Nom d'usage" },
       { key: 'birthDate', label: 'Date de naissance', required: true, type: 'date' },
-      { key: 'sex', label: 'Sexe', required: true, placeholder: 'F / M / Autre' },
+      {
+        key: 'sex',
+        label: 'Sexe',
+        required: true,
+        type: 'select',
+        placeholder: 'Choisir',
+      },
       { key: 'address', label: 'Adresse' },
       { key: 'postalCode', label: 'Code postal' },
       { key: 'city', label: 'Ville' },
@@ -182,6 +208,7 @@ export function MegaProfileEditor({
       return;
     }
     saveMegaProfile(patientId, profileId, values);
+    notifyMegaProfileUpdated(patientId, profileId);
     appToast.success({
       title: 'Profil enregistré',
       description: `${meta.title} mis à jour.`,
@@ -239,6 +266,31 @@ export function MegaProfileEditor({
                     JPG ou PNG — stockée localement pour le MVP.
                   </p>
                 </div>
+              ) : field.type === 'select' ? (
+                <Select
+                  value={values[field.key] ?? ''}
+                  onValueChange={(value) =>
+                    setValues((v) => ({ ...v, [field.key]: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={field.placeholder ?? 'Choisir'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(field.key === 'sex'
+                      ? [
+                          { value: 'F', label: 'Féminin' },
+                          { value: 'M', label: 'Masculin' },
+                          { value: 'Autre', label: 'Autre' },
+                        ]
+                      : field.options ?? []
+                    ).map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               ) : field.type === 'textarea' ? (
                 <Textarea
                   value={values[field.key] ?? ''}
@@ -277,7 +329,11 @@ export function MegaProfileView({
   profileId: MegaProfileId;
 }) {
   const meta = FIELD_SETS[profileId];
-  const data = loadMegaProfile(patientId, profileId);
+  const revision = useMegaProfileRevision(patientId, profileId);
+  const data = useMemo(
+    () => loadMegaProfile(patientId, profileId),
+    [patientId, profileId, revision],
+  );
   const entries = useMemo(() => {
     if (!data) return [];
     return meta.fields

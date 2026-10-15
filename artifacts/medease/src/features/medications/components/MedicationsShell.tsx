@@ -45,8 +45,8 @@ export function MedicationsShell({
     return (
       <PageShell title={title}>
         <EmptyState
-          title="Access denied"
-          description="You do not have permission to view medications."
+          title="Accès refusé"
+          description="Vous n’avez pas l’autorisation de consulter le pilulier."
         />
       </PageShell>
     );
@@ -57,7 +57,7 @@ export function MedicationsShell({
   if (variant === 'patient' && patientResolve.isLoading) {
     return (
       <PageShell title={title}>
-        <LoadingView label="Loading medications…" />
+        <LoadingView label="Chargement du pilulier…" />
       </PageShell>
     );
   }

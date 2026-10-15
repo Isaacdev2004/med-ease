@@ -93,40 +93,16 @@ export function SummarySection({ record }: { record: PatientHealthRecord }) {
 
 export function ProfileSection({ record }: { record: PatientHealthRecord }) {
   const d = record.demographics;
-  const rows = [
-    [
-      'Adresse',
-      `${d.address.street}, ${d.address.postalCode} ${d.address.city}`,
-    ],
-    ['Langue', d.language],
-    ['Situation familiale', d.maritalStatus],
-    ['Profession', d.occupation],
-    ['Nationalité', d.nationality],
-    ['Médecin traitant', d.primaryPhysician],
-    ['Assurance', `${d.insurance.provider} (${d.insurance.policyNumber})`],
-    ['Tabac', d.smoking],
-    ['Alcool', d.alcohol],
-    ['Poids / Taille', `${d.weightKg} kg / ${d.heightCm} cm`],
-  ];
   return (
     <MegaSectionChrome
       patientId={d.id}
       profileId="general"
       title="Profil général"
     >
-      <Card>
-        <CardHeader>
-          <CardTitle>Informations personnelles (dossier)</CardTitle>
-        </CardHeader>
-        <CardContent className="grid gap-3 text-sm sm:grid-cols-2">
-          {rows.map(([label, value]) => (
-            <div key={label}>
-              <p className="text-muted-foreground">{label}</p>
-              <p className="font-medium">{value}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+      <p className="text-sm text-muted-foreground">
+        Les informations saisies ici alimentent le résumé en haut du Mega carnet
+        et la page Mon profil.
+      </p>
     </MegaSectionChrome>
   );
 }

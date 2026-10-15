@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'wouter';
 import {
   FileText,
@@ -17,6 +17,8 @@ import {
 import { nestedModuleTabHref } from '@/shared/hooks/use-portal-path';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
+import { cn } from '@/shared/lib/utils';
+import { useMegaProfileRevision } from '@/features/patient-records/lib/mega-profile-events';
 
 export const MEGA_PROFILES = [
   {
@@ -56,6 +58,14 @@ export const MEGA_PROFILES = [
   },
 ];
 
+const PROFILE_CARD_ACCENT: Record<MegaProfileId, string> = {
+  general: 'border-l-primary',
+  administratif: 'border-l-sky-500',
+  urgence: 'border-l-red-500',
+  physique: 'border-l-emerald-500',
+  vaccination: 'border-l-violet-500',
+};
+
 interface MegaProfilesPanelProps {
   basePath: string;
   patientId: string;
@@ -65,8 +75,11 @@ export function MegaProfilesPanel({
   basePath,
   patientId,
 }: MegaProfilesPanelProps) {
-  const [, setTick] = useState(0);
-  const completion = megaProfileCompletion(patientId);
+  const revision = useMegaProfileRevision(patientId);
+  const completion = useMemo(
+    () => megaProfileCompletion(patientId),
+    [patientId, revision],
+  );
 
   return (
     <div className="space-y-4">
@@ -92,7 +105,13 @@ export function MegaProfilesPanel({
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {MEGA_PROFILES.map((profile) => (
-          <Card key={profile.id} className="flex flex-col">
+          <Card
+            key={profile.id}
+            className={cn(
+              'flex flex-col border-l-4 bg-card shadow-sm',
+              PROFILE_CARD_ACCENT[profile.id],
+            )}
+          >
             <CardHeader className="pb-2">
               <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <profile.icon className="h-5 w-5" />
@@ -113,7 +132,6 @@ export function MegaProfilesPanel({
                       ? 'Ajouter une vaccination'
                       : 'Créer / Modifier'
                   }
-                  onSaved={() => setTick((t) => t + 1)}
                 />
                 <Button asChild size="sm" variant="outline" className="w-full">
                   <Link href={nestedModuleTabHref(basePath, profile.segment)}>

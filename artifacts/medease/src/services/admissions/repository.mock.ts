@@ -318,7 +318,11 @@ class AdmissionsMockRepository implements AdmissionsRepositoryContract {
       id: `tr-${Date.now()}`,
       admissionId: input.admissionId,
       patientId: input.patientId,
-      patientName: 'Patient',
+      patientName:
+        input.notes
+          ?.split('\n')[0]
+          ?.replace(/^Patient:\s*/i, '')
+          .trim() || 'Patient',
       fromFacilityId: input.fromFacilityId,
       fromFacilityName: input.fromFacilityName,
       fromWard: input.fromWard,

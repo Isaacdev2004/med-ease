@@ -35,6 +35,27 @@ type FinessSearchResult = {
   complements?: { est_finess?: boolean };
 };
 
+const HEALTH_ACTIVITY_PREFIXES = ['86', '87'];
+const EXCLUDED_ESTABLISHMENT =
+  /(?:^|\s)(?:la poste|poste\b|mairie|commune\b|prefecture|gendarmerie|police\b|rectorat|caf\b|urssaf|imp[oô]ts|tribunal|notaire)(?:\s|$)/i;
+
+function isHealthcareEstablishment(
+  row: FinessEstablishment,
+  displayName: string,
+): boolean {
+  const finess = row.liste_finess?.[0];
+  if (!finess) return false;
+  if (EXCLUDED_ESTABLISHMENT.test(displayName)) return false;
+  const activity = row.activite_principale ?? '';
+  if (
+    activity &&
+    !HEALTH_ACTIVITY_PREFIXES.some((prefix) => activity.startsWith(prefix))
+  ) {
+    return false;
+  }
+  return true;
+}
+
 function inferProviderType(
   activity?: string,
   name?: string,
@@ -65,6 +86,7 @@ function mapEstablishment(
   const enseigne = row.liste_enseignes?.[0];
   const name = enseigne ?? fallbackName;
   if (!name?.trim()) return null;
+  if (!isHealthcareEstablishment(row, `${name} ${fallbackName}`)) return null;
 
   const city = row.libelle_commune ?? row.commune ?? '';
   const postal = row.code_postal ?? '';
@@ -104,7 +126,7 @@ function mapEstablishment(
       latitude: Number.isFinite(lat) ? lat : undefined,
       longitude: Number.isFinite(lon) ? lon : undefined,
     },
-    availability: 'Open data FINESS',
+    availability: 'Données FINESS',
     status: 'stable',
     languages: ['French'],
     emergencyServices: type === 'facility' && /hopital|urgence|chru|ap-hp/i.test(name),

@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
 import { useLocation } from 'wouter';
 
-import { PatientBanner } from '@/features/patient-records/components/PatientBanner';
+import { MegaProfileSummary } from '@/features/patient-records/components/MegaProfileSummary';
 import { MegaProfilesPanel } from '@/features/patient-records/components/MegaProfilesPanel';
+import { migrateMegaProfileStorage } from '@/features/patient-records/lib/mega-profile-migrate';
+import { useAuth } from '@/services/auth/auth-context';
 import { RecordSectionContent } from '@/features/patient-records/components/RecordSections';
 import {
   getSectionFromPath,
@@ -27,10 +30,17 @@ export function PatientRecordsShell({
 }: PatientRecordsShellProps) {
   const [location] = useLocation();
   const perms = usePatientRecordPermissions();
+  const { user } = useAuth();
   const resolveQuery = usePatientId(routePatientId);
   const patientId = routePatientId ?? resolveQuery.data ?? undefined;
   const recordQuery = usePatientRecord(patientId);
   const section = getSectionFromPath(location);
+
+  useEffect(() => {
+    if (user?.id && patientId) {
+      migrateMegaProfileStorage(user.id, patientId);
+    }
+  }, [user?.id, patientId]);
 
   if (!perms.canView) {
     return (
@@ -75,11 +85,7 @@ export function PatientRecordsShell({
       subtitle={`Dossier longitudinal · Mis à jour ${new Date(record.updatedAt).toLocaleString('fr-FR')}`}
     >
       <div className="space-y-6">
-        <PatientBanner
-          demographics={record.demographics}
-          healthScore={record.healthScore}
-          alerts={record.alerts}
-        />
+        <MegaProfileSummary patientId={patientId} />
         {showProfiles ? (
           <MegaProfilesPanel basePath={basePath} patientId={patientId} />
         ) : null}

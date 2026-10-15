@@ -70,7 +70,7 @@ export function RecordTabs({ basePath, medicationsOnly }: RecordTabsProps) {
   return (
     <nav
       className="flex flex-wrap gap-1 border-b pb-2"
-      aria-label="Health record sections"
+      aria-label="Sections du Mega carnet"
     >
       {tabs.map((tab) => {
         const href = tab.segment ? `${basePath}/${tab.segment}` : basePath;

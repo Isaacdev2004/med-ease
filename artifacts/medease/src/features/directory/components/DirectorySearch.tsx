@@ -103,7 +103,7 @@ export function DirectorySearch({
         <div
           className="absolute z-20 mt-2 w-full rounded-lg border bg-popover p-3 shadow-md"
           role="listbox"
-          aria-label="Search suggestions"
+          aria-label="Suggestions de recherche"
         >
           {suggestions.length > 0 ? (
             <div className="mb-3">

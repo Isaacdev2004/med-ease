@@ -23,7 +23,10 @@ export const directoryService = {
       return local;
     }
 
-    const external = await searchFinessExternal({ ...filters, page: 1, pageSize: 25 });
+    const skipExternal = filters.type === 'professional';
+    const external = skipExternal
+      ? []
+      : await searchFinessExternal({ ...filters, page: 1, pageSize: 25 });
     rememberDirectoryProviders([...local.items, ...external]);
     if (!external.length) return local;
 

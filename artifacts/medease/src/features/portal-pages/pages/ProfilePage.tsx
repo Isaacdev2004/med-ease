@@ -1,38 +1,54 @@
+import { useEffect } from 'react';
 import { Link } from 'wouter';
 
+import { usePatientId } from '@/features/patient-records/hooks/use-patient-records';
+import { MegaProfileSummary } from '@/features/patient-records/components/MegaProfileSummary';
 import {
   MegaProfileEditor,
   MegaProfileView,
-  loadMegaProfile,
 } from '@/features/patient-records/components/MegaProfileEditor';
+import { migrateMegaProfileStorage } from '@/features/patient-records/lib/mega-profile-migrate';
 import { useAuth } from '@/services/auth/auth-context';
-import { PageShell } from '@/shared/components';
+import { LoadingView, PageShell } from '@/shared/components';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 
-/** Compte → Profil : lié au Profil général du Mega carnet (patient). */
+/** Compte → Profil : synchronisé avec le Profil général du Mega carnet. */
 export default function ProfilePage() {
   const { user } = useAuth();
-  const patientId =
-    user?.id ?? '01930000-0000-7000-8000-000000000301';
-  const general = loadMegaProfile(patientId, 'general');
-  const photo = general?.photoDataUrl;
-  const displayName =
-    [general?.firstName, general?.lastName].filter(Boolean).join(' ') ||
-    user?.fullName ||
-    'Patient';
-  const initials = displayName
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
+  const resolveQuery = usePatientId();
+  const patientId = resolveQuery.data ?? undefined;
+
+  useEffect(() => {
+    if (user?.id && patientId) {
+      migrateMegaProfileStorage(user.id, patientId);
+    }
+  }, [user?.id, patientId]);
+
+  if (resolveQuery.isLoading) {
+    return (
+      <PageShell title="Mon profil">
+        <LoadingView label="Chargement du profil…" />
+      </PageShell>
+    );
+  }
+
+  if (!patientId) {
+    return (
+      <PageShell title="Mon profil">
+        <Card>
+          <CardContent className="pt-6 text-sm text-muted-foreground">
+            Impossible de résoudre votre dossier patient. Reconnectez-vous.
+          </CardContent>
+        </Card>
+      </PageShell>
+    );
+  }
 
   return (
     <PageShell
       title="Mon profil"
-      subtitle="Identité et coordonnées — synchronisé avec le Profil général du Mega carnet."
+      subtitle="Identité et coordonnées — synchronisé avec le Mega carnet."
       primaryAction={
         <div className="flex flex-wrap gap-2">
           <MegaProfileEditor
@@ -46,27 +62,17 @@ export default function ProfilePage() {
         </div>
       }
     >
-      <Card>
-        <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-          <Avatar className="h-16 w-16">
-            {photo ? <AvatarImage src={photo} alt={displayName} /> : null}
-            <AvatarFallback className="text-lg">{initials}</AvatarFallback>
-          </Avatar>
-          <div>
-            <CardTitle className="text-xl">{displayName}</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              {general?.email || user?.email || '—'}
-            </p>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <MegaProfileView patientId={patientId} profileId="general" />
-          <p className="text-xs text-muted-foreground">
-            Les modifications passent par le formulaire Studio du Profil général
-            (photo, identité, contacts).
-          </p>
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        <MegaProfileSummary patientId={patientId} />
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Détail — profil général</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <MegaProfileView patientId={patientId} profileId="general" />
+          </CardContent>
+        </Card>
+      </div>
     </PageShell>
   );
 }
